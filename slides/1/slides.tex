@@ -1,0 +1,57 @@
+\documentclass{beamer}
+\usetheme{Boadilla}
+%\usetheme{polimi}
+
+\usefonttheme{professionalfonts}
+%\usefonttheme{serif}
+
+%\input{etc/_includes}
+%\include{etc/_commands}
+
+\title[Short title]{Title}
+\subtitle{Subtitle}
+\author[Guindani, Zazzetti]{Bruno Guindani \\ Elena Zazzetti}
+\institute[PoliMi]{\includegraphics[scale=.5]{../etc/logo_long.jpg}}
+\date[2019/11/22]{November 22, 2019}
+
+\begin{document}
+
+\frame{  %#01
+	\titlepage
+	{ \color{blue}
+	\begin{center}
+		\href{https://github.com/poliprojects/BNPlib}
+		{https://github.com/poliprojects/BNPlib}
+	\end{center}
+	}
+}
+
+%\addtobeamertemplate{frametitle}{}{
+%	\begin{textblock*}{100mm}(.85\textwidth,-0.5cm)
+%		\includegraphics[scale=0.1]{etc/logo_only.png}
+%	\end{textblock*}
+%}
+
+\input{part_1}
+\input{part_2}
+
+\begin{frame} %#last %TODO
+	\frametitle{Bibliography}
+%	\begin{thebibliography}{9}
+%		\setbeamertemplate{bibliography item}[book] % or [online] or [article]
+%		\bibitem{P} Podhaisky, \textit{Parallel two-step Runge-Kutta methods}
+%		\bibitem{QS} Quarteroni, Saleri, \textit{Calcolo scientifico}
+%		\bibitem{QSSG} Quarteroni, Sacco, Saleri, Gervasio, \textit{Matematica numerica}
+%		\bibitem{SI} Solodushkin, Iumanova, \textit{Parallel Numerical Methods for Ordinary Differential Equations: a Survey}	
+%	\end{thebibliography}
+\end{frame}
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	\frametitle{Title}
+	\begin{itemize}
+		\item Text
+	\end{itemize}
+\end{frame}
