@@ -81,13 +81,14 @@
 		\item Conditional prior for $\theta_i$:
 			\begin{minipage}{0.3\textwidth}
 				\begin{align*}
+					\hspace{-20pt}
 					\Lc(\theta_i | \boldsymbol\theta_{-i}) \propto
 					\sum_{j=1}^{k^-} n^-_j &\delta_{\phi^-_j} (\theta_i) + M G_0 (\theta_i) \\
 					&\uparrow \hspace{55pt} \uparrow
 				\end{align*}
 			\end{minipage}%
 			\begin{minipage}{0.5\textwidth}
-				\include{diffuse_spiked}
+				\include{etc/diffuse_spiked}
 			\end{minipage}
 		\pause
 		\item Via \textbf{conjugancy} of the DP:
