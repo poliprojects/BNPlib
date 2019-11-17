@@ -6,6 +6,35 @@
 
 
 \begin{frame} %#03
-	\frametitle{Title}
-	Stuff
+	\frametitle{Non-Parametric statistics \onslide<2->{(the Bayesian way)}}
+	\textbf{Infinite-dimensional} parameters, e.g. functions \\[10pt]
+	Model:
+	\begin{align*}
+		y_i | G &\iidsim G, \quad i=1,\dots,n \\
+		\onslide<2->{G &\sim \Pc \quad \text{(distribution over distributions!)}}
+	\end{align*}
+	\onslide<3->
+	\vspace{-20pt}
+	\begin{center}
+		$\implies$ \textbf{BNP model}
+	\end{center}
+	\vspace{10pt}
+	Goal: density approximation
 \end{frame}
+
+\begin{frame}
+	\frametitle{Dirichlet Process prior}
+	$$G \sim DP(M G_0)$$
+	\begin{itemize}
+		\item Text
+	\end{itemize}
+\end{frame}
+
+
+
+%\begin{frame}
+%	\frametitle{Title}
+%	\begin{itemize}
+%		\item Text
+%	\end{itemize}
+%\end{frame}

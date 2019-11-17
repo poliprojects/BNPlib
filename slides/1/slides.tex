@@ -5,13 +5,13 @@
 \usefonttheme{professionalfonts}
 %\usefonttheme{serif}
 
-%\input{etc/_includes}
-%\include{etc/_commands}
+%\input{../etc/includes}
+\include{commands}
 
 \title[Short title]{Title}
 \subtitle{Subtitle}
 \author[Guindani, Zazzetti]{Bruno Guindani \\ Elena Zazzetti}
-\institute[PoliMi]{\includegraphics[scale=.5]{../etc/logo_long.jpg}}
+\institute[PoliMi]{\includegraphics[scale=.4]{../etc/logo_long.jpg}}
 \date[2019/11/22]{November 22, 2019}
 
 \begin{document}
@@ -37,13 +37,12 @@
 
 \begin{frame} %#last %TODO
 	\frametitle{Bibliography}
-%	\begin{thebibliography}{9}
-%		\setbeamertemplate{bibliography item}[book] % or [online] or [article]
-%		\bibitem{P} Podhaisky, \textit{Parallel two-step Runge-Kutta methods}
-%		\bibitem{QS} Quarteroni, Saleri, \textit{Calcolo scientifico}
-%		\bibitem{QSSG} Quarteroni, Sacco, Saleri, Gervasio, \textit{Matematica numerica}
-%		\bibitem{SI} Solodushkin, Iumanova, \textit{Parallel Numerical Methods for Ordinary Differential Equations: a Survey}	
-%	\end{thebibliography}
+	\begin{thebibliography}{9}
+		\setbeamertemplate{bibliography item}[book] % or [online] or [article]
+		\bibitem{Book} Muller, Quintana, \textit{Bayesian Nonparametric Data Analysis}
+		\bibitem{Neal} Neal (2000), \textit{Markov Chain Sampling Methods for Dirichlet Process Mixture Models}
+		\bibitem{James} Ishwaran, James (2001), \textit{Gibbs Sampling Methods for Stick-Breaking Priors}	
+	\end{thebibliography}
 \end{frame}
 
 \end{document}
