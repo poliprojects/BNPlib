@@ -7,29 +7,81 @@
 
 \begin{frame} %#03
 	\frametitle{Non-Parametric statistics \onslide<2->{(the Bayesian way)}}
-	\textbf{Infinite-dimensional} parameters, e.g. functions \\[10pt]
-	Model:
-	\begin{align*}
-		y_i | G &\iidsim G, \quad i=1,\dots,n \\
-		\onslide<2->{G &\sim \Pc \quad \text{(distribution over distributions!)}}
-	\end{align*}
-	\onslide<3->
-	\vspace{-20pt}
-	\begin{center}
-		$\implies$ \textbf{BNP model}
-	\end{center}
-	\vspace{10pt}
-	Goal: density approximation
+	\begin{itemize}
+		\item Goal: density approximation %TODO
+		\item \textbf{Infinite-dimensional} parameters, e.g. functions
+		\pause
+		\item Model:
+		\begin{align*}
+			y_i | G &\iidsim G, \quad i=1,\dots,n \\
+			G &\sim \Pc \\[10pt]
+			\onslide<3->
+			{ \Pc : \Omega &\to M(S) \ \ \text{fixed} \\
+			\big[ \ \omega &\mapsto G(\cdot) \ \big] }
+		\end{align*}
+		\onslide<3->
+		\item Model name: \textbf{BNP model}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Dirichlet Process prior}
-	$$G \sim DP(M G_0)$$
+	\begin{align*}
+		y_i | G &\iidsim G \\
+		G &\sim DP(M G_0)
+	\end{align*}
+	\vspace{-10pt}
 	\begin{itemize}
-		\item Text
+		\item Parameters: $M > 0, \ G_0 \in M(S)$
+		\item Defining property: $\forall \{B_{1:k}\}$ partition of $S$,
+		$$[G(B_1),\dots,G(B_k)] \sim \operatorname{Dir}
+			\big( M G_0(B_1),\dots, M G_0(B_k) \big)$$
+		\pause
+		\item \textbf{Discreteness} (stick-breaking): $G(\cdot) = \sum_{k=1}^{+\infty} w_h \delta_{m_h} (\cdot)$ %TODO stick-breaking model
+		%\item \textbf{Conjugacy}: $G | \textbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i})$ %TODO should we add it?
+		\item Polya urn representation:
+		\begin{center}
+			$ \Lc(y_i | y_1,\dots,y_{i-1}) \propto \sum_{h=1}^{i-1} \delta_{y_h}(y_i) + M G_0 (y_i) $
+		\end{center}
+	\item $M \log n \ll n$ values %TODO
 	\end{itemize}
 \end{frame}
 
+
+\begin{frame}
+	\frametitle{Continuous density estimation}
+	\begin{itemize}
+		\item \textbf{Mixtures}:
+		\begin{align*}
+			y_i | G &\sim f_G(y) = \int f_\theta(y) \, \de G(\theta) \\
+			\onslide<2-> { G &\sim DP(M G_0) }
+		\end{align*}
+		\vspace{-10pt}
+		\onslide<2->
+		\item Model name: \textbf{DPM model}
+		\onslide<3->
+		\item Equivalent to:
+		\begin{align*}
+			y_i | \theta_i &\indsim f_{\theta_i} \\
+			\theta_i | G &\iidsim G \\
+			G &\sim DP(M G_0)
+		\end{align*}
+		\item $\theta_i$ ``latent variables'' $\forall i = 1,\dots,n$
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Clustering}
+	\begin{itemize}
+		\item Discreteness: the $\theta_i$ have one of the $k$ \textbf{unique values} $\theta^*_j \ $ ($j=1,\dots,k$)
+		\item $k \simeq M \log(n) \ll n$ (!)
+		\item All $i$ s.t. $\theta_i = \theta^*_j$ belong to cluster $S_j \ $ ($j=1,\dots,k$)
+		\item
+		$$ \Lc(\theta_i | \mathbf{\theta}_{-i}) \propto
+		\sum_{j=1}^{k^-} n^-_j \delta_{\theta^{*-}_j} (\theta_i) + M G_0(\theta_i) $$
+	\end{itemize}
+\end{frame}
 
 
 %\begin{frame}
