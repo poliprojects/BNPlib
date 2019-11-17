@@ -78,10 +78,17 @@
 		\item $k \simeq M \log(n) \ll n$
 		\item All $i$ s.t. $\theta_i = \phi_j$ belong to cluster $S_j \ $ ($j=1,\dots,k$), and $n_j = |S_j|$
 		\pause
-		\item Conditional priors:
-		$$ \Lc(\theta_i | \boldsymbol\theta_{-i}) \propto
-		\sum_{j=1}^{k^-} n^-_j \delta_{\phi^-_j} (\theta_i) + M G_0(\theta_i) $$
-		% TODO graficozzo
+		\item Conditional prior for $\theta_i$:
+			\begin{minipage}{0.3\textwidth}
+				\begin{align*}
+					\Lc(\theta_i | \boldsymbol\theta_{-i}) \propto
+					\sum_{j=1}^{k^-} n^-_j &\delta_{\phi^-_j} (\theta_i) + M G_0 (\theta_i) \\
+					&\uparrow \hspace{55pt} \uparrow
+				\end{align*}
+			\end{minipage}%
+			\begin{minipage}{0.5\textwidth}
+				\include{diffuse_spiked}
+			\end{minipage}
 		\pause
 		\item Via \textbf{conjugancy} of the DP:
 		
