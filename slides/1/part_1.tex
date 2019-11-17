@@ -1,14 +1,14 @@
-\begin{frame}[c] %#02
-	\begin{center}
-		\Huge \color{blue} Title
-	\end{center}
-\end{frame}
+%\begin{frame}[c]
+%	\begin{center}
+%		\Huge \color{blue} Title
+%	\end{center}
+%\end{frame}
 
 
 \begin{frame} %#03
 	\frametitle{Non-Parametric statistics \onslide<2->{(the Bayesian way)}}
 	\begin{itemize}
-		\item Goal: density approximation %TODO
+		\item Goal: density estimation
 		\item \textbf{Infinite-dimensional} parameters, e.g. functions
 		\pause
 		\item Model:
@@ -28,22 +28,24 @@
 	\frametitle{Dirichlet Process prior}
 	\begin{align*}
 		y_i | G &\iidsim G \\
-		G &\sim DP(M G_0)
+		G &\sim \Pc = DP(M G_0)
 	\end{align*}
 	\vspace{-10pt}
 	\begin{itemize}
 		\item Parameters: $M > 0, \ G_0 \in M(S)$
+		\vspace{5pt}
 		\item Defining property: $\forall \{B_{1:k}\}$ partition of $S$,
 		$$[G(B_1),\dots,G(B_k)] \sim \operatorname{Dir}
 			\big( M G_0(B_1),\dots, M G_0(B_k) \big)$$
 		\pause
+		\vspace{-15pt}
 		\item \textbf{Discreteness} (stick-breaking): $G(\cdot) = \sum_{k=1}^{+\infty} w_h \delta_{m_h} (\cdot)$ %TODO stick-breaking model
-		\item \textbf{Conjugacy}: $G | \textbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i})$ %TODO should we add it?
-		\item Polya urn representation:
-		\begin{center}
-			$ \Lc(y_i | y_1,\dots,y_{i-1}) \propto \sum_{h=1}^{i-1} \delta_{y_h}(y_i) + M G_0 (y_i) $
-		\end{center}
-	\item $M \log n \ll n$ values %TODO
+		\vspace{10pt}
+		\item \textbf{Conjugacy}: $G | \textbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i}) \quad \implies \quad $ density estimation %TODO true?
+%		\item Polya urn representation:
+%		\begin{center}
+%			$ \Lc(y_i | y_1,\dots,y_{i-1}) \propto \sum_{h=1}^{i-1} \delta_{y_h}(y_i) + M G_0 (y_i) $
+%		\end{center}
 	\end{itemize}
 \end{frame}
 
@@ -51,7 +53,7 @@
 \begin{frame}
 	\frametitle{Continuous density estimation}
 	\begin{itemize}
-		\item \textbf{Mixtures}:
+		\item \textbf{Mixtures} (kernel $f$ + mixing distribution $G$):
 		\begin{align*}
 			y_i | G &\sim f_G(y) = \int f_\theta(y) \, \de G(\theta) \\
 			\onslide<2-> { G &\sim DP(M G_0) }
@@ -74,14 +76,14 @@
 \begin{frame}
 	\frametitle{Clustering in the DPM}
 	\begin{itemize}
-		\item Discreteness: the $\theta_i$ have one of the $k$ \textbf{unique values} $\phi_j $ {\small ($j=1,\dots,k$)}
+		\item Discreteness: the $\theta_i$ have one of the $k$ \textbf{unique values} $\boldsymbol{\phi_j}$ {\tiny ($j=1,\dots,k$)}
 		\item $k \simeq M \log(n) \ll n$
-		\item All $i$ s.t. $\theta_i = \phi_j$ belong to cluster $S_j \ $ ($j=1,\dots,k$), and $n_j = |S_j|$
+		\item All $i$ s.t. $\theta_i = \phi_j$ belong to cluster $S_j $ {\tiny ($j=1,\dots,k$)}, and $n_j = |S_j|$
 		\pause
 		\item Conditional prior for $\theta_i$:
 			\begin{minipage}{0.3\textwidth}
 				\begin{align*}
-					\hspace{-20pt}
+					\hspace{-10pt}
 					\Lc(\theta_i | \boldsymbol\theta_{-i}) \propto
 					\sum_{j=1}^{k^-} n^-_j &\delta_{\phi^-_j} (\theta_i) + M G_0 (\theta_i) \\
 					&\uparrow \hspace{55pt} \uparrow
@@ -91,7 +93,9 @@
 				\include{etc/diffuse_spiked}
 			\end{minipage}
 		\pause
-		\item Via \textbf{conjugancy} of the DP:
+		\item Conditional posterior for $\theta_i$:
+		$$ \Lc(\theta_i | \boldsymbol\theta_{-i}, y_i) \propto
+		\sum_{j=1}^{k^-} f_{\theta}(y_i) \delta_{\phi^-_j} (\theta_i) + M \, r_i \, G_0(\theta_i | y_i) $$ %\int f_{\theta_j}(y_i) \, \de G_0 (\theta)
 		
 	\end{itemize}
 \end{frame}
