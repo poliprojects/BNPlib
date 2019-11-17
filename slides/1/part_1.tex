@@ -38,7 +38,7 @@
 			\big( M G_0(B_1),\dots, M G_0(B_k) \big)$$
 		\pause
 		\item \textbf{Discreteness} (stick-breaking): $G(\cdot) = \sum_{k=1}^{+\infty} w_h \delta_{m_h} (\cdot)$ %TODO stick-breaking model
-		%\item \textbf{Conjugacy}: $G | \textbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i})$ %TODO should we add it?
+		\item \textbf{Conjugacy}: $G | \textbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i})$ %TODO should we add it?
 		\item Polya urn representation:
 		\begin{center}
 			$ \Lc(y_i | y_1,\dots,y_{i-1}) \propto \sum_{h=1}^{i-1} \delta_{y_h}(y_i) + M G_0 (y_i) $
@@ -72,14 +72,19 @@
 
 
 \begin{frame}
-	\frametitle{Clustering}
+	\frametitle{Clustering in the DPM}
 	\begin{itemize}
-		\item Discreteness: the $\theta_i$ have one of the $k$ \textbf{unique values} $\theta^*_j \ $ ($j=1,\dots,k$)
-		\item $k \simeq M \log(n) \ll n$ (!)
-		\item All $i$ s.t. $\theta_i = \theta^*_j$ belong to cluster $S_j \ $ ($j=1,\dots,k$)
-		\item
-		$$ \Lc(\theta_i | \mathbf{\theta}_{-i}) \propto
-		\sum_{j=1}^{k^-} n^-_j \delta_{\theta^{*-}_j} (\theta_i) + M G_0(\theta_i) $$
+		\item Discreteness: the $\theta_i$ have one of the $k$ \textbf{unique values} $\phi_j $ {\small ($j=1,\dots,k$)}
+		\item $k \simeq M \log(n) \ll n$
+		\item All $i$ s.t. $\theta_i = \phi_j$ belong to cluster $S_j \ $ ($j=1,\dots,k$), and $n_j = |S_j|$
+		\pause
+		\item Conditional priors:
+		$$ \Lc(\theta_i | \boldsymbol\theta_{-i}) \propto
+		\sum_{j=1}^{k^-} n^-_j \delta_{\phi^-_j} (\theta_i) + M G_0(\theta_i) $$
+		% TODO graficozzo
+		\pause
+		\item Via \textbf{conjugancy} of the DP:
+		
 	\end{itemize}
 \end{frame}
 
