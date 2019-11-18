@@ -8,6 +8,7 @@
 
 
 
+
 \title{parte2}
 \author{elena.zazzetti }
 \date{November 2019}
@@ -17,6 +18,12 @@
 
 \begin{document}
 
+\begin{frame} %#01
+	\frametitle{Neal Algorithm 2}
+
+
+		
+\end{frame}
 
 
 
@@ -30,7 +37,7 @@
 		    % No integration with respect $G_{0}$ is required
         \end{itemize}
         \begin{center}
-        \includegraphics[scale=0.5]{neal.PNG}
+        \includegraphics[scale=0.29]{neal8.png}
         \end{center}
         \item Prior for $c_{i}$ :
             \begin{align*}
@@ -54,10 +61,10 @@
 		\begin{itemize}
 		    \item For $i= 1...n$ : update $c_{i}$  \\
 		        \begin{itemize}
-		            \item Sample auxiliary parameters: \\ \begin{itemize}
+		            \item Sample auxiliary parameters: \\ \begin{list}{$\circ$}{} 
 		                \item $c_{i}=c_{j}$ for some $j\ \Rightarrow$ no connection \\
 		                \item $c_{i}\neq c_{j} \ \Rightarrow$ association to one of $m$
-		            \end{itemize} 
+		            \end{list}
 
 		            The other $\phi$ values drawn from $G_{0}$ \\
 		            \item Gibbs sampling update for $c_{i}$: %(by evaluating relative prob of these possibilities)
@@ -85,18 +92,37 @@
 	    \item Hierarchical extensions
 	\end{itemize}
 
-	
 		
 \end{frame}
 
+	
 
-\begin{frame}[c] %#06
+\begin{frame} %#06
+	\frametitle{Stick-Breaking Priors}
 	\begin{center}
-stick-breaking
-		
-		(stelline, immagine)
+
+$   \mathscr{P}(\cdot)= \sum\limits_{k=1}^N
+    \mathit{p_{k}}\delta_{Z_{k}}(\cdot) \\
+	\mathit{p_{k}}=V_{1} \ \text{and} \  \mathit{p_{k}}=(1-V_{1})(1-V_{2}) \cdot \cdot \cdot(1-V_{k-1})V_{k} \\
+	\mathbf{Z_{k}}  \stackrel{iid}{\sim} H \\
+	 V_{k}  \stackrel{iid}{\sim} Beta(a_{k},b_{k}) \\
+	\mathbf{a}=(a_{1},a_{2},...) \ \text{and} \  \mathbf{b}=(b_{1},b_{2},...) \\
+	0\leq\mathit{p_{k}}\leq1 \ \text{and} \ \sum\limits_{k=1}^N\mathit{p_{k}}=1 
+	$
 		
 	\end{center}
+	
+	    	\begin{itemize}
+	    	    \item $N<\infty$ : \ $\mathscr{P}_{N}(\textbf{a},\textbf{b})$
+	    	    \begin{itemize}
+	    	        \item $\mathbf{p} &\sim \mathscr{GD}(\textbf{a},\textbf{b})$
+	    	        \item e.g. all finite dimensional Dirichlet priors
+	    	    \end{itemize}
+	    	    \item $N=\infty$ : $\mathscr{P}_{\infty}(\textbf{a},\textbf{b})$
+	    	    \begin{itemize}
+	    	        \item e.g. Dirichlet process, the two parameter Poisson-Dirichlet process
+	    	    \end{itemize}
+	    	\end{itemize}
 \end{frame}
 
 
@@ -112,7 +138,7 @@ stick-breaking
             (Y_{i}|\mathbf{\Phi},\mathbf{c})&\stackrel{ind}{\sim} F(\phi_{c_{i}}) , \ i=1,..,n \\
             (c_{i}|\mathbf{p})&\stackrel{iid}{\sim}\sum\limits_{k=1}^N \mathit{p_{k}}\delta_{k}(\cdot)\\
             \mathbf{p} &\sim \mathscr{GD}(\textbf{a},\textbf{b}) \\
-            \mathbf{\Phi_{c}} & \sim G_{0}
+            \mathbf{\Phi}_{c} & \sim G_{0}
         \end{align*}
 
 
@@ -139,7 +165,7 @@ Repeatedly drawing values from conditional distributions of the blocked variable
 
 \begin{itemize}
     \item The Algorithm produces draws from $(\Phi,\textbf{c},\textbf{p}| \textbf{Y})$ \\
-\item Each draw $(\Phi,\textbf{c},\textbf{p})$ defines a measure $P(\cdot)= \sum\limits_{k=1}^N  \mathit{p_{k}}\delta_{Z_{k}}(\cdot) $
+\item Each draw $(\Phi,\textbf{c},\textbf{p})$ defines a measure $P(\cdot)= \sum\limits_{k=1}^N  \mathit{p_{k}}\delta_{\Phi_{k}}(\cdot) $
 \item Each $P$ is a draw from $\mathscr{P}(\cdot|\mathbf{Y})$
 \end{itemize}
 
