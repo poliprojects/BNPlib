@@ -8,18 +8,18 @@
 		    % No integration with respect $G_{0}$ is required
         \end{itemize}
         \begin{center}
-        \includegraphics[scale=0.29]{etc/neal8.png}
+        	\includegraphics[scale=0.29]{etc/neal8.png}
         \end{center}
+
         \item Prior for $c_{i}$ :
             \begin{align*}
                 \text{If} \ c=c_{j} \ \text{for some } j: \ P(c_{i}=c | c_{-i}) &= \frac{n_{-i,c}}{n-1-M}  \\
                 P(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1-M}  \Rightarrow 
-                \begin{tabular}{s}
-                \textbf{split} among the $m$   \\
+                \begin{tabular}{c}
+                \textbf{split} among the $m$ \\
                 auxiliary parameters 
                 \end{tabular}
-            \end{align*}
-		
+            \end{align*}	
 	\end{itemize}
 \end{frame}
 
@@ -71,22 +71,22 @@
 \begin{frame} %#06
 	\frametitle{Stick-Breaking Priors}
 	\begin{center}
+	\begin{align*}
+		\mathscr{P}(\cdot)= \sum\limits_{k=1}^N
+		\mathit{p_{k}}\delta_{Z_{k}}(\cdot) \\
+		\mathit{p_{k}}=V_{1} \ \text{and} \  \mathit{p_{k}}=(1-V_{1})(1-V_{2}) \cdot \cdot \cdot(1-V_{k-1})V_{k} \\
+		\mathbf{Z_{k}}  \stackrel{iid}{\sim} H \\
+		V_{k}  \stackrel{iid}{\sim} Beta(a_{k},b_{k}) \\
+		\mathbf{a}=(a_{1},a_{2},...) \ \text{and} \  \mathbf{b}=(b_{1},b_{2},...) \\
+		0\leq\mathit{p_{k}}\leq1 \ \text{and} \ \sum\limits_{k=1}^N\mathit{p_{k}}=1 
+	\end{align*}
 
-$   \mathscr{P}(\cdot)= \sum\limits_{k=1}^N
-    \mathit{p_{k}}\delta_{Z_{k}}(\cdot) \\
-	\mathit{p_{k}}=V_{1} \ \text{and} \  \mathit{p_{k}}=(1-V_{1})(1-V_{2}) \cdot \cdot \cdot(1-V_{k-1})V_{k} \\
-	\mathbf{Z_{k}}  \stackrel{iid}{\sim} H \\
-	 V_{k}  \stackrel{iid}{\sim} Beta(a_{k},b_{k}) \\
-	\mathbf{a}=(a_{1},a_{2},...) \ \text{and} \  \mathbf{b}=(b_{1},b_{2},...) \\
-	0\leq\mathit{p_{k}}\leq1 \ \text{and} \ \sum\limits_{k=1}^N\mathit{p_{k}}=1 
-	$
-		
 	\end{center}
 	
 	    	\begin{itemize}
 	    	    \item $N<\infty$ : \ $\mathscr{P}_{N}(\textbf{a},\textbf{b})$
 	    	    \begin{itemize}
-	    	        \item $\mathbf{p} &\sim \mathscr{GD}(\textbf{a},\textbf{b})$
+	    	        \item $\mathbf{p} \sim \mathscr{GD}(\textbf{a},\textbf{b})$
 	    	        \item e.g. all finite dimensional Dirichlet priors
 	    	    \end{itemize}
 	    	    \item $N=\infty$ : $\mathscr{P}_{\infty}(\textbf{a},\textbf{b})$
