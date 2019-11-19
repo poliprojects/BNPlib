@@ -39,7 +39,7 @@
 			\big( M G_0(B_1),\dots, M G_0(B_k) \big)$$
 		\pause
 		\vspace{-15pt}
-		\item \textbf{Discreteness} (stick-breaking): $G(\cdot) = \sum_{k=1}^{+\infty} w_h \delta_{m_h} (\cdot)$ %TODO stick-breaking model
+		\item \textbf{Discreteness} (stick-breaking): $G(\cdot) = \sum_{k=1}^{+\infty} w_h \delta_{m_h} (\cdot)$
 		\vspace{10pt}
 		\item \textbf{Conjugacy}: $G | \textbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i}) \quad \implies \quad $ density estimation %TODO true?
 %		\item Polya urn representation:
@@ -76,7 +76,7 @@
 \begin{frame}
 	\frametitle{Clustering in the DPM}
 	\begin{itemize}
-		\item Discreteness: the $\theta_i$ have one of the $k$ \textbf{unique values} $\boldsymbol{\phi_j}$ {\tiny ($j=1,\dots,k$)}
+		\item Discreteness: the $\theta_i$ have one of the $k$ \textbf{unique values} $\phi_j$ {\tiny ($j=1,\dots,k$)}
 		\item $k \simeq M \log(n) \ll n$
 		\item All $i$ s.t. $\theta_i = \phi_j$ belong to cluster $S_j $ {\tiny ($j=1,\dots,k$)}, and $n_j = |S_j|$
 		\pause
@@ -102,8 +102,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%% BOZZA NEAL2
 
 \begin{frame} %#03
-	\frametitle{Neal Algorithm 2}
-Equivalent models with $ K\rightarrow \infty$ :
+	\frametitle{Neal's Algorithm 2}
+Equivalent models with $ K\rightarrow +\infty$:
 \begin{figure}[htpb] 
 \minipage{0.40\textwidth} 
         \begin{align*}
@@ -115,13 +115,17 @@ Equivalent models with $ K\rightarrow \infty$ :
 %\hspace{1cm} 
 \minipage{0.40\textwidth} 
         \begin{align*}
-            (Y_{i}|\mathbf{\Phi},c_{i})&\sim F(\phi_{c_{i}}) \\
+            (Y_{i}|\mathbf{\phi},c_{i})&\sim F(\phi_{c_{i}}) \\
             (c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},...,\mathit{p_{K}})\\
-            \mathbf{\Phi}_{c} & \sim G_{0} \\
+            \phi_{c} & \sim G_{0} \\
             \mathbf{p} &\sim \text{Dirichlet}(M/K,...,M/K) 
         \end{align*}
 \endminipage  
 \end{figure}
+\begin{center}
+	\vspace{30pt}
+	with $\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$
+\end{center}
 
 
 
@@ -132,7 +136,7 @@ Equivalent models with $ K\rightarrow \infty$ :
 
 
 \begin{frame} %#04
-	\frametitle{Neal Algorithm 2}
+	\frametitle{Neal's Algorithm 2}
 	\textbf{Algorithm}:
 		\begin{itemize}
 		    \item For $i= 1...n$ : update $c_{i}$  \\
@@ -140,11 +144,11 @@ Equivalent models with $ K\rightarrow \infty$ :
 		            \item If $c_{i}$ is associated with no other observation, remove $\phi_{c_{i}}$ from the state
 		            \item Gibbs sampling for $c_{i}$:
 		            \begin{align*}
-                    \text{If} \ c=c_{j} \ \text{for some } j\neq i: \ P(c_{i}=c | c_{-i}, y_{i},\mathbf{\Phi}) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
-                    P(c_{i}\neq c_{j} \text{ for all } j | c_{-i}, y_{i},\mathbf{\Phi}) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi)dG_{0}(\phi)
+		            \hspace{-35pt}
+                    \text{If} \ c=c_{j} \ \text{for some } j\neq i: \ P(c_{i}=c | c_{-i}, y_{i},\mathbf{\phi}) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
+                    P(c_{i}\neq c_{j} \text{ for all } j | c_{-i}, y_{i},\mathbf{\phi}) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi)dG_{0}(\phi)
                     \end{align*}
                     \item  If the new $c_{i}$ is not associated with any other observation, draw a value for $\phi_{c_{i}}$ from $H_{i}$ and add it to the state
-                    
                 \end{itemize} 
         
             \item For $c \in \{c_{1},..,c_{n}\}$: update $\phi_{c}$ given $y_{i}$ such that $c_{i}=c$

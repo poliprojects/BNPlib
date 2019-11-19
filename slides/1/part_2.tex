@@ -1,18 +1,20 @@
 \begin{frame} %#03
-	\frametitle{Neal Algorithm 8}
+	\frametitle{Neal's Algorithm 8}
 	\begin{itemize}
-		\item \textbf{Approach} :
+		\item Approach:
 		\begin{itemize}
-		    \item Markov chain with permanent state $c$ and $\phi$ %(?)
+		    \item Markov chain with permanent state $\textbf c$ and $\boldsymbol\phi$ %(?)
 		    \item Gibbs sampling to the state extended by the addition of $m$ auxiliary parameters \\
 		    % No integration with respect $G_{0}$ is required
         \end{itemize}
         \begin{center}
         	\includegraphics[scale=0.29]{etc/neal8.png}
         \end{center}
-
-        \item Prior for $c_{i}$ :
+		
+        \item Prior for $c_{i}$:
             \begin{align*}
+            \hspace{-25pt}
+            \vspace{-10pt}
                 \text{If} \ c=c_{j} \ \text{for some } j: \ P(c_{i}=c | c_{-i}) &= \frac{n_{-i,c}}{n-1-M}  \\
                 P(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1-M}  \Rightarrow 
                 \begin{tabular}{c}
@@ -27,7 +29,7 @@
 
 
 \begin{frame} %#04
-	\frametitle{Neal Algorithm 8}
+	\frametitle{Neal's Algorithm 8}
 	\textbf{Algorithm}:
 		\begin{itemize}
 		    \item For $i= 1...n$ : update $c_{i}$  \\
@@ -39,11 +41,12 @@
 
 		            The other $\phi$ values drawn from $G_{0}$ \\
 		            \item Gibbs sampling update for $c_{i}$: %(by evaluating relative prob of these possibilities)
-		                \begin{displaymath}
-		                    P(c_{i}=c | c_{-i}, y_{i}, \phi_{1},...,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
-		                \end{cases}
-		                \end{displaymath}
-                    \item Discard $\phi$ values not associated
+		            	\begin{displaymath}
+		            	\hspace{-20pt}
+		            	P(c_{i}=c | c_{-i}, y_{i}, \phi_{1},...,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
+		            	\end{cases}
+		            	\end{displaymath}
+                    \item Discard $\boldsymbol\phi$ values not associated
                     
                 \end{itemize} 
         
@@ -58,7 +61,7 @@
 	\frametitle{Advantages}
 	\begin{itemize}
 	    \item  Models with non-conjugate priors
-	    \item As $m \rightarrow \infty $ approaches Algorithm 2 but equilibrium distribution is exact 
+	    \item As $m \rightarrow +\infty$ it approaches Algorithm 2 but equilibrium distribution is exact 
 	    \item More efficient than similar algorithms (e.g. no-gaps) %not reduced prob to create new cluster
 	    \item Hierarchical extensions
 	\end{itemize}
@@ -70,26 +73,25 @@
 
 \begin{frame} %#06
 	\frametitle{Stick-Breaking Priors}
-	\begin{center}
+	\vspace{-15pt}
 	\begin{align*}
 		\mathscr{P}(\cdot)= \sum\limits_{k=1}^N
 		\mathit{p_{k}}\delta_{Z_{k}}(\cdot) \\
 		\mathit{p_{k}}=V_{1} \ \text{and} \  \mathit{p_{k}}=(1-V_{1})(1-V_{2}) \cdot \cdot \cdot(1-V_{k-1})V_{k} \\
-		\mathbf{Z_{k}}  \stackrel{iid}{\sim} H \\
-		V_{k}  \stackrel{iid}{\sim} Beta(a_{k},b_{k}) \\
+		\mathbf{Z_{k}}  \iidsim H \\
+		V_{k}  \iidsim Beta(a_{k},b_{k}) \\
 		\mathbf{a}=(a_{1},a_{2},...) \ \text{and} \  \mathbf{b}=(b_{1},b_{2},...) \\
 		0\leq\mathit{p_{k}}\leq1 \ \text{and} \ \sum\limits_{k=1}^N\mathit{p_{k}}=1 
 	\end{align*}
-
-	\end{center}
+	\vspace{-15pt}
 	
 	    	\begin{itemize}
-	    	    \item $N<\infty$ : \ $\mathscr{P}_{N}(\textbf{a},\textbf{b})$
+	    	    \item $N<+\infty$: \ $\mathscr{P}_{N}(\textbf{a},\textbf{b})$
 	    	    \begin{itemize}
 	    	        \item $\mathbf{p} \sim \mathscr{GD}(\textbf{a},\textbf{b})$
 	    	        \item e.g. all finite dimensional Dirichlet priors
 	    	    \end{itemize}
-	    	    \item $N=\infty$ : $\mathscr{P}_{\infty}(\textbf{a},\textbf{b})$
+	    	    \item $N=+\infty$: $\mathscr{P}_{\infty}(\textbf{a},\textbf{b})$
 	    	    \begin{itemize}
 	    	        \item e.g. Dirichlet process, the two parameter Poisson-Dirichlet process
 	    	    \end{itemize}
@@ -98,18 +100,18 @@
 
 
 \begin{frame} %#07
-	\frametitle{Blocked Gibbs}
+	\frametitle{Blocked Gibbs Algorithm}
 	\begin{itemize}
-	    \item \textbf{Assumption}: finite dimensional prior  $P \sim  \mathscr{P}_{N}(\textbf{a},\textbf{b})$
+	    \item Assumption: \textbf{finite-dimensional} prior  $P \sim  \mathscr{P}_{N}(\textbf{a},\textbf{b})$
 	
 %(main use: approximate DPMmodels by truncating the stick-breaking representation of the DP)\\
         \item Finite number of variables $\Rightarrow$ \textit{blocks of parameters} \\
         \item \textbf{Model}:\\
         \begin{align*}
-            (Y_{i}|\mathbf{\Phi},\mathbf{c})&\stackrel{ind}{\sim} F(\phi_{c_{i}}) , \ i=1,..,n \\
-            (c_{i}|\mathbf{p})&\stackrel{iid}{\sim}\sum\limits_{k=1}^N \mathit{p_{k}}\delta_{k}(\cdot)\\
+            (Y_{i}|\mathbf{\phi},\mathbf{c})&\indsim F(\phi_{c_{i}}) , \ i=1,..,n \\
+            (c_{i}|\mathbf{p})&\iidsim\sum\limits_{k=1}^N \mathit{p_{k}}\delta_{k}(\cdot)\\
             \mathbf{p} &\sim \mathscr{GD}(\textbf{a},\textbf{b}) \\
-            \mathbf{\Phi}_{c} & \sim G_{0}
+            \mathbf{\phi}_{c} & \sim G_{0}
         \end{align*}
 
 
@@ -121,13 +123,13 @@
 
 
 \begin{frame} %#08
-	\frametitle{Blocked Gibbs}
+	\frametitle{Blocked Gibbs Algorithm}
 \textbf{Algorithm}: \\
 Repeatedly drawing values from conditional distributions of the blocked variables:\\
 
 \begin{itemize}
-    \item $(\Phi | \textbf{c}, \textbf{Y})$
-    \item $(\textbf{c}| \Phi,\textbf{p}, \textbf{Y})$
+    \item $(\phi | \textbf{c}, \textbf{Y})$
+    \item $(\textbf{c}| \phi,\textbf{p}, \textbf{Y})$
     \item $(\textbf{p}| \textbf{c})$
 
 \end{itemize}
@@ -135,9 +137,9 @@ Repeatedly drawing values from conditional distributions of the blocked variable
 \textbf{Direct sampling of the posterior} $\mathscr{P}(\cdot|\mathbf{Y})$ :\\
 
 \begin{itemize}
-    \item The Algorithm produces draws from $(\Phi,\textbf{c},\textbf{p}| \textbf{Y})$ \\
-\item Each draw $(\Phi,\textbf{c},\textbf{p})$ defines a measure $P(\cdot)= \sum\limits_{k=1}^N  \mathit{p_{k}}\delta_{\Phi_{k}}(\cdot) $
-\item Each $P$ is a draw from $\mathscr{P}(\cdot|\mathbf{Y})$
+    \item The Algorithm produces draws from $(\phi,\textbf{c},\textbf{p}| \textbf{Y})$ \\
+\item Each draw $(\phi,\textbf{c},\textbf{p})$ defines a measure $P(\cdot)= \sum\limits_{k=1}^N  \mathit{p_{k}}\delta_{\phi_{k}}(\cdot) $
+\item Each $P$ is a drawn from $\mathscr{P}(\cdot|\mathbf{Y})$
 \end{itemize}
 
 
