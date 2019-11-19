@@ -99,12 +99,70 @@
 	\end{itemize}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%% BOZZA NEAL2
 
-\begin{frame} %#01
-	\frametitle{Neal's Algorithm 2}
-	aaa
+\begin{frame} %#03
+	\frametitle{Neal Algorithm 2}
+Equivalent models with $ K\rightarrow \infty$ :
+\begin{figure}[htpb] 
+\minipage{0.40\textwidth} 
+        \begin{align*}
+            (Y_{i}|\theta_{i})&\sim F(\theta_{i}) \\
+            (\theta_{i}|G)&\sim G \\
+            G & \sim DP(M,G_{0})
+        \end{align*}
+\endminipage 
+%\hspace{1cm} 
+\minipage{0.40\textwidth} 
+        \begin{align*}
+            (Y_{i}|\mathbf{\Phi},c_{i})&\sim F(\phi_{c_{i}}) \\
+            (c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},...,\mathit{p_{K}})\\
+            \mathbf{\Phi}_{c} & \sim G_{0} \\
+            \mathbf{p} &\sim \text{Dirichlet}(M/K,...,M/K) 
+        \end{align*}
+\endminipage  
+\end{figure}
+
+
+
+
 \end{frame}
 
+
+
+
+\begin{frame} %#04
+	\frametitle{Neal Algorithm 2}
+	\textbf{Algorithm}:
+		\begin{itemize}
+		    \item For $i= 1...n$ : update $c_{i}$  \\
+		        \begin{itemize}
+		            \item If $c_{i}$ is associated with no other observation, remove $\phi_{c_{i}}$ from the state
+		            \item Gibbs sampling for $c_{i}$:
+		            \begin{align*}
+                    \text{If} \ c=c_{j} \ \text{for some } j\neq i: \ P(c_{i}=c | c_{-i}, y_{i},\mathbf{\Phi}) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
+                    P(c_{i}\neq c_{j} \text{ for all } j | c_{-i}, y_{i},\mathbf{\Phi}) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi)dG_{0}(\phi)
+                    \end{align*}
+                    \item  If the new $c_{i}$ is not associated with any other observation, draw a value for $\phi_{c_{i}}$ from $H_{i}$ and add it to the state
+                    
+                \end{itemize} 
+        
+            \item For $c \in \{c_{1},..,c_{n}\}$: update $\phi_{c}$ given $y_{i}$ such that $c_{i}=c$
+            
+		\end{itemize}
+		
+\end{frame}
+
+
+\begin{frame} %#05
+	\frametitle{Advantages}
+	\begin{itemize}
+	    \item  Feasible if we can compute $\int F(y_{i},\phi)dG_{0}(\phi)$ and sample from $H_{i}$ (generally conjugate case)
+	    \item  Change the $\theta$ for more than one observation simultaneously
+	\end{itemize}
+
+		
+\end{frame}
 
 
 %\begin{frame}
