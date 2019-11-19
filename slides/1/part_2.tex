@@ -1,7 +1,7 @@
 \begin{frame}
 	\frametitle{Neal's Algorithm 8}
 	\begin{itemize}
-	    %\item Markov chain with permanent state $\textbf c$ and $\boldsymbol\phi$ %(?)
+	    %\item Markov chain with permanent state $\mathbf c$ and $\boldsymbol\phi$ %(?)
 		\item \textbf{Gibbs sampling} on the state, which is extended by the addition of $m$ \textbf{auxiliary parameters} \\
 		    % No integration with respect $G_{0}$ is required
         \begin{center}
@@ -12,7 +12,7 @@
             \begin{align*}
             \hspace{-25pt}
             \vspace{-12pt}
-                \text{If $c=c_j$ for some $j$: } \PP(c_i=c | \textbf c_{-i}) &= \frac{n_{-i,c}}{n-1-M}  \\
+                \text{If $c=c_j$ for some $j$: } \PP(c_i=c | \mathbf c_{-i}) &= \frac{n_{-i,c}}{n-1-M}  \\
                 \PP(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1-M}  \Rightarrow 
                 \begin{tabular}{c}
                 \textbf{split} among the $m$ \\
@@ -38,7 +38,7 @@
 		            \item Draw $c_{i}$ as follows: %(by evaluating relative prob of these possibilities)
 		            	\begin{displaymath}
 		            	\hspace{-20pt}
-		            	P(c_{i}=c | \textbf c_{-i}, y_{i}, \phi_{1},...,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
+		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},...,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
 		            	\end{cases}
 		            	\end{displaymath}
                     \item Discard values in $\boldsymbol\phi$ not associated to any $\theta_j$
@@ -70,19 +70,19 @@
 	\mathit{p_{k}}\delta_{Z_{k}}(\cdot)$$
 	with:
 	\begin{itemize}
-		\item $Z_k \iidsim H \quad$ (allocations),
+		\item $Z_k \iidsim H \quad$ (allocations)
 		\item $V_k  \iidsim \operatorname{Beta}(a_{k},b_{k}) \quad$ with $\mathbf{a}=(a_{1},a_{2},...)$ and $\mathbf{b}=(b_{1},b_{2},...)$
 		\item $p_k = (1-V_{1}) (1-V_{2}) \cdots (1-V_{k-1}) V_k \quad$ (weights) \\[8pt] %\mathit{p_{1}}=V_{1}
 		with $0 \leq p_k \leq 1, \sum_{k=1}^N p_k = 1$
 	\end{itemize}
-
+	Dimension:
    	\begin{itemize}
-   	    \item[$\circ$] $N<+\infty$: \ $\mathscr{P}_{N}(\textbf{a},\textbf{b})$
+   	    \item[$\circ$] $N<+\infty$: \ $\mathscr{P}_{N}(\mathbf{a},\mathbf{b})$
    	    \begin{itemize}
-   	        \item $\mathbf{p} \sim \mathscr{GD}(\textbf{a},\textbf{b})$ (Generalized Dirichlet)
+   	        \item $\mathbf{p} \sim \mathscr{GD}(\mathbf{a},\mathbf{b})$ (Generalized Dirichlet)
    	        \item e.g. all finite dimensional Dirichlet priors
    	    \end{itemize}
-   	    \item[$\circ$] $N=+\infty$: $\mathscr{P}_{\infty}(\textbf{a},\textbf{b})$
+   	    \item[$\circ$] $N=+\infty$: $\mathscr{P}_{\infty}(\mathbf{a},\mathbf{b})$
    	    \begin{itemize}
    	        \item e.g. Dirichlet process, the two-parameter Poisson-Dirichlet process
    	    \end{itemize}
@@ -93,14 +93,14 @@
 \begin{frame}
 	\frametitle{Blocked Gibbs Algorithm}
 	\begin{itemize}
-	    \item Assumption: \textbf{finite-dimensional} prior $P \sim  \mathscr{P}_{N}(\textbf{a},\textbf{b})$
+	    \item Assumption: \textbf{finite-dimensional} prior $P \sim  \mathscr{P}_{N}(\mathbf{a},\mathbf{b})$
 		%(main use: approximate DPMmodels by truncating the stick-breaking representation of the DP)\\
         \item Finite number of variables $\Rightarrow$ \textit{blocks of parameters}
         \item Model:
         \begin{align*}
             (Y_{i}|\mathbf{\phi},\mathbf{c})&\indsim F(\cdot,\phi_{c_{i}}) , \ i=1,..,n \\
             (c_{i}|\mathbf{p})&\iidsim\sum\limits_{k=1}^N \mathit{p_{k}}\delta_{k}(\cdot)\\
-            \mathbf{p} &\sim \mathscr{GD}(\textbf{a},\textbf{b}) \\
+            \mathbf{p} &\sim \mathscr{GD}(\mathbf{a},\mathbf{b}) \\
             \mathbf{\phi}_{c} & \sim G_{0}
         \end{align*}
 
@@ -116,17 +116,17 @@
 	\frametitle{Blocked Gibbs Algorithm}
 	Algorithm:
 	\begin{itemize}
-		\item Repeatedly draw values from conditional distributions of the blocked variables:
-		\begin{itemize}
-			\item $\boldsymbol\phi \sim \Lc(\boldsymbol\phi | \textbf{c}, \mathbf{y})$
-			\item $\textbf{c} \sim \Lc (\textbf{c}| \boldsymbol\phi,\textbf{p}, \mathbf{y})$
-			\item $\textbf{p} \sim \Lc (\textbf{p}| \textbf{c})$
-		\end{itemize}
+		\item Repeatedly draw values from the conditional distributions of the blocked variables:
+		\begin{align*}
+			\boldsymbol\phi &\sim \Lc(\boldsymbol\phi | \mathbf{c}, \mathbf{y}) \\
+			\mathbf{c} &\sim \Lc (\mathbf{c}| \boldsymbol\phi,\mathbf{p}, \mathbf{y}) \\
+			\mathbf{p} &\sim \Lc (\mathbf{p}| \mathbf{c})
+		\end{align*}
 	\end{itemize}
 	\textbf{Direct sampling} of the \textbf{posterior} $\mathscr{P}(\cdot|\mathbf{y})$:
 	\begin{itemize}
-    	\item The algorithm produces draws from $(\phi,\textbf{c},\textbf{p}| \mathbf{y})$
-		\item Each draw $(\phi,\textbf{c},\textbf{p})$ defines a measure $P(\cdot)= \sum\limits_{k=1}^N  \mathit{p_{k}}\delta_{\phi_{k}}(\cdot) $
+    	\item The algorithm produces draws from $(\boldsymbol\phi,\mathbf{c},\mathbf{p}| \mathbf{y})$
+		\item Each draw $(\boldsymbol\phi,\mathbf{c},\mathbf{p})$ defines a measure $P(\cdot)= \sum\limits_{k=1}^N  \mathit{p_{k}}\delta_{\phi_{k}}(\cdot) $ %TODO what about c?
 		\item Each $P$ is a drawn from $\mathscr{P}(\cdot|\mathbf{y})$
 	\end{itemize}
 \end{frame}
@@ -142,6 +142,6 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Code structure}
+	\frametitle{Code Structure}
 	\includegraphics[width=\linewidth]{etc/code_map.png}
 \end{frame}

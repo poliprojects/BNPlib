@@ -6,7 +6,7 @@
 
 
 \begin{frame}
-	\frametitle{Non-Parametric statistics}
+	\frametitle{Non-Parametric Statistics}
 	\begin{itemize}
 		\item Goal: density estimation
 		\item \textbf{Infinite-dimensional} parameters, e.g. functions
@@ -22,7 +22,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Dirichlet Process prior}
+	\frametitle{Dirichlet Process Prior}
 	\begin{align*}
 		y_i | G &\iidsim G \\
 		G &\sim \Pc = DP(M G_0)
@@ -47,7 +47,7 @@
 
 
 \begin{frame}
-	\frametitle{Continuous density estimation}
+	\frametitle{Continuous Density Estimation}
 	\begin{itemize}
 		\item \textbf{Mixtures} (kernel $F$ + mixing distribution $G$):
 		\begin{align*}
@@ -68,7 +68,7 @@
 
 
 \begin{frame}
-	\frametitle{Clustering in the DPM}
+	\frametitle{Clustering In The DPM}
 	\begin{itemize}
 		\item Discreteness: the $\theta_i$ have one of the $k$ \textbf{unique values} $\phi_j$ {\tiny ($j=1,\dots,k$)}
 		\item $k \simeq M \log(n) \ll n$
@@ -94,7 +94,7 @@
 
 
 \begin{frame} %#03
-	\frametitle{Discrete model}
+	\frametitle{Discrete Model}
 	\begin{figure}[htpb] 
 		\minipage{0.40\textwidth}
     	    \begin{align*}
@@ -136,15 +136,15 @@
 	\frametitle{Neal's Algorithm 2}
 	\textbf{Gibbs sampling} algorithm:
 	\begin{itemize}
-		\item $(\boldsymbol\phi, \textbf c)$ is the \textbf{state} of a Markov chain
+		\item $(\boldsymbol\phi, \mathbf c)$ is the \textbf{state} of a Markov chain
 	    \item For $i= 1,\dots,n$: update $c_{i}$
 	    \begin{itemize}
 	        \item If $c_{i}$ allocates $\phi_i$ to a singleton, remove $\phi_{c_{i}}$ from the state
 		    \item Sample $c_i$ as follows:
 	        \begin{align*}
 		        \hspace{-35pt}
-                \text{If $c=c_j$ for some $j\neq i$: } \PP(c_{i}=c | \textbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
-                \PP(c_{i}\neq c_{j} \text{ for all } j | \textbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi) \, G_0(\de\phi)
+                \text{If $c=c_j$ for some $j\neq i$: } \PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
+                \PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi) \, G_0(\de\phi)
             \end{align*}
             \item If the new $c_{i}$ allocates $\phi_i$ to a singleton, draw $\phi_{c_{i}} \sim G_0(\cdot|y_i)$ and add it to the state
         \end{itemize} 
