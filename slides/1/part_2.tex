@@ -1,8 +1,8 @@
-\begin{frame} %#03
+\begin{frame}
 	\frametitle{Neal's Algorithm 8}
 	\begin{itemize}
 	    %\item Markov chain with permanent state $\textbf c$ and $\boldsymbol\phi$ %(?)
-		\item Gibbs sampling to the state extended by the addition of $m$ auxiliary parameters \\
+		\item \textbf{Gibbs sampling} to the state extended by the addition of $m$ \textbf{auxiliary parameters} \\
 		    % No integration with respect $G_{0}$ is required
         \begin{center}
         	\includegraphics[scale=0.35]{etc/neal8.png}
@@ -11,9 +11,9 @@
         \item Prior for $c_{i}$:
             \begin{align*}
             \hspace{-25pt}
-            \vspace{-10pt}
-                \text{If} \ c=c_{j} \ \text{for some } j: \ P(c_{i}=c | c_{-i}) &= \frac{n_{-i,c}}{n-1-M}  \\
-                P(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1-M}  \Rightarrow 
+            \vspace{-12pt}
+                \text{If $c=c_j$ for some $j$: } \PP(c_{i}=c | c_{-i}) &= \frac{n_{-i,c}}{n-1-M}  \\
+                \PP(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1-M}  \Rightarrow 
                 \begin{tabular}{c}
                 \textbf{split} among the $m$ \\
                 auxiliary parameters 
@@ -23,38 +23,34 @@
 \end{frame}
 
 
-
-
-\begin{frame} %#04
+\begin{frame}
 	\frametitle{Neal's Algorithm 8}
-	\textbf{Algorithm}:
+	Algorithm:
 		\begin{itemize}
-		    \item For $i= 1...n$ : update $c_{i}$  \\
+		    \item For $i= 1,\dots,n$: update $c_{i}$
 		        \begin{itemize}
-		            \item Sample auxiliary parameters: \\ \begin{list}{$\circ$}{} 
+		            \item Sample auxiliary parameters: \begin{list}{$\circ$}{} 
 		                \item $c_{i}=c_{j}$ for some $j\ \Rightarrow$ no connection \\
 		                \item $c_{i}\neq c_{j} \ \Rightarrow$ association to one of $m$
 		            \end{list}
 
-		            The other $\phi$ values drawn from $G_{0}$ \\
-		            \item Gibbs sampling update for $c_{i}$: %(by evaluating relative prob of these possibilities)
+		            The other $\phi$ values drawn from $G_{0}$
+		            \item Draw $c_{i}$ as follows: %(by evaluating relative prob of these possibilities)
 		            	\begin{displaymath}
 		            	\hspace{-20pt}
 		            	P(c_{i}=c | c_{-i}, y_{i}, \phi_{1},...,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
 		            	\end{cases}
 		            	\end{displaymath}
-                    \item Discard $\boldsymbol\phi$ values not associated
+                    \item Discard $\boldsymbol\phi$ values not associated to any cluster
                     
                 \end{itemize} 
         
             \item For $c \in \{c_{1},..,c_{n}\}$: update $\phi_{c}$ given $y_{i}$ such that $c_{i}=c$
-            
 		\end{itemize}
-		
 \end{frame}
 
 
-\begin{frame} %#05
+\begin{frame}
 	\frametitle{Advantages}
 	\begin{itemize}
 	    \item  Models with non-conjugate priors
@@ -68,7 +64,7 @@
 
 	
 
-\begin{frame} %#06
+\begin{frame}
 	\frametitle{Stick-Breaking Priors}
 	\vspace{-15pt}
 	\begin{align*}
@@ -96,7 +92,7 @@
 \end{frame}
 
 
-\begin{frame} %#07
+\begin{frame}
 	\frametitle{Blocked Gibbs Algorithm}
 	\begin{itemize}
 	    \item Assumption: \textbf{finite-dimensional} prior  $P \sim  \mathscr{P}_{N}(\textbf{a},\textbf{b})$
@@ -119,42 +115,39 @@
 
 
 
-\begin{frame} %#08
+\begin{frame}
 	\frametitle{Blocked Gibbs Algorithm}
-\textbf{Algorithm}: \\
-Repeatedly drawing values from conditional distributions of the blocked variables:\\
-
-\begin{itemize}
-    \item $(\phi | \textbf{c}, \textbf{Y})$
-    \item $(\textbf{c}| \phi,\textbf{p}, \textbf{Y})$
-    \item $(\textbf{p}| \textbf{c})$
-
-\end{itemize}
-
-\textbf{Direct sampling of the posterior} $\mathscr{P}(\cdot|\mathbf{Y})$ :\\
-
-\begin{itemize}
-    \item The Algorithm produces draws from $(\phi,\textbf{c},\textbf{p}| \textbf{Y})$ \\
-\item Each draw $(\phi,\textbf{c},\textbf{p})$ defines a measure $P(\cdot)= \sum\limits_{k=1}^N  \mathit{p_{k}}\delta_{\phi_{k}}(\cdot) $
-\item Each $P$ is a drawn from $\mathscr{P}(\cdot|\mathbf{Y})$
-\end{itemize}
-
-
-
-
-\end{frame}
-
-\begin{frame} %#09
-	\frametitle{Advantages}
+	Algorithm: \\
+	Repeatedly drawing values from conditional distributions of the blocked variables
 
 	\begin{itemize}
-	     \item Handles the issue of conjugacy
-	    	    % nonconjugate case Metropolis–Hastings for phi
-
-	    \item Good mixing %(block)
-
-	    \item Hierarchical extensions
+    	\item $(\phi | \textbf{c}, \textbf{Y})$
+	    \item $(\textbf{c}| \phi,\textbf{p}, \textbf{Y})$
+    	\item $(\textbf{p}| \textbf{c})$
 	\end{itemize}
+
+	\textbf{Direct sampling of the posterior} $\mathscr{P}(\cdot|\mathbf{Y})$ :\\
+
+	\begin{itemize}
+    	\item The Algorithm produces draws from $(\phi,\textbf{c},\textbf{p}| \textbf{Y})$ \\
+		\item Each draw $(\phi,\textbf{c},\textbf{p})$ defines a measure $P(\cdot)= \sum\limits_{k=1}^N  \mathit{p_{k}}\delta_{\phi_{k}}(\cdot) $
+		\item Each $P$ is a drawn from $\mathscr{P}(\cdot|\mathbf{Y})$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Advantages}
+		\begin{itemize}
+		     \item Handles the issue of conjugacy
+	   	    	% nonconjugate case Metropolis–Hastings for phi
+		    \item Good mixing %(block)
+		    \item Hierarchical extensions
+	\end{itemize}
+
+\begin{frame}
+	\frametitle{Code structure}
+	\includegraphics{etc/code_map.png}
+\end{frame}
 
 \end{frame}
 
