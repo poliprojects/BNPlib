@@ -5,21 +5,18 @@
 %\end{frame}
 
 
-\begin{frame} %#03
-	\frametitle{Non-Parametric statistics \onslide<2->{(the Bayesian way)}}
+\begin{frame}
+	\frametitle{Non-Parametric statistics}
 	\begin{itemize}
 		\item Goal: density estimation
 		\item \textbf{Infinite-dimensional} parameters, e.g. functions
-		\pause
 		\item Model:
 		\begin{align*}
 			y_i | G &\iidsim G, \quad i=1,\dots,n \\
 			G &\sim \Pc \\[10pt]
-			\onslide<3->
-			{ \Pc : \Omega &\to M(S) \ \ \text{fixed} \\
-			\big[ \ \omega &\mapsto G(\cdot) \ \big] }
+			\Pc : \Omega &\to M(S) \ \ \text{fixed} \\
+			\big[ \ \omega &\mapsto G(\cdot) \ \big]
 		\end{align*}
-		\onslide<3->
 		\item Model name: \textbf{BNP model}
 	\end{itemize}
 \end{frame}
@@ -37,11 +34,10 @@
 		\item Defining property: $\forall \{B_{1:k}\}$ partition of $S$,
 		$$[G(B_1),\dots,G(B_k)] \sim \operatorname{Dir}
 			\big( M G_0(B_1),\dots, M G_0(B_k) \big)$$
-		\pause
 		\vspace{-15pt}
 		\item \textbf{Discreteness} (stick-breaking): $G(\cdot) = \sum_{k=1}^{+\infty} w_h \delta_{m_h} (\cdot)$
 		\vspace{10pt}
-		\item \textbf{Conjugacy}: $G | \textbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i}) \quad \implies$ density estimation %TODO true?
+		\item \textbf{Conjugacy}: $G | \mathbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i}) \quad \implies$ density estimation
 %		\item Polya urn representation:
 %		\begin{center}
 %			$ \Lc(y_i | y_1,\dots,y_{i-1}) \propto \sum_{h=1}^{i-1} \delta_{y_h}(y_i) + M G_0 (y_i) $
@@ -53,18 +49,16 @@
 \begin{frame}
 	\frametitle{Continuous density estimation}
 	\begin{itemize}
-		\item \textbf{Mixtures} (kernel $f$ + mixing distribution $G$):
+		\item \textbf{Mixtures} (kernel $F$ + mixing distribution $G$):
 		\begin{align*}
-			y_i | G &\sim f_G(y) = \int f_\theta(y) \, \de G(\theta) \\
-			\onslide<2-> { G &\sim DP(M G_0) }
+			y_i | G &\sim F_G(y) = \int F(y,\theta) \, G(\de\theta) \\
+			G &\sim DP(M G_0)
 		\end{align*}
 		\vspace{-10pt}
-		\onslide<2->
 		\item Model name: \textbf{DPM model}
-		\onslide<3->
 		\item Equivalent to:
 		\begin{align*}
-			y_i | \theta_i &\indsim f_{\theta_i} \\
+			y_i | \theta_i &\indsim F(\cdot,\theta_i) \\
 			\theta_i | G &\iidsim G \\
 			G &\sim DP(M G_0)
 		\end{align*}
@@ -92,51 +86,47 @@
 			\begin{minipage}{0.5\textwidth}
 				\include{etc/diffuse_spiked}
 			\end{minipage}
-		\pause
 		\item Conditional posterior for $\theta_i$:
 		$$ \Lc(\theta_i | \boldsymbol\theta_{-i}, y_i) \propto
-		\sum_{j=1}^{k^-} f_{\theta}(y_i) \delta_{\phi^-_j} (\theta_i) + M \, r_i \, G_0(\theta_i | y_i) $$ %\int f_{\theta_j}(y_i) \, \de G_0 (\theta)
+		\sum_{j=1}^{k^-} F(y_i,\theta) \, \delta_{\phi^-_j} (\theta_i) + M \, r_i \, G_0(\theta_i | y_i) $$ %\int f_{\theta_j}(y_i) \, G_0 (\de\theta)
 	\end{itemize}
 \end{frame}
 
 
 \begin{frame} %#03
 	\frametitle{Discrete model}
-Equivalent models as $ K\rightarrow +\infty$:
-\begin{figure}[htpb] 
-\minipage{0.40\textwidth}
-        \begin{align*}
-            (Y_{i}|\theta_{i})&\sim F(\theta_{i}) \\
-            (\theta_{i}|G)&\sim G \\
-            G & \sim DP(M,G_{0})
-        \end{align*}
-        \begin{center}
-        	(hierarchical model)
-        \end{center}
-\endminipage 
-%\hspace{1cm} 
-\minipage{0.40\textwidth} 
-        \begin{align*}
-            (Y_{i}|\mathbf{\phi},c_{i})&\sim F(\phi_{c_{i}}) \\
-            (c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},\dots,\mathit{p_{K}})\\
-            \phi_{c} & \sim G_{0} \\
-            \mathbf{p} &\sim \text{Dirichlet}(M/K,\dots,M/K) 
-        \end{align*}
-        \begin{center}
-        	(discrete model)
-        \end{center}
-        
-\endminipage  
-\end{figure}
-\begin{center}
-	\vspace{20pt}
-	with $c_i = j \iff \theta_i \in S_j$ allocation parameters and
-	$$\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
-\end{center}
-
-
-
-
+	\begin{figure}[htpb] 
+		\minipage{0.40\textwidth}
+    	    \begin{align*}
+  	 		    (Y_{i}|\theta_{i})&\sim F(\cdot,\theta_i) \\
+    	        (\theta_{i}|G)&\sim G \\
+            	G & \sim DP(M,G_{0}) \\
+      		\end{align*}
+        	\begin{center}
+        		(hierarchical model)
+        	\end{center}
+		\endminipage 
+		%\hspace{1cm}
+		\minipage{0.10\textwidth}
+			$\stackrel{K\to+\infty}{\iff}$
+		\endminipage
+		\minipage{0.40\textwidth} 
+        	\begin{align*}
+            	(Y_{i}|\mathbf{\phi},c_{i})&\sim F(\cdot,\phi_{c_{i}}) \\
+            	(c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},\dots,\mathit{p_{K}})\\
+            	\phi_{c} & \sim G_{0} \\
+            	\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K)
+        	\end{align*}
+        	\begin{center}
+        		($K$-discrete model)
+        	\end{center}
+		\endminipage  
+	\end{figure}
+	\begin{center}
+		\vspace{20pt}
+		with $c_i$ allocation parameters and
+		$$\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
+	\end{center}
 \end{frame}
 
 
@@ -153,11 +143,10 @@ Equivalent models as $ K\rightarrow +\infty$:
 		    \item Sample $c_i$ as follows:
 	        \begin{align*}
 		        \hspace{-35pt}
-                \text{If $c=c_j$ for some $j\neq i$: } \PP(c_{i}=c | c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
-                \PP(c_{i}\neq c_{j} \text{ for all } j | c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi) \de G_{0}(\phi)
+                \text{If $c=c_j$ for some $j\neq i$: } \PP(c_{i}=c | \textbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
+                \PP(c_{i}\neq c_{j} \text{ for all } j | \textbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi) \, G_0(\de\phi)
             \end{align*}
-            \pause
-            \item If the new $c_{i}$ allocates $\phi_i$ to a singleton, draw $\phi_{c_{i}} \sim G_0|y_i$ and add it to the state %TODO correct?
+            \item If the new $c_{i}$ allocates $\phi_i$ to a singleton, draw $\phi_{c_{i}} \sim G_0(\cdot|y_i)$ and add it to the state
         \end{itemize} 
         
        	\item For $c \in \{c_{1},\dots,c_{n}\}$: update $\phi_{c}$, given all the $y_{i}$ with $c_{i}=c$
@@ -166,12 +155,11 @@ Equivalent models as $ K\rightarrow +\infty$:
 \end{frame}
 
 
-\begin{frame} %#05
+\begin{frame}
 	\frametitle{Advantages}
 	\begin{itemize}
-	    \item Feasible if we can compute $\int F(y_{i},\phi)dG_{0}(\phi)$ and sample from $H_{i}$ (generally conjugate case)
+	    \item Feasible if we can compute $\int F(y_i,\phi) G_0(\de\phi)$ and sample from $G_0(\cdot|y_i)$ (conjugate case)
 	    \item Change the $\theta$ for more than one observation simultaneously
-	    \item %TODO something more pls
 	\end{itemize}
 \end{frame}
 
