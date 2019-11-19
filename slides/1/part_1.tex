@@ -41,7 +41,7 @@
 		\vspace{-15pt}
 		\item \textbf{Discreteness} (stick-breaking): $G(\cdot) = \sum_{k=1}^{+\infty} w_h \delta_{m_h} (\cdot)$
 		\vspace{10pt}
-		\item \textbf{Conjugacy}: $G | \textbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i}) \quad \implies \quad $ density estimation %TODO true?
+		\item \textbf{Conjugacy}: $G | \textbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i}) \quad \implies$ density estimation %TODO true?
 %		\item Polya urn representation:
 %		\begin{center}
 %			$ \Lc(y_i | y_1,\dots,y_{i-1}) \propto \sum_{h=1}^{i-1} \delta_{y_h}(y_i) + M G_0 (y_i) $
@@ -103,14 +103,17 @@
 
 \begin{frame} %#03
 	\frametitle{Neal's Algorithm 2}
-Equivalent models with $ K\rightarrow +\infty$:
+Equivalent models as $ K\rightarrow +\infty$:
 \begin{figure}[htpb] 
-\minipage{0.40\textwidth} 
+\minipage{0.40\textwidth}
         \begin{align*}
             (Y_{i}|\theta_{i})&\sim F(\theta_{i}) \\
             (\theta_{i}|G)&\sim G \\
             G & \sim DP(M,G_{0})
         \end{align*}
+        \begin{center}
+        	(hierarchical model)
+        \end{center}
 \endminipage 
 %\hspace{1cm} 
 \minipage{0.40\textwidth} 
@@ -120,11 +123,16 @@ Equivalent models with $ K\rightarrow +\infty$:
             \phi_{c} & \sim G_{0} \\
             \mathbf{p} &\sim \text{Dirichlet}(M/K,...,M/K) 
         \end{align*}
+        \begin{center}
+        	(discrete model)
+        \end{center}
+        
 \endminipage  
 \end{figure}
 \begin{center}
 	\vspace{30pt}
-	with $\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$
+	with $c_i = j \iff \theta_i \in S_j$ allocation parameters and \\
+	$$\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
 \end{center}
 
 
