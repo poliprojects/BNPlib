@@ -118,9 +118,9 @@ Equivalent models as $ K\rightarrow +\infty$:
 \minipage{0.40\textwidth} 
         \begin{align*}
             (Y_{i}|\mathbf{\phi},c_{i})&\sim F(\phi_{c_{i}}) \\
-            (c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},...,\mathit{p_{K}})\\
+            (c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},\dots,\mathit{p_{K}})\\
             \phi_{c} & \sim G_{0} \\
-            \mathbf{p} &\sim \text{Dirichlet}(M/K,...,M/K) 
+            \mathbf{p} &\sim \text{Dirichlet}(M/K,\dots,M/K) 
         \end{align*}
         \begin{center}
         	(discrete model)
@@ -129,8 +129,8 @@ Equivalent models as $ K\rightarrow +\infty$:
 \endminipage  
 \end{figure}
 \begin{center}
-	\vspace{30pt}
-	with $c_i = j \iff \theta_i \in S_j$ allocation parameters and \\
+	\vspace{20pt}
+	with $c_i = j \iff \theta_i \in S_j$ allocation parameters and
 	$$\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
 \end{center}
 
@@ -144,23 +144,23 @@ Equivalent models as $ K\rightarrow +\infty$:
 
 \begin{frame} %#04
 	\frametitle{Neal's Algorithm 2}
-	$\textbf c$ and $\boldsymbol\phi$ are the state of a Markov chain.
+	\textbf{Gibbs sampling} algorithm:
 	\begin{itemize}
-	    \item For $i= 1...n$ : update $c_{i}$  \\
+		\item $(\boldsymbol\phi, \textbf c)$ is the \textbf{state} of a Markov chain
+	    \item For $i= 1,\dots,n$: update $c_{i}$
 	    \begin{itemize}
-	        \item If $c_{i}$ is associated with no other observation, remove $\phi_{c_{i}}$ from the state
-		    \item Gibbs sampling for $c_{i}$:
+	        \item If $c_{i}$ allocates $\phi_i$ to a singleton, remove $\phi_{c_{i}}$ from the state
+		    \item Sample $c_i$ as follows:
 	        \begin{align*}
 		        \hspace{-35pt}
-                \text{If} \ c=c_{j} \ \text{for some } j\neq i: \ P(c_{i}=c | c_{-i}, y_{i},\mathbf{\phi}) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
-                P(c_{i}\neq c_{j} \text{ for all } j | c_{-i}, y_{i},\mathbf{\phi}) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi)dG_{0}(\phi)
+                \text{If $c=c_j$ for some $j\neq i$: } P(c_{i}=c | c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
+                P(c_{i}\neq c_{j} \text{ for all } j | c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi) \de G_{0}(\phi)
             \end{align*}
-                
-            \item  If the new $c_{i}$ is not associated with any other observation, draw a value for $\phi_{c_{i}}$ from $H_{i}$ and add it to the state
+            \pause
+            \item If the new $c_{i}$ allocates $\phi_i$ to a singleton, draw $\phi_{c_{i}} \sim G_0|y_i$ and add it to the state %TODO correct?
         \end{itemize} 
         
-        \item For $c \in \{c_{1},..,c_{n}\}$: update $\phi_{c}$ given $y_{i}$ such that $c_{i}=c$
-            
+       	\item For $c \in \{c_{1},\dots,c_{n}\}$: update $\phi_{c}$, given all the $y_{i}$ with $c_{i}=c$
 	\end{itemize}
 		
 \end{frame}
@@ -171,6 +171,7 @@ Equivalent models as $ K\rightarrow +\infty$:
 	\begin{itemize}
 	    \item Feasible if we can compute $\int F(y_{i},\phi)dG_{0}(\phi)$ and sample from $H_{i}$ (generally conjugate case)
 	    \item Change the $\theta$ for more than one observation simultaneously
+	    \item %TODO something more pls
 	\end{itemize}
 \end{frame}
 
