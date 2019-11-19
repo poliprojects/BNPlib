@@ -99,10 +99,9 @@
 	\end{itemize}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%% BOZZA NEAL2
 
 \begin{frame} %#03
-	\frametitle{Neal's Algorithm 2}
+	\frametitle{Discrete model}
 Equivalent models as $ K\rightarrow +\infty$:
 \begin{figure}[htpb] 
 \minipage{0.40\textwidth}
@@ -145,23 +144,24 @@ Equivalent models as $ K\rightarrow +\infty$:
 
 \begin{frame} %#04
 	\frametitle{Neal's Algorithm 2}
-	\textbf{Algorithm}:
-		\begin{itemize}
-		    \item For $i= 1...n$ : update $c_{i}$  \\
-		        \begin{itemize}
-		            \item If $c_{i}$ is associated with no other observation, remove $\phi_{c_{i}}$ from the state
-		            \item Gibbs sampling for $c_{i}$:
-		            \begin{align*}
-		            \hspace{-35pt}
-                    \text{If} \ c=c_{j} \ \text{for some } j\neq i: \ P(c_{i}=c | c_{-i}, y_{i},\mathbf{\phi}) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
-                    P(c_{i}\neq c_{j} \text{ for all } j | c_{-i}, y_{i},\mathbf{\phi}) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi)dG_{0}(\phi)
-                    \end{align*}
-                    \item  If the new $c_{i}$ is not associated with any other observation, draw a value for $\phi_{c_{i}}$ from $H_{i}$ and add it to the state
-                \end{itemize} 
+	$\textbf c$ and $\boldsymbol\phi$ are the state of a Markov chain.
+	\begin{itemize}
+	    \item For $i= 1...n$ : update $c_{i}$  \\
+	    \begin{itemize}
+	        \item If $c_{i}$ is associated with no other observation, remove $\phi_{c_{i}}$ from the state
+		    \item Gibbs sampling for $c_{i}$:
+	        \begin{align*}
+		        \hspace{-35pt}
+                \text{If} \ c=c_{j} \ \text{for some } j\neq i: \ P(c_{i}=c | c_{-i}, y_{i},\mathbf{\phi}) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
+                P(c_{i}\neq c_{j} \text{ for all } j | c_{-i}, y_{i},\mathbf{\phi}) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi)dG_{0}(\phi)
+            \end{align*}
+                
+            \item  If the new $c_{i}$ is not associated with any other observation, draw a value for $\phi_{c_{i}}$ from $H_{i}$ and add it to the state
+        \end{itemize} 
         
-            \item For $c \in \{c_{1},..,c_{n}\}$: update $\phi_{c}$ given $y_{i}$ such that $c_{i}=c$
+        \item For $c \in \{c_{1},..,c_{n}\}$: update $\phi_{c}$ given $y_{i}$ such that $c_{i}=c$
             
-		\end{itemize}
+	\end{itemize}
 		
 \end{frame}
 
@@ -169,11 +169,9 @@ Equivalent models as $ K\rightarrow +\infty$:
 \begin{frame} %#05
 	\frametitle{Advantages}
 	\begin{itemize}
-	    \item  Feasible if we can compute $\int F(y_{i},\phi)dG_{0}(\phi)$ and sample from $H_{i}$ (generally conjugate case)
-	    \item  Change the $\theta$ for more than one observation simultaneously
+	    \item Feasible if we can compute $\int F(y_{i},\phi)dG_{0}(\phi)$ and sample from $H_{i}$ (generally conjugate case)
+	    \item Change the $\theta$ for more than one observation simultaneously
 	\end{itemize}
-
-		
 \end{frame}
 
 
