@@ -38,14 +38,14 @@
 		            \item Draw $c_{i}$ as follows: %(by evaluating relative prob of these possibilities)
 		            	\begin{displaymath}
 		            	\hspace{-20pt}
-		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},...,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
+		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
 		            	\end{cases}
 		            	\end{displaymath}
                     \item Discard values in $\boldsymbol\phi$ not associated to any $\theta_j$
                     
                 \end{itemize}
         
-            \item For $c \in \{c_{1},..,c_{n}\}$: update $\phi_{c}$ given $y_{i}$ such that $c_{i}=c$
+            \item For $c \in \{c_{1},\dots,c_{n}\}$: update $\phi_{c}$ given $y_{i}$ such that $c_{i}=c$
 		\end{itemize}
 \end{frame}
 
@@ -67,12 +67,12 @@
 	\frametitle{Stick-Breaking Priors}
 	$$\mathscr{P}(\cdot)= \sum\limits_{k=1}^N
 	\mathit{p_{k}}\delta_{Z_{k}}(\cdot)$$
-	with:
+	with $k=1,\dots,N$ and:
 	\begin{itemize}
 		\item $Z_k \iidsim H \quad$ (allocations)
-		\item $V_k  \iidsim \operatorname{Beta}(a_{k},b_{k}) \quad$ with $\mathbf{a}=(a_{1},a_{2},...)$ and $\mathbf{b}=(b_{1},b_{2},...)$
+		\item $V_k  \iidsim \operatorname{Beta}(a_{k},b_{k}) \quad$ with $\mathbf{a}=(a_{1},a_{2},\dots)$ and $\mathbf{b}=(b_{1},b_{2},\dots)$
 		\item $p_k = (1-V_{1}) (1-V_{2}) \cdots (1-V_{k-1}) V_k \quad$ (weights), \\[8pt] %\mathit{p_{1}}=V_{1}
-		with $k=1,\dots,N, 0 \leq p_k \leq 1, \sum_{k=1}^N p_k = 1$
+		with $0 \leq p_k \leq 1, \sum_{k=1}^N p_k = 1$
 	\end{itemize}
 	Dimension:
    	\begin{itemize}
@@ -81,7 +81,7 @@
    	        \item $\mathbf{p} \sim \mathscr{GD}(\mathbf{a},\mathbf{b})$ (Generalized Dirichlet)
    	        \item e.g. all finite dimensional Dirichlet priors
    	    \end{itemize}
-   	    \item[$\circ$] $N=+\infty$: $\mathscr{P}_{\infty}(\mathbf{a},\mathbf{b})$
+   	    \item[$\circ$] $N=+\infty$: \ $\mathscr{P}_{\infty}(\mathbf{a},\mathbf{b})$
    	    \begin{itemize}
    	        \item e.g. Dirichlet process, the two-parameter Poisson-Dirichlet process
    	    \end{itemize}
@@ -97,7 +97,7 @@
         \item Finite number of random variables $\Rightarrow$ \textit{blocks of parameters}
         \item Model:
         \begin{align*}
-            (Y_{i}|\mathbf{\phi},\mathbf{c})&\indsim F(\cdot,\phi_{c_{i}}), \quad i=1,\dots,n \\
+            (y_{i}|\mathbf{\phi},\mathbf{c})&\indsim F(\cdot,\phi_{c_{i}}), \quad i=1,\dots,n \\
             (c_{i}|\mathbf{p})&\iidsim\sum\limits_{k=1}^N \mathit{p_{k}}\delta_{k}(\cdot), \quad i=1,\dots,n \\
             \mathbf{p} &\sim \mathscr{GD}(\mathbf{a},\mathbf{b}) \\
             \mathbf{\phi}_{c} & \sim G_{0}, \quad c \in \{c_1,\dots, c_n\}
