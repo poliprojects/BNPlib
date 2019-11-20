@@ -62,7 +62,7 @@
 			\theta_i | G &\iidsim G \\
 			G &\sim DP(M G_0)
 		\end{align*}
-		\item $\theta_i$ ``latent variables'' $\forall i = 1,\dots,n$
+		\item $\theta_i$ \textit{latent variables} $\forall i = 1,\dots,n$
 	\end{itemize}
 \end{frame}
 
@@ -70,11 +70,13 @@
 \begin{frame}
 	\frametitle{Clustering In The DPM}
 	\begin{itemize}
-		\item Discreteness: the $\theta_i$ have one of the $k$ \textbf{unique values} $\phi_j$ {\tiny ($j=1,\dots,k$)}
-		\item $k \simeq M \log(n) \ll n$
-		\item All $i$ s.t. $\theta_i = \phi_j$ belong to cluster $S_j $ {\tiny ($j=1,\dots,k$)}, and $n_j = |S_j|$
+		\item Discreteness: the $\theta_i$ have one of $k$ \textbf{unique values} $\phi_j$
+		\item Data units: $i=1,\dots,n$ \\
+		\item Unique values: $j=1,\dots,k \simeq M \log n \ll n$
+		\item \textbf{Allocation} parameters to the clusters: $c_i = j$ if $\theta_i = \phi_j$
 		\pause
 		\item Conditional prior for $\theta_i$:
+		\vspace{-5pt}
 			\begin{minipage}{0.3\textwidth}
 				\begin{align*}
 					\hspace{-10pt}
@@ -86,6 +88,7 @@
 			\begin{minipage}{0.5\textwidth}
 				\include{etc/diffuse_spiked}
 			\end{minipage}
+		\vspace{-5pt}
 		\item Conditional posterior for $\theta_i$:
 		$$ \Lc(\theta_i | \boldsymbol\theta_{-i}, y_i) \propto
 		\sum_{j=1}^{k^-} F(y_i,\theta) \, \delta_{\phi^-_j} (\theta_i) + M \, r_i \, G_0(\theta_i | y_i) $$ %\int f_{\theta_j}(y_i) \, G_0 (\de\theta)
@@ -93,41 +96,41 @@
 \end{frame}
 
 
-\begin{frame} %#03
-	\frametitle{Discrete Model}
-	\begin{figure}[htpb] 
-		\minipage{0.40\textwidth}
-    	    \begin{align*}
-  	 		    (Y_{i}|\theta_{i})&\sim F(\cdot,\theta_i) \\
-    	        (\theta_{i}|G)&\sim G \\
-            	G & \sim DP(M,G_{0}) \\
-      		\end{align*}
-        	\begin{center}
-        		(hierarchical model)
-        	\end{center}
-		\endminipage 
-		%\hspace{1cm}
-		\minipage{0.10\textwidth}
-			$\stackrel{K\to+\infty}{\iff}$
-		\endminipage
-		\minipage{0.40\textwidth} 
-        	\begin{align*}
-            	(Y_{i}|\mathbf{\phi},c_{i})&\sim F(\cdot,\phi_{c_{i}}) \\
-            	(c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},\dots,\mathit{p_{K}})\\
-            	\phi_{c} & \sim G_{0} \\
-            	\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K)
-        	\end{align*}
-        	\begin{center}
-        		($K$-discrete model)
-        	\end{center}
-		\endminipage  
-	\end{figure}
-	\begin{center}
-		\vspace{20pt}
-		with $c_i$ allocation parameters and
-		$$\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
-	\end{center}
-\end{frame}
+%\begin{frame} %#03
+%	\frametitle{Discrete Model}
+%	\begin{figure}[htpb] 
+%		\minipage{0.40\textwidth}
+%    	    \begin{align*}
+%  	 		    (Y_{i}|\theta_{i})&\sim F(\cdot,\theta_i) \\
+%    	        (\theta_{i}|G)&\sim G \\
+%            	G & \sim DP(M,G_{0}) \\
+%      		\end{align*}
+%        	\begin{center}
+%        		(hierarchical model)
+%        	\end{center}
+%		\endminipage 
+%		%\hspace{1cm}
+%		\minipage{0.10\textwidth}
+%			$\stackrel{K\to+\infty}{\iff}$
+%		\endminipage
+%		\minipage{0.40\textwidth} 
+%        	\begin{align*}
+%            	(Y_{i}|\mathbf{\phi},c_{i})&\sim F(\cdot,\phi_{c_{i}}) \\
+%            	(c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},\dots,\mathit{p_{K}})\\
+%            	\phi_{c} & \sim G_{0} \\
+%            	\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K)
+%        	\end{align*}
+%        	\begin{center}
+%        		($K$-discrete model)
+%        	\end{center}
+%		\endminipage  
+%	\end{figure}
+%	\begin{center}
+%		\vspace{20pt}
+%		with $c_i$ allocation parameters and
+%		$$\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
+%	\end{center}
+%\end{frame}
 
 
 
