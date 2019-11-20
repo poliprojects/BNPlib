@@ -9,15 +9,14 @@
 	\frametitle{Non-Parametric Statistics}
 	\begin{itemize}
 		\item Goal: density estimation
-		\item \textbf{Infinite-dimensional} parameters, e.g. functions
-		\item Model:
+		\item \textbf{Infinite-dimensional} parameters
+		\item For example: functions
+		\item Bayesian Non-Parametric (\textbf{BNP}) model:
 		\begin{align*}
 			y_i | G &\iidsim G, \quad i=1,\dots,n \\
-			G &\sim \Pc \\[10pt]
-			\Pc : \Omega &\to M(S) \ \ \text{fixed} \\
-			\big[ \ \omega &\mapsto G(\cdot) \ \big]
+			G &\sim \mathscr P \ \ \text{($G$ random pr. measure)} %\\[10pt]
+			%\mathscr P : \Omega &\to M(S)
 		\end{align*}
-		\item Model name: \textbf{BNP model}
 	\end{itemize}
 \end{frame}
 
@@ -25,7 +24,7 @@
 	\frametitle{Dirichlet Process Prior}
 	\begin{align*}
 		y_i | G &\iidsim G \\
-		G &\sim \Pc = DP(M G_0)
+		G &\sim \mathscr P = DP(M G_0)
 	\end{align*}
 	\vspace{-10pt}
 	\begin{itemize}
@@ -62,7 +61,7 @@
 			\theta_i | G &\iidsim G \\
 			G &\sim DP(M G_0)
 		\end{align*}
-		\item $\theta_i$ \textit{latent variables} $\forall i = 1,\dots,n$
+		\item $\theta_i$ are the \textit{latent variables}, $\ \forall i = 1,\dots,n$
 	\end{itemize}
 \end{frame}
 
