@@ -23,7 +23,7 @@
 \begin{frame}
 	\frametitle{Dirichlet Process Prior}
 	\begin{align*}
-		y_i | G &\iidsim G \\
+		y_i | G &\iidsim G, \quad i=1,\dots,n \\
 		G &\sim \mathscr P = DP(M G_0)
 	\end{align*}
 	\vspace{-10pt}
@@ -34,9 +34,9 @@
 		$$[G(B_1),\dots,G(B_k)] \sim \operatorname{Dir}
 			\big( M G_0(B_1),\dots, M G_0(B_k) \big)$$
 		\vspace{-15pt}
-		\item \textbf{Discreteness} (stick-breaking): $G(\cdot) = \sum_{k=1}^{+\infty} w_h \delta_{m_h} (\cdot)$
+		\item \textbf{Discreteness} (stick-breaking): $G(\cdot) = \sum_{k=1}^{+\infty} w_k \delta_{m_k} (\cdot)$
 		\vspace{10pt}
-		\item \textbf{Conjugacy}: $G | \mathbf{y} \sim DP(M G_0 + \sum_i \delta_{y_i}) \quad \implies$ density estimation
+		\item \textbf{Conjugacy}: $G | \mathbf{y} \sim DP(M G_0 + \sum_{i=1}^n \delta_{y_i}) \quad \implies$ density estimation
 %		\item Polya urn representation:
 %		\begin{center}
 %			$ \Lc(y_i | y_1,\dots,y_{i-1}) \propto \sum_{h=1}^{i-1} \delta_{y_h}(y_i) + M G_0 (y_i) $
@@ -50,18 +50,18 @@
 	\begin{itemize}
 		\item \textbf{Mixtures} (kernel $F$ + mixing distribution $G$):
 		\begin{align*}
-			y_i | G &\sim F_G(y) = \int F(y,\theta) \, G(\de\theta) \\
+			y_i | G &\sim F_G(y) = \int F(y,\theta) \, G(\de\theta), \quad i=1,\dots,n \\
 			G &\sim DP(M G_0)
 		\end{align*}
 		\vspace{-10pt}
 		\item Model name: \textbf{DPM model}
 		\item Equivalent to:
 		\begin{align*}
-			y_i | \theta_i &\indsim F(\cdot,\theta_i) \\
-			\theta_i | G &\iidsim G \\
+			y_i | \theta_i &\indsim F(\cdot,\theta_i), \quad i=1,\dots,n \\
+			\theta_i | G &\iidsim G, \quad i=1,\dots,n \\
 			G &\sim DP(M G_0)
 		\end{align*}
-		\item $\theta_i$ are the \textit{latent variables}, $\ \forall i = 1,\dots,n$
+		\item $\theta_i$ are the \textit{latent variables}, one for each data unit
 	\end{itemize}
 \end{frame}
 
@@ -69,12 +69,12 @@
 \begin{frame}
 	\frametitle{Clustering In The DPM}
 	\begin{itemize}
-		\item Discreteness: the $\theta_i$ have one of $k$ \textbf{unique values} $\phi_j$
+		\item Discreteness: the $\theta_i$ have one of $k$ \textbf{unique values} $\phi_j$ %TODO why are the \phi finite?
 		\item Data units: $i=1,\dots,n$ \\
 		\item Unique values: $j=1,\dots,k \simeq M \log n \ll n$
-		\item \textbf{Allocation} parameters to the clusters: $c_i = j$ if $\theta_i = \phi_j$
+		\item $c_i$ \textbf{allocation} parameters to the clusters: $c_i = j$ if $\theta_i = \phi_j$
 		\pause
-		\item Conditional prior for $\theta_i$:
+		\item Conditional prior for $\theta_i$, $i=1,\dots,n$:
 		\vspace{-5pt}
 			\begin{minipage}{0.3\textwidth}
 				\begin{align*}
@@ -160,7 +160,7 @@
 \begin{frame}
 	\frametitle{Advantages}
 	\begin{itemize}
-	    \item Feasible if we can compute $\int F(y_i,\phi) G_0(\de\phi)$ and sample from $G_0(\cdot|y_i)$ (conjugate case)
+	    \item Feasible if we can compute the $\int F(y_i,\phi) G_0(\de\phi)$ and sample from $G_0(\cdot|y_i)$ (conjugate case)
 	    \item Change the $\theta$ for more than one observation simultaneously
 	\end{itemize}
 \end{frame}
