@@ -24,7 +24,7 @@
 	\frametitle{Dirichlet Process Prior}
 	\begin{align*}
 		y_i | G &\iidsim G, \quad i=1,\dots,n \\
-		G &\sim \mathscr P = DP(M G_0)
+		G &\sim \mathscr P = \mathscr{DP}(M G_0)
 	\end{align*}
 	\vspace{-10pt}
 	\begin{itemize}
@@ -36,7 +36,7 @@
 		\vspace{-15pt}
 		\item \textbf{Discreteness} (stick-breaking): $G(\cdot) = \sum_{k=1}^{+\infty} w_k \delta_{m_k} (\cdot)$
 		\vspace{10pt}
-		\item \textbf{Conjugacy}: $G | \mathbf{y} \sim DP(M G_0 + \sum_{i=1}^n \delta_{y_i}) \quad \implies$ density estimation
+		\item \textbf{Conjugacy}: $G | \mathbf{y} \sim \mathscr{DP}(M G_0 + \sum_{i=1}^n \delta_{y_i}) \ \implies$ density estimation
 %		\item Polya urn representation:
 %		\begin{center}
 %			$ \Lc(y_i | y_1,\dots,y_{i-1}) \propto \sum_{h=1}^{i-1} \delta_{y_h}(y_i) + M G_0 (y_i) $
@@ -51,17 +51,17 @@
 		\item \textbf{Mixtures} (kernel $F$ + mixing distribution $G$):
 		\begin{align*}
 			y_i | G &\sim F_G(y) = \int F(y,\theta) \, G(\de\theta), \quad i=1,\dots,n \\
-			G &\sim DP(M G_0)
+			G &\sim \mathscr{DP}(M G_0)
 		\end{align*}
 		\vspace{-10pt}
 		\item Model name: Dirichlet-Process Mixture (\textbf{DPM}) model
-		\item Equivalent to:
+		\item Equivalent to a hierarchical model:
 		\begin{align*}
 			y_i | \theta_i &\indsim F(\cdot,\theta_i), \quad i=1,\dots,n \\
 			\theta_i | G &\iidsim G, \quad i=1,\dots,n \\
-			G &\sim DP(M G_0)
+			G &\sim \mathscr{DP}(M G_0)
 		\end{align*}
-		\item $\theta_i$ are the \textit{latent variables}, one for each data unit
+		\item $\theta_i$ \textit{latent variables}, one per unit
 	\end{itemize}
 \end{frame}
 
@@ -102,7 +102,7 @@
     	    \begin{align*}
   	 		    (Y_{i}|\theta_{i})&\sim F(\cdot,\theta_i) \\
     	        (\theta_{i}|G)&\sim G \\
-            	G & \sim DP(M,G_{0}) \\
+            	G & \sim \mathscr{DP}(M,G_{0}) \\
       		\end{align*}
         	\begin{center}
         		(hierarchical model)
@@ -110,12 +110,12 @@
 		\endminipage 
 		%\hspace{1cm}
 		\minipage{0.10\textwidth}
-			$\stackrel{K\to+\infty}{\iff}$
+			$\stackrel{K\to\infty}{\iff}$
 		\endminipage
 		\minipage{0.40\textwidth} 
         	\begin{align*}
             	(Y_{i}|\mathbf{\phi},c_{i})&\sim F(\cdot,\phi_{c_{i}}) \\
-            	(c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},\dots,\mathit{p_{K}})\\
+            	(c_{i}|\mathit{\mathbf{p}})&\sim \sum_{k=1}^K\mathit{p_k} \delta_k(\cdot) \\
             	\phi_{c} & \sim G_{0} \\
             	\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K)
         	\end{align*}
@@ -125,7 +125,6 @@
 		\endminipage  
 	\end{figure}
 	\begin{center}
-		\vspace{20pt}
 		$$\text{with} \quad \boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
 	\end{center}
 \end{frame}
@@ -145,9 +144,9 @@
 	        \begin{align*}
 		        \hspace{-35pt}
                 \text{If $c=c_j$ for some $j\neq i$: } \PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
-                \PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi) \, G_0(\de\phi)
+                \text{total } \ \PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi) \, G_0(\de\phi)
             \end{align*}
-            \item If the new $c_{i}$ allocates $\phi_i$ to a singleton, draw $\phi_{c_{i}} \sim G_0(\cdot|y_i)$ and add it to the state
+            \item If the new $c_{i}$ allocates $\phi_{c_i}$ to a singleton, draw $\phi_{c_{i}} \sim G_0(\cdot|y_i)$ and add it to the state
         \end{itemize} 
         
        	\item For $c \in \{c_{1},\dots,c_{n}\}$: update $\phi_{c}$, given all the $y_{i}$ with $c_{i}=c$
