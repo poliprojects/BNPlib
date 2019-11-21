@@ -12,8 +12,8 @@
             \begin{align*}
             \hspace{-25pt}
             \vspace{-12pt}
-                \text{If $c=c_j$ for some $j$: } \PP(c_i=c | \mathbf c_{-i}) &= \frac{n_{-i,c}}{n-1-M}  \\
-                \text{total } \ \PP(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1-M}  \Rightarrow 
+                \text{If $c=c_j$ for some $j$: } \PP(c_i=c | \mathbf c_{-i}) &= \frac{n_{-i,c}}{n-1+M}  \\
+                \text{total } \ \PP(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1+M}  \Rightarrow 
                 \begin{tabular}{c}
                 \textbf{split} among the $m$ \\
                 auxiliary parameters 
@@ -45,7 +45,7 @@
 		            %(by evaluating relative prob of these possibilities)
 		            	\begin{displaymath}
 		            	\hspace{-20pt}
-		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
+		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1+M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1+M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
 		            	\end{cases}
 		            	\vspace{-5pt}
 		            	\end{displaymath}

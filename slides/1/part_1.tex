@@ -143,8 +143,8 @@
 		    \item Sample $c_i$ as follows:
 	        \begin{align*}
 		        \hspace{-35pt}
-                \text{If $c=c_j$ for some $j\neq i$: } \PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c}}{n-1-M} F(y_{i},\phi_{c}) \\
-                \text{total } \ \PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1-M} \int F(y_{i},\phi) \, G_0(\de\phi)
+                \text{If $c=c_j$ for some $j\neq i$: } \PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c}}{n-1+M} F(y_{i},\phi_{c}) \\
+                \text{total } \ \PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1+M} \int F(y_{i},\phi) \, G_0(\de\phi)
             \end{align*}
             \item If the new $c_{i}$ allocates $\phi_{c_i}$ to a singleton, draw $\phi_{c_{i}} \sim G_0(\cdot|y_i)$ and add it to the state
         \end{itemize} 
