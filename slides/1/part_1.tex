@@ -95,41 +95,41 @@
 \end{frame}
 
 
-%\begin{frame} %#03
-%	\frametitle{Discrete Model}
-%	\begin{figure}[htpb] 
-%		\minipage{0.40\textwidth}
-%    	    \begin{align*}
-%  	 		    (Y_{i}|\theta_{i})&\sim F(\cdot,\theta_i) \\
-%    	        (\theta_{i}|G)&\sim G \\
-%            	G & \sim DP(M,G_{0}) \\
-%      		\end{align*}
-%        	\begin{center}
-%        		(hierarchical model)
-%        	\end{center}
-%		\endminipage 
-%		%\hspace{1cm}
-%		\minipage{0.10\textwidth}
-%			$\stackrel{K\to+\infty}{\iff}$
-%		\endminipage
-%		\minipage{0.40\textwidth} 
-%        	\begin{align*}
-%            	(Y_{i}|\mathbf{\phi},c_{i})&\sim F(\cdot,\phi_{c_{i}}) \\
-%            	(c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},\dots,\mathit{p_{K}})\\
-%            	\phi_{c} & \sim G_{0} \\
-%            	\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K)
-%        	\end{align*}
-%        	\begin{center}
-%        		($K$-discrete model)
-%        	\end{center}
-%		\endminipage  
-%	\end{figure}
-%	\begin{center}
-%		\vspace{20pt}
-%		with $c_i$ allocation parameters and
-%		$$\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
-%	\end{center}
-%\end{frame}
+\begin{frame} %#03
+	\frametitle{Discrete Model}
+	\begin{figure}[htpb] 
+		\minipage{0.40\textwidth}
+    	    \begin{align*}
+  	 		    (Y_{i}|\theta_{i})&\sim F(\cdot,\theta_i) \\
+    	        (\theta_{i}|G)&\sim G \\
+            	G & \sim DP(M,G_{0}) \\
+      		\end{align*}
+        	\begin{center}
+        		(hierarchical model)
+        	\end{center}
+		\endminipage 
+		%\hspace{1cm}
+		\minipage{0.10\textwidth}
+			$\stackrel{K\to+\infty}{\iff}$
+		\endminipage
+		\minipage{0.40\textwidth} 
+        	\begin{align*}
+            	(Y_{i}|\mathbf{\phi},c_{i})&\sim F(\cdot,\phi_{c_{i}}) \\
+            	(c_{i}|\mathit{\mathbf{p}})&\sim \text{Discrete}(\mathit{p_{1}},\dots,\mathit{p_{K}})\\
+            	\phi_{c} & \sim G_{0} \\
+            	\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K)
+        	\end{align*}
+        	\begin{center}
+        		($K$-discrete model)
+        	\end{center}
+		\endminipage  
+	\end{figure}
+	\begin{center}
+		\vspace{20pt}
+		with $c_i$ allocation parameters and
+		$$\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
+	\end{center}
+\end{frame}
 
 
 
@@ -157,13 +157,13 @@
 \end{frame}
 
 
-\begin{frame}
-	\frametitle{Advantages}
-	\begin{itemize}
-	    \item Feasible if we can compute the $\int F(y_i,\phi) G_0(\de\phi)$ and sample from the $G_0(\cdot|y_i)$ (conjugate case)
-	    \item Change the $\theta$ for more than one observation simultaneously
-	\end{itemize}
-\end{frame}
+%\begin{frame}
+%	\frametitle{Advantages}
+%	\begin{itemize}
+%	    \item Feasible if we can compute the $\int F(y_i,\phi) G_0(\de\phi)$ and sample from the $G_0(\cdot|y_i)$ (conjugate case)
+%	    \item Change the $\theta$ for more than one observation simultaneously
+%	\end{itemize}
+%\end{frame}
 
 
 %\begin{frame}
