@@ -25,6 +25,11 @@
 
 \begin{frame}
 	\frametitle{Neal's Algorithm 8}
+	\begin{center}
+		\vspace{-4pt}
+		\includegraphics[scale=0.2]{etc/neal8.png}
+	\end{center}
+	\vspace{-6pt}
 	Algorithm (with $h = k^- + m$):
 		\begin{itemize}
 		    \item For $i= 1,\dots,n$: update $c_{i}$
@@ -35,11 +40,14 @@
 		            \end{list}
 
 		            The other $\phi$ values drawn from $G_{0}$
-		            \item Draw $c_{i}$ as follows: %(by evaluating relative prob of these possibilities)
+		            \item Draw $c_{i}$ as follows:
+		            \vspace{-8pt}
+		            %(by evaluating relative prob of these possibilities)
 		            	\begin{displaymath}
 		            	\hspace{-20pt}
 		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
 		            	\end{cases}
+		            	\vspace{-5pt}
 		            	\end{displaymath}
                     \item Discard values in $\boldsymbol\phi$ not associated to any $\theta_j$
                     

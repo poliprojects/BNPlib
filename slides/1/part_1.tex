@@ -54,7 +54,7 @@
 			G &\sim DP(M G_0)
 		\end{align*}
 		\vspace{-10pt}
-		\item Model name: \textbf{DPM model}
+		\item Model name: Dirichlet-Process Mixture (\textbf{DPM}) model
 		\item Equivalent to:
 		\begin{align*}
 			y_i | \theta_i &\indsim F(\cdot,\theta_i), \quad i=1,\dots,n \\
@@ -126,8 +126,7 @@
 	\end{figure}
 	\begin{center}
 		\vspace{20pt}
-		with $c_i$ allocation parameters and
-		$$\boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
+		$$\text{with} \quad \boldsymbol\theta \leftrightsquigarrow (\boldsymbol\phi, \mathbf c)$$
 	\end{center}
 \end{frame}
 
@@ -141,7 +140,7 @@
 		\item $(\boldsymbol\phi, \mathbf c)$ is the \textbf{state} of a Markov chain
 	    \item For $i= 1,\dots,n$: update $c_{i}$
 	    \begin{itemize}
-	        \item If $c_{i}$ allocates $\phi_i$ to a singleton, remove $\phi_{c_{i}}$ from the state
+	        \item If $c_{i}$ allocates $\phi_{c_i}$ to a singleton, remove $\phi_{c_{i}}$ from the state
 		    \item Sample $c_i$ as follows:
 	        \begin{align*}
 		        \hspace{-35pt}
