@@ -25,7 +25,7 @@
 
 \begin{frame}
 	\frametitle{Neal's Algorithm 8}
-	Algorithm:
+	Algorithm (with $h = k^- + m$):
 		\begin{itemize}
 		    \item For $i= 1,\dots,n$: update $c_{i}$
 		        \begin{itemize}
@@ -38,7 +38,7 @@
 		            \item Draw $c_{i}$ as follows: %(by evaluating relative prob of these possibilities)
 		            	\begin{displaymath}
 		            	\hspace{-20pt}
-		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h %TODO what's h in \phi_{h}?
+		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1-M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
 		            	\end{cases}
 		            	\end{displaymath}
                     \item Discard values in $\boldsymbol\phi$ not associated to any $\theta_j$
@@ -125,7 +125,7 @@
 	\textbf{Direct sampling} of the \textbf{posterior} $\mathscr{P}(\cdot|\mathbf{y})$:
 	\begin{itemize}
     	\item The algorithm produces draws from $(\boldsymbol\phi,\mathbf{c},\mathbf{p}| \mathbf{y})$
-		\item Each draw $(\boldsymbol\phi,\mathbf{c},\mathbf{p})$ defines a measure $P(\cdot)= \sum\limits_{k=1}^N  \mathit{p_{k}}\delta_{\phi_{k}}(\cdot) $ %TODO what about c?
+		\item Each draw $(\boldsymbol\phi,\mathbf{c},\mathbf{p})$ defines a measure $P(\cdot)= \sum\limits_{k=1}^N  \mathit{p_{k}}\delta_{\phi_{k}}(\cdot) $
 		\item Each $P$ is drawn from $\mathscr{P}(\cdot|\mathbf{y})$
 	\end{itemize}
 \end{frame}
