@@ -12,8 +12,8 @@ class Algorithm{
 		unsigned int maxiter;
 		void step(unsigned int iter) {
 			std::cout << "Step " << iter << std::endl;
-			sample_clusters();
-			sample_parameters();
+			sample_clusters(); // c_i, allocation
+			sample_parameters(); // phi_c
 			if(H->G0.has_prior())
 				update_hyperparams();
 			if(M.alpha_has_prior())
