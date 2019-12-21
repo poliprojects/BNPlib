@@ -93,7 +93,7 @@ class Hierarchy {
 class HypersFixed {
 	double mu0, k0, alpha0, beta0;
 
-	getters
+	//getters
 
 	void sample() {return;}
 
@@ -130,8 +130,13 @@ public:
 
 template<Hierarchy, Hypers>
 class Neal8 {
+	int m=3;
 	std::vector<Hierarchy> hierarchies;
 	std::vector<real> data;
+	std::array<n,int> allocations; // the c vector
+	std::vector<data_t> unique_values;
+	std::array<m,data_t> aux_unique_values;
+
 	Hypers hypers;
 
 	void sample_c {
@@ -152,8 +157,49 @@ class Neal8 {
 		}
 	}
 
-	void sample_clustervals {
+	void sample_clustervals(){
 		for (c = 0)
+	}
+
+	void run(){
+		initalize();
+		while(!converged){
+			step();
+		}
+	}
+
+	void initalize(){
+		//...
+		return;
+	}
+
+	void step(){
+		sample_allocations();
+		sample_unique_values();
+	}
+
+	int unique_sans_i(int i){ // counts unique values by scrolling allocations
+		// without the i-th unit
+		// ...
+		return k;
+	}
+
+	void sample_allocations(){
+		for(int i=0; i<n; i++){ // for each data unit
+			//data[i]
+            std::vector<unsigned int> temp;
+            // ideas: our own for loop for k and bool (ci is a singleton)
+            // ideas: function from std count distinct values in vector
+            // ideas: using a (multi)map?
+            for(int j=0; j<n; j++){
+                if(j == i)
+                    continue;
+
+            }
+
+			int k = unique_sans_i(i);
+			int h = k+m;
+		}
 	}
 }
 
@@ -163,3 +209,16 @@ int main() {
 
 
 // Fai caso base: neal8 w/ normal-normalinvgamma, poi generalizza
+
+
+// Modello N-NIG: kernel gaussiano, G0 N-IG:
+// f ~ N(mu,sig^2)
+// (mu,sig^2) ~ G
+// G ~ DP(M, G0)  with G0 ~ N-IG
+
+
+class Hypers{
+    real current_value;
+    void sample(){...} // prende a caso
+}
+
