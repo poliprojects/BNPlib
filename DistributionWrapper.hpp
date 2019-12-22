@@ -214,18 +214,19 @@ class Neal8 {
 			card[allocations[i]]-=1;
 
 			for(int j=singleton;j<m; j++ ){
-			aux_unique_values[j][0] = stats::rnorm(hypers.get_m0(), hypers.get_k0());
-			aux_unique_values[j][1] = stats::rinvgamma(hypers.get_alpha0(),hypers.get_beta0());
+			aux_unique_values[j][0] = stan::math::normal_rng(hypers.get_m0(), hypers.get_k0(), rng);
+			aux_unique_values[j][1] = stan::math::inv_gamma_rng(hypers.get_alpha0(),hypers.get_beta0(), rng);
 			}
-			std::vector<double> probas(k+m,0);
+			probas = Eigen::VectorXd(k+m); //			std::vector<double> probas(k+m,0);
+
 			for(int k=0; k<n_unique ; k++){ // if datum i is a singleton card[k] when k=allocations[i] is equal to 0 ->probas[k]=0
-				probas[k]=card[k]*stats::pnorm(data[i],unique_values[k][0],unique_values[k][1])/(n-1+ mixture.get_totalmass());
+				probas(k)=card[k]*stan::math::normal_cdf(data[i],unique_values[k][0],unique_values[k][1])/(n-1+ mixture.get_totalmass());
 			}
 			for(int k=0; k<m ; k++){
-				probas[n_unique+k]=(mixture.get_totalmass()/m)*stats::pnorm(data[i],unique_values[k][0],unique_values[k][1])/(n-1+ mixture.get_totalmass());
+				probas(n_unique+k)=(mixture.get_totalmass()/m)*stan::math::normal_cdf(data[i],unique_values[k][0],unique_values[k][1])/(n-1+ mixture.get_totalmass());
 			}
 
-			int c_new= std::discrete_distribution(probas); // in stats??
+			int c_new=  stan::math::categorical_rng(probas,rng) //std::discrete_distribution(probas); // in stats??
 			if(singleton){
 
 				if (c_new>=n_unique){ // SINGLETON - AUX
@@ -253,24 +254,33 @@ class Neal8 {
 					card.push_back(1);
 					allocations[i]=n_unique+1;
 			}
-			else{ // NOT SINGLETON - OLD VALUES 
+			else{ // NOT SINGLETON - OLD VALUES
 				allocations[i]=c_new;
 				card[c_new]+=1;
 			}
 
 		}
 			}
-		}
-
-	} // end sample allocation
+		} // end sample allocation
 
 
+void sample_unique_values(){
+std::vector<std::vector<unsigned int>> clust_idxs;
+for(int i=0; i<n; i++) // save different cluster in each row
+	clust_idxs[allocations[i]].push_back(i);
 
 
-
+for (auto &row: clust_idxs) {
+	std::vector<data_t> curr_data;
+	for (auto &idx: row){
+		curr_data.push_back(data[idx]);
+	}
+	// draw PHI_c given curr_data;
 }
 
 }
+
+
 
 
 
