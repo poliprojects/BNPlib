@@ -223,7 +223,7 @@ class Neal8 {
 				probas(k)=card[k]*stan::math::normal_cdf(data[i],unique_values[k][0],unique_values[k][1])/(n-1+ mixture.get_totalmass());
 			}
 			for(int k=0; k<m ; k++){
-				probas(n_unique+k)=(mixture.get_totalmass()/m)*stan::math::normal_cdf(data[i],unique_values[k][0],unique_values[k][1])/(n-1+ mixture.get_totalmass());
+				probas(n_unique+k)=(mixture.get_totalmass()/m)*stan::math::normal_pdf(data[i],unique_values[k][0],unique_values[k][1])/(n-1+ mixture.get_totalmass());
 			}
 
 			int c_new=  stan::math::categorical_rng(probas,rng) //std::discrete_distribution(probas); // in stats??
