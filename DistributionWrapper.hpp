@@ -264,18 +264,20 @@ class Neal8 {
 		} // end sample allocation
 
 
+
+
 void sample_unique_values(){
 std::vector<std::vector<unsigned int>> clust_idxs;
 for(int i=0; i<n; i++) // save different cluster in each row
 	clust_idxs[allocations[i]].push_back(i);
 
 
-for (auto &row: clust_idxs) {
+for (int j=0; j< clust_idxs.size(); j++) {
 	std::vector<data_t> curr_data;
-	for (auto &idx: row){
+	for (auto &idx: clust_idxs[j]){
 		curr_data.push_back(data[idx]);
 	}
-	// draw PHI_c given curr_data;
+	hierarchies(j).sample(curr_data);
 }
 
 }
