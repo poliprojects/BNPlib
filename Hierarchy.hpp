@@ -1,12 +1,26 @@
 class Distribution{
 	arma::vec parameters;
-	double eval();
+	double eval() virtual;
+}
+
+class GaussianDistribution: public Distribution{
+    double eval() override{
+			return 1/(2*pi)^0.5 * ...;
+		}
 }
 
 
-class DistributionWithHypers: public Distribution{
-	std::vector<shared_ptr<Distribution>> hyperparameters;
-	arma::vec update();
+//POI CREO OGGETTI GAUSSIAN, etc:
+Distribution gaussian;
+
+
+class DistributionWithHypers{
+	std::vector<shared_ptr<DistributionWithFixed>> hyperparameters;
+	arma::vec sample();
+}
+
+class DistributionWithFixed: public DistributionWithHypers{
+	arma::vec parameters;
 }
 
 
