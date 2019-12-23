@@ -48,6 +48,7 @@ public:
 
 
 
+
 template<Hierarchy, Hypers>
 class Neal8{
 private:
