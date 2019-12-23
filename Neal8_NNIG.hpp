@@ -22,6 +22,14 @@ public:
         return stan::math::normal_lpdf(datum, state-1, state-2);
     }
 
+    void draw() {
+        real sigmaNew = stan::math::inv_gamma_rng(hypers.get_alpha0(),hypers.get_beta0(), rng);
+        real muNew = stan::math::normal_rng(hypers.get_m0(), hypers.get_k0(), rng);
+        state(0) = muNew;
+        state(1) = sigmaNew;
+        }
+
+
     void sample(std::vector<real> data) {
         // prendo mu_0, k0, alpha0, beta0 da hypers:
         mu_0 = hypers.current_value // ?
@@ -33,6 +41,9 @@ public:
         state(0) = muNew;
         state(1) = sigmaNew;
         }
+
+
+
 }
 
 
@@ -41,12 +52,15 @@ template<Hierarchy, Hypers>
 class Neal8{
 private:
     int m=3; // TODO
-    std::vector<Hierarchy> hierarchies;
+    // std::vector<Hierarchy> hierarchies;
     std::vector<real> data;
     std::array<n,int> allocations; // the c vector
-    std::vector<param_t> unique_values;
-    std::array<m,param_t> aux_unique_values;
-    
+    //std::vector<param_t> unique_values;
+    //std::array<m,param_t> aux_unique_values;
+
+    std::vector<Hierarchy> unique_values;
+    std::array<m,Hierarchy> aux_unique_values;
+
     Hypers hypers; // see Hypers class in other files
 
     // Idea by Mario
@@ -111,7 +125,7 @@ private:
 
             if(card[ allocations[i] ] == 1){ // datum i is a singleton
                 k = n_unique - 1;
-                aux_unique_values[0] = unique_values[ allocations[i] ];
+                aux_unique_values[0].setState(unique_values[allocations[i]].getState()); // move phi value in aux
                 singleton = 1;
             }
             else{
@@ -120,32 +134,32 @@ private:
 
             card[ allocations[i] ] -= 1;
 
+
+             // draw from G0 the aux
+
             for(int j=singleton;j<m; j++){
-                aux_unique_values[j][0] = stan::math::normal_rng(
-                    hypers.get_m0(), hypers.get_k0(), rng);
-                aux_unique_values[j][1] = stan::math::inv_gamma_rng(
-                    hypers.get_alpha0(),hypers.get_beta0(), rng);
+                aux_unique_values[j].draw();
             }
+
+
+            //draw a NEW value for ci
 
             auto probas = Eigen::VectorXd(k+m); // or vec initialized to 0
 
             for(int k=0; k<n_unique ; k++){ // if datum i is a singleton, then
                 // card[k] when k=allocations[i] is equal to 0 ->probas[k]=0
-                probas(k) = card[k] * stan::math::normal_cdf(data[i], // TODO cdf? sure?
-                    unique_values[k][0], unique_values[k][1]) / (
+                probas(k) = card[k] * unique_values[k].loglike(data[i]) / (
                     n-1+mixture.get_totalmass() );
             }
             for(int k=0; k<m ; k++){
                 probas(n_unique+k) = (mixture.get_totalmass()/m) *
-                    stan::math::normal_pdf(data[i],unique_values[k][0],
-                    unique_values[k][1]) / ( n-1+mixture.get_totalmass() );
+                    aux_unique_values[k].loglike(data[i])/ ( n-1+mixture.get_totalmass() );
             }
 
             unsigned int c_new = stan::math::categorical_rng(probas,rng);
             if(singleton == 1){
                 if (c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
-                    unique_values[ allocations[i] ] =
-                        aux_unique_values[c_new-n_unique];
+                    unique_values[ allocations[i] ].setState(aux_unique_values[c_new-n_unique].getState());
                     card[allocations[i]] += 1;
                 }
                 else{ // case 2 of 4: SINGLETON - OLD VALUE
@@ -188,14 +202,14 @@ private:
         std::vector<std::vector<unsigned int>> clust_idxs;
         for(int i=0; i<n; i++) // save different cluster in each row
             clust_idxs[ allocations[i] ].push_back(i);
-         
+
         for (int j=0; j< clust_idxs.size(); j++) {
             std::vector<data_t> curr_data;
 
             for ( auto &idx : clust_idxs[j] )
                 curr_data.push_back( data[idx] );
 
-            hierarchies(j).sample(curr_data);
+            unique_values[j].sample(curr_data);
         }
     }
 
