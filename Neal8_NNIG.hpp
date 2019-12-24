@@ -1,87 +1,71 @@
-// Modello N-NIG: kernel gaussiano, G0 N-IG:
+// N-NIG model == gaussian kernel + N-IG base measure:
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
 // G ~ DP(M, G0)  with G0 ~ N-IG
 
 
-// Normal likelihoood, Normal Inverse Gamma Hierarchy
+// Normal likelihoood, Normal Inverse Gamma hierarchy
 template<typename Hypers> //Hypers = TupleWrapper, distro, ...
 class NNIGHierarchy {
 protected:
-    std::tuple<real, real> state;
-    //std::tuple<> params; // mu_0, k, alpha, beta
+    using std::tuple<par_t, par_t, par_t, par_t> = state_tuple_t;
+    unsigned int rng = 20191225;
+    state_tuple_t state; // current values for G0's
+        // parameters: in order, mu_0, sig2_0, alpha, beta
 
+    std::shared_ptr<Hypers> hypers;
 
-    //qualcosa che mi rappresenta i parametri ma possono cambiare
-    Hypers* hypers;
 public:
-    // getters, such as:
-    std::tuple getState();
+    // getters/setters:
+    state_tuple_t get_state(){return state;}
+    void set_state(const state_tuple_t &s){state = s;}
+    void set_state(int pos, par_t val){state(pos) = val;}
 
-    double log_like(real datum) {
-        return stan::math::normal_lpdf(datum, state-1, state-2);
+    double log_like(data_t datum) {
+        return stan::math::normal_lpdf(datum, state(0), state(1));
     }
 
-    void sample(std::vector<real> data) {
-        // prendo mu_0, k0, alpha0, beta0 da hypers:
-        mu_0 = hypers.current_value // ?
+    void sample_given_data(std::vector<data_t> data) { //TODO
+        // get current values of parameters
+        auto mu_0    = hypers.get_current_val(0);
+        auto sig2_0  = hypers.get_current_val(1);
+        auto alpha_0 = hypers.get_current_val(2);
+        auto beta_0  = hypers.get_current_val(3);
 
-        ... // calcolo mu_post, k_post, alpha_post, beta_post
+        // compute posterior parameters //TODO
+        auto mu_post = ...;
+        auto sig_post = ...;
+        auto alpha_post = ...;
+        auto beta_post = ...;
 
-        real sigmaNew = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
-        real muNew = stan::math::normal_rng(mu_post, kpost * sigmaNew, rng);
-        state(0) = muNew;
-        state(1) = sigmaNew;
-        }
+        // get a sample
+        par_t sigma_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
+        par_t mu_new = stan::math::normal_rng(mu_post, sig_post * sigma_new, rng);
+        state(0) = mu_new;
+        state(1) = sigma_new;
+    }
 }
 
 
 
-template<Hierarchy, Hypers>
+template<class Hierarchy, class Hypers>
 class Neal8{
 private:
-    int m=3; // TODO
+    int m = 3; // TODO
+    int maxiter = 10000;
+    int burnin = 1000;
     std::vector<Hierarchy> hierarchies;
-    std::vector<real> data;
+    std::vector<data_t> data;
     std::array<n,int> allocations; // the c vector
-    std::vector<param_t> unique_values;
-    std::array<m,param_t> aux_unique_values;
+    std::vector<par_t> unique_values;
+    std::array<m,par_t> aux_unique_values;
     
     Hypers hypers; // see Hypers class in other files
 
-    // Idea by Mario
-    void sample_c() {
-        for (i=0; i<numData; i++) {
-            old = c[i];
-            probas = Eigen::VectorXd(numClusters);
-            for (c = 0; c < numClusters; c++) {
-
-                // meglio in logscale
-                probas(c) = dataPerClusters[c] * hierarchies[c].like(data[i]);
-            }
-
-            probas;
-
-            c[i] = stan::math::categorical_rng(probas, rng);
-            dataPerClusters[old] -= 1;
-            dataPerClusters[c[i]] += 1;
-        }
-    }
-
-
-
-
-
-    void run(){
-        initalize();
-        while(!converged){
-            step();
-        }
-    }
 
     void initalize(){
-        //...
-        return;
+        for(int i=0; i<n; i++)
+            allocations[i] = i; // one datum per cluster
     }
 
     void step(){
@@ -127,10 +111,14 @@ private:
                     hypers.get_alpha0(),hypers.get_beta0(), rng);
             }
 
-            auto probas = Eigen::VectorXd(k+m); // or vec initialized to 0
+
+            Eigen::Matrix<double, k+m, 1> probas;
+            // or std::vec initialized to 0, or dynamic Eigen::VectorXd(k+m)
 
             for(int k=0; k<n_unique ; k++){ // if datum i is a singleton, then
                 // card[k] when k=allocations[i] is equal to 0 ->probas[k]=0
+
+                // TODO // meglio in logscale (?)
                 probas(k) = card[k] * stan::math::normal_cdf(data[i], // TODO cdf? sure?
                     unique_values[k][0], unique_values[k][1]) / (
                     n-1+mixture.get_totalmass() );
@@ -200,6 +188,24 @@ private:
     }
 
 
+    void save_iteration(unsigned int iter){
+        std::cout << "Iteration n. " << iter << " / " << maxiter << std::endl;
+        for(auto &s : state)
+            std::cout << s << " " << std::endl;
+    }
+
+
+public:
+    void run(){
+        initalize();
+        unsigned int iter = 0;
+        while(iter < maxiter){
+            step();
+            if(iter >= burnin)
+                save_iteration(iter);
+        }
+    }
+
 } // end of Class Neal8
 
 
@@ -207,3 +213,6 @@ private:
 int main() {
     Neal8<NNIGHierarchy<HypersFixed>> sampler;
 }
+
+// TODO:
+// * in sample_allocations(), use vec of hierarchies instead of vec of params
