@@ -3,7 +3,8 @@
 
 namespace bnplib{
     using data_t = double;
-    using param_t = std::vector<double>;
+    using par_t = double;
+    using parvec_t = std::vector<param_t>;
     // using Normal = std::normal_distribution<data_t>;
 }
 
