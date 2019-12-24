@@ -5,7 +5,7 @@
 
 
 // Normal likelihoood, Normal Inverse Gamma hierarchy
-template<typename Hypers> //Hypers = TupleWrapper, distro, ...
+template<class Hypers> //Hypers = TupleWrapper, distro, ...
 class NNIGHierarchy {
 protected:
     using std::tuple<par_t, par_t, par_t, par_t> = state_tuple_t;
@@ -17,6 +17,9 @@ protected:
     std::shared_ptr<Hypers> hypers;
 
 public:
+    // Contructors:
+    // TODO!
+
     // Getters/setters:
     state_tuple_t get_state(){return state;}
     void set_state(const state_tuple_t &s){state = s;}
@@ -29,20 +32,20 @@ public:
     void draw() {
         real sigmaNew = stan::math::inv_gamma_rng(hypers.get_alpha0(),
             hypers.get_beta0(), rng);
-        real muNew = stan::math::normal_rng(hypers.get_m0(), hypers.get_sig0(),
+        real muNew = stan::math::normal_rng(hypers.get_m0(), hypers.get_sig20(),
             rng);
         state(0) = muNew;
         state(1) = sigmaNew;
         }
 
-    void sample_given_data(std::vector<data_t> data) { //TODO
+    void sample_given_data(std::vector<data_t> data) { // TODO
         // Get current values of parameters
-        auto mu_0    = hypers.get_current_val(0);
-        auto sig2_0  = hypers.get_current_val(1);
-        auto alpha_0 = hypers.get_current_val(2);
-        auto beta_0  = hypers.get_current_val(3);
+        auto mu0    = hypers.get_mu0();
+        auto sig20  = hypers.get_sig20();
+        auto alpha0 = hypers.get_alpha0();
+        auto beta0  = hypers.get_beta0();
 
-        // Compute posterior parameters //TODO
+        // Compute posterior parameters // TODO
         auto mu_post = ...;
         auto sig_post = ...;
         auto alpha_post = ...;
@@ -50,7 +53,7 @@ public:
 
         // Get a sample
         par_t sigma_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
-        par_t mu_new = stan::math::normal_rng(mu_post, sig_post * sigma_new, rng);
+        par_t mu_new = stan::math::normal_rng(mu_post, sig_post*sigma_new, rng);
         state(0) = mu_new;
         state(1) = sigma_new;
     }
@@ -70,8 +73,8 @@ private:
     //std::vector<Hierarchy> hierarchies;
     std::vector<data_t> data;
     std::array<n, unsigned int> allocations; // the c vector
-    std::vector<Hierarchy> unique_values; // the phi vector
-    std::array<m, Hierarchy> aux_unique_values; // the auxiliary phi values
+    std::vector<Hierarchy> unique_values;
+    std::array<m, Hierarchy> aux_unique_values;
     
     Hypers hypers;
 
@@ -107,8 +110,8 @@ private:
 
             if(card[ allocations[i] ] == 1){ // datum i is a singleton
                 k = n_unique - 1;
-                aux_unique_values[0].set_state(unique_values[allocations[i]
-                    ].get_state()); // move phi value in aux
+                aux_unique_values[0].set_state( unique_values[allocations[i]
+                    ].get_state() ); // move phi value in aux
                 singleton = 1;
             }
             else{
@@ -119,7 +122,7 @@ private:
 
 
             // Draw the aux from G0
-            for(int j=singleton;j<m; j++){
+            for(int j=singleton; j<m; j++){
                 aux_unique_values[j].draw();
             }
 
@@ -131,7 +134,7 @@ private:
 
                 auto M = mixture.get_totalmass();
 
-                // TODO meglio in logscale (?)
+                // TODO giusto? "meglio in logscale" (?)
                 probas(k) = card[k] * unique_values[k].loglike(data[i]) / (
                     n-1+M);
             }
@@ -145,7 +148,7 @@ private:
                 if (c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
                     unique_values[ allocations[i] ].set_state(
                         aux_unique_values[c_new-n_unique].get_state());
-                    card[allocations[i]] += 1;
+                    card[ allocations[i] ] += 1;
                 }
                 else{ // case 2 of 4: SINGLETON - OLD VALUE
                     unique_values.erase(
@@ -204,6 +207,9 @@ private:
 
 
 public:
+    // Constructors
+    // TODO!
+
     void run(){
         initalize();
         unsigned int iter = 0;
