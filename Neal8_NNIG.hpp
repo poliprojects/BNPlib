@@ -25,6 +25,13 @@ public:
         return stan::math::normal_lpdf(datum, state(0), state(1));
     }
 
+    void draw() {
+        real sigmaNew = stan::math::inv_gamma_rng(hypers.get_alpha0(),hypers.get_beta0(), rng);
+        real muNew = stan::math::normal_rng(hypers.get_m0(), hypers.get_k0(), rng);
+        state(0) = muNew;
+        state(1) = sigmaNew;
+        }
+
     void sample_given_data(std::vector<data_t> data) { //TODO
         // get current values of parameters
         auto mu_0    = hypers.get_current_val(0);
@@ -44,7 +51,9 @@ public:
         state(0) = mu_new;
         state(1) = sigma_new;
     }
+
 }
+
 
 
 
@@ -54,11 +63,11 @@ private:
     int m = 3; // TODO
     int maxiter = 10000;
     int burnin = 1000;
-    std::vector<Hierarchy> hierarchies;
+    //std::vector<Hierarchy> hierarchies;
     std::vector<data_t> data;
     std::array<n,int> allocations; // the c vector
-    std::vector<par_t> unique_values;
-    std::array<m,par_t> aux_unique_values;
+    std::vector<Hierarchy> unique_values;
+    std::array<m,Hierarchy> aux_unique_values;
     
     Hypers hypers; // see Hypers class in other files
 
@@ -95,7 +104,7 @@ private:
 
             if(card[ allocations[i] ] == 1){ // datum i is a singleton
                 k = n_unique - 1;
-                aux_unique_values[0] = unique_values[ allocations[i] ];
+                aux_unique_values[0].setState(unique_values[allocations[i]].getState()); // move phi value in aux
                 singleton = 1;
             }
             else{
@@ -104,14 +113,15 @@ private:
 
             card[ allocations[i] ] -= 1;
 
+
+             // draw from G0 the aux
+
             for(int j=singleton;j<m; j++){
-                aux_unique_values[j][0] = stan::math::normal_rng(
-                    hypers.get_m0(), hypers.get_k0(), rng);
-                aux_unique_values[j][1] = stan::math::inv_gamma_rng(
-                    hypers.get_alpha0(),hypers.get_beta0(), rng);
+                aux_unique_values[j].draw();
             }
 
 
+            //draw a NEW value for ci
             Eigen::Matrix<double, k+m, 1> probas;
             // or std::vec initialized to 0, or dynamic Eigen::VectorXd(k+m)
 
@@ -119,21 +129,18 @@ private:
                 // card[k] when k=allocations[i] is equal to 0 ->probas[k]=0
 
                 // TODO // meglio in logscale (?)
-                probas(k) = card[k] * stan::math::normal_cdf(data[i], // TODO cdf? sure?
-                    unique_values[k][0], unique_values[k][1]) / (
+                probas(k) = card[k] * unique_values[k].loglike(data[i]) / (
                     n-1+mixture.get_totalmass() );
             }
             for(int k=0; k<m ; k++){
                 probas(n_unique+k) = (mixture.get_totalmass()/m) *
-                    stan::math::normal_pdf(data[i],unique_values[k][0],
-                    unique_values[k][1]) / ( n-1+mixture.get_totalmass() );
+                    aux_unique_values[k].loglike(data[i])/ ( n-1+mixture.get_totalmass() );
             }
 
             unsigned int c_new = stan::math::categorical_rng(probas,rng);
             if(singleton == 1){
                 if (c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
-                    unique_values[ allocations[i] ] =
-                        aux_unique_values[c_new-n_unique];
+                    unique_values[ allocations[i] ].setState(aux_unique_values[c_new-n_unique].getState());
                     card[allocations[i]] += 1;
                 }
                 else{ // case 2 of 4: SINGLETON - OLD VALUE
@@ -176,14 +183,14 @@ private:
         std::vector<std::vector<unsigned int>> clust_idxs;
         for(int i=0; i<n; i++) // save different cluster in each row
             clust_idxs[ allocations[i] ].push_back(i);
-         
+
         for (int j=0; j< clust_idxs.size(); j++) {
             std::vector<data_t> curr_data;
 
             for ( auto &idx : clust_idxs[j] )
                 curr_data.push_back( data[idx] );
 
-            hierarchies(j).sample(curr_data);
+            unique_values[j].sample(curr_data);
         }
     }
 
