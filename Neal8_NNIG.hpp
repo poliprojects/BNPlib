@@ -241,6 +241,7 @@ private:
     }
 
 
+
     void save_iteration(unsigned int iter){ // TODO
         std::cout << "Iteration n. " << iter << " / " << maxiter << std::endl;
         print();
