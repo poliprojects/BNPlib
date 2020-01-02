@@ -32,7 +32,7 @@ public:
     void draw() {
         real sigmaNew = stan::math::inv_gamma_rng(hypers.get_alpha0(),
             hypers.get_beta0(), rng);
-        real muNew = stan::math::normal_rng(hypers.get_m0(), hypers.get_sig20(),
+        real muNew = stan::math::normal_rng(hypers.get_m0(), sigmaNew/hypers.get_lambda(),
             rng);
         state(0) = muNew;
         state(1) = sigmaNew;
@@ -88,7 +88,7 @@ arma::vec NNIGHierarchy::normalGammaUpdate(
 
 
 
-template<class Hierarchy, class Hypers, unsigned int n_aux = 3>
+template<class Hierarchy<Hypers>, unsigned int n_aux = 3>
 class Neal8{
 private:
     unsigned int m = n_aux; // TODO
@@ -104,7 +104,7 @@ private:
     std::vector<Hierarchy> unique_values;
     std::array<m, Hierarchy> aux_unique_values;
 
-    Hypers hypers;
+    //Hypers hypers;
 
 
     void initalize(){
@@ -279,14 +279,26 @@ public:
 
 
 //TO DO LIST and general doubts
-// - hierarchy<Hypers> or Neal<Hierarchy, Hypers>?
+
 // - is it correct the posterior update given data, given clusters?
-// - a way to erase and add clusters more efficient
 // - Hierarchy constructors
+// - Hypers constructors
+// unif con stan
+// - a way to erase and add clusters more efficient
 
 
 
 
+class HypersFixed {
+    double mu0, lambda, alpha0, beta0;
+    double get_mu0(){return mu0;}
+    double get_alpha0(){return alpha0;}
+    double get_beta0(){return beta0;}
+    double get_lambda(){return lambda;}
+
+
+
+}
 
 
 int main() {
