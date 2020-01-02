@@ -8,13 +8,13 @@
 template<class Hypers> //Hypers = TupleWrapper, distro, ...
 class NNIGHierarchy {
 protected:
-    using std::tuple<par_t, par_t, par_t, par_t> = state_tuple_t;
+    using std::tuple<par_t, par_t> = state_tuple_t;
 
     unsigned int rng = 20191225;
-    state_tuple_t state; // current values for G0's parameters: in order, mu_0,
-                         // sig2_0, alpha, beta
+    state_tuple_t state; // current values for F's parameters: mu, sigma
 
-    std::shared_ptr<Hypers> hypers;
+
+    std::shared_ptr<Hypers> hypers; // current values for G0's parameters:mu_0,Lambda0, alpha, beta
 
 public:
     // Contructors:
@@ -38,28 +38,53 @@ public:
         state(1) = sigmaNew;
         }
 
-    void sample_given_data(std::vector<data_t> data) { // TODO
+    void sample_given_data(std::vector<data_t> data) {
         // Get current values of parameters
         auto mu0    = hypers.get_mu0();
-        auto sig20  = hypers.get_sig20();
+        auto Lambda0  = hypers.get_lambda();
         auto alpha0 = hypers.get_alpha0();
         auto beta0  = hypers.get_beta0();
 
-        // Compute posterior parameters // TODO
-        auto mu_post = ...;
-        auto sig_post = ...;
-        auto alpha_post = ...;
-        auto beta_post = ...;
+        arma::vec temp = normalGammaUpdate(
+          data, mu0, alpha0, beta0, Lambda0);
+
+        auto mu_post = temp(0);
+        auto alpha_post = temp(1);
+        auto beta_post = temp(2);
+        auto postLambda = temp(3);
 
         // Get a sample
         par_t sigma_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
-        par_t mu_new = stan::math::normal_rng(mu_post, sig_post*sigma_new, rng);
+        par_t mu_new = stan::math::normal_rng(mu_post, sigma_new/postLambda, rng); //? is it ok /postLambda?
         state(0) = mu_new;
         state(1) = sigma_new;
     }
 
 }
 
+arma::vec NNIGHierarchy::normalGammaUpdate(
+    arma::vec data, double mu0, double alpha0, double beta0,
+    double Lambda0) {
+  double mu_post, alpha_post, beta_post, postLambda;
+  int n = data.size();
+  if (n == 0) {
+    return arma::vec{mu0, alpha0, beta0, Lambda0};
+  }
+  double ybar = arma::mean(data);
+  mu_post = (Lambda0 * mu0 + n * ybar) / (Lambda0 + n);
+  alpha_post = 1.0 * alpha0 + 1.0 * n / 2;
+
+  // arma::var(x, 1) divides by n, not n-1
+  double ss = n * arma::var(data, 1);
+
+  beta_post = (
+      beta0 + 0.5 * ss +
+      0.5 * Lambda0 / (n + Lambda0) * n * std::pow((ybar - mu0), 2));
+
+  postLambda = Lambda0 + n;
+
+  return arma::vec{mu_post, alpha_post, beta_post, postLambda};
+}
 
 
 
@@ -69,20 +94,33 @@ private:
     unsigned int m = n_aux; // TODO
     unsigned int maxiter = 1000;
     unsigned int burnin = 0;
+    int numClusters;
+    //arma::vec probas;
+
 
     //std::vector<Hierarchy> hierarchies;
     std::vector<data_t> data;
     std::array<n, unsigned int> allocations; // the c vector
     std::vector<Hierarchy> unique_values;
     std::array<m, Hierarchy> aux_unique_values;
-    
+
     Hypers hypers;
 
 
     void initalize(){
-        for(int i=0; i<n; i++)
-            allocations[i] = i; // one datum per cluster
+
+    for (int h = 0; h < numClusters; h++) {
+          Hierarchy hierarchy;
+          unique_values.push_back((hierarchy));
+          allocations[h] = h;
+        }
+
+        for (int j = numClusters; j < data.size(); j++) {
+          int num = stats::rdiscreteunif(0, numClusters, engine); //da stan?
+          allocations[j] = num;
+        }
     }
+
 
     void step(){
         sample_allocations();
@@ -106,7 +144,7 @@ private:
         for(int i=0; i<n; i++){ // for each data unit data[i]
 
             singleton = 0;
-            n_unique = unique_values.size();
+            n_unique = unique_values.size(); //
 
             if(card[ allocations[i] ] == 1){ // datum i is a singleton
                 k = n_unique - 1;
@@ -186,6 +224,8 @@ private:
 
 
     void sample_unique_values(){
+        numClusters=unique_values.size();
+
         std::vector<std::vector<unsigned int>> clust_idxs;
         for(int i=0; i<n; i++) // save different cluster in each row
             clust_idxs[ allocations[i] ].push_back(i);
@@ -203,11 +243,25 @@ private:
 
     void save_iteration(unsigned int iter){ // TODO
         std::cout << "Iteration n. " << iter << " / " << maxiter << std::endl;
+        print();
     }
+
+    void print() {
+        for (int h = 0; h < numClusters; h++) {
+            std::cout << "Cluster # " << h << std::endl;
+            std::cout << "Parameters: "<< unique_values[h].getstate();
+          }
+        }
+
 
 
 public:
-    // Constructors
+
+    ~Neal8() = default;
+    Neal8(std::vector<data_t> & data, int numClusters):
+    data(data), numClusters(numClusters) {};
+    Neal8(std::vector<data_t>  & data, int m):
+    data(data), numClusters(data.size()) {};
     // TODO!
 
     void run(){
@@ -221,6 +275,16 @@ public:
     }
 
 } // end of Class Neal8
+
+
+//TO DO LIST and general doubts
+// - hierarchy<Hypers> or Neal<Hierarchy, Hypers>?
+// - is it correct the posterior update given data, given clusters?
+// - a way to erase and add clusters more efficient
+// - Hierarchy constructors
+
+
+
 
 
 
