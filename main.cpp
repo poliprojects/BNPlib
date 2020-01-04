@@ -2,7 +2,6 @@
 #include <random>
 #include <tuple>
 #include <vector>
-#include "includes.hpp"
 #include "Neal8_NNIG.hpp"
 
 
@@ -11,6 +10,6 @@ int main() {
     //SimpleMixture mix(5.0);
     //Neal8<NNIGHierarchy<HypersFixed>, SimpleMixture> sampler(hy,mix);
 
-		return 0;
+	return 0;
 
 }
