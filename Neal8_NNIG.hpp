@@ -1,8 +1,9 @@
 // N-NIG model == gaussian kernel + N-IG base measure:
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
-// G ~ DP(M, G0)  with G0 ~ N-IG
+// G ~ DP(M, G0)  with G0 = N-IG
 
+#include "includes.hpp" 
 
 // Normal likelihoood, Normal Inverse Gamma hierarchy
 template<class Hypers> //Hypers = TupleWrapper, distro, ...
@@ -18,12 +19,16 @@ protected:
 
 public:
     // Contructors:
-    // TODO!
+    ~NNIGHierarchy() = default;
+    NNIGHierarchy(std::shared_ptr<Hypers> hypers):
+    hypers(hypers))  {}
 
     // Getters/setters:
     state_tuple_t get_state(){return state;}
     void set_state(const state_tuple_t &s){state = s;}
     void set_state(int pos, par_t val){state(pos) = val;}
+
+
 
     double log_like(data_t datum) {
         return stan::math::normal_lpdf(datum, state(0), state(1));
@@ -60,7 +65,7 @@ public:
         state(1) = sigma_new;
     }
 
-}
+};
 
 arma::vec NNIGHierarchy::normalGammaUpdate(
     arma::vec data, double mu0, double alpha0, double beta0,
@@ -88,30 +93,27 @@ arma::vec NNIGHierarchy::normalGammaUpdate(
 
 
 
-template<class Hierarchy<Hypers>, unsigned int n_aux = 3>
+template<class Hierarchy<Hypers>, class Mixture>
 class Neal8{
 private:
-    unsigned int m = n_aux; // TODO
-    unsigned int maxiter = 1000;
+    unsigned int n_aux=3;
+    unsigned int maxiter = 1000; // TODO LATER
     unsigned int burnin = 0;
     int numClusters;
+    Mixture mixture;
+    Hypers hy;
     //arma::vec probas;
 
 
-    //std::vector<Hierarchy> hierarchies;
     std::vector<data_t> data;
     std::array<n, unsigned int> allocations; // the c vector
     std::vector<Hierarchy> unique_values;
     std::array<m, Hierarchy> aux_unique_values;
 
-    //Hypers hypers;
 
 
     void initalize(){
-
     for (int h = 0; h < numClusters; h++) {
-          Hierarchy hierarchy;
-          unique_values.push_back((hierarchy));
           allocations[h] = h;
         }
 
@@ -172,13 +174,13 @@ private:
 
                 auto M = mixture.get_totalmass();
 
-                // TODO giusto? "meglio in logscale" (?)
-                probas(k) = card[k] * unique_values[k].loglike(data[i]) / (
+                // TODO LATER "meglio in logscale" (?)
+                probas(k) = card[k] * unique_values[k].log_like(data[i]) / (
                     n-1+M);
             }
             for(int k=0; k<m ; k++){
                 probas(n_unique+k) = (M/m) *
-                    aux_unique_values[k].loglike(data[i]) / (n-1+M);
+                    aux_unique_values[k].log_like(data[i]) / (n-1+M);
             }
 
             unsigned int c_new = stan::math::categorical_rng(probas,rng);
@@ -242,7 +244,7 @@ private:
 
 
 
-    void save_iteration(unsigned int iter){ // TODO
+    void save_iteration(unsigned int iter){ // TODO LATER
         std::cout << "Iteration n. " << iter << " / " << maxiter << std::endl;
         print();
     }
@@ -250,7 +252,7 @@ private:
     void print() {
         for (int h = 0; h < numClusters; h++) {
             std::cout << "Cluster # " << h << std::endl;
-            std::cout << "Parameters: "<< unique_values[h].getstate();
+            std::cout << "Parameters: "<< unique_values[h].getstate()<<std::endl;
           }
         }
 
@@ -259,11 +261,21 @@ private:
 public:
 
     ~Neal8() = default;
-    Neal8(std::vector<data_t> & data, int numClusters):
-    data(data), numClusters(numClusters) {};
-    Neal8(std::vector<data_t>  & data, int m):
-    data(data), numClusters(data.size()) {};
-    // TODO!
+    Neal8(const std::vector<data_t> & data, int numClusters,int n_aux, const Mixture & mix,const Hypers &hy ):
+    data(data), numClusters(numClusters), n_aux(n_aux), mixture(mix)  {
+      Hierarchy hierarchy(&hy);
+      for (int h = 0; h < numClusters; h++) {
+              unique_values.push_back(hierarchy);
+            }
+      for (int h = 0; h < n_aux; h++) {
+        aux_unique_values.push_back(hierarchy);
+      }
+    }
+
+
+    Neal8(std::vector<data_t>  & data, int n_aux, const Mixture & mix, const Hypers &hy):
+    Neal8(data, data.size(), n_aux, mix, hy ) {}
+
 
     void run(){
         initalize();
@@ -275,32 +287,46 @@ public:
         }
     }
 
-} // end of Class Neal8
+}; // end of Class Neal8
 
 
-//TO DO LIST and general doubts
+//TODO LIST and general doubts
 
 // - is it correct the posterior update given data, given clusters?
-// - Hierarchy constructors
-// - Hypers constructors
-// unif con stan
+
 // - a way to erase and add clusters more efficient
 
+class SimpleMixture {
+double totalmass;
 
+public:
+
+    ~SimpleMixture() = default;
+    SimpleMixture(double totalmass):
+    totalmass(totalmass) {
+      assert(m>=0);
+    }
+
+    double const get_totalmass(){return totalmass;}
+};
 
 
 class HypersFixed {
     double mu0, lambda, alpha0, beta0;
+public:
     double get_mu0(){return mu0;}
     double get_alpha0(){return alpha0;}
     double get_beta0(){return beta0;}
     double get_lambda(){return lambda;}
 
-
-
-}
+    ~HypersFixed() = default;
+    HypersFixed(double mu0, double lambda, double alpha0, double beta0):
+    mu0(mu0), lambda(lambda), alpha0(alpha0), beta0(beta0)  {}
+};
 
 
 int main() {
-    Neal8<NNIGHierarchy<HypersFixed>> sampler;
+    HypersFixed hy();
+    SimpleMixture mix(5.0);
+    Neal8<NNIGHierarchy<HypersFixed>, SimpleMixture> sampler(hy,mix);
 }
