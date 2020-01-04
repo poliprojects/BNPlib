@@ -3,7 +3,7 @@
 // (mu,sig^2) ~ G
 // G ~ DP(M, G0)  with G0 = N-IG
 
-#include "includes.hpp" 
+#include "includes.hpp"
 
 // Normal likelihoood, Normal Inverse Gamma hierarchy
 template<class Hypers> //Hypers = TupleWrapper, distro, ...
@@ -167,7 +167,7 @@ private:
             }
 
             // Draw a NEW value for ci
-            Eigen::Matrix<double, k+m, 1> probas;
+            arma::vec probas(k+m);
 
             for(int k=0; k<n_unique ; k++){ // if datum i is a singleton, then
                 // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
@@ -323,10 +323,3 @@ public:
     HypersFixed(double mu0, double lambda, double alpha0, double beta0):
     mu0(mu0), lambda(lambda), alpha0(alpha0), beta0(beta0)  {}
 };
-
-
-int main() {
-    HypersFixed hy();
-    SimpleMixture mix(5.0);
-    Neal8<NNIGHierarchy<HypersFixed>, SimpleMixture> sampler(hy,mix);
-}

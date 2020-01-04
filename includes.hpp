@@ -1,9 +1,9 @@
-#include <Eigen/Dense>
+//#include <Eigen/Dense>
 // typedef Matrix<double, Dynamic, 1> VectorXd
 
-#include "stanlib/stan/math.hpp"
+#include "stan/math.hpp"
 #include "statslib/stats.hpp"
-#include <arma.cpp>
+#include <armadillo>
 
 namespace bnplib{
     using data_t = double;

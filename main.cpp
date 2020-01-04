@@ -3,9 +3,14 @@
 #include <tuple>
 #include <vector>
 #include "includes.hpp"
+#include "Neal8_NNIG.hpp"
 
-int main(int argc, char const *argv[])
-{
-	std::cout << 42 << std::endl;
-	return 0;
+
+int main() {
+    //HypersFixed hy();
+    //SimpleMixture mix(5.0);
+    //Neal8<NNIGHierarchy<HypersFixed>, SimpleMixture> sampler(hy,mix);
+
+		return 0;
+
 }
