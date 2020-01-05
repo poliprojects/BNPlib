@@ -1,6 +1,0 @@
-/usr/bin/ld: /tmp/ccge4zcf.o: in function `tbb::interface7::task_arena::current_thread_index()':
-test_main.cpp:(.text._ZN3tbb10interface710task_arena20current_thread_indexEv[_ZN3tbb10interface710task_arena20current_thread_indexEv]+0x9): undefined reference to `tbb::interface7::internal::task_arena_base::internal_current_slot()'
-/usr/bin/ld: /tmp/ccge4zcf.o: in function `tbb::internal::task_scheduler_observer_v3::~task_scheduler_observer_v3()':
-test_main.cpp:(.text._ZN3tbb8internal26task_scheduler_observer_v3D2Ev[_ZN3tbb8internal26task_scheduler_observer_v3D5Ev]+0x38): undefined reference to `tbb::internal::task_scheduler_observer_v3::observe(bool)'
-/usr/bin/ld: /tmp/ccge4zcf.o: in function `tbb::interface6::task_scheduler_observer::observe(bool)':
-test_main.cpp:(.text._ZN3tbb10interface623task_scheduler_observer7observeEb[_ZN3tbb10interface623task_scheduler_observer7observeEb]+0x50): undefined reference to `tbb::internal::task_scheduler_observer_v3::observe(bool)'
