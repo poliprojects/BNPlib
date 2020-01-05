@@ -2,6 +2,8 @@ STAN_ROOT_DIR := lib/math
 CXX = g++
 CFLAGS = \
 -fopenmp \
+-I armadillo/include \
+-I eigen/eigen-3.3.7/include \
 -I$(STAN_ROOT_DIR) \
 -I$(STAN_ROOT_DIR)/lib \
 -I$(STAN_ROOT_DIR)/lib/eigen_3.3.3/ \

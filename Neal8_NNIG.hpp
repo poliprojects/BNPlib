@@ -1,7 +1,7 @@
 #include <tuple>
 #include <vector>
-
 #include <armadillo>
+#include <Eigen/Dense> 
 #include <stan/math/prim/mat.hpp>
 
 #include "includes.hpp"
@@ -16,10 +16,10 @@
 template<class Hypers> //Hypers = TupleWrapper, distro, ...
 class NNIGHierarchy {
 protected:
-    using std::tuple<par_t, par_t> = state_tuple_t;
+    using state_t= std::array<par_t,2>;
 
     unsigned int rng = 20191225;
-    state_tuple_t state; // current values for F's parameters: mu, sigma
+    state_t state; // current values for F's parameters: mu, sigma
 
 
     std::shared_ptr<Hypers> hypers; // current values for G0's parameters:mu_0,Lambda0, alpha, beta
@@ -31,23 +31,21 @@ public:
     hypers(hypers)  {}
 
     // Getters/setters:
-    state_tuple_t get_state(){return state;}
-    void set_state(const state_tuple_t &s){state = s;}
-    void set_state(int pos, par_t val){state(pos) = val;}
+    state_t get_state(){return state;}
+    void set_state(const state_t &s){state = s;}
+    void set_state(int pos, par_t val){state[pos] = val;}
 
 
 
     double log_like(data_t datum) {
-        return stan::math::normal_lpdf(datum, state(0), state(1));
+        return stan::math::normal_lpdf(datum, state[0], state[1]);
     }
 
     void draw() {
-        real sigmaNew = stan::math::inv_gamma_rng(hypers.get_alpha0(),
-            hypers.get_beta0(), rng);
-        real muNew = stan::math::normal_rng(hypers.get_m0(), sigmaNew/hypers.get_lambda(),
-            rng);
-        state(0) = muNew;
-        state(1) = sigmaNew;
+        float sigmaNew = stan::math::inv_gamma_rng(hypers.get_alpha0(), hypers.get_beta0(), rng);
+        float muNew = stan::math::normal_rng(hypers.get_m0(), sigmaNew/hypers.get_lambda(), rng);
+        state[0] = muNew;
+        state[1] = sigmaNew;
         }
 
     void sample_given_data(std::vector<data_t> data) {
@@ -60,6 +58,7 @@ public:
         arma::vec temp = normalGammaUpdate(
           data, mu0, alpha0, beta0, Lambda0);
 
+
         auto mu_post = temp(0);
         auto alpha_post = temp(1);
         auto beta_post = temp(2);
@@ -68,64 +67,65 @@ public:
         // Get a sample
         par_t sigma_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
         par_t mu_new = stan::math::normal_rng(mu_post, sigma_new/postLambda, rng); //? is it ok /postLambda?
-        state(0) = mu_new;
-        state(1) = sigma_new;
+        state[0] = mu_new;
+        state[1] = sigma_new;
     }
+
+
+
+  arma::vec normalGammaUpdate(arma::vec data, double mu0, double alpha0, double beta0,double Lambda0) {
+    	double mu_post, alpha_post, beta_post, postLambda;
+    	int n = data.size();
+    	if (n == 0) {
+    		return arma::vec{mu0, alpha0, beta0, Lambda0};
+  	}
+  	double ybar = arma::mean(data);
+  	mu_post = (Lambda0 * mu0 + n * ybar) / (Lambda0 + n);
+  	alpha_post = 1.0 * alpha0 + 1.0 * n / 2;
+
+  	// arma::var(x, 1) divides by n, not n-1
+  	double ss = n * arma::var(data, 1);
+
+  	beta_post = (beta0 + 0.5 * ss + 0.5 * Lambda0 / (n + Lambda0) * n * std::pow((ybar - mu0), 2));
+
+  	postLambda = Lambda0 + n;
+
+  	return arma::vec{mu_post, alpha_post, beta_post, postLambda};
+  }
 
 };
 
-arma::vec NNIGHierarchy::normalGammaUpdate(
-    arma::vec data, double mu0, double alpha0, double beta0,
-    double Lambda0) {
-  double mu_post, alpha_post, beta_post, postLambda;
-  int n = data.size();
-  if (n == 0) {
-    return arma::vec{mu0, alpha0, beta0, Lambda0};
-  }
-  double ybar = arma::mean(data);
-  mu_post = (Lambda0 * mu0 + n * ybar) / (Lambda0 + n);
-  alpha_post = 1.0 * alpha0 + 1.0 * n / 2;
 
-  // arma::var(x, 1) divides by n, not n-1
-  double ss = n * arma::var(data, 1);
-
-  beta_post = (
-      beta0 + 0.5 * ss +
-      0.5 * Lambda0 / (n + Lambda0) * n * std::pow((ybar - mu0), 2));
-
-  postLambda = Lambda0 + n;
-
-  return arma::vec{mu_post, alpha_post, beta_post, postLambda};
-}
-
-
-
-template<class Hierarchy<Hypers>, class Mixture> // TODO change to MixingMode?
+template<class Hierarchy, class Mixture, class Hypers> // TODO change to MixingMode?
 class Neal8{
 private:
     unsigned int n_aux=3;
     unsigned int maxiter = 1000; // TODO LATER
     unsigned int burnin = 0;
+    unsigned int rng = 20191225;
     int numClusters;
     Mixture mixture;
-    Hypers hy;
+    //Hypers hy;
     //arma::vec probas;
 
 
     std::vector<data_t> data;
-    std::array<n, unsigned int> allocations; // the c vector
+    std::vector<unsigned int> allocations; // the c vector
     std::vector<Hierarchy> unique_values;
-    std::array<m, Hierarchy> aux_unique_values;
+    std::vector<Hierarchy> aux_unique_values;
 
 
 
     void initalize(){
+   std::default_random_engine generator;
+   std::uniform_int_distribution<int> distribution(0,numClusters);
+
     for (int h = 0; h < numClusters; h++) {
           allocations[h] = h;
         }
 
         for (int j = numClusters; j < data.size(); j++) {
-          int num = stats::rdiscreteunif(0, numClusters, engine); //da stan?
+          int num = distribution(generator); //da stan?
           allocations[j] = num;
         }
     }
@@ -144,6 +144,7 @@ private:
 
         // Initialize some relevant variables
         unsigned int k, n_unique, singleton;
+	unsigned int n=data.size();
 
         // Initialize cardinalities of unique values
         std::vector<unsigned int> card(unique_values.size(), 0);
@@ -169,28 +170,30 @@ private:
 
 
             // Draw the aux from G0
-            for(int j=singleton; j<m; j++){
+            for(int j=singleton; j<n_aux; j++){
                 aux_unique_values[j].draw();
             }
 
             // Draw a NEW value for ci
-            arma::vec probas(k+m);
+            Eigen::MatrixXd probas(k+n_aux,1);
+            //arma::vec probas(k+n_aux);
+	    auto M = mixture.get_totalmass();
 
             for(int k=0; k<n_unique ; k++){ // if datum i is a singleton, then
                 // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
 
-                auto M = mixture.get_totalmass();
+                
 
                 // TODO LATER "meglio in logscale" (?)
-                probas(k) = card[k] * unique_values[k].log_like(data[i]) / (
+                probas(k,1) = card[k] * unique_values[k].log_like(data[i]) / (
                     n-1+M);
             }
-            for(int k=0; k<m ; k++){
-                probas(n_unique+k) = (M/m) *
+            for(int k=0; k<n_aux ; k++){
+                probas(n_unique+k,1) = (M/n_aux) *
                     aux_unique_values[k].log_like(data[i]) / (n-1+M);
             }
 
-            unsigned int c_new = stan::math::categorical_rng(probas,rng);
+            unsigned int c_new = stan::math::categorical_rng(probas, rng);
             if(singleton == 1){
                 if (c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
                     unique_values[ allocations[i] ].set_state(
@@ -236,6 +239,7 @@ private:
         numClusters=unique_values.size();
 
         std::vector<std::vector<unsigned int>> clust_idxs;
+	unsigned int n=allocations.size();
         for(int i=0; i<n; i++) // save different cluster in each row
             clust_idxs[ allocations[i] ].push_back(i);
 
@@ -259,7 +263,9 @@ private:
     void print() {
         for (int h = 0; h < numClusters; h++) {
             std::cout << "Cluster # " << h << std::endl;
-            std::cout << "Parameters: "<< unique_values[h].getstate()<<std::endl;
+	    for (auto c:unique_values[h].getstate()){
+	            std::cout << "Parameters: "<< c<<std::endl;
+            }
           }
         }
 
@@ -311,7 +317,7 @@ public:
     ~SimpleMixture() = default;
     SimpleMixture(double totalmass):
     totalmass(totalmass) {
-      assert(m>=0);
+      assert(totalmass>=0);
     }
 
     double const get_totalmass(){return totalmass;}
