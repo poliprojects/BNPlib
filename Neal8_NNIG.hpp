@@ -12,8 +12,15 @@
 // G ~ DP(M, G0)  with G0 = N-IG
 
 
+// TODO LIST and general doubts
+// - is it correct the posterior update given data, given clusters?
+// - a way to erase and add clusters more efficiently
+// - const getters, const function args, etc
+
+
+
 // Normal likelihoood, Normal Inverse Gamma hierarchy
-template<class Hypers> //Hypers = TupleWrapper, distro, ...
+template<class Hypers> // Hypers = TupleWrapper, distro, ...
 class NNIGHierarchy {
 protected:
     using state_t= std::array<par_t,2>;
@@ -22,7 +29,8 @@ protected:
     state_t state; // current values for F's parameters: mu, sigma
 
 
-    std::shared_ptr<Hypers> hypers; // current values for G0's parameters:mu_0,Lambda0, alpha, beta
+    std::shared_ptr<Hypers> hypers; // current values for G0's parameters:
+                                    // mu_0,Lambda0, alpha, beta
 
 public:
     // Contructors:
@@ -42,10 +50,19 @@ public:
     }
 
     void draw() {
+<<<<<<< HEAD
         float sigmaNew = stan::math::inv_gamma_rng(hypers.get_alpha0(), hypers.get_beta0(), rng);
         float muNew = stan::math::normal_rng(hypers.get_m0(), sigmaNew/hypers.get_lambda(), rng);
         state[0] = muNew;
         state[1] = sigmaNew;
+=======
+        real sigmaNew = stan::math::inv_gamma_rng(hypers.get_alpha0(),
+            hypers.get_beta0(), rng);
+        real muNew = stan::math::normal_rng(hypers.get_m0(),
+            sigmaNew/hypers.get_lambda(), rng);
+        state(0) = muNew;
+        state(1) = sigmaNew;
+>>>>>>> 5de7a67c6952137a5007c27b6c5cecc80f5d0858
         }
 
     void sample_given_data(std::vector<data_t> data) {
@@ -55,7 +72,7 @@ public:
         auto alpha0 = hypers.get_alpha0();
         auto beta0  = hypers.get_beta0();
 
-        arma::vec temp = normalGammaUpdate(
+        arma::vec temp = normal_gamma_update(
           data, mu0, alpha0, beta0, Lambda0);
 
 
@@ -66,6 +83,7 @@ public:
 
         // Get a sample
         par_t sigma_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
+<<<<<<< HEAD
         par_t mu_new = stan::math::normal_rng(mu_post, sigma_new/postLambda, rng); //? is it ok /postLambda?
         state[0] = mu_new;
         state[1] = sigma_new;
@@ -92,6 +110,40 @@ public:
 
   	return arma::vec{mu_post, alpha_post, beta_post, postLambda};
   }
+=======
+        par_t mu_new = stan::math::normal_rng(mu_post, sigma_new/postLambda,
+            rng); //? is it ok /postLambda?
+
+        state(0) = mu_new;
+        state(1) = sigma_new;
+    }
+
+    arma::vec normal_gamma_update(arma::vec data, double mu0, double alpha0,
+        double beta0, double Lambda0) {
+        double mu_post, alpha_post, beta_post, postLambda;
+        int n = data.size();
+        if (n == 0) {
+            return arma::vec{mu0, alpha0, beta0, Lambda0};
+        }
+        double ybar = arma::mean(data);
+        mu_post = (Lambda0 * mu0 + n * ybar) / (Lambda0 + n);
+        alpha_post = 1.0 * alpha0 + 1.0 * n / 2;
+
+        // arma::var(x, 1) divides by n, not n-1
+        double ss = n * arma::var(data, 1);
+
+        beta_post = (beta0 + 0.5 * ss +
+            0.5 * Lambda0 / (n + Lambda0) * n * std::pow((ybar - mu0), 2));
+
+        postLambda = Lambda0 + n;
+
+        return arma::vec{mu_post, alpha_post, beta_post, postLambda};
+    }
+
+}; // end of template class NNIGHierarchy
+
+
+>>>>>>> 5de7a67c6952137a5007c27b6c5cecc80f5d0858
 
 };
 
@@ -125,7 +177,11 @@ private:
         }
 
         for (int j = numClusters; j < data.size(); j++) {
+<<<<<<< HEAD
           int num = distribution(generator); //da stan?
+=======
+          int num = stats::rdiscreteunif(0, numClusters, engine); //TODO stan
+>>>>>>> 5de7a67c6952137a5007c27b6c5cecc80f5d0858
           allocations[j] = num;
         }
     }
@@ -263,9 +319,14 @@ private:
     void print() {
         for (int h = 0; h < numClusters; h++) {
             std::cout << "Cluster # " << h << std::endl;
+<<<<<<< HEAD
 	    for (auto c:unique_values[h].getstate()){
 	            std::cout << "Parameters: "<< c<<std::endl;
             }
+=======
+            std::cout << "Parameters: " << unique_values[h].getstate()
+                << std::endl;
+>>>>>>> 5de7a67c6952137a5007c27b6c5cecc80f5d0858
           }
         }
 
@@ -274,7 +335,8 @@ private:
 public:
 
     ~Neal8() = default;
-    Neal8(const std::vector<data_t> & data, int numClusters,int n_aux, const Mixture & mix,const Hypers &hy ):
+    Neal8(const std::vector<data_t> & data, int numClusters,int n_aux,
+        const Mixture & mix,const Hypers &hy ):
     data(data), numClusters(numClusters), n_aux(n_aux), mixture(mix)  {
       Hierarchy hierarchy(&hy);
       for (int h = 0; h < numClusters; h++) {
@@ -286,7 +348,8 @@ public:
     }
 
 
-    Neal8(std::vector<data_t>  & data, int n_aux, const Mixture & mix, const Hypers &hy):
+    Neal8(std::vector<data_t>  & data, int n_aux, const Mixture & mix,
+        const Hypers &hy):
     Neal8(data, data.size(), n_aux, mix, hy ) {}
 
 
@@ -300,14 +363,10 @@ public:
         }
     }
 
-}; // end of Class Neal8
+}; // end of template class Neal8
 
 
-//TODO LIST and general doubts
 
-// - is it correct the posterior update given data, given clusters?
-
-// - a way to erase and add clusters more efficiently
 
 class SimpleMixture {
 double totalmass;
@@ -322,6 +381,7 @@ public:
 
     double const get_totalmass(){return totalmass;}
 };
+
 
 
 class HypersFixed {
