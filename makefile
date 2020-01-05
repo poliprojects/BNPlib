@@ -6,19 +6,17 @@ SRC_DIR := $(ROOT_DIR)/mwe/mix/src
 SPIKES_DIR := $(SRC_DIR)/spikes
 CXX = g++
 CFLAGS = \
--std=c++1y \
--O3 \
 -fopenmp \
 -I$(STAN_ROOT_DIR) \
+-I $(STAN_ROOT_DIR)/lib\
 -I $(STAN_ROOT_DIR)/lib/eigen_3.3.3/ \
--I$(STAN_ROOT_DIR)/lib/boost_1.69.0/ \
+-I$(STAN_ROOT_DIR)/lib/boost_1.72.0/ \
 -I$(STAN_ROOT_DIR)/lib/sundials_4.1.0/include \
 -I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include \
 -I$(PROTO_DIR)/cpp \
 -D_REENTRANT $(shell root-config --cflags)
 LDLIBS = \
-$(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb \
-.lpthread -ltbb -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
+$(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb -lpthread -ltbb -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
 LDFLAGS = -O3 -D_REENTRANT -fopenmp
 PROTO_SRCS = $(wildcard $(PROTO_DIR)/cpp/*.cpp)
 
@@ -29,19 +27,20 @@ OBJS = $(subst .cpp,.o, $(SRCS))
 SPIKES_EXECS = $(subst .cpp,.out, $(SPIKES_SRCS))
 SPIKES_OBJS = $(subst .cpp,.o, $(SPIKES_SRCS))
 EXEC = test_main
-info:
-	@echo " Info..." 
-	@echo " ROOT_DIR = $(ROOT_DIR)" 
-	@echo " PROTO_DIR = $(PROTO_DIR)"
-	@echo " SRC_DIR = $(SRC_DIR)"
-	@echo " SPIKES_DIR = $(SPIKES_DIR)"
-	@echo " SOURCES = $(SRCS)"
-	@echo " OBJECTS = $(OBJS)"
-	@echo " EXECS = $(SPIKES_EXECS)"
-	@echo " STAN_ROOT_DIR = $(STAN_ROOT_DIR)"
+#info:
+	#@echo " Info..." 
+	#@echo " ROOT_DIR = $(ROOT_DIR)" 
+	#@echo " PROTO_DIR = $(PROTO_DIR)"
+	#@echo " SRC_DIR = $(SRC_DIR)"
+	#@echo " SPIKES_DIR = $(SPIKES_DIR)"
+	#@echo " SOURCES = $(SRCS)"
+	#@echo " OBJECTS = $(OBJS)"
+	#@echo " EXECS = $(SPIKES_EXECS)"
+	#@echo " STAN_ROOT_DIR = $(STAN_ROOT_DIR)"
 
-all: compile_protos test_main $(SPIKES_EXECS)
+all: test_main $(SPIKES_EXECS)
 #all: $(SPIKES_EXECS) test_main
+
 
 $(SPIKES_EXECS): %.out: %.o $(OBJS) 
 	$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS) $< $(LDLIBS)
