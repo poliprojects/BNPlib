@@ -1,4 +1,5 @@
-ROOT_DIR := /home/elenazaz/prog/BNPlib
+#ROOT_DIR := /home/elenazaz/prog/BNPlib
+ROOT_DIR := /home/bruno/git/github/bnplib
 
 PROTO_DIR := $(ROOT_DIR)/mwe/mix/protos
 STAN_ROOT_DIR := $(ROOT_DIR)/lib/math
@@ -73,4 +74,3 @@ compile_protos:
 	touch $(PROTO_DIR)/__init__.py
 	touch $(PROTO_DIR)/py/__init__.py
 	2to3 --output-dir=$(PROTO_DIR)/py/ -W -n $(PROTO_DIR)/py/
-
