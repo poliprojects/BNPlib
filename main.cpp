@@ -3,7 +3,7 @@
 #include <tuple>
 #include <vector>
 #include <stan/math/prim/mat.hpp>
-//#include "Neal8_NNIG.hpp"
+#include "Neal8_NNIG.hpp"
 
 
 int main() {

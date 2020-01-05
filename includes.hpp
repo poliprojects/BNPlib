@@ -1,8 +1,7 @@
 //#include <Eigen/Dense>
 // typedef Matrix<double, Dynamic, 1> VectorXd
 
-#include "math/stan/math.hpp"
-#include "statslib/stats.hpp"
+//#include "statslib/stats.hpp"
 #include <armadillo>
 
 namespace bnplib{
