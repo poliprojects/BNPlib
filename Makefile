@@ -15,7 +15,7 @@ LDFLAGS = -O3 -D_REENTRANT -fopenmp
 
 SRCS = 
 OBJS = $(subst .cpp,.o, $(SRCS))
-EXEC = test_main
+EXEC = main
 
 #info:
 	#@echo " Info..." 
@@ -25,13 +25,13 @@ EXEC = test_main
 	#@echo " OBJECTS = $(OBJS)"
 	#@echo " STAN_ROOT_DIR = $(STAN_ROOT_DIR)"
 
-all: test_main
+all: main
 
 
-test_main: test_main.o $(OBJS)
-	$(CXX) $(LDFLAGS) -o test_main $(OBJS) test_main.o $(LDLIBS)
-test_main.o:
-	$(CXX) $(CFLAGS) -c test_main.cpp -o test_main.o
+main: main.o $(OBJS)
+	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS)
+main.o:
+	$(CXX) $(CFLAGS) -c main.cpp -o main.o
 %.o : %.cpp
 	$(CXX) $(CFLAGS) -c $< -o $@
 -include $(dep)
@@ -40,6 +40,6 @@ test_main.o:
 
 
 clean:
-	rm $(OBJS) test_main.o
+	rm $(OBJS) main.o
 
 distclean: clean
