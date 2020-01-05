@@ -38,7 +38,7 @@ EXEC = test_main
 	#@echo " EXECS = $(SPIKES_EXECS)"
 	#@echo " STAN_ROOT_DIR = $(STAN_ROOT_DIR)"
 
-all: test_main $(SPIKES_EXECS)
+all: test_main 
 #all: $(SPIKES_EXECS) test_main
 
 
