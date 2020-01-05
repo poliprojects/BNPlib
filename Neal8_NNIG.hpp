@@ -1,9 +1,16 @@
+#include <tuple>
+#include <vector>
+
+#include <armadillo>
+#include <stan/math/prim/mat.hpp>
+
+#include "includes.hpp"
+
 // N-NIG model == gaussian kernel + N-IG base measure:
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
 // G ~ DP(M, G0)  with G0 = N-IG
 
-#include "includes.hpp"
 
 // Normal likelihoood, Normal Inverse Gamma hierarchy
 template<class Hypers> //Hypers = TupleWrapper, distro, ...
@@ -21,7 +28,7 @@ public:
     // Contructors:
     ~NNIGHierarchy() = default;
     NNIGHierarchy(std::shared_ptr<Hypers> hypers):
-    hypers(hypers))  {}
+    hypers(hypers)  {}
 
     // Getters/setters:
     state_tuple_t get_state(){return state;}
@@ -93,7 +100,7 @@ arma::vec NNIGHierarchy::normalGammaUpdate(
 
 
 
-template<class Hierarchy<Hypers>, class Mixture>
+template<class Hierarchy<Hypers>, class Mixture> // TODO change to MixingMode?
 class Neal8{
 private:
     unsigned int n_aux=3;
@@ -294,7 +301,7 @@ public:
 
 // - is it correct the posterior update given data, given clusters?
 
-// - a way to erase and add clusters more efficient
+// - a way to erase and add clusters more efficiently
 
 class SimpleMixture {
 double totalmass;
