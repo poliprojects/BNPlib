@@ -1,3 +1,4 @@
 TODO LIST
 * Documentation with Doxygen (?)
 * readme.md mide for the Github repo
+* probas in a separate function?
