@@ -2,3 +2,4 @@ TODO LIST
 * Documentation with Doxygen (?)
 * readme.md mide for the Github repo
 * probas in a separate function?
+* initialize() with boost::random::mt19937 (or boost::mt19937?)
