@@ -1,9 +1,10 @@
 \begin{frame}{The algorithms in C++}
 	\begin{center}
+		\texttt{Algorithm<Hierarchy, Mixture, Hypers>}
 		\includegraphics[scale=0.4]{../etc/neal8_2.png}
 	\end{center}
 	\begin{itemize}
-		\item Example: Normal-NormalInvGamma hierarchy, no hyperpriors
+		\item Example: \texttt{Hierarchy = Normal-NormalInvGamma}, \\ \texttt{Hypers = HypersFixed}
 		\item \texttt{initalize()}: random allocation
 		\item \texttt{step()}
 		\begin{itemize}
@@ -36,7 +37,15 @@
 \end{frame}
 
 \begin{frame}{A general library?}
-	%è possibile una libreria del tutto "generale"? Utilizzando una libreria tipo stan per le distribuzioni, si può mettere su un codice per cui non serve programmare a mano gli update dei valori dei cluster e dei vari iper-parametri, volendo rinunciare a degli update coniugati? %TODO what
+	Fully abstract library for all distributions?
+	\begin{itemize}
+		\item Hierarchies
+		\item Updates
+		\item Non-conjugacy
+	\end{itemize}
+	\vspace{10pt}
+	\dots but Stan functions cannot take vectors of parameters \\
+	$\implies$ argument unpacker?
 \end{frame}
 
 
