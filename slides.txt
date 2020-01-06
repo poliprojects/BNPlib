@@ -1,30 +1,36 @@
-SLIDES:
+SLIDES
 
 
-NEAL8
+SUPER QUICK RECAP
+* Models and algorithms: scopiazza dalle vecchie slide
 
 
-cosa può fare:
-
-HIERARCHY: NNINVGAMMA
-
-HYPERS: hypersfixed
-
-
-
-fattibile in breve tempo (di programmazione):
-
--HYPERS: and possibility to extend with prior , common interface
-
-- interfacciare R E Python tramite google protobuf
-
-- utilizzare il sampler HMC di stan per fare l'update dei valori dei cluster quando base measure e likelihood non sono coniugate
+GENERAL STRUCTURE
+* Libraries: stan (-> Eigen), armadillo
+* Algorithm<Hierarchy, Mixture> template class (i.e. come si interfacciano le
+	classi)
+* Specializations such as Neal8NNIG
+* classes of hyperparameters: Hypers and HypersFixed (common interface)
+* Hierarchy classes
+* Mixture classes
 
 
-ambizioso
-- sempre in quest'ottica, è pensabile fare una libreria del tutto "generale"?
- Utilizzando una libreria tipo stan per le distribuzioni,
- si può mettere su un codice per cui non serve programmare a mano gli update dei valori dei cluster 
-e dei vari iper-parametri che ci sono in giro, volendo rinunciare a degli update coniugati?
+THE ALGORITHMS
+* So far we have only implemented the following particular case, but the
+	structure will be similar for all other ones
+* Particular case: Neal8 with NNIG Hierarchy and fixed Hypers
+* initialize(), step() (sample_allocations(), sample_unique_values())
+* 4 cases: singleton vs !singleton, aux vs old
+* clust_idxs: vec of clusters (in form of vectors) which records which data are
+	in each cluster
+* Would it be better to use a data structure which "physically" collects data
+	hierarchies into clusters?
 
 
+EXTENSIONS
+* Hypers
+* protobuf: spiegare bene cos'è e come funziona
+* Sampler HMC di stan per update dei valori dei cluster se non c'è coniugio
+* Ambizioso: è possibile una libreria del tutto "generale"? Utilizzando una
+	libreria tipo stan per le distribuzioni, si può mettere su un codice per cui
+	non serve programmare a mano gli update dei valori dei cluster e dei vari iper-parametri, volendo rinunciare a degli update coniugati?
