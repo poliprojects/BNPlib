@@ -52,12 +52,95 @@
 \end{frame}
 
 
-\begin{frame}{Title}
+
+
+
+\begin{frame}{Implementation}
+
+Libraries:
 \begin{itemize}
-		\item Text
-	\end{itemize}
+		\item Stan
+		\item Eigen
+		\item Armadillo
+\end{itemize}
 \end{frame}
 
+\begin{frame}{Structure of Algorithm}
+
+Structure:
+ Algorithm$<$Hierarchy, Mixture$>$
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+\hline
+ Algorithm$<$Hierarchy, Mixture$>$ \\
+\hline
+ \textcolor{violet}{Mixture} mixture\\
+ vector$<$data\_type$>$ data  \\ 
+ vector$<$unsigned int$>$ allocations  \\
+ vector$<$\textcolor{violet}{Hierarchy}$>$ unique\_values \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+\hline
+Hierarchy$<$Hypers$>$ \\
+\hline
+ state\_type state  \\ 
+ shared\_ptr $<$\textcolor{violet}{Hypers}$>$ hypers \\
+ void \textcolor{red}{draw()} \\
+ void \textcolor{red}{sample\_given\_data()} \\
+\hline
+\end{tabular}
+\end{center}
+
+	
+\end{frame}
+
+
+
+\begin{frame}{Specializations}
+Hierarchy : NNIGHierarchy
+	\begin{itemize}
+		\item draw()
+		\begin{itemize}
+			\item stan::math::inv\_gamma\_rng
+			\item stan::math::normal\_rng
+		\end{itemize}
+		\item sample\_given\_data()
+		\begin{itemize}
+			\item NormalGammaUpdate
+			\item stan::math::inv\_gamma\_rng
+			\item stan::math::normal\_rng
+		\end{itemize}
+	\end{itemize}
+Mixture : SimpleMixture $ \rightarrow$ TotalMass
+
+Hypers : HypersFixed $ \rightarrow \mu_0 \ \lambda_0 \ \alpha_0 \ \beta_0 $
+
+\end{frame}
+
+\begin{frame}{Neal8}
+ Algorithm Base $\rightarrow$ Neal8 Derived
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+\hline
+ Neal8$<$Hierarchy, Mixture$>$ \\
+\hline
+ Mixture mixture\\
+ vector$<$data\_type$>$ data  \\ 
+ vector$<$unsigned int$>$ allocations  \\
+ vector$<$Hierarchy$>$ unique\_values \\
+ vector$<$Hierarchy$>$ \textcolor{red}{aux\_unique\_values} \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{frame}
 
 %\begin{frame}{Title}
 %	\begin{itemize}
