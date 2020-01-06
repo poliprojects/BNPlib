@@ -1,0 +1,10 @@
+useDynLib(BNPmix)
+importFrom(methods, new)
+
+importFrom(ggplot2, ggplot, theme, theme_bw, element_blank, aes, geom_line,stat_contour, facet_wrap, guides, geom_point, geom_histogram)
+importFrom(stats, as.dist, cutree, hclust, rWishart, rgamma, rnorm, aggregate, quantile, uniroot)
+exportPattern("^[[:alpha:]]+")
+
+#export(est_partition.modCond)
+S3method(plot, BNPdens)
+S3method(summary, BNPdens)
