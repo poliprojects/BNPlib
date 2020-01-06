@@ -1,3 +1,21 @@
+\begin{frame}{The algorithms in C++}
+	\begin{center}
+		\includegraphics[scale=0.4]{../etc/neal8_2.png}
+	\end{center}
+	\begin{itemize}
+		\item Example: Normal-NormalInvGamma hierarchy, no hyperpriors
+		\item \texttt{initalize()}: random allocation
+		\item \texttt{step()}
+		\begin{itemize}
+			\item \texttt{sample\_allocations()}: vector \texttt{card} of cardinalities of clusters
+			\item 4 cases handled separately: singleton vs !singleton, aux vs old
+			\item \texttt{sample\_unique\_values()}: vector \texttt{clust\_idxs} to record which data are in each cluster
+		\end{itemize}
+		\item Actual cluster structures?
+	\end{itemize}
+\end{frame}
+
+
 \begin{frame}{Impending extensions}
 	\begin{itemize}
 	   \item \textbf{Hyperpriors}: objects of class \texttt{Hypers} store pointers to objects of class \texttt{HypersFixed} %TODO?
