@@ -18,7 +18,7 @@ class NNIGHierarchy {
 protected:
     using state_t= std::array<par_t,2>;
 
-    unsigned int rng = 20191225;
+    std::mt19937  rng;
     state_t state; // current values for F's parameters: mu, sigma
 
 
@@ -102,7 +102,7 @@ private:
     unsigned int n_aux=3;
     unsigned int maxiter = 1000; // TODO LATER
     unsigned int burnin = 0;
-    unsigned int rng = 20191225;
+    std::mt19937 rng;
     int numClusters;
     Mixture mixture;
     //Hypers hy;
