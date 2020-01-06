@@ -35,6 +35,8 @@ public:
     void set_state(const state_t &s){state = s;}
     void set_state(int pos, par_t val){state[pos] = val;}
 
+    int get_count(){return hypers.use_count();}
+
 
 
     double log_like(data_t datum) {
@@ -42,18 +44,18 @@ public:
     }
 
     void draw() {
-        float sigmaNew = stan::math::inv_gamma_rng(hypers.get_alpha0(), hypers.get_beta0(), rng);
-        float muNew = stan::math::normal_rng(hypers.get_m0(), sigmaNew/hypers.get_lambda(), rng);
+        float sigmaNew = stan::math::inv_gamma_rng(hypers->get_alpha0(), hypers->get_beta0(), rng);
+        float muNew = stan::math::normal_rng(hypers->get_mu0(), sigmaNew/hypers->get_lambda(), rng);
         state[0] = muNew;
         state[1] = sigmaNew;
         }
 
     void sample_given_data(std::vector<data_t> data) {
         // Get current values of parameters
-        auto mu0    = hypers.get_mu0();
-        auto Lambda0  = hypers.get_lambda();
-        auto alpha0 = hypers.get_alpha0();
-        auto beta0  = hypers.get_beta0();
+        auto mu0    = hypers->get_mu0();
+        auto Lambda0  = hypers->get_lambda();
+        auto alpha0 = hypers->get_alpha0();
+        auto beta0  = hypers->get_beta0();
 
         arma::vec temp = normalGammaUpdate(
           data, mu0, alpha0, beta0, Lambda0);
@@ -100,7 +102,7 @@ template<class Hierarchy, class Mixture, class Hypers> // TODO change to MixingM
 class Neal8{
 private:
     unsigned int n_aux=3;
-    unsigned int maxiter = 1000; // TODO LATER
+    unsigned int maxiter = 100; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
     int numClusters;
@@ -119,12 +121,12 @@ private:
     void initalize(){
    std::default_random_engine generator;
    std::uniform_int_distribution<int> distribution(0,numClusters);
-
+	
     for (int h = 0; h < numClusters; h++) {
-          allocations[h] = h;
+          allocations.push_back(h);
         }
-
-        for (int j = numClusters; j < data.size(); j++) {
+   
+      for (int j = numClusters; j < data.size(); j++) {
           int num = distribution(generator); //da stan?
           allocations[j] = num;
         }
@@ -175,23 +177,27 @@ private:
             }
 
             // Draw a NEW value for ci
-            Eigen::MatrixXd probas(k+n_aux,1);
+            Eigen::MatrixXd probas(n_unique+n_aux,1); //k or n_unique
             //arma::vec probas(k+n_aux);
 	    auto M = mixture.get_totalmass();
-
+	    double tot=0.0;
             for(int k=0; k<n_unique ; k++){ // if datum i is a singleton, then
                 // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
 
                 
 
                 // TODO LATER "meglio in logscale" (?)
-                probas(k,1) = card[k] * unique_values[k].log_like(data[i]) / (
+                probas(k,0) = card[k] * unique_values[k].log_like(data[i]) / (
                     n-1+M);
+		tot+=probas(k,0);
+              
             }
             for(int k=0; k<n_aux ; k++){
-                probas(n_unique+k,1) = (M/n_aux) *
+                probas(n_unique+k,0) = (M/n_aux) *
                     aux_unique_values[k].log_like(data[i]) / (n-1+M);
-            }
+		tot+=probas(n_unique+k,0);
+               }
+	     probas=probas*(1/tot);
 
             unsigned int c_new = stan::math::categorical_rng(probas, rng);
             if(singleton == 1){
@@ -249,7 +255,7 @@ private:
             for ( auto &idx : clust_idxs[j] )
                 curr_data.push_back( data[idx] );
 
-            unique_values[j].sample(curr_data);
+            unique_values[j].sample_given_data(curr_data);
         }
     }
 
@@ -263,7 +269,7 @@ private:
     void print() {
         for (int h = 0; h < numClusters; h++) {
             std::cout << "Cluster # " << h << std::endl;
-	    for (auto c:unique_values[h].getstate()){
+	    for (auto c:unique_values[h].get_state()){
 	            std::cout << "Parameters: "<< c<<std::endl;
             }
           }
@@ -276,13 +282,14 @@ public:
     ~Neal8() = default;
     Neal8(const std::vector<data_t> & data, int numClusters,int n_aux, const Mixture & mix,const Hypers &hy ):
     data(data), numClusters(numClusters), n_aux(n_aux), mixture(mix)  {
-      Hierarchy hierarchy(&hy);
+      Hierarchy hierarchy(std::make_shared<Hypers> (hy));
       for (int h = 0; h < numClusters; h++) {
               unique_values.push_back(hierarchy);
             }
       for (int h = 0; h < n_aux; h++) {
         aux_unique_values.push_back(hierarchy);
       }
+	//std::cout<<unique_values[0].get_count();
     }
 
 
@@ -292,12 +299,12 @@ public:
 
     void run(){
         initalize();
-        unsigned int iter = 0;
-        while(iter < maxiter){
+ 	unsigned int iter = 0;
+        //while(iter < maxiter){
             step();
-            if(iter >= burnin)
-                save_iteration(iter);
-        }
+            //if(iter >= burnin)
+              //  save_iteration(iter);
+        //}
     }
 
 }; // end of Class Neal8
