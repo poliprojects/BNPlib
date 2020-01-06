@@ -1,0 +1,30 @@
+SLIDES:
+
+
+NEAL8
+
+
+cosa può fare:
+
+HIERARCHY: NNINVGAMMA
+
+HYPERS: hypersfixed
+
+
+
+fattibile in breve tempo (di programmazione):
+
+-HYPERS: and possibility to extend with prior , common interface
+
+- interfacciare R E Python tramite google protobuf
+
+- utilizzare il sampler HMC di stan per fare l'update dei valori dei cluster quando base measure e likelihood non sono coniugate
+
+
+ambizioso
+- sempre in quest'ottica, è pensabile fare una libreria del tutto "generale"?
+ Utilizzando una libreria tipo stan per le distribuzioni,
+ si può mettere su un codice per cui non serve programmare a mano gli update dei valori dei cluster 
+e dei vari iper-parametri che ci sono in giro, volendo rinunciare a degli update coniugati?
+
+
