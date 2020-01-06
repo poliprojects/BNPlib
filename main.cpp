@@ -18,12 +18,15 @@ int main() {
   for (int i=0; i< data.size(); i++) {
 
   data[i] = stan::math::normal_rng(means, sds, rng_base);
-  std::cout<<data[i]<<std::endl;}
+  //std::cout<<data[i]<<std::endl;
+}
 
 
-    //HypersFixed hy();
-    //SimpleMixture mix(5.0);
-    //Neal8<NNIGHierarchy<HypersFixed>, SimpleMixture> sampler(hy,mix);
+    HypersFixed hy(4,1,1,1);
+    SimpleMixture mix(5.0);
+
+    Neal8<NNIGHierarchy<HypersFixed>, SimpleMixture,HypersFixed> sampler(data, 3, mix, hy);
+    sampler.run();
 
 	std::cout << "Test" << std::endl;
 	return 0;
