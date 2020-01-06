@@ -1,0 +1,67 @@
+\documentclass{beamer}
+\usetheme{Boadilla}
+%\usetheme{polimi}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{subfigure}
+\usepackage[mathscr]{eucal}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+
+\usefonttheme{professionalfonts}
+%\usefonttheme{serif}
+
+\include{etc/commands}
+
+\title[BNPlib]{\textbf{BNPlib for density estimation:}}
+\subtitle{\textbf{A nonparametric C++ library \\ (part 2)}}
+\author[Guindani, Zazzetti]{\textbf{Bruno Guindani \\ Elena Zazzetti}}
+\institute[PoliMi]{}
+\date[2020/01/08]{
+	January 8\textsuperscript{th}, 2020 \\[15pt]
+	\includegraphics[scale=.35]{../etc/logo_long.jpg}
+}
+
+\begin{document}
+
+\frame{
+	\titlepage
+	{ \color{blue}
+	\begin{center}
+		\href{https://github.com/poliprojects/BNPlib}
+		{https://github.com/poliprojects/BNPlib}
+	\end{center}
+	}
+}
+
+%\addtobeamertemplate{frametitle}{}{
+%	\begin{textblock*}{100mm}(.85\textwidth,-0.5cm)
+%		\includegraphics[scale=0.1]{etc/logo_only.png}
+%	\end{textblock*}
+%}
+
+\input{part_1}
+\input{part_2}
+
+\begin{frame}
+	\frametitle{Bibliography}
+	\begin{thebibliography}{9}
+		\setbeamertemplate{bibliography item}[book] % or [online] or [article]
+		\bibitem{Book} Muller, Quintana, \textit{Bayesian Nonparametric Data Analysis}
+		\bibitem{Neal} Neal (2000), \textit{Markov Chain Sampling Methods for Dirichlet Process Mixture Models}
+		\bibitem{James} Ishwaran, James (2001), \textit{Gibbs Sampling Methods for Stick-Breaking Priors}
+		\bibitem{proto} https://developers.google.com/protocol-buffers/docs/cpptutorial
+	\end{thebibliography}
+\end{frame}
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	\frametitle{Title}
+	\begin{itemize}
+		\item Text
+	\end{itemize}
+\end{frame}
