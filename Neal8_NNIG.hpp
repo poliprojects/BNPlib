@@ -302,13 +302,12 @@ public:
 
     void run(){
         initalize();
- 	unsigned int iter = 0;
+ 		unsigned int iter = 0;
         while(iter < maxiter){
-            step();
-	    
+            step();    
             if(iter >= burnin)
               save_iteration(iter);
-	iter++;
+			iter++;
         }
     }
 

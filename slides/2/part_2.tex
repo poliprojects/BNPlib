@@ -1,18 +1,39 @@
-\begin{frame}{The algorithms in C++}
+\begin{frame}{Neal8 specialization}
+\textbf{Algorithm} Base $\rightarrow$ \textbf{Neal8} Derived
+
+\begin{center}
+	\begin{tabular}{ | l | c| } 
+		\hline
+		Neal8$<<>$Hierarchy, Mixture, Hypers$>$ \\
+		\hline
+		Mixture mixture\\
+		vector$<$data\_type$>$ data  \\ 
+		vector$<$unsigned int$>$ allocations  \\
+		vector$<$Hierarchy$<$ Hypers $>>$ unique\_values \\
+		vector$<$Hierarchy$<$ Hypers $>>$ \textcolor{red}{aux\_unique\_values} \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\end{frame}
+
+
+
+\begin{frame}{Implementation of an algorithm}
 	\begin{center}
 		\texttt{Algorithm<Hierarchy, Mixture, Hypers>}
-		\includegraphics[scale=0.4]{../etc/neal8_2.png}
+		\includegraphics[scale=0.35]{../etc/neal8_2.png}
 	\end{center}
 	\begin{itemize}
-		\item Example: \texttt{Hierarchy = Normal-NormalInvGamma}, \\ \texttt{Hypers = HypersFixed}
+		\item Example: \texttt{Neal8} with \texttt{Hierarchy = Normal-NormalInvGamma}, \\ \texttt{Hypers = HypersFixed}
 		\item \texttt{initalize()}: random allocation
 		\item \texttt{step()}
 		\begin{itemize}
-			\item \texttt{sample\_allocations()}: vector \texttt{card} of cardinalities of clusters
-			\item 4 cases handled separately: singleton vs !singleton, aux vs old
-			\item \texttt{sample\_unique\_values()}: vector \texttt{clust\_idxs} to record which data are in each cluster
+			\item \texttt{sample\_allocations()}: vector \texttt{card} of cardinalities of clusters; \\
+			4 cases handled separately: singleton vs !singleton, aux vs old
+			\item \texttt{sample\_unique\_values()}: vector \texttt{clust\_idxs} to record which data are in each cluster (or actual cluster structures?)
+			\item \texttt{save\_iteration()}
 		\end{itemize}
-		\item Actual cluster structures?
 	\end{itemize}
 \end{frame}
 
@@ -37,7 +58,7 @@
 \end{frame}
 
 \begin{frame}{A general library?}
-	Fully abstract library for all distributions?
+	Fully abstract library for all distributions? It requires abstract handling of
 	\begin{itemize}
 		\item Hierarchies
 		\item Updates
