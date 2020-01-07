@@ -72,16 +72,16 @@
 \begin{frame}{Structure of Algorithm}
 
 \textbf{Structure}:
- Algorithm$<$Hierarchy, Mixture$>$
+ Algorithm$<$Hierarchy, Mixture, Hypers$>$
 \begin{center}
 \begin{tabular}{ | l | c| } 
 \hline
- Algorithm$<$Hierarchy, Mixture$>$ \\
+ Algorithm$<<>$Hierarchy, Mixture, Hypers$>$ \\
 \hline
  \textcolor{violet}{Mixture} mixture\\
  vector$<$data\_type$>$ data  \\ 
  vector$<$unsigned int$>$ allocations  \\
- vector$<$\textcolor{violet}{Hierarchy}$>$ unique\_values \\
+ vector$<$\textcolor{violet}{Hierarchy}$<$\textcolor{violet}{Hypers} $>>$ unique\_values \\
 \hline
 \end{tabular}
 \end{center}
@@ -133,13 +133,13 @@ Hierarchy$<$Hypers$>$ \\
 \begin{center}
 \begin{tabular}{ | l | c| } 
 \hline
- Neal8$<$Hierarchy, Mixture$>$ \\
+ Neal8$<<>$Hierarchy, Mixture, Hypers$>$ \\
 \hline
  Mixture mixture\\
  vector$<$data\_type$>$ data  \\ 
  vector$<$unsigned int$>$ allocations  \\
- vector$<$Hierarchy$>$ unique\_values \\
- vector$<$Hierarchy$>$ \textcolor{red}{aux\_unique\_values} \\
+ vector$<$Hierarchy$<$ Hypers $>>$ unique\_values \\
+ vector$<$Hierarchy$<$ Hypers $>>$ \textcolor{red}{aux\_unique\_values} \\
 \hline
 \end{tabular}
 \end{center}
