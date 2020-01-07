@@ -3,9 +3,9 @@
 #include <armadillo>
 #include <Eigen/Dense> 
 #include <stan/math/prim/mat.hpp>
-
+#include <type_traits>
 #include "includes.hpp"
-
+#include <math.h>   
 // N-NIG model == gaussian kernel + N-IG base measure:
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
@@ -40,7 +40,7 @@ public:
 
 
     double log_like(data_t datum) {
-        return stan::math::normal_lpdf(datum, state[0], state[1]);
+        return exp(stan::math::normal_lpdf(datum, state[0], state[1]));
     }
 
     void draw() {
@@ -98,11 +98,11 @@ public:
 };
 
 
-template<class Hierarchy, class Mixture, class Hypers> // TODO change to MixingMode?
+template<template <class> class Hierarchy, class Hypers, class Mixture> // TODO change to MixingMode?
 class Neal8{
 private:
     unsigned int n_aux=3;
-    unsigned int maxiter = 100; // TODO LATER
+    unsigned int maxiter = 3; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
     int numClusters;
@@ -113,8 +113,8 @@ private:
 
     std::vector<data_t> data;
     std::vector<unsigned int> allocations; // the c vector
-    std::vector<Hierarchy> unique_values;
-    std::vector<Hierarchy> aux_unique_values;
+    std::vector<Hierarchy<Hypers>> unique_values;
+    std::vector<Hierarchy<Hypers>> aux_unique_values;
 
 
 
@@ -147,7 +147,7 @@ private:
         // Initialize some relevant variables
         unsigned int k, n_unique, singleton;
 	unsigned int n=data.size();
-
+	
         // Initialize cardinalities of unique values
         std::vector<unsigned int> card(unique_values.size(), 0);
         for(int j=0; j<n; j++)
@@ -244,11 +244,13 @@ private:
     void sample_unique_values(){
         numClusters=unique_values.size();
 
-        std::vector<std::vector<unsigned int>> clust_idxs;
+        std::vector<std::vector<unsigned int>> clust_idxs(numClusters);
 	unsigned int n=allocations.size();
-        for(int i=0; i<n; i++) // save different cluster in each row
-            clust_idxs[ allocations[i] ].push_back(i);
+		
+        for(unsigned int i=0; i<n; i++) // save different cluster in each row
+            clust_idxs[ allocations[i]].push_back(i);
 
+	
         for (int j=0; j< clust_idxs.size(); j++) {
             std::vector<data_t> curr_data;
 
@@ -282,7 +284,8 @@ public:
     ~Neal8() = default;
     Neal8(const std::vector<data_t> & data, int numClusters,int n_aux, const Mixture & mix,const Hypers &hy ):
     data(data), numClusters(numClusters), n_aux(n_aux), mixture(mix)  {
-      Hierarchy hierarchy(std::make_shared<Hypers> (hy));
+	
+      Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
       for (int h = 0; h < numClusters; h++) {
               unique_values.push_back(hierarchy);
             }
@@ -300,11 +303,13 @@ public:
     void run(){
         initalize();
  	unsigned int iter = 0;
-        //while(iter < maxiter){
+        while(iter < maxiter){
             step();
-            //if(iter >= burnin)
-              //  save_iteration(iter);
-        //}
+	    
+            if(iter >= burnin)
+              save_iteration(iter);
+	iter++;
+        }
     }
 
 }; // end of Class Neal8

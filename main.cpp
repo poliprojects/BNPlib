@@ -25,7 +25,7 @@ int main() {
     HypersFixed hy(4,1,1,1);
     SimpleMixture mix(5.0);
 
-    Neal8<NNIGHierarchy<HypersFixed>, SimpleMixture,HypersFixed> sampler(data, 3, mix, hy);
+    Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler(data, 3, mix, hy);
     sampler.run();
 
 	std::cout << "Test" << std::endl;
