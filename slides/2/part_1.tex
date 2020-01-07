@@ -46,7 +46,7 @@
 		\begin{itemize}
 			\item sample \textbf{allocations} $c$ from some conditional distribution
 			\item sample \textbf{unique values} $\phi$ from some conditional distribution
-			\item (sample \textbf{weighGibbs samplingts} $p$ of the unique values deltas)
+			\item (sample \textbf{weights} $p$ of the unique values deltas)
 		\end{itemize}
 	\end{itemize}
 \end{frame}
@@ -55,22 +55,26 @@
 
 
 
-\begin{frame}{Implementation}
+\begin{frame}{C++ Implementation}
 
-Libraries:
+\textbf{Libraries}:
 \begin{itemize}
-		\item Stan
-		\item Eigen
-		\item Armadillo
+		\item Stan Math: C++ template library for automatic differentiation of any order. It includes a range of built-in functions for probabilistic modeling, linear algebra, and equation solving.
+		\begin{itemize}
+			\item Intel TBB library
+			\item  Sundials library
+		\end{itemize}
+		\item Eigen: C++ template library for linear algebra.
+		
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Structure of Algorithm}
 
-Structure:
+\textbf{Structure}:
  Algorithm$<$Hierarchy, Mixture$>$
 \begin{center}
-\begin{tabular}{ |c|c|c|c| } 
+\begin{tabular}{ | l | c| } 
 \hline
  Algorithm$<$Hierarchy, Mixture$>$ \\
 \hline
@@ -85,7 +89,7 @@ Structure:
 
 
 \begin{center}
-\begin{tabular}{ |c|c|c|c| } 
+\begin{tabular}{ | l | c| } 
 \hline
 Hierarchy$<$Hypers$>$ \\
 \hline
@@ -103,7 +107,7 @@ Hierarchy$<$Hypers$>$ \\
 
 
 \begin{frame}{Specializations}
-Hierarchy : NNIGHierarchy
+\textbf{Hierarchy} : NNIGHierarchy (Normal-NormalInvGamma)
 	\begin{itemize}
 		\item draw()
 		\begin{itemize}
@@ -117,17 +121,17 @@ Hierarchy : NNIGHierarchy
 			\item stan::math::normal\_rng
 		\end{itemize}
 	\end{itemize}
-Mixture : SimpleMixture $ \rightarrow$ TotalMass
+\textbf{Mixture} : SimpleMixture $ \rightarrow$ TotalMass
 
-Hypers : HypersFixed $ \rightarrow \mu_0 \ \lambda_0 \ \alpha_0 \ \beta_0 $
+\textbf{Hypers} : HypersFixed $ \rightarrow \mu_0 \ \lambda_0 \ \alpha_0 \ \beta_0 $
 
 \end{frame}
 
 \begin{frame}{Neal8}
- Algorithm Base $\rightarrow$ Neal8 Derived
+ \textbf{Algorithm} Base $\rightarrow$ \textbf{Neal8} Derived
 
 \begin{center}
-\begin{tabular}{ |c|c|c|c| } 
+\begin{tabular}{ | l | c| } 
 \hline
  Neal8$<$Hierarchy, Mixture$>$ \\
 \hline
