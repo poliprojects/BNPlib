@@ -42,6 +42,7 @@ main.o:
 
 
 clean:
-	rm $(OBJS) main.o
+	rm -f $(OBJS) main.o
 
 distclean: clean
+	rm -f main
