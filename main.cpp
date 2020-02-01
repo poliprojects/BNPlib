@@ -23,12 +23,12 @@ int main() {
 
 
     HypersFixed hy(4,1,1,1);
-    SimpleMixture mix(5.0);
+    SimpleMixture mix(1.0);
 
     Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler(data, 3, mix, hy);
     sampler.run();
 
-	std::cout << "Test" << std::endl;
+	//std::cout << "Test" << std::endl;
 	return 0;
 
 }
