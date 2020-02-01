@@ -5,5 +5,5 @@ TODO LIST
 * readme.md mide for the Github repo
 * probas in a separate function?
 * initialize() with boost::random::mt19937 (or boost::mt19937?)
-* convert all armadillo stuff to Eigen
 * deal with the extra dynamically allocated Hypers
+* empty includes.hpp as much as possible
