@@ -1,5 +1,7 @@
-class HypersFixed {
+#ifndef HYPERSFIXED_HPP
+#define HYPERSFIXED_HPP
 
+class HypersFixed {
 private:
     double mu0, lambda, alpha0, beta0;
 
@@ -18,3 +20,5 @@ public:
             assert(beta0  >= 0);
         }
 };
+
+#endif // HYPERSFIXED_HPP

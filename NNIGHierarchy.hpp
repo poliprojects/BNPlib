@@ -1,3 +1,6 @@
+#ifndef NNIGHIERARCHY_HPP
+#define NNIGHIERARCHY_HPP
+
 // Normal likelihoood, Normal Inverse Gamma hierarchy
 template<class Hypers> //Hypers = TupleWrapper, distro, ...
 class NNIGHierarchy {
@@ -86,3 +89,5 @@ public:
     }
 
 };
+
+# endif // NNIGHIERARCHY_HPP

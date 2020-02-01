@@ -1,3 +1,6 @@
+#ifndef NEAL8NNIG_HPP
+#define NEAL8NNIG_HPP
+
 #include <tuple>
 #include <stan/math/prim/mat.hpp>
 #include <type_traits>
@@ -253,3 +256,5 @@ public:
     }
 
 }; // end of Class Neal8
+
+#endif // NEAL8NNIG_HPP

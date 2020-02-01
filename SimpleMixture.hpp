@@ -1,3 +1,8 @@
+#ifndef SIMPLEMIXTURE_HPP
+#define SIMPLEMIXTURE_HPP
+
+#include "includes.hpp"
+
 class SimpleMixture {
 
 private:
@@ -13,3 +18,5 @@ public:
     double const get_totalmass(){return totalmass;}
 
 };
+
+#endif // SIMPLEMIXTURE_HPP

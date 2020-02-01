@@ -1,3 +1,6 @@
+#ifndef INCLUDES_HPP
+#define INCLUDES_HPP
+
 // Universal includes, to be included in every single header:
 #include <Eigen/Dense> 
 #include <vector>
@@ -13,3 +16,5 @@ namespace bnplib{
 }
 
 using namespace bnplib;
+
+#endif // INCLUDES_HPP
