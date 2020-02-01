@@ -1,4 +1,6 @@
 TODO LIST
+* is the posterior update given data, given clusters, correct?
+* a way to erase and add clusters more efficiently
 * Documentation with Doxygen (?)
 * readme.md mide for the Github repo
 * probas in a separate function?

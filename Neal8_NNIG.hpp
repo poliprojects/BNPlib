@@ -11,94 +11,7 @@
 // (mu,sig^2) ~ G
 // G ~ DP(M, G0)  with G0 = N-IG
 
-
-// Normal likelihoood, Normal Inverse Gamma hierarchy
-template<class Hypers> //Hypers = TupleWrapper, distro, ...
-class NNIGHierarchy {
-protected:
-    using state_t= std::array<par_t,2>;
-
-    std::mt19937  rng;
-    state_t state; // current values for F's parameters: mu, sigma
-
-
-    std::shared_ptr<Hypers> hypers; // current values for G0's parameters:mu_0,Lambda0, alpha, beta
-
-public:
-    // Constructors:
-    ~NNIGHierarchy() = default;
-    NNIGHierarchy(std::shared_ptr<Hypers> hypers):
-    hypers(hypers)  {}
-
-    // Getters/setters:
-    state_t get_state(){return state;}
-    void set_state(const state_t &s){state = s;}
-    void set_state(int pos, par_t val){state[pos] = val;}
-
-    int get_count(){return hypers.use_count();}
-
-
-
-    double log_like(data_t datum) {
-        return exp(stan::math::normal_lpdf(datum, state[0], state[1]));
-    }
-
-    void draw() {
-        float sigmaNew = stan::math::inv_gamma_rng(hypers->get_alpha0(), hypers->get_beta0(), rng);
-        float muNew = stan::math::normal_rng(hypers->get_mu0(), sigmaNew/hypers->get_lambda(), rng);
-        state[0] = muNew;
-        state[1] = sigmaNew;
-        }
-
-    void sample_given_data(std::vector<data_t> data) {
-        // Get current values of parameters
-        auto mu0    = hypers->get_mu0();
-        auto Lambda0  = hypers->get_lambda();
-        auto alpha0 = hypers->get_alpha0();
-        auto beta0  = hypers->get_beta0();
-
-        arma::vec temp = normalGammaUpdate(
-          data, mu0, alpha0, beta0, Lambda0);
-
-
-        auto mu_post = temp(0);
-        auto alpha_post = temp(1);
-        auto beta_post = temp(2);
-        auto postLambda = temp(3);
-
-        // Get a sample
-        par_t sigma_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
-        par_t mu_new = stan::math::normal_rng(mu_post, sigma_new/postLambda, rng); //? is it ok /postLambda?
-        state[0] = mu_new;
-        state[1] = sigma_new;
-    }
-
-
-
-  arma::vec normalGammaUpdate(arma::vec data, double mu0, double alpha0, double beta0,double Lambda0) {
-    	double mu_post, alpha_post, beta_post, postLambda;
-    	int n = data.size();
-    	if (n == 0) {
-    		return arma::vec{mu0, alpha0, beta0, Lambda0};
-  	}
-  	double ybar = arma::mean(data);
-  	mu_post = (Lambda0 * mu0 + n * ybar) / (Lambda0 + n);
-  	alpha_post = 1.0 * alpha0 + 1.0 * n / 2;
-
-  	// arma::var(x, 1) divides by n, not n-1
-  	double ss = n * arma::var(data, 1);
-
-  	beta_post = (beta0 + 0.5 * ss + 0.5 * Lambda0 / (n + Lambda0) * n * std::pow((ybar - mu0), 2));
-
-  	postLambda = Lambda0 + n;
-
-  	return arma::vec{mu_post, alpha_post, beta_post, postLambda};
-  }
-
-};
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture> // TODO change to MixingMode?
+template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal8{
 private:
     unsigned int n_aux=3;
@@ -121,13 +34,13 @@ private:
     void initalize(){
    std::default_random_engine generator;
    std::uniform_int_distribution<int> distribution(0,numClusters);
-	
+    
     for (int h = 0; h < numClusters; h++) {
           allocations.push_back(h);
         }
    
       for (int j = numClusters; j < data.size(); j++) {
-          int num = distribution(generator); //da stan?
+          int num = distribution(generator); //TODO da stan?
           allocations[j] = num;
         }
     }
@@ -146,8 +59,8 @@ private:
 
         // Initialize some relevant variables
         unsigned int k, n_unique, singleton;
-	unsigned int n=data.size();
-	
+    unsigned int n=data.size();
+    
         // Initialize cardinalities of unique values
 
         
@@ -185,8 +98,8 @@ for(int j=0; j<n; j++)
             // Draw a NEW value for ci
             Eigen::MatrixXd probas(n_unique+n_aux,1); //k or n_unique
             //arma::vec probas(k+n_aux);
-	    auto M = mixture.get_totalmass();
-	    double tot=0.0;
+        auto M = mixture.get_totalmass();
+        double tot=0.0;
             for(int k=0; k<n_unique ; k++){ // if datum i is a singleton, then
                 // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
 
@@ -194,7 +107,7 @@ for(int j=0; j<n; j++)
                 // TODO LATER "meglio in logscale" (?)
                 probas(k,0) = card[k] * unique_values[k].log_like(data[i]) / (
                     n-1+M);
-		tot+=probas(k,0);
+        tot+=probas(k,0);
               
             }
 
@@ -202,11 +115,11 @@ for(int j=0; j<n; j++)
             for(int k=0; k<n_aux ; k++){
                 probas(n_unique+k,0) = (M/n_aux) *
                     aux_unique_values[k].log_like(data[i]) / (n-1+M);
-		tot+=probas(n_unique+k,0);
+        tot+=probas(n_unique+k,0);
                }
-	     probas=probas*(1/tot);
+         probas=probas*(1/tot);
 
-	  
+      
 for(int i=0; i<probas.size(); i++){
  std::cout<<"probas_"<<probas(i,0)<<std::endl;}
  
@@ -274,7 +187,7 @@ std::cout<<"c_new: "<<c_new<<std::endl;
         numClusters=unique_values.size();
 
         std::vector<std::vector<unsigned int>> clust_idxs(numClusters);
-	unsigned int n=allocations.size();
+    unsigned int n=allocations.size();
 
 
         for(unsigned int i=0; i<n; i++){ // save different cluster in each row
@@ -282,7 +195,7 @@ std::cout<<"c_new: "<<c_new<<std::endl;
 
 
 
-	 for(int j=0; j<numClusters; j++){ 
+     for(int j=0; j<numClusters; j++){ 
 std::cout<<"cluster #"<< j << ": ";
              for (unsigned int i=0; i<clust_idxs[j].size(); i++ )
             std::cout<<" "<<clust_idxs[j][i];
@@ -312,8 +225,8 @@ std::cout<<""<<std::endl;
     void print() {
         for (int h = 0; h < numClusters; h++) {
             std::cout << "Cluster # " << h << std::endl;
-	    for (auto c:unique_values[h].get_state()){
-	            std::cout << "Parameters: "<< c<<std::endl;
+        for (auto c:unique_values[h].get_state()){
+                std::cout << "Parameters: "<< c<<std::endl;
             }
           }
         }
@@ -325,7 +238,7 @@ public:
     ~Neal8() = default;
     Neal8(const std::vector<data_t> & data, int numClusters,int n_aux, const Mixture & mix,const Hypers &hy ):
     data(data), numClusters(numClusters), n_aux(n_aux), mixture(mix)  {
-	
+    
       Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
       for (int h = 0; h < numClusters; h++) {
               unique_values.push_back(hierarchy);
@@ -333,7 +246,7 @@ public:
       for (int h = 0; h < n_aux; h++) {
         aux_unique_values.push_back(hierarchy);
       }
-	//std::cout<<unique_values[0].get_count();
+    //std::cout<<unique_values[0].get_count();
     }
 
 
@@ -343,48 +256,13 @@ public:
     // Running tool
     void run(){
         initalize();
- 		unsigned int iter = 0;
+        unsigned int iter = 0;
         while(iter < maxiter){
             step();    
             if(iter >= burnin)
               save_iteration(iter);
-			iter++;
+            iter++;
         }
     }
 
 }; // end of Class Neal8
-
-
-//TODO LIST and general doubts
-
-// - is it correct the posterior update given data, given clusters?
-
-// - a way to erase and add clusters more efficiently
-
-class SimpleMixture {
-double totalmass;
-
-public:
-
-    ~SimpleMixture() = default;
-    SimpleMixture(double totalmass):
-    totalmass(totalmass) {
-      assert(totalmass>=0);
-    }
-
-    double const get_totalmass(){return totalmass;}
-};
-
-
-class HypersFixed {
-    double mu0, lambda, alpha0, beta0;
-public:
-    double get_mu0(){return mu0;}
-    double get_alpha0(){return alpha0;}
-    double get_beta0(){return beta0;}
-    double get_lambda(){return lambda;}
-
-    ~HypersFixed() = default;
-    HypersFixed(double mu0, double lambda, double alpha0, double beta0):
-    mu0(mu0), lambda(lambda), alpha0(alpha0), beta0(beta0)  {}
-};
