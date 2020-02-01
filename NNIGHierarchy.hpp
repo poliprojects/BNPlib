@@ -1,6 +1,8 @@
 #ifndef NNIGHIERARCHY_HPP
 #define NNIGHIERARCHY_HPP
 
+#include "includes.hpp"
+
 // Normal likelihoood, Normal Inverse Gamma hierarchy
 template<class Hypers> //Hypers = TupleWrapper, distro, ...
 class NNIGHierarchy {

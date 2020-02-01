@@ -6,7 +6,9 @@
 #include <type_traits>
 
 #include "includes.hpp"
+
 #include <math.h>   
+
 // N-NIG model == gaussian kernel + N-IG base measure:
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
@@ -15,7 +17,7 @@
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal8{
 private:
-    unsigned int n_aux=3;
+    unsigned int n_aux = 3;
     unsigned int maxiter = 10000; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
