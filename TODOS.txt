@@ -7,3 +7,5 @@ TODO LIST
 * initialize() with boost::random::mt19937 (or boost::mt19937?)
 * deal with the extra dynamically allocated Hypers
 * empty includes.hpp as much as possible
+* const everywhere
+* DEBUG
