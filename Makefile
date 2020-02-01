@@ -15,9 +15,26 @@ LDLIBS = \
 -L$(STAN_ROOT_DIR)/lib/tbb -lpthread -ltbb -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
 LDFLAGS = -O3 -D_REENTRANT -fopenmp
 
-SRCS = 
+SRCS = main.cpp Neal8_NNIG.cpp NNIGHierarchy.cpp
 OBJS = $(subst .cpp,.o, $(SRCS))
 EXEC = main
+
+.PHONY: all clean distclean
+
+all: $(EXEC)
+
+$(EXEC): $(OBJS)
+	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS)
+
+main.o: headers.hpp includes.hpp NNIGHierarchy.hpp HypersFixed.hpp \
+		Neal8_NNIG.hpp SimpleMixture.hpp
+
+NNIGHierarchy.o: NNIGHierarchy.hpp
+HypersFixed.o: HypersFixed.hpp
+Neal8_NNIG.o: Neal8_NNIG.hpp
+SimpleMixture.o: SimpleMixture.hpp
+
+
 
 #info:
 	#@echo " Info..." 
@@ -27,22 +44,10 @@ EXEC = main
 	#@echo " OBJECTS = $(OBJS)"
 	#@echo " STAN_ROOT_DIR = $(STAN_ROOT_DIR)"
 
-all: main
-
-
-main: main.o $(OBJS)
-	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS)
-main.o:
-	$(CXX) $(CFLAGS) -c main.cpp -o main.o
-%.o : %.cpp
-	$(CXX) $(CFLAGS) -c $< -o $@
--include $(dep)
-%.d: %.c 
-	$(CXX) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
-
 
 clean:
-	rm -f $(OBJS) main.o
+	$(RM) *.o
 
 distclean: clean
-	rm -f main
+	$(RM) $(EXE)
+	$(RM) *~
