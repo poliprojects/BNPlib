@@ -102,7 +102,7 @@ template<template <class> class Hierarchy, class Hypers, class Mixture> // TODO 
 class Neal8{
 private:
     unsigned int n_aux=3;
-    unsigned int maxiter = 500; // TODO LATER
+    unsigned int maxiter = 2000; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
     int numClusters;
@@ -176,6 +176,7 @@ for(int j=0; j<n; j++)
             card[ allocations[i] ] -= 1;
 
 
+
             // Draw the aux from G0
             for(int j=singleton; j<n_aux; j++){
                 aux_unique_values[j].draw();
@@ -196,7 +197,7 @@ for(int j=0; j<n; j++)
 		tot+=probas(k,0);
               
             }
-            
+
 
             for(int k=0; k<n_aux ; k++){
                 probas(n_unique+k,0) = (M/n_aux) *
@@ -205,19 +206,24 @@ for(int j=0; j<n; j++)
                }
 	     probas=probas*(1/tot);
 
-	 std::cout<<"NUNIQUE"<<n_unique<<std::endl;   
+	  
+for(int i=0; i<probas.size(); i++){
+ std::cout<<"probas_"<<probas(i,0)<<std::endl;}
+ 
 
-            unsigned int c_new = stan::math::categorical_rng(probas, rng);
+
+            unsigned int c_new = stan::math::categorical_rng(probas, rng) -1;
+std::cout<<"c_new: "<<c_new<<std::endl;
+
             if(singleton == 1){
                 if (c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
-std::cout<<"test1"<<std::endl;
+
 
                     unique_values[ allocations[i] ].set_state(
                         aux_unique_values[c_new-n_unique].get_state());
                     card[ allocations[i] ] += 1;
                 }
                 else{ // case 2 of 4: SINGLETON - OLD VALUE
-std::cout<<"test2"<<std::endl;
 
                     unique_values.erase(
                         unique_values.begin()+allocations[i] ); // TODO ho levato il -1, giusto? allocations parte da 0
@@ -226,8 +232,7 @@ std::cout<<"test2"<<std::endl;
                     card[c_new] += 1;
 
                     int tmp = allocations[i];
-std::cout<<"c_new"<<c_new<<std::endl;
-std::cout<<"alloc[i]"<<tmp<<std::endl;
+
 
                     allocations[i] = c_new;
                     for(auto &c : allocations){ // relabeling
@@ -237,9 +242,6 @@ std::cout<<"alloc[i]"<<tmp<<std::endl;
 
 
 
-for(unsigned int i=0; i<n; i++){ 
- std::cout<<"i:"<<i<<std::endl;
- std::cout<<"allo:"<<allocations[i]<<std::endl; }
 
                 }
             } // end of if(singleton == 1)
@@ -247,14 +249,14 @@ for(unsigned int i=0; i<n; i++){
             else{ // if singleton == 0
 
                 if (c_new>=n_unique){ // case 3 of 4: NOT SINGLETON - AUX
-std::cout<<"test3"<<std::endl;
+
                     unique_values.push_back(aux_unique_values[c_new-n_unique]);
                     card.push_back(1);
                     allocations[i] = n_unique ; // TODO tolto il -1, ho aggiunto un elem
 
                 }
                 else{ // case 4 of 4: NOT SINGLETON - OLD VALUES
-std::cout<<"test4"<<std::endl;
+
 
                     allocations[i] = c_new;
                     card[c_new] += 1;
