@@ -102,7 +102,7 @@ template<template <class> class Hierarchy, class Hypers, class Mixture> // TODO 
 class Neal8{
 private:
     unsigned int n_aux=3;
-    unsigned int maxiter = 7; // TODO LATER
+    unsigned int maxiter = 500; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
     int numClusters;
@@ -149,14 +149,18 @@ private:
 	unsigned int n=data.size();
 	
         // Initialize cardinalities of unique values
-        std::vector<int> card(unique_values.size(), 0);
-        for(int j=0; j<n; j++)
-            card[ allocations[j] ] += 1;
+
+        
  
         for(int i=0; i<n; i++){ // for each data unit data[i]
+
+std::vector<int> card(unique_values.size(), 0);      
+for(int j=0; j<n; j++)
+            card[ allocations[j] ] += 1;
     
             singleton = 0;
             n_unique = unique_values.size(); //
+
 
             if(card[ allocations[i] ] == 1){ // datum i is a singleton
                 k = n_unique - 1;
@@ -201,18 +205,19 @@ private:
                }
 	     probas=probas*(1/tot);
 
-	    
+	 std::cout<<"NUNIQUE"<<n_unique<<std::endl;   
 
             unsigned int c_new = stan::math::categorical_rng(probas, rng);
             if(singleton == 1){
                 if (c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
+std::cout<<"test1"<<std::endl;
 
                     unique_values[ allocations[i] ].set_state(
                         aux_unique_values[c_new-n_unique].get_state());
                     card[ allocations[i] ] += 1;
                 }
                 else{ // case 2 of 4: SINGLETON - OLD VALUE
-
+std::cout<<"test2"<<std::endl;
 
                     unique_values.erase(
                         unique_values.begin()+allocations[i] ); // TODO ho levato il -1, giusto? allocations parte da 0
@@ -221,24 +226,35 @@ private:
                     card[c_new] += 1;
 
                     int tmp = allocations[i];
+std::cout<<"c_new"<<c_new<<std::endl;
+std::cout<<"alloc[i]"<<tmp<<std::endl;
+
                     allocations[i] = c_new;
                     for(auto &c : allocations){ // relabeling
                         if (c > tmp)
                             c -= 1;
                     }
+
+
+
+for(unsigned int i=0; i<n; i++){ 
+ std::cout<<"i:"<<i<<std::endl;
+ std::cout<<"allo:"<<allocations[i]<<std::endl; }
+
                 }
             } // end of if(singleton == 1)
 
             else{ // if singleton == 0
 
                 if (c_new>=n_unique){ // case 3 of 4: NOT SINGLETON - AUX
-
+std::cout<<"test3"<<std::endl;
                     unique_values.push_back(aux_unique_values[c_new-n_unique]);
                     card.push_back(1);
-                    allocations[i] = n_unique ; // TODO tolto il -1 size parte da 1 non da 0
+                    allocations[i] = n_unique ; // TODO tolto il -1, ho aggiunto un elem
 
                 }
                 else{ // case 4 of 4: NOT SINGLETON - OLD VALUES
+std::cout<<"test4"<<std::endl;
 
                     allocations[i] = c_new;
                     card[c_new] += 1;
@@ -252,19 +268,19 @@ private:
 
 
     void sample_unique_values(){
- 
+
         numClusters=unique_values.size();
 
         std::vector<std::vector<unsigned int>> clust_idxs(numClusters);
 	unsigned int n=allocations.size();
 
+
         for(unsigned int i=0; i<n; i++){ // save different cluster in each row
-
-            clust_idxs[ allocations[i]].push_back(i);}
-
+             clust_idxs[ allocations[i]].push_back(i);}
 
 
-	 for(int j=0; j<numClusters; j++){ // 13 clusters da 0 a 12
+
+	 for(int j=0; j<numClusters; j++){ 
 std::cout<<"cluster num "<< j;
              for (unsigned int i=0; i<clust_idxs[j].size(); i++ )
             std::cout<<" "<<clust_idxs[j][i];
@@ -279,6 +295,9 @@ std::cout<<""<<std::endl;
 
             unique_values[j].sample_given_data(curr_data);
         }
+
+
+    std::cout<<""<<std::endl;
     }
 
 
