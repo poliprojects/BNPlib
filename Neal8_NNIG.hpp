@@ -25,7 +25,7 @@ protected:
     std::shared_ptr<Hypers> hypers; // current values for G0's parameters:mu_0,Lambda0, alpha, beta
 
 public:
-    // Contructors:
+    // Constructors:
     ~NNIGHierarchy() = default;
     NNIGHierarchy(std::shared_ptr<Hypers> hypers):
     hypers(hypers)  {}
@@ -102,7 +102,7 @@ template<template <class> class Hierarchy, class Hypers, class Mixture> // TODO 
 class Neal8{
 private:
     unsigned int n_aux=3;
-    unsigned int maxiter = 2000; // TODO LATER
+    unsigned int maxiter = 1000; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
     int numClusters;
@@ -321,7 +321,7 @@ std::cout<<""<<std::endl;
 
 
 public:
-
+    // Constructors and destructors:
     ~Neal8() = default;
     Neal8(const std::vector<data_t> & data, int numClusters,int n_aux, const Mixture & mix,const Hypers &hy ):
     data(data), numClusters(numClusters), n_aux(n_aux), mixture(mix)  {
@@ -340,7 +340,7 @@ public:
     Neal8(std::vector<data_t>  & data, int n_aux, const Mixture & mix, const Hypers &hy):
     Neal8(data, data.size(), n_aux, mix, hy ) {}
 
-
+    // Running tool
     void run(){
         initalize();
  		unsigned int iter = 0;

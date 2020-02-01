@@ -11,16 +11,25 @@
 
 int main() {
 
-  double means=5;
-  double sds=1;
+  double mean1=5;
+  double mean2=0;
+  double sd1=1;
+  double sd2=1;
   std::mt19937 rng_base;
-  std::vector<double> data(20);
-  for (int i=0; i< data.size(); i++) {
+  std::vector<double> data(40);
+  int half = data.size()/2;
 
-  data[i] = stan::math::normal_rng(means, sds, rng_base);
+  for (int i=0; i< half; i++) {
+
+  data[i]      = stan::math::normal_rng(mean1, sd1, rng_base);
+  data[i+half] = stan::math::normal_rng(mean2, sd2, rng_base);
+  
   //std::cout<<data[i]<<std::endl;
 }
-
+	//for(auto &c : data)
+	//	std::cout << c << " ";
+	//std::cout << std::endl;
+	//return 0;
 
     HypersFixed hy(4,1,1,1);
     SimpleMixture mix(1.0);
