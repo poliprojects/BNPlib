@@ -102,7 +102,7 @@ template<template <class> class Hierarchy, class Hypers, class Mixture> // TODO 
 class Neal8{
 private:
     unsigned int n_aux=3;
-    unsigned int maxiter = 1000; // TODO LATER
+    unsigned int maxiter = 10000; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
     int numClusters;
@@ -283,7 +283,7 @@ std::cout<<"c_new: "<<c_new<<std::endl;
 
 
 	 for(int j=0; j<numClusters; j++){ 
-std::cout<<"cluster num "<< j;
+std::cout<<"cluster #"<< j << ": ";
              for (unsigned int i=0; i<clust_idxs[j].size(); i++ )
             std::cout<<" "<<clust_idxs[j][i];
 std::cout<<""<<std::endl;
