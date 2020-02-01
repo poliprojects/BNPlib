@@ -1,7 +1,10 @@
+// Universal includes, to be included in every single header:
 #include <Eigen/Dense> 
-// typedef Matrix<double, Dynamic, 1> VectorXd
-
-//#include <random>
+#include <vector>
+#include <armadillo>
+#include <stan/math/prim/mat.hpp>
+#include <boost/random/random_number_generator.hpp>
+#include <boost/random/detail/qrng_base.hpp>
 
 namespace bnplib{
     using data_t = double;

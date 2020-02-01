@@ -1,9 +1,7 @@
 #include <tuple>
-#include <vector>
-#include <armadillo>
-#include <Eigen/Dense> 
 #include <stan/math/prim/mat.hpp>
 #include <type_traits>
+
 #include "includes.hpp"
 #include <math.h>   
 // N-NIG model == gaussian kernel + N-IG base measure:
@@ -21,8 +19,6 @@ private:
     int numClusters;
     Mixture mixture;
     //Hypers hy;
-    //arma::vec probas;
-
 
     std::vector<data_t> data;
     std::vector<unsigned int> allocations; // the c vector
@@ -97,7 +93,8 @@ for(int j=0; j<n; j++)
 
             // Draw a NEW value for ci
             Eigen::MatrixXd probas(n_unique+n_aux,1); //k or n_unique
-            //arma::vec probas(k+n_aux);
+            //Matrix<double, Dynamic, 1> VectorXd
+
         auto M = mixture.get_totalmass();
         double tot=0.0;
             for(int k=0; k<n_unique ; k++){ // if datum i is a singleton, then
