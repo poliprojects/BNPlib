@@ -26,45 +26,15 @@ public:
 
     int get_count(){return hypers.use_count();}
 
-    double log_like(data_t datum) {
-        return exp(stan::math::normal_lpdf(datum, state[0], state[1]));
-    }
+    double log_like(data_t datum);
 
-    void draw() {
-        float sigma_new = stan::math::inv_gamma_rng(hypers->get_alpha0(),
-            hypers->get_beta0(), rng);
-        float mu_new = stan::math::normal_rng(hypers->get_mu0(),
-            sigma_new/hypers->get_lambda(), rng);
-        state[0] = mu_new;
-        state[1] = sigma_new;
-    }
+    void draw();
 
-
-    void sample_given_data(std::vector<data_t> data) {
-        // Get current values of parameters
-        auto mu0     = hypers->get_mu0();
-        auto lambda0 = hypers->get_lambda();
-        auto alpha0  = hypers->get_alpha0();
-        auto beta0   = hypers->get_beta0();
-
-        parvec_t temp = normalGammaUpdate(data, mu0, alpha0, beta0, lambda0);
-
-        auto mu_post = temp(0);
-        auto alpha_post = temp(1);
-        auto beta_post = temp(2);
-        auto lambda_post = temp(3);
-
-        // Get a sample
-        par_t sigma_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
-        par_t mu_new = stan::math::normal_rng(mu_post, sigma_new/lambda_post,
-            rng); //? is it ok /lambda_post?
-        state[0] = mu_new;
-        state[1] = sigma_new;
-    }
+    void sample_given_data(std::vector<data_t> data);
 
 
 
-    parvec_t normalGammaUpdate(std::vector<data_t> data, double mu0,
+    parvec_t normal_gamma_update(std::vector<data_t> data, double mu0,
         double alpha0, double beta0, double lambda0) {
         
         double mu_post, alpha_post, beta_post, lambda_post;
