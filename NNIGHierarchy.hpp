@@ -5,7 +5,6 @@
 #include <random>
 #include <vector>
 #include <memory>
-#include <armadillo>
 #include <stan/math/prim/mat.hpp>
 
 #include "includes_universal.hpp"
@@ -32,8 +31,6 @@ public:
 
     int get_count(){return hypers.use_count();}
 
-
-
     double log_like(data_t datum){
         return exp(stan::math::normal_lpdf(datum, state[0], state[1]));
     }
@@ -45,7 +42,7 @@ public:
         sigma_new/hypers->get_lambda(), rng);
     state[0] = mu_new;
     state[1] = sigma_new;
-  }
+    }
 
     void sample_given_data(std::vector<data_t> data){
     // Get current values of parameters
