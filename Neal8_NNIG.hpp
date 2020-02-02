@@ -24,7 +24,7 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal8{
 private:
     unsigned int n_aux = 3;
-    unsigned int maxiter = 5000; // TODO LATER
+    unsigned int maxiter = 1; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
     int numClusters;
@@ -119,7 +119,7 @@ private:
         //}
         unsigned int c_new = stan::math::categorical_rng(probas, rng) -1;
         
-        std::cout<<"c_new: "<<c_new<<std::endl; // DEBUG
+        //std::cout<<"c_new: "<<c_new<<std::endl; // DEBUG
 
         if(singleton == 1){
             if(c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
