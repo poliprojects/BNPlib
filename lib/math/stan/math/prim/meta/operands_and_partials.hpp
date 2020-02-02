@@ -1,12 +1,10 @@
 #ifndef STAN_MATH_PRIM_META_OPERANDS_AND_PARTIALS_HPP
 #define STAN_MATH_PRIM_META_OPERANDS_AND_PARTIALS_HPP
 
-#include <stan/math/prim/fun/Eigen.hpp>
-#include <stan/math/prim/meta/require_generics.hpp>
+#include <stan/math/prim/mat/fun/Eigen.hpp>
 #include <stan/math/prim/meta/broadcast_array.hpp>
 #include <stan/math/prim/meta/return_type.hpp>
 #include <vector>
-#include <type_traits>
 
 namespace stan {
 namespace math {
@@ -36,7 +34,7 @@ namespace internal {
  * @tparam ViewElt the type we expect to be at partials_[i]
  * @tparam Op the type of the operand
  */
-template <typename ViewElt, typename Op, typename Enable = void>
+template <typename ViewElt, typename Op>
 class ops_partials_edge {
  public:
   empty_broadcast_array<ViewElt, Op> partials_;
@@ -134,14 +132,14 @@ namespace internal {
  * This class will be used for both multivariate (nested container)
  * operands_and_partials edges as well as for the univariate case.
  */
-template <typename Op, typename ViewElt>
-class ops_partials_edge<ViewElt, Op, require_eigen_st<std::is_arithmetic, Op>> {
+template <typename Op, typename ViewElt, int R, int C>
+class ops_partials_edge<ViewElt, Eigen::Matrix<Op, R, C>> {
  public:
-  using partials_t = empty_broadcast_array<ViewElt, Op>;
+  using partials_t = empty_broadcast_array<ViewElt, Eigen::Matrix<Op, R, C>>;
   partials_t partials_;
-  empty_broadcast_array<partials_t, Op> partials_vec_;
+  empty_broadcast_array<partials_t, Eigen::Matrix<Op, R, C>> partials_vec_;
   ops_partials_edge() {}
-  explicit ops_partials_edge(const Op& /* ops */) {}
+  explicit ops_partials_edge(const Eigen::Matrix<Op, R, C>& /* ops */) {}
 
  private:
   template <typename, typename, typename, typename, typename, typename>

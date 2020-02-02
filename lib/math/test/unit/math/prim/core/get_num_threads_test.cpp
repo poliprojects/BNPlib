@@ -1,7 +1,8 @@
-#include <stan/math/prim.hpp>
+#include <stan/math/prim/core/init_threadpool_tbb.hpp>
+
+#include <gtest/gtest.h>
 #include <test/unit/util.hpp>
 #include <test/unit/math/prim/functor/utils_threads.hpp>
-#include <gtest/gtest.h>
 
 TEST(get_num_threads, correct_values) {
   set_n_threads("10");

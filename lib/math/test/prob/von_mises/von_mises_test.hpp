@@ -1,5 +1,5 @@
 // Arguments: Doubles, Doubles, Doubles
-#include <stan/math/prim.hpp>
+#include <stan/math/prim/scal.hpp>
 
 using stan::math::var;
 using std::numeric_limits;
@@ -34,12 +34,6 @@ class AgradDistributionVonMises : public AgradDistributionTest {
     param[2] = 4.0;
     parameters.push_back(param);
     log_prob.push_back(-2.262849861924804084623);
-
-    param[0] = boost::math::constants::third_pi<double>();
-    param[1] = boost::math::constants::sixth_pi<double>();
-    param[2] = 1e-8;
-    parameters.push_back(param);
-    log_prob.push_back(-1.837877066409345339082);
   }
 
   void invalid_values(vector<size_t>& index, vector<double>& value) {
@@ -58,6 +52,9 @@ class AgradDistributionVonMises : public AgradDistributionTest {
     value.push_back(numeric_limits<double>::infinity());
 
     // kappa
+    index.push_back(2U);
+    value.push_back(0.0);
+
     index.push_back(2U);
     value.push_back(-1.0);
   }
@@ -87,7 +84,7 @@ class AgradDistributionVonMises : public AgradDistributionTest {
     using stan::math::pi;
     using std::log;
 
-    return -stan::math::LOG_TWO_PI - log(modified_bessel_first_kind(0, kappa))
-           + kappa * cos(mu - y);
+    return -log(2.0 * stan::math::pi())
+           - log(modified_bessel_first_kind(0, kappa)) + kappa * cos(mu - y);
   }
 };

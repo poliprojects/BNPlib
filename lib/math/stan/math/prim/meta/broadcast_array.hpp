@@ -1,15 +1,12 @@
 #ifndef STAN_MATH_PRIM_META_BROADCAST_ARRAY_HPP
 #define STAN_MATH_PRIM_META_BROADCAST_ARRAY_HPP
 
-#include <stan/math/prim/meta/require_generics.hpp>
-#include <stan/math/prim/meta/promote_scalar_type.hpp>
-#include <stan/math/prim/fun/Eigen.hpp>
+#include <stan/math/prim/mat/fun/Eigen.hpp>
 #include <stdexcept>
 
 namespace stan {
 namespace math {
 namespace internal {
-
 template <typename T>
 class broadcast_array {
  private:
@@ -32,7 +29,7 @@ class broadcast_array {
   }
 };
 
-template <typename T, typename S, typename Enable = void>
+template <typename T, typename S>
 class empty_broadcast_array {
  public:
   empty_broadcast_array() {}
@@ -48,11 +45,8 @@ class empty_broadcast_array {
   void operator=(const Y& /*A*/);
 };
 
-template <typename ViewElt, typename T>
-class empty_broadcast_array<ViewElt, T, require_eigen_t<T>> {
-  enum { R = T::RowsAtCompileTime, C = T::ColsAtCompileTime };
-  using T_arg = promote_scalar_t<ViewElt, T>;
-
+template <typename ViewElt, typename OpElt, int R, int C>
+class empty_broadcast_array<ViewElt, Eigen::Matrix<OpElt, R, C> > {
  public:
   empty_broadcast_array() {}
   /** \ingroup type_trait
@@ -66,23 +60,23 @@ class empty_broadcast_array<ViewElt, T, require_eigen_t<T>> {
   /** \ingroup type_trait
    * Not implemented so cannot be called.
    */
-  void operator=(const T_arg& /*A*/);
+  void operator=(const Eigen::Matrix<ViewElt, R, C>& /*A*/);
   /** \ingroup type_trait
    * Not implemented so cannot be called.
    */
-  void operator+=(T_arg /*A*/);
+  void operator+=(Eigen::Matrix<ViewElt, R, C> /*A*/);
   /** \ingroup type_trait
    * Not implemented so cannot be called.
    */
-  void operator-=(T_arg /*A*/);
+  void operator-=(Eigen::Matrix<ViewElt, R, C> /*A*/);
   /** \ingroup type_trait
    * Not implemented so cannot be called.
    */
-  T& row(int /*i*/);
+  Eigen::Matrix<ViewElt, 1, C>& row(int /*i*/);
   /** \ingroup type_trait
    * Not implemented so cannot be called.
    */
-  T& col(int /*i*/);
+  Eigen::Matrix<ViewElt, R, 1>& col(int /*i*/);
 };
 }  // namespace internal
 }  // namespace math

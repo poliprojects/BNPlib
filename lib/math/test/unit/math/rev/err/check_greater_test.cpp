@@ -1,4 +1,6 @@
-#include <stan/math/rev.hpp>
+#include <stan/math/rev/arr.hpp>
+#include <stan/math/rev/mat.hpp>
+#include <stan/math/rev/scal.hpp>
 #include <gtest/gtest.h>
 #include <vector>
 #include <limits>

@@ -1,4 +1,5 @@
-#include <stan/math/prim.hpp>
+#include <stan/math/prim/mat/fun/Eigen.hpp>
+#include <stan/math/prim/arr.hpp>
 #include <gtest/gtest.h>
 #include <limits>
 #include <vector>

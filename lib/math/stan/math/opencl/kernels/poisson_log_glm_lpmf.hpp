@@ -32,7 +32,9 @@ static const char* poisson_log_glm_kernel_code = STRINGIFY(
      * it is a scalar)
      * @param is_alpha_vector 0 or 1 - whether alpha is a vector (alternatively
      * it is a scalar)
-     * @param need_logp interpreted as boolean - whether first part of
+     * @param need_logp1 interpreted as boolean - whether first part of
+     * logp_global needs to be computed
+     * @param need_logp2 interpreted as boolean - whether second part of
      * logp_global needs to be computed
      */
     __kernel void poisson_log_glm(
@@ -41,7 +43,7 @@ static const char* poisson_log_glm_kernel_code = STRINGIFY(
         const __global int* y_global, const __global double* x,
         const __global double* alpha, const __global double* beta, const int N,
         const int M, const int is_y_vector, const int is_alpha_vector,
-        const int need_logp) {
+        const int need_logp1, const int need_logp2) {
       const int gid = get_global_id(0);
       const int lid = get_local_id(0);
       const int lsize = get_local_size(0);
@@ -66,10 +68,12 @@ static const char* poisson_log_glm_kernel_code = STRINGIFY(
           // this signals that an exception must be raised
           theta_derivative = NAN;
         }
-        if (need_logp) {
+        if (need_logp1) {
           logp = -lgamma(y + 1);
         }
-        logp += y * theta - exp_theta;
+        if (need_logp2) {
+          logp += y * theta - exp_theta;
+        }
         theta_derivative_global[gid] = theta_derivative;
       }
       // Sum theta_derivative, calculated by different threads.
@@ -90,21 +94,23 @@ static const char* poisson_log_glm_kernel_code = STRINGIFY(
         theta_derivative_sum[wg_id] = local_storage[0];
       }
 
-      // Sum logp, calculated by different threads.
-      barrier(CLK_LOCAL_MEM_FENCE);
-      local_storage[lid] = logp;
-      barrier(CLK_LOCAL_MEM_FENCE);
-      for (int step = lsize / REDUCTION_STEP_SIZE; step > 0;
-           step /= REDUCTION_STEP_SIZE) {
-        if (lid < step) {
-          for (int i = 1; i < REDUCTION_STEP_SIZE; i++) {
-            local_storage[lid] += local_storage[lid + step * i];
-          }
-        }
+      if (need_logp1 || need_logp2) {
+        // Sum logp, calculated by different threads.
         barrier(CLK_LOCAL_MEM_FENCE);
-      }
-      if (lid == 0) {
-        logp_global[wg_id] = local_storage[0];
+        local_storage[lid] = logp;
+        barrier(CLK_LOCAL_MEM_FENCE);
+        for (int step = lsize / REDUCTION_STEP_SIZE; step > 0;
+             step /= REDUCTION_STEP_SIZE) {
+          if (lid < step) {
+            for (int i = 1; i < REDUCTION_STEP_SIZE; i++) {
+              local_storage[lid] += local_storage[lid + step * i];
+            }
+          }
+          barrier(CLK_LOCAL_MEM_FENCE);
+        }
+        if (lid == 0) {
+          logp_global[wg_id] = local_storage[0];
+        }
       }
     }
     // \cond
@@ -116,7 +122,7 @@ static const char* poisson_log_glm_kernel_code = STRINGIFY(
  * poisson_log_glm_lpmf() \endlink
  */
 const kernel_cl<out_buffer, out_buffer, out_buffer, in_buffer, in_buffer,
-                in_buffer, in_buffer, int, int, int, int, int>
+                in_buffer, in_buffer, int, int, int, int, int, int>
     poisson_log_glm("poisson_log_glm", {poisson_log_glm_kernel_code},
                     {{"REDUCTION_STEP_SIZE", 4}, {"LOCAL_SIZE_", 64}});
 

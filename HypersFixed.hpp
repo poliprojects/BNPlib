@@ -4,7 +4,6 @@
 #include "includes_universal.hpp"
 //#include <Eigen/Dense>
 //#include <stan/math/prim/mat.hpp>
-#include <boost/random/random_number_generator.hpp>
 //#include <boost/random/detail/qrng_base.hpp>
 
 class HypersFixed {

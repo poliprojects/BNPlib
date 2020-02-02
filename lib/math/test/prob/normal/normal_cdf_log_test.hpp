@@ -1,5 +1,5 @@
 // Arguments: Doubles, Doubles, Doubles
-#include <stan/math/prim.hpp>
+#include <stan/math/prim/scal.hpp>
 
 using stan::math::square;
 using stan::math::var;

@@ -3,7 +3,7 @@
 
 #include <stan/math/fwd/meta.hpp>
 #include <stan/math/fwd/core.hpp>
-#include <stan/math/prim/fun/primitive_value.hpp>
+#include <stan/math/prim/scal/fun/primitive_value.hpp>
 
 namespace stan {
 namespace math {
@@ -13,7 +13,7 @@ namespace math {
  * autodiff variable.  This function applies recursively to
  * higher-order autodiff types to return a primitive double value.
  *
- * @tparam T inner type of the fvar
+ * @tparam T scalar type for autodiff variable.
  * @param v input variable.
  * @return primitive value of input.
  */
@@ -23,6 +23,7 @@ inline double primitive_value(const fvar<T>& v) {
 }
 
 }  // namespace math
+
 }  // namespace stan
 
 #endif

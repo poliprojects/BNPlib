@@ -1,5 +1,5 @@
 // Arguments: Doubles
-#include <stan/math/prim.hpp>
+#include <stan/math/prim/scal.hpp>
 
 using stan::math::var;
 using std::numeric_limits;

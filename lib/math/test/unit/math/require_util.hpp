@@ -30,14 +30,6 @@ struct conjunction<B1> : B1 {};
 template <class B1, class... Bn>
 struct conjunction<B1, Bn...>
     : std::conditional_t<bool(B1::value), conjunction<Bn...>, B1> {};
-
-template <class...>
-struct disjunction : std::true_type {};
-template <class B1>
-struct disjunction<B1> : B1 {};
-template <class B1, class... Bn>
-struct disjunction<B1, Bn...>
-    : std::conditional_t<bool(B1::value), B1, disjunction<Bn...>> {};
 }  // namespace internal
 
 /**
@@ -78,22 +70,6 @@ template <template <class...> class Check>
 struct unary_require_tester<Check, void> : std::true_type {};
 
 /**
- * Used for checking an enable_if alias, when the enable_if goes off
- * the struct holds a /c value of true, else false.
- * @tparam Check The enable_if alias.
- * @tparam Types Parameter pack of types that will be checked individually.
- * @note Because of /c disjunction, the member /c value will only be true
- *  if at least one of the types passes.
- */
-template <template <class...> class Check, typename... Types>
-struct unary_not_require_tester
-    : internal::disjunction<unary_require_tester_impl<Check, Types>...> {};
-
-// For the end of recursion
-template <template <class...> class Check>
-struct unary_not_require_tester<Check, void> : std::true_type {};
-
-/**
  * This is the same as above, but instead all types are checked at once
  * since this is used for the require_any/all type checks
  */
@@ -113,36 +89,39 @@ template <template <class...> class checker, typename... Types>
 struct require_scal_checker {
   struct dummy {};
   static void unary() {
+    using stan::test::unary_require_tester;
     EXPECT_FALSE((unary_require_tester<checker, dummy>::value));
     EXPECT_TRUE((unary_require_tester<checker, Types...>::value));
   }
   static void not_unary() {
-    EXPECT_TRUE((unary_not_require_tester<checker, dummy>::value));
-    EXPECT_FALSE((unary_not_require_tester<checker, Types...>::value));
+    using stan::test::unary_require_tester;
+    EXPECT_TRUE((unary_require_tester<checker, dummy>::value));
+    EXPECT_FALSE((unary_require_tester<checker, Types...>::value));
   }
   static void all() {
-    EXPECT_FALSE((require_variadic_checker<checker, dummy>::value));
+    using stan::test::require_variadic_checker;
     EXPECT_FALSE((require_variadic_checker<checker, dummy, Types...>::value));
     EXPECT_FALSE((require_variadic_checker<checker, Types..., dummy>::value));
     EXPECT_TRUE((require_variadic_checker<checker, Types...>::value));
   }
+
   static void all_not() {
-    EXPECT_TRUE((require_variadic_checker<checker, dummy>::value));
-    EXPECT_FALSE((require_variadic_checker<checker, dummy, Types...>::value));
-    EXPECT_FALSE((require_variadic_checker<checker, Types..., dummy>::value));
+    using stan::test::require_variadic_checker;
+    EXPECT_TRUE((require_variadic_checker<checker, dummy, Types...>::value));
+    EXPECT_TRUE((require_variadic_checker<checker, Types..., dummy>::value));
     EXPECT_FALSE((require_variadic_checker<checker, Types...>::value));
   }
+
   static void any() {
-    EXPECT_FALSE((require_variadic_checker<checker, dummy>::value));
-    EXPECT_TRUE((require_variadic_checker<checker, dummy, Types...>::value));
+    using stan::test::require_variadic_checker;
+    EXPECT_FALSE((require_variadic_checker<checker, dummy, dummy>::value));
     EXPECT_TRUE((require_variadic_checker<checker, Types..., dummy>::value));
-    EXPECT_TRUE((require_variadic_checker<checker, Types...>::value));
   }
+
   static void any_not() {
-    EXPECT_TRUE((require_variadic_checker<checker, dummy>::value));
-    EXPECT_TRUE((require_variadic_checker<checker, dummy, Types...>::value));
-    EXPECT_TRUE((require_variadic_checker<checker, Types..., dummy>::value));
-    EXPECT_FALSE((require_variadic_checker<checker, Types...>::value));
+    using stan::test::require_variadic_checker;
+    EXPECT_TRUE((require_variadic_checker<checker, dummy, dummy>::value));
+    EXPECT_FALSE((require_variadic_checker<checker, Types..., dummy>::value));
   }
 };
 
@@ -196,6 +175,7 @@ template <template <template <class...> class TypeCheck, class...>
 struct require_container_checker {
   template <template <class...> class ContainerCheck>
   static void unary() {
+    using stan::test::unary_container_require_tester;
     EXPECT_FALSE((unary_container_require_tester<checker, ContainerCheck,
                                                  double>::value));
     EXPECT_TRUE((unary_container_require_tester<checker, ContainerCheck,
@@ -203,9 +183,9 @@ struct require_container_checker {
     EXPECT_TRUE((unary_container_require_tester<checker, ContainerCheck,
                                                 Container<float>>::value));
   }
-
   template <template <class...> class ContainerCheck>
   static void not_unary() {
+    using stan::test::unary_container_require_tester;
     EXPECT_TRUE((unary_container_require_tester<checker, ContainerCheck,
                                                 double>::value));
     EXPECT_FALSE((unary_container_require_tester<checker, ContainerCheck,
@@ -216,6 +196,7 @@ struct require_container_checker {
 
   template <template <class...> class ContainerCheck>
   static void all() {
+    using stan::test::variadic_container_require_tester;
     EXPECT_TRUE((variadic_container_require_tester<checker, ContainerCheck,
                                                    Container<double>,
                                                    Container<double>>::value));
@@ -236,26 +217,28 @@ struct require_container_checker {
 
   template <template <class...> class ContainerCheck>
   static void all_not() {
+    using stan::test::variadic_container_require_tester;
     EXPECT_FALSE((variadic_container_require_tester<checker, ContainerCheck,
                                                     Container<double>,
                                                     Container<double>>::value));
-    EXPECT_FALSE(
+    EXPECT_FALSE((variadic_container_require_tester<checker, ContainerCheck,
+                                                    Container<float>,
+                                                    Container<double>>::value));
+    EXPECT_TRUE(
         (variadic_container_require_tester<checker, ContainerCheck, double,
                                            Container<double>>::value));
-    EXPECT_FALSE(
+    EXPECT_TRUE(
         (variadic_container_require_tester<checker, ContainerCheck,
                                            Container<double>, double>::value));
-    EXPECT_FALSE((variadic_container_require_tester<checker, ContainerCheck,
-                                                    Container<std::string>,
-                                                    Container<double>>::value));
     EXPECT_TRUE((variadic_container_require_tester<checker, ContainerCheck, int,
-                                                   float>::value));
+                                                   std::string>::value));
     EXPECT_TRUE((variadic_container_require_tester<checker, ContainerCheck,
                                                    double, double>::value));
   }
 
   template <template <class...> class ContainerCheck>
   static void any() {
+    using stan::test::variadic_container_require_tester;
     EXPECT_TRUE((variadic_container_require_tester<checker, ContainerCheck,
                                                    Container<double>,
                                                    Container<double>>::value));
@@ -276,20 +259,21 @@ struct require_container_checker {
 
   template <template <class...> class ContainerCheck>
   static void any_not() {
+    using stan::test::require_variadic_checker;
     EXPECT_FALSE((variadic_container_require_tester<checker, ContainerCheck,
                                                     Container<double>,
                                                     Container<double>>::value));
-    EXPECT_FALSE((variadic_container_require_tester<checker, ContainerCheck,
-                                                    Container<float>,
-                                                    Container<double>>::value));
-    EXPECT_TRUE(
+    EXPECT_FALSE(
         (variadic_container_require_tester<checker, ContainerCheck, double,
                                            Container<double>>::value));
-    EXPECT_TRUE(
+    EXPECT_FALSE(
         (variadic_container_require_tester<checker, ContainerCheck,
                                            Container<double>, double>::value));
+    EXPECT_FALSE((variadic_container_require_tester<checker, ContainerCheck,
+                                                    Container<std::string>,
+                                                    Container<double>>::value));
     EXPECT_TRUE((variadic_container_require_tester<checker, ContainerCheck, int,
-                                                   std::string>::value));
+                                                   float>::value));
     EXPECT_TRUE((variadic_container_require_tester<checker, ContainerCheck,
                                                    double, double>::value));
   }

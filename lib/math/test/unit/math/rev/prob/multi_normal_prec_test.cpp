@@ -1,6 +1,6 @@
-#include <stan/math/rev.hpp>
+#include <stan/math/rev/mat.hpp>
 #include <gtest/gtest.h>
-#include <test/unit/math/rev/util.hpp>
+#include <test/unit/math/rev/mat/util.hpp>
 
 using Eigen::Dynamic;
 using Eigen::Matrix;

@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include <boost/math/distributions.hpp>
 #include <boost/random/mersenne_twister.hpp>
-#include <stan/math/prim.hpp>
+#include <stan/math/prim/mat.hpp>
 #include <test/unit/math/prim/meta/apply_template_permutations.hpp>
 #include <test/unit/math/prim/prob/util.hpp>
 #include <test/unit/math/prim/prob/VectorRealRNGTestRig.hpp>
@@ -135,8 +135,8 @@ void resize_if_vector(int& v, int N) {}
  * combinations with an invalid (bad) parameter, generate_samples should throw
  * domain_errors.
  *
- * If rig.good_p1_, rig.good_p2_ or rig.good_p3_ are empty, then it is assumed
- * that those parameters are unused and will not be tested.
+ * If rig.good_p2_ or rig.good_p3_ are empty, then it is assumed that those
+ * parameters are unused and will not be tested.
  *
  * rig.generate_samples will also be passed various other guaranteed invalid
  * values like positive infinity, negative infinity, and NaNs (these should also
@@ -165,7 +165,6 @@ struct check_dist_throws {
     using T_scalar_param2 = typename stan::scalar_type<T_param2>::type;
     using T_scalar_param3 = typename stan::scalar_type<T_param3>::type;
 
-    bool p1_is_used = rig.p1_is_used();
     bool p2_is_used = rig.p2_is_used();
     bool p3_is_used = rig.p3_is_used();
 
@@ -200,13 +199,11 @@ struct check_dist_throws {
     }
 
     // Now try putting incompatible values in first parameter
-    if (p1_is_used) {
-      for (auto bad_p1_value : bad_p1) {
-        assign_parameter_values(p1, {bad_p1_value});
-        assign_parameter_values(p2, good_p2);
-        assign_parameter_values(p3, good_p3);
-        EXPECT_THROW(rig.generate_samples(p1, p2, p3, rng), std::domain_error);
-      }
+    for (auto bad_p1_value : bad_p1) {
+      assign_parameter_values(p1, {bad_p1_value});
+      assign_parameter_values(p2, good_p2);
+      assign_parameter_values(p3, good_p3);
+      EXPECT_THROW(rig.generate_samples(p1, p2, p3, rng), std::domain_error);
     }
 
     // Now try putting incompatible values in second parameter
@@ -301,7 +298,7 @@ void check_dist_throws_all_types(const T_rig& rig) {
  */
 template <typename T_rig>
 void check_dist_throws_int_first_argument(const T_rig& rig) {
-  apply_template_permutations<std::tuple<int, std::vector<int>>, ArgumentTypes,
+  apply_template_permutations<std::tuple<int, std::vector<int> >, ArgumentTypes,
                               ArgumentTypes>(check_dist_throws{}, rig);
 }
 
@@ -317,7 +314,7 @@ void check_dist_throws_int_first_argument(const T_rig& rig) {
  */
 template <typename T_rig>
 void check_dist_throws_real_first_argument(const T_rig& rig) {
-  apply_template_permutations<std::tuple<double, std::vector<double>>,
+  apply_template_permutations<std::tuple<double, std::vector<double> >,
                               ArgumentTypes, ArgumentTypes>(check_dist_throws{},
                                                             rig);
 }
@@ -379,11 +376,10 @@ struct check_quantiles {
         p3,
         rig.template get_good_p3<typename stan::scalar_type<T_param3>::type>());
 
-    bool p1_is_used = rig.p1_is_used();
     bool p2_is_used = rig.p2_is_used();
     bool p3_is_used = rig.p3_is_used();
 
-    int M = std::max({(p1_is_used) ? stan::math::size(p1) : 1,
+    int M = std::max({stan::math::size(p1),
                       (p2_is_used) ? stan::math::size(p2) : 1,
                       (p3_is_used) ? stan::math::size(p3) : 1});
 
@@ -391,7 +387,7 @@ struct check_quantiles {
     stan::scalar_seq_view<T_param2> p2_vec(p2);
     stan::scalar_seq_view<T_param3> p3_vec(p3);
 
-    std::vector<std::vector<double>> samples_to_test_transpose;
+    std::vector<std::vector<double> > samples_to_test_transpose;
     for (int n = 0; n < rig.N_; ++n) {
       // If p1, p2, and p3 are scalars, the output is a scalar. Need to promote
       // it to a std::vector
@@ -414,19 +410,6 @@ struct check_quantiles {
 
 /*
  * Call check_quantiles on the given test rig for a continuous distribution that
- * has no parameters.
- *
- * @tparam T_rig Type of test rig for random number generator
- * @param T_rig Test rig for random number generator
- */
-template <typename T_rig>
-void check_quantiles_no_params(const T_rig& rig) {
-  apply_template_permutations<std::tuple<double>, std::tuple<double>,
-                              std::tuple<double>>(check_quantiles{}, rig);
-}
-
-/*
- * Call check_quantiles on the given test rig for a continuous distribution that
  * has one parameter that can be an int, std::vector<int>,
  * double, std::vector<double>, Eigen::VectorXd, or an Eigen::RowVectorXd
  *
@@ -436,7 +419,7 @@ void check_quantiles_no_params(const T_rig& rig) {
 template <typename T_rig>
 void check_quantiles_real(const T_rig& rig) {
   apply_template_permutations<ArgumentTypes, std::tuple<double>,
-                              std::tuple<double>>(check_quantiles{}, rig);
+                              std::tuple<double> >(check_quantiles{}, rig);
 }
 
 /*
@@ -449,8 +432,8 @@ void check_quantiles_real(const T_rig& rig) {
  */
 template <typename T_rig>
 void check_quantiles_real_real(const T_rig& rig) {
-  apply_template_permutations<ArgumentTypes, ArgumentTypes, std::tuple<double>>(
-      check_quantiles{}, rig);
+  apply_template_permutations<ArgumentTypes, ArgumentTypes,
+                              std::tuple<double> >(check_quantiles{}, rig);
 }
 
 /*
@@ -465,8 +448,8 @@ void check_quantiles_real_real(const T_rig& rig) {
  */
 template <typename T_rig>
 void check_quantiles_real_first_argument(const T_rig& rig) {
-  apply_template_permutations<std::tuple<double, std::vector<double>>,
-                              ArgumentTypes, std::tuple<double>>(
+  apply_template_permutations<std::tuple<double, std::vector<double> >,
+                              ArgumentTypes, std::tuple<double> >(
       check_quantiles{}, rig);
 }
 
@@ -550,7 +533,7 @@ struct check_counts {
     stan::scalar_seq_view<T_param2> p2_vec(p2);
     stan::scalar_seq_view<T_param3> p3_vec(p3);
 
-    std::vector<std::vector<int>> samples_to_test_transpose;
+    std::vector<std::vector<int> > samples_to_test_transpose;
     for (int n = 0; n < rig.N_; ++n) {
       // If p1, p2, and p3 are scalars, the output is a scalar. Need to promote
       // it to a std::vector
@@ -628,7 +611,7 @@ struct check_counts {
 template <typename T_rig>
 void check_counts_real(const T_rig& rig) {
   apply_template_permutations<ArgumentTypes, std::tuple<double>,
-                              std::tuple<double>>(check_counts{}, rig);
+                              std::tuple<double> >(check_counts{}, rig);
 }
 
 /*
@@ -641,8 +624,8 @@ void check_counts_real(const T_rig& rig) {
  */
 template <typename T_rig>
 void check_counts_real_real(const T_rig& rig) {
-  apply_template_permutations<ArgumentTypes, ArgumentTypes, std::tuple<double>>(
-      check_counts{}, rig);
+  apply_template_permutations<ArgumentTypes, ArgumentTypes,
+                              std::tuple<double> >(check_counts{}, rig);
 }
 
 /*
@@ -670,8 +653,8 @@ void check_counts_real_real_real(const T_rig& rig) {
  */
 template <typename T_rig>
 void check_counts_int_real(const T_rig& rig) {
-  apply_template_permutations<std::tuple<int, std::vector<int>>, ArgumentTypes,
-                              std::tuple<double>>(check_counts{}, rig);
+  apply_template_permutations<std::tuple<int, std::vector<int> >, ArgumentTypes,
+                              std::tuple<double> >(check_counts{}, rig);
 }
 
 /*
@@ -685,7 +668,7 @@ void check_counts_int_real(const T_rig& rig) {
  */
 template <typename T_rig>
 void check_counts_int_real_real(const T_rig& rig) {
-  apply_template_permutations<std::tuple<int, std::vector<int>>, ArgumentTypes,
+  apply_template_permutations<std::tuple<int, std::vector<int> >, ArgumentTypes,
                               ArgumentTypes>(check_counts{}, rig);
 }
 

@@ -1,4 +1,5 @@
-#include <stan/math/prim.hpp>
+#include <stan/math/prim/arr.hpp>
+#include <stan/math/prim/mat.hpp>
 #include <test/unit/util.hpp>
 #include <gtest/gtest.h>
 #include <limits>

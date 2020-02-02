@@ -1,7 +1,16 @@
 #include <iostream>
+#include "Neal8_NNIG.hpp"
+#include "SimpleMixture.hpp"
+#include "HypersFixed.hpp"
+#include "NNIGHierarchy.hpp"
+#include <vector>
+#include <armadillo>
+#include <Eigen/Dense> 
+#include <stan/math/prim/mat.hpp>
+#include <boost/random/random_number_generator.hpp>
+#include <boost/random/detail/qrng_base.hpp>
+
 #include "includes_main.hpp"
-//#include <stan/math/prim/mat.hpp>
-#include <stan/math.hpp>
 
 int main() {
     double mean1=5.5;
@@ -29,3 +38,4 @@ int main() {
     return 0;
 
 }
+

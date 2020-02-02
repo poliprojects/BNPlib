@@ -9,7 +9,7 @@ namespace stan {
 namespace math {
 
 /**
- * Prints the autodiff variable stack. This function
+ * Prints the auto-dif variable stack. This function
  * is used for debugging purposes.
  *
  * Only works if all members of stack are vari* as it

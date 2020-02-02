@@ -1,4 +1,5 @@
-#include <stan/math/prim.hpp>
+#include <stan/math/prim/mat/fun/Eigen.hpp>
+#include <stan/math/prim/meta.hpp>
 #include <Eigen/Sparse>
 #include <gtest/gtest.h>
 #include <vector>

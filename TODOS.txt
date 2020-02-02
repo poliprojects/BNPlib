@@ -10,4 +10,3 @@ TODO LIST
 * const everywhere
 * DEBUG
 * acceleration steps?
-

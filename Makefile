@@ -1,6 +1,6 @@
 STAN_ROOT_DIR := lib/math
 CXX = g++
-CXXFLAGS = \
+CFLAGS = \
 -fopenmp \
 -I armadillo/include \
 -I$(STAN_ROOT_DIR) \
@@ -10,31 +10,10 @@ CXXFLAGS = \
 -I$(STAN_ROOT_DIR)/lib/sundials_4.1.0/include \
 -I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include \
 -D_REENTRANT
-LDLIBS = \
--L$(STAN_ROOT_DIR)/lib/tbb -lpthread -ltbb -Wl,\
--rpath,"$(STAN_ROOT_DIR)/lib/tbb"
 LDFLAGS = -O3 -D_REENTRANT -fopenmp
 
-SRCS = main.cpp Neal8_NNIG.cpp NNIGHierarchy.cpp
+SRCS = NNIGHierarchy.cpp Neal8_NNIG.cpp
 OBJS = $(subst .cpp,.o, $(SRCS))
-EXEC = main
-
-.PHONY: all clean distclean
-
-all: $(EXEC)
-
-$(EXEC): $(OBJS)
-	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS)
-
-main.o: includes_main.hpp includes_universal.hpp NNIGHierarchy.hpp \
-	HypersFixed.hpp Neal8_NNIG.hpp SimpleMixture.hpp
-
-NNIGHierarchy.o: NNIGHierarchy.hpp
-HypersFixed.o: HypersFixed.hpp
-Neal8_NNIG.o: Neal8_NNIG.hpp
-SimpleMixture.o: SimpleMixture.hpp
-
-
 
 #info:
 	#@echo " Info..." 
@@ -44,6 +23,17 @@ SimpleMixture.o: SimpleMixture.hpp
 	#@echo " OBJECTS = $(OBJS)"
 	#@echo " STAN_ROOT_DIR = $(STAN_ROOT_DIR)"
 
+.PHONY: all clean distclean
+
+all: main
+
+main: main.o $(OBJS)
+	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS)
+main.o:
+	$(CXX) $(CFLAGS) -c main.cpp -o main.o
+%.o : %.cpp
+	$(CXX) $(CFLAGS) -c $< -o $@
+-include $(dep)
 
 clean:
 	$(RM) *.o
@@ -51,3 +41,17 @@ clean:
 distclean: clean
 	$(RM) $(EXE)
 	$(RM) *~
+
+
+
+#main.o: includes_main.hpp includes_universal.hpp NNIGHierarchy.hpp \
+#	HypersFixed.hpp Neal8_NNIG.hpp SimpleMixture.hpp
+
+#NNIGHierarchy.o: NNIGHierarchy.hpp
+#HypersFixed.o: HypersFixed.hpp
+#Neal8_NNIG.o: Neal8_NNIG.hpp
+#SimpleMixture.o: SimpleMixture.hpp
+
+
+
+

@@ -10,7 +10,7 @@ namespace math {
  * A var implementation that stores the daughter variable
  * implementation pointers and the partial derivative with respect
  * to the result explicitly in arrays constructed on the
- * autodiff memory stack.
+ * auto-diff memory stack.
  *
  * Like a simplified version of OperandsAndPartials.
  */

@@ -1,4 +1,4 @@
-#include <stan/math/mix.hpp>
+#include <stan/math/mix/mat.hpp>
 #include <gtest/gtest.h>
 #include <vector>
 #include <limits>
