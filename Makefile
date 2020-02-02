@@ -1,6 +1,6 @@
 STAN_ROOT_DIR := lib/math
 CXX = g++
-CFLAGS = \
+CXXFLAGS += \
 -fopenmp \
 -I$(STAN_ROOT_DIR) \
 -I$(STAN_ROOT_DIR)/lib \
@@ -22,15 +22,17 @@ main: main.o $(OBJS)
 
 main.o: includes_main.hpp includes_universal.hpp NNIGHierarchy.hpp \
 HypersFixed.hpp Neal8_NNIG.hpp SimpleMixture.hpp
-	$(CXX) $(CFLAGS) -c main.cpp -o main.o
+	$(CXX) $(CXXFLAGS) -c main.cpp -o main.o
 
 NNIGHierarchy.o: NNIGHierarchy.hpp HypersFixed.hpp
 HypersFixed.o: HypersFixed.hpp
 Neal8_NNIG.o: Neal8_NNIG.hpp
 SimpleMixture.o: SimpleMixture.hpp
 
+%.h: %.cpp
+
 %.o : %.cpp
-	$(CXX) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 -include $(dep)
 
