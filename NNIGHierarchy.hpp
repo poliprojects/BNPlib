@@ -2,6 +2,10 @@
 #define NNIGHIERARCHY_HPP
 
 #include "includes_universal.hpp"
+//#include <Eigen/Dense>
+//#include <stan/math/prim/mat.hpp>
+#include <boost/random/random_number_generator.hpp>
+//#include <boost/random/detail/qrng_base.hpp>
 
 // Normal likelihoood, Normal Inverse Gamma hierarchy
 template<class Hypers> //Hypers = TupleWrapper, distro, ...

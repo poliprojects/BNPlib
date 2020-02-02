@@ -1,9 +1,13 @@
 #ifndef NEAL8NNIG_HPP
 #define NEAL8NNIG_HPP
 
-#include <tuple>
-#include <stan/math/prim/mat.hpp>
 #include <type_traits>
+#include <tuple>
+//#include <stan/math/prim/mat.hpp>
+//#include <Eigen/Dense>
+#include <boost/random/random_number_generator.hpp>
+//#include <boost/random/detail/qrng_base.hpp>
+
 
 #include "includes_universal.hpp"
 

@@ -2,12 +2,14 @@
 #define INCLUDES_UNIVERSAL_HPP
 
 // Universal includes, to be included in every single header:
-#include <Eigen/Dense> 
 #include <vector>
 #include <armadillo>
-#include <stan/math/prim/mat.hpp>
-#include <boost/random/random_number_generator.hpp>
-#include <boost/random/detail/qrng_base.hpp>
+#include <assert.h> // assert
+#include <memory> // smart pointers
+//#include <Eigen/Dense> // TODO why does it not work here?
+//#include <stan/math/prim/mat.hpp> // TODO same
+//#include <boost/random/random_number_generator.hpp> // TODO same
+//#include <boost/random/detail/qrng_base.hpp> // TODO same
 
 namespace bnplib{
     using data_t = double;
