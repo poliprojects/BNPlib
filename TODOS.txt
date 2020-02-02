@@ -9,3 +9,5 @@ TODO LIST
 * empty includes.hpp as much as possible
 * const everywhere
 * DEBUG
+* acceleration steps?
+
