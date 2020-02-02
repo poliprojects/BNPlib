@@ -1,5 +1,5 @@
-#ifndef INCLUDES_HPP
-#define INCLUDES_HPP
+#ifndef INCLUDES_UNIVERSAL_HPP
+#define INCLUDES_UNIVERSAL_HPP
 
 // Universal includes, to be included in every single header:
 #include <Eigen/Dense> 
@@ -17,4 +17,4 @@ namespace bnplib{
 
 using namespace bnplib;
 
-#endif // INCLUDES_HPP
+#endif // INCLUDES_UNIVERSAL_HPP

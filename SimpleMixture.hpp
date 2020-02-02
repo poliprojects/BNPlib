@@ -1,7 +1,7 @@
 #ifndef SIMPLEMIXTURE_HPP
 #define SIMPLEMIXTURE_HPP
 
-#include "includes.hpp"
+#include "includes_universal.hpp"
 
 class SimpleMixture {
 
