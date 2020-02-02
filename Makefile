@@ -26,8 +26,8 @@ all: $(EXEC)
 $(EXEC): $(OBJS)
 	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS)
 
-main.o: headers.hpp includes.hpp NNIGHierarchy.hpp HypersFixed.hpp \
-		Neal8_NNIG.hpp SimpleMixture.hpp
+main.o: includes_main.hpp includes_universal.hpp NNIGHierarchy.hpp \
+	HypersFixed.hpp Neal8_NNIG.hpp SimpleMixture.hpp
 
 NNIGHierarchy.o: NNIGHierarchy.hpp
 HypersFixed.o: HypersFixed.hpp
