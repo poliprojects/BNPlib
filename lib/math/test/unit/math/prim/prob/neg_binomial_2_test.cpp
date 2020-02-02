@@ -1,5 +1,4 @@
-#include <stan/math/prim/mat.hpp>
-#include <stan/math/prim/scal.hpp>
+#include <stan/math/prim.hpp>
 #include <test/unit/math/prim/prob/vector_rng_test_helper.hpp>
 #include <test/unit/math/prim/prob/NegativeBinomial2LogTestRig.hpp>
 #include <test/unit/math/prim/prob/VectorIntRNGTestRig.hpp>
@@ -247,6 +246,19 @@ TEST(ProbDistributionsNegBinomial, extreme_values) {
     double logp = stan::math::neg_binomial_2_log<false>(N, mu, phi);
     EXPECT_LT(logp, 0);
   }
+}
+
+TEST(ProbDistributionsNegBinomial2, vectorAroundCutoff) {
+  int y = 10;
+  double mu = 9.36;
+  std::vector<double> phi;
+  phi.push_back(1);
+  phi.push_back(1e15);
+  double vector_value = stan::math::neg_binomial_2_lpmf(y, mu, phi);
+  double scalar_value = stan::math::neg_binomial_2_lpmf(y, mu, phi[0])
+                        + stan::math::neg_binomial_2_lpmf(y, mu, phi[1]);
+
+  EXPECT_FLOAT_EQ(vector_value, scalar_value);
 }
 
 TEST(ProbDistributionsNegativeBinomial2Log, distributionCheck) {
