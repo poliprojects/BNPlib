@@ -1,6 +1,6 @@
 STAN_ROOT_DIR := lib/math
 CXX = g++
-CFLAGS = \
+CXXFLAGS = \
 -fopenmp \
 -I armadillo/include \
 -I eigen/eigen-3.3.7/include \
