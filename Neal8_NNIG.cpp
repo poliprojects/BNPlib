@@ -1,7 +1,7 @@
 #include "Neal8_NNIG.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<<>Hierarchy, Hypers, Mixture>::initalize(){
+void Neal8<Hierarchy, Hypers, Mixture>::initalize(){
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution(0,numClusters);
 
@@ -16,7 +16,7 @@ void Neal8<<>Hierarchy, Hypers, Mixture>::initalize(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<<>Hierarchy, Hypers, Mixture>::sample_allocations(){
+void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     // TODO Other ideas:
     // * our own for loop for k and bool (ci is a singleton)
     // * function from std count distinct values in vector
@@ -118,7 +118,7 @@ void Neal8<<>Hierarchy, Hypers, Mixture>::sample_allocations(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<<>Hierarchy, Hypers, Mixture>::sample_unique_values()
+void Neal8<Hierarchy, Hypers, Mixture>::sample_unique_values()
 {
 
     numClusters=unique_values.size();
@@ -148,7 +148,7 @@ std::cout << std::endl; // DEBUG
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<<>Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
+void Neal8<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
 	// TODO LATER
     std::cout << "Iteration n. " << iter << " / " << maxiter << std::endl;
     print();
@@ -156,7 +156,7 @@ void Neal8<<>Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<<>Hierarchy, Hypers, Mixture>::print() {
+void Neal8<Hierarchy, Hypers, Mixture>::print() {
     for (int h = 0; h < numClusters; h++) {
         std::cout << "Cluster # " << h << std::endl;
         std::cout << "Parameters: ";

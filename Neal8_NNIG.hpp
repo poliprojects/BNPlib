@@ -4,7 +4,7 @@
 #include <type_traits>
 #include <tuple>
 //#include <stan/math/prim/mat.hpp>
-//#include <Eigen/Dense>
+#include <Eigen/Dense>
 #include <boost/random/random_number_generator.hpp>
 //#include <boost/random/detail/qrng_base.hpp>
 
