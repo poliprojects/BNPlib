@@ -1,5 +1,3 @@
-include lib/math/make/standalone
-
 STAN_ROOT_DIR := lib/math
 CXX = g++
 CXXFLAGS = \
