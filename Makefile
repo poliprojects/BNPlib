@@ -1,3 +1,5 @@
+include lib/math/make/standalone
+
 STAN_ROOT_DIR := lib/math
 CXX = g++
 CXXFLAGS = \
@@ -9,9 +11,10 @@ CXXFLAGS = \
 -I$(STAN_ROOT_DIR)/lib/boost_1.72.0/ \
 -I$(STAN_ROOT_DIR)/lib/sundials_4.1.0/include \
 -I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include \
--D_REENTRANT $(shell root-config --cflags)
+-D_REENTRANT
 LDLIBS = \
--L$(STAN_ROOT_DIR)/lib/tbb -lpthread -ltbb -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
+-L$(STAN_ROOT_DIR)/lib/tbb -lpthread -ltbb -Wl,\
+-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
 LDFLAGS = -O3 -D_REENTRANT -fopenmp
 
 SRCS = main.cpp Neal8_NNIG.cpp NNIGHierarchy.cpp
