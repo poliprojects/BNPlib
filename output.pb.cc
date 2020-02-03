@@ -14,94 +14,126 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Output_UniqueValues_output_2eproto;
-class Output_UniqueValuesDefaultTypeInternal {
+extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_IterationOutput_output_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_UniqueValues_output_2eproto;
+class UniqueValuesDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Output_UniqueValues> _instance;
-} _Output_UniqueValues_default_instance_;
-class OutputDefaultTypeInternal {
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<UniqueValues> _instance;
+} _UniqueValues_default_instance_;
+class IterationOutputDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Output> _instance;
-} _Output_default_instance_;
-static void InitDefaultsscc_info_Output_output_2eproto() {
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<IterationOutput> _instance;
+} _IterationOutput_default_instance_;
+class ChainOutputDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ChainOutput> _instance;
+} _ChainOutput_default_instance_;
+static void InitDefaultsscc_info_ChainOutput_output_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::_Output_default_instance_;
-    new (ptr) ::Output();
+    void* ptr = &::_ChainOutput_default_instance_;
+    new (ptr) ::ChainOutput();
     ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::Output::InitAsDefaultInstance();
+  ::ChainOutput::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Output_output_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Output_output_2eproto}, {
-      &scc_info_Output_UniqueValues_output_2eproto.base,}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_ChainOutput_output_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_ChainOutput_output_2eproto}, {
+      &scc_info_IterationOutput_output_2eproto.base,}};
 
-static void InitDefaultsscc_info_Output_UniqueValues_output_2eproto() {
+static void InitDefaultsscc_info_IterationOutput_output_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::_Output_UniqueValues_default_instance_;
-    new (ptr) ::Output_UniqueValues();
+    void* ptr = &::_IterationOutput_default_instance_;
+    new (ptr) ::IterationOutput();
     ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::Output_UniqueValues::InitAsDefaultInstance();
+  ::IterationOutput::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Output_UniqueValues_output_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Output_UniqueValues_output_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_IterationOutput_output_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_IterationOutput_output_2eproto}, {
+      &scc_info_UniqueValues_output_2eproto.base,}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_output_2eproto[2];
+static void InitDefaultsscc_info_UniqueValues_output_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_UniqueValues_default_instance_;
+    new (ptr) ::UniqueValues();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::UniqueValues::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_UniqueValues_output_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_UniqueValues_output_2eproto}, {}};
+
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_output_2eproto[3];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_output_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_output_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_output_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  PROTOBUF_FIELD_OFFSET(::Output_UniqueValues, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::Output_UniqueValues, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::UniqueValues, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::UniqueValues, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Output_UniqueValues, params_),
+  PROTOBUF_FIELD_OFFSET(::UniqueValues, params_),
   ~0u,
-  PROTOBUF_FIELD_OFFSET(::Output, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::Output, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::IterationOutput, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::IterationOutput, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Output, allocations_),
-  PROTOBUF_FIELD_OFFSET(::Output, phi_),
+  PROTOBUF_FIELD_OFFSET(::IterationOutput, allocations_),
+  PROTOBUF_FIELD_OFFSET(::IterationOutput, phi_),
   ~0u,
+  ~0u,
+  PROTOBUF_FIELD_OFFSET(::ChainOutput, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::ChainOutput, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::ChainOutput, state_),
   ~0u,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 6, sizeof(::Output_UniqueValues)},
-  { 7, 14, sizeof(::Output)},
+  { 0, 6, sizeof(::UniqueValues)},
+  { 7, 14, sizeof(::IterationOutput)},
+  { 16, 22, sizeof(::ChainOutput)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Output_UniqueValues_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Output_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_UniqueValues_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_IterationOutput_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_ChainOutput_default_instance_),
 };
 
 const char descriptor_table_protodef_output_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\014output.proto\"`\n\006Output\022\023\n\013allocations\030"
-  "\001 \003(\005\022!\n\003phi\030\002 \003(\0132\024.Output.UniqueValues"
-  "\032\036\n\014UniqueValues\022\016\n\006params\030\001 \003(\001"
+  "\n\014output.proto\"\036\n\014UniqueValues\022\016\n\006params"
+  "\030\001 \003(\001\"B\n\017IterationOutput\022\023\n\013allocations"
+  "\030\001 \003(\005\022\032\n\003phi\030\002 \003(\0132\r.UniqueValues\".\n\013Ch"
+  "ainOutput\022\037\n\005state\030\001 \003(\0132\020.IterationOutp"
+  "ut"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_output_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_output_2eproto_sccs[2] = {
-  &scc_info_Output_output_2eproto.base,
-  &scc_info_Output_UniqueValues_output_2eproto.base,
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_output_2eproto_sccs[3] = {
+  &scc_info_ChainOutput_output_2eproto.base,
+  &scc_info_IterationOutput_output_2eproto.base,
+  &scc_info_UniqueValues_output_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_output_2eproto_once;
 static bool descriptor_table_output_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_output_2eproto = {
-  &descriptor_table_output_2eproto_initialized, descriptor_table_protodef_output_2eproto, "output.proto", 112,
-  &descriptor_table_output_2eproto_once, descriptor_table_output_2eproto_sccs, descriptor_table_output_2eproto_deps, 2, 0,
+  &descriptor_table_output_2eproto_initialized, descriptor_table_protodef_output_2eproto, "output.proto", 162,
+  &descriptor_table_output_2eproto_once, descriptor_table_output_2eproto_sccs, descriptor_table_output_2eproto_deps, 3, 0,
   schemas, file_default_instances, TableStruct_output_2eproto::offsets,
-  file_level_metadata_output_2eproto, 2, file_level_enum_descriptors_output_2eproto, file_level_service_descriptors_output_2eproto,
+  file_level_metadata_output_2eproto, 3, file_level_enum_descriptors_output_2eproto, file_level_service_descriptors_output_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -109,49 +141,49 @@ static bool dynamic_init_dummy_output_2eproto = (  ::PROTOBUF_NAMESPACE_ID::inte
 
 // ===================================================================
 
-void Output_UniqueValues::InitAsDefaultInstance() {
+void UniqueValues::InitAsDefaultInstance() {
 }
-class Output_UniqueValues::_Internal {
+class UniqueValues::_Internal {
  public:
-  using HasBits = decltype(std::declval<Output_UniqueValues>()._has_bits_);
+  using HasBits = decltype(std::declval<UniqueValues>()._has_bits_);
 };
 
-Output_UniqueValues::Output_UniqueValues()
+UniqueValues::UniqueValues()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:Output.UniqueValues)
+  // @@protoc_insertion_point(constructor:UniqueValues)
 }
-Output_UniqueValues::Output_UniqueValues(const Output_UniqueValues& from)
+UniqueValues::UniqueValues(const UniqueValues& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_),
       params_(from.params_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:Output.UniqueValues)
+  // @@protoc_insertion_point(copy_constructor:UniqueValues)
 }
 
-void Output_UniqueValues::SharedCtor() {
+void UniqueValues::SharedCtor() {
 }
 
-Output_UniqueValues::~Output_UniqueValues() {
-  // @@protoc_insertion_point(destructor:Output.UniqueValues)
+UniqueValues::~UniqueValues() {
+  // @@protoc_insertion_point(destructor:UniqueValues)
   SharedDtor();
 }
 
-void Output_UniqueValues::SharedDtor() {
+void UniqueValues::SharedDtor() {
 }
 
-void Output_UniqueValues::SetCachedSize(int size) const {
+void UniqueValues::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const Output_UniqueValues& Output_UniqueValues::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Output_UniqueValues_output_2eproto.base);
+const UniqueValues& UniqueValues::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_UniqueValues_output_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void Output_UniqueValues::Clear() {
-// @@protoc_insertion_point(message_clear_start:Output.UniqueValues)
+void UniqueValues::Clear() {
+// @@protoc_insertion_point(message_clear_start:UniqueValues)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -161,7 +193,7 @@ void Output_UniqueValues::Clear() {
   _internal_metadata_.Clear();
 }
 
-const char* Output_UniqueValues::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* UniqueValues::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
@@ -203,9 +235,9 @@ failure:
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* Output_UniqueValues::_InternalSerialize(
+::PROTOBUF_NAMESPACE_ID::uint8* UniqueValues::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Output.UniqueValues)
+  // @@protoc_insertion_point(serialize_to_array_start:UniqueValues)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -219,12 +251,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:Output.UniqueValues)
+  // @@protoc_insertion_point(serialize_to_array_end:UniqueValues)
   return target;
 }
 
-size_t Output_UniqueValues::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Output.UniqueValues)
+size_t UniqueValues::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:UniqueValues)
   size_t total_size = 0;
 
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -249,23 +281,23 @@ size_t Output_UniqueValues::ByteSizeLong() const {
   return total_size;
 }
 
-void Output_UniqueValues::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:Output.UniqueValues)
+void UniqueValues::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:UniqueValues)
   GOOGLE_DCHECK_NE(&from, this);
-  const Output_UniqueValues* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Output_UniqueValues>(
+  const UniqueValues* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<UniqueValues>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Output.UniqueValues)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:UniqueValues)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:Output.UniqueValues)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:UniqueValues)
     MergeFrom(*source);
   }
 }
 
-void Output_UniqueValues::MergeFrom(const Output_UniqueValues& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:Output.UniqueValues)
+void UniqueValues::MergeFrom(const UniqueValues& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:UniqueValues)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -274,83 +306,83 @@ void Output_UniqueValues::MergeFrom(const Output_UniqueValues& from) {
   params_.MergeFrom(from.params_);
 }
 
-void Output_UniqueValues::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:Output.UniqueValues)
+void UniqueValues::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:UniqueValues)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Output_UniqueValues::CopyFrom(const Output_UniqueValues& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Output.UniqueValues)
+void UniqueValues::CopyFrom(const UniqueValues& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:UniqueValues)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Output_UniqueValues::IsInitialized() const {
+bool UniqueValues::IsInitialized() const {
   return true;
 }
 
-void Output_UniqueValues::InternalSwap(Output_UniqueValues* other) {
+void UniqueValues::InternalSwap(UniqueValues* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   params_.InternalSwap(&other->params_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata Output_UniqueValues::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata UniqueValues::GetMetadata() const {
   return GetMetadataStatic();
 }
 
 
 // ===================================================================
 
-void Output::InitAsDefaultInstance() {
+void IterationOutput::InitAsDefaultInstance() {
 }
-class Output::_Internal {
+class IterationOutput::_Internal {
  public:
-  using HasBits = decltype(std::declval<Output>()._has_bits_);
+  using HasBits = decltype(std::declval<IterationOutput>()._has_bits_);
 };
 
-Output::Output()
+IterationOutput::IterationOutput()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:Output)
+  // @@protoc_insertion_point(constructor:IterationOutput)
 }
-Output::Output(const Output& from)
+IterationOutput::IterationOutput(const IterationOutput& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_),
       allocations_(from.allocations_),
       phi_(from.phi_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:Output)
+  // @@protoc_insertion_point(copy_constructor:IterationOutput)
 }
 
-void Output::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Output_output_2eproto.base);
+void IterationOutput::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_IterationOutput_output_2eproto.base);
 }
 
-Output::~Output() {
-  // @@protoc_insertion_point(destructor:Output)
+IterationOutput::~IterationOutput() {
+  // @@protoc_insertion_point(destructor:IterationOutput)
   SharedDtor();
 }
 
-void Output::SharedDtor() {
+void IterationOutput::SharedDtor() {
 }
 
-void Output::SetCachedSize(int size) const {
+void IterationOutput::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const Output& Output::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Output_output_2eproto.base);
+const IterationOutput& IterationOutput::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_IterationOutput_output_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void Output::Clear() {
-// @@protoc_insertion_point(message_clear_start:Output)
+void IterationOutput::Clear() {
+// @@protoc_insertion_point(message_clear_start:IterationOutput)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -361,7 +393,7 @@ void Output::Clear() {
   _internal_metadata_.Clear();
 }
 
-const char* Output::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* IterationOutput::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
@@ -383,7 +415,7 @@ const char* Output::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // repeated .Output.UniqueValues phi = 2;
+      // repeated .UniqueValues phi = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr -= 1;
@@ -415,9 +447,9 @@ failure:
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* Output::_InternalSerialize(
+::PROTOBUF_NAMESPACE_ID::uint8* IterationOutput::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Output)
+  // @@protoc_insertion_point(serialize_to_array_start:IterationOutput)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -427,7 +459,7 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_allocations(i), target);
   }
 
-  // repeated .Output.UniqueValues phi = 2;
+  // repeated .UniqueValues phi = 2;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->_internal_phi_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
@@ -439,12 +471,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:Output)
+  // @@protoc_insertion_point(serialize_to_array_end:IterationOutput)
   return target;
 }
 
-size_t Output::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Output)
+size_t IterationOutput::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:IterationOutput)
   size_t total_size = 0;
 
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -460,7 +492,7 @@ size_t Output::ByteSizeLong() const {
     total_size += data_size;
   }
 
-  // repeated .Output.UniqueValues phi = 2;
+  // repeated .UniqueValues phi = 2;
   total_size += 1UL * this->_internal_phi_size();
   for (const auto& msg : this->phi_) {
     total_size +=
@@ -476,23 +508,23 @@ size_t Output::ByteSizeLong() const {
   return total_size;
 }
 
-void Output::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:Output)
+void IterationOutput::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:IterationOutput)
   GOOGLE_DCHECK_NE(&from, this);
-  const Output* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Output>(
+  const IterationOutput* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<IterationOutput>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Output)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:IterationOutput)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:Output)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:IterationOutput)
     MergeFrom(*source);
   }
 }
 
-void Output::MergeFrom(const Output& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:Output)
+void IterationOutput::MergeFrom(const IterationOutput& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:IterationOutput)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -502,25 +534,25 @@ void Output::MergeFrom(const Output& from) {
   phi_.MergeFrom(from.phi_);
 }
 
-void Output::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:Output)
+void IterationOutput::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:IterationOutput)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Output::CopyFrom(const Output& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Output)
+void IterationOutput::CopyFrom(const IterationOutput& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:IterationOutput)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Output::IsInitialized() const {
+bool IterationOutput::IsInitialized() const {
   return true;
 }
 
-void Output::InternalSwap(Output* other) {
+void IterationOutput::InternalSwap(IterationOutput* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
@@ -528,18 +560,216 @@ void Output::InternalSwap(Output* other) {
   phi_.InternalSwap(&other->phi_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata Output::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata IterationOutput::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void ChainOutput::InitAsDefaultInstance() {
+}
+class ChainOutput::_Internal {
+ public:
+  using HasBits = decltype(std::declval<ChainOutput>()._has_bits_);
+};
+
+ChainOutput::ChainOutput()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ChainOutput)
+}
+ChainOutput::ChainOutput(const ChainOutput& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr),
+      _has_bits_(from._has_bits_),
+      state_(from.state_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:ChainOutput)
+}
+
+void ChainOutput::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ChainOutput_output_2eproto.base);
+}
+
+ChainOutput::~ChainOutput() {
+  // @@protoc_insertion_point(destructor:ChainOutput)
+  SharedDtor();
+}
+
+void ChainOutput::SharedDtor() {
+}
+
+void ChainOutput::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ChainOutput& ChainOutput::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ChainOutput_output_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void ChainOutput::Clear() {
+// @@protoc_insertion_point(message_clear_start:ChainOutput)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  state_.Clear();
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+const char* ChainOutput::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // repeated .IterationOutput state = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_state(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* ChainOutput::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ChainOutput)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .IterationOutput state = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_state_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, this->_internal_state(i), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ChainOutput)
+  return target;
+}
+
+size_t ChainOutput::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ChainOutput)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .IterationOutput state = 1;
+  total_size += 1UL * this->_internal_state_size();
+  for (const auto& msg : this->state_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void ChainOutput::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ChainOutput)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ChainOutput* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ChainOutput>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ChainOutput)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ChainOutput)
+    MergeFrom(*source);
+  }
+}
+
+void ChainOutput::MergeFrom(const ChainOutput& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ChainOutput)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  state_.MergeFrom(from.state_);
+}
+
+void ChainOutput::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ChainOutput)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ChainOutput::CopyFrom(const ChainOutput& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ChainOutput)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ChainOutput::IsInitialized() const {
+  return true;
+}
+
+void ChainOutput::InternalSwap(ChainOutput* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  state_.InternalSwap(&other->state_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ChainOutput::GetMetadata() const {
   return GetMetadataStatic();
 }
 
 
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::Output_UniqueValues* Arena::CreateMaybeMessage< ::Output_UniqueValues >(Arena* arena) {
-  return Arena::CreateInternal< ::Output_UniqueValues >(arena);
+template<> PROTOBUF_NOINLINE ::UniqueValues* Arena::CreateMaybeMessage< ::UniqueValues >(Arena* arena) {
+  return Arena::CreateInternal< ::UniqueValues >(arena);
 }
-template<> PROTOBUF_NOINLINE ::Output* Arena::CreateMaybeMessage< ::Output >(Arena* arena) {
-  return Arena::CreateInternal< ::Output >(arena);
+template<> PROTOBUF_NOINLINE ::IterationOutput* Arena::CreateMaybeMessage< ::IterationOutput >(Arena* arena) {
+  return Arena::CreateInternal< ::IterationOutput >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ChainOutput* Arena::CreateMaybeMessage< ::ChainOutput >(Arena* arena) {
+  return Arena::CreateInternal< ::ChainOutput >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

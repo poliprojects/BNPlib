@@ -30,6 +30,7 @@ private:
     std::mt19937 rng;
     int numClusters;
     Mixture mixture;
+	ChainOutput chain;
  
 
     std::vector<data_t> data;

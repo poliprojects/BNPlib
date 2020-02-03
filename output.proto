@@ -1,17 +1,18 @@
 syntax = "proto2";
 
-
-message Output {
-
-	repeated int32 allocations = 1;
-
-
-
-	message UniqueValues {
+message UniqueValues {
     	repeated double params = 1;
   	}
 
-  	repeated UniqueValues phi = 2;
+
+message IterationOutput {
+
+	repeated int32 allocations = 1;
+
+	repeated UniqueValues phi = 2;
 }
 
+message ChainOutput {
+	repeated IterationOutput state = 1;
+}
 

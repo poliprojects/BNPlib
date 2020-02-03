@@ -15,20 +15,22 @@ LDFLAGS = -O3 -D_REENTRANT -fopenmp
 SRCS_OUT = output.pb.cc
 SRCS =
 OBJS = $(subst .cc,.o, $(SRCS_OUT)) $(subst .cpp,.o, $(SRCS))
-PBFLAGS = -pthread -lprotobuf -pthread
+PBFLAGS = -pthread
 
 
 .PHONY: all clean distclean
 
 all: main
 
-main: main.o $(OBJS) 
-	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS) $(PBFLAGS)
+main: main.o
+	$(CXX) $(LDFLAGS) -o main main.o $(LDLIBS) $(PBFLAGS)
 
 main.o: 
 	$(CXX) $(CXXFLAGS) -c main.cpp -o main.o
 
 output.pb.o: output.pb.h
+
+%.h: %.cc
 
 -include $(dep)
 

@@ -47,43 +47,47 @@ struct TableStruct_output_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[2]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[3]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
   static const ::PROTOBUF_NAMESPACE_ID::uint32 offsets[];
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_output_2eproto;
-class Output;
-class OutputDefaultTypeInternal;
-extern OutputDefaultTypeInternal _Output_default_instance_;
-class Output_UniqueValues;
-class Output_UniqueValuesDefaultTypeInternal;
-extern Output_UniqueValuesDefaultTypeInternal _Output_UniqueValues_default_instance_;
+class ChainOutput;
+class ChainOutputDefaultTypeInternal;
+extern ChainOutputDefaultTypeInternal _ChainOutput_default_instance_;
+class IterationOutput;
+class IterationOutputDefaultTypeInternal;
+extern IterationOutputDefaultTypeInternal _IterationOutput_default_instance_;
+class UniqueValues;
+class UniqueValuesDefaultTypeInternal;
+extern UniqueValuesDefaultTypeInternal _UniqueValues_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
-template<> ::Output* Arena::CreateMaybeMessage<::Output>(Arena*);
-template<> ::Output_UniqueValues* Arena::CreateMaybeMessage<::Output_UniqueValues>(Arena*);
+template<> ::ChainOutput* Arena::CreateMaybeMessage<::ChainOutput>(Arena*);
+template<> ::IterationOutput* Arena::CreateMaybeMessage<::IterationOutput>(Arena*);
+template<> ::UniqueValues* Arena::CreateMaybeMessage<::UniqueValues>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 // ===================================================================
 
-class Output_UniqueValues :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Output.UniqueValues) */ {
+class UniqueValues :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:UniqueValues) */ {
  public:
-  Output_UniqueValues();
-  virtual ~Output_UniqueValues();
+  UniqueValues();
+  virtual ~UniqueValues();
 
-  Output_UniqueValues(const Output_UniqueValues& from);
-  Output_UniqueValues(Output_UniqueValues&& from) noexcept
-    : Output_UniqueValues() {
+  UniqueValues(const UniqueValues& from);
+  UniqueValues(UniqueValues&& from) noexcept
+    : UniqueValues() {
     *this = ::std::move(from);
   }
 
-  inline Output_UniqueValues& operator=(const Output_UniqueValues& from) {
+  inline UniqueValues& operator=(const UniqueValues& from) {
     CopyFrom(from);
     return *this;
   }
-  inline Output_UniqueValues& operator=(Output_UniqueValues&& from) noexcept {
+  inline UniqueValues& operator=(UniqueValues&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -108,37 +112,37 @@ class Output_UniqueValues :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const Output_UniqueValues& default_instance();
+  static const UniqueValues& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Output_UniqueValues* internal_default_instance() {
-    return reinterpret_cast<const Output_UniqueValues*>(
-               &_Output_UniqueValues_default_instance_);
+  static inline const UniqueValues* internal_default_instance() {
+    return reinterpret_cast<const UniqueValues*>(
+               &_UniqueValues_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  friend void swap(Output_UniqueValues& a, Output_UniqueValues& b) {
+  friend void swap(UniqueValues& a, UniqueValues& b) {
     a.Swap(&b);
   }
-  inline void Swap(Output_UniqueValues* other) {
+  inline void Swap(UniqueValues* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Output_UniqueValues* New() const final {
-    return CreateMaybeMessage<Output_UniqueValues>(nullptr);
+  inline UniqueValues* New() const final {
+    return CreateMaybeMessage<UniqueValues>(nullptr);
   }
 
-  Output_UniqueValues* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<Output_UniqueValues>(arena);
+  UniqueValues* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<UniqueValues>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const Output_UniqueValues& from);
-  void MergeFrom(const Output_UniqueValues& from);
+  void CopyFrom(const UniqueValues& from);
+  void MergeFrom(const UniqueValues& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -152,10 +156,10 @@ class Output_UniqueValues :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(Output_UniqueValues* other);
+  void InternalSwap(UniqueValues* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Output.UniqueValues";
+    return "UniqueValues";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -204,7 +208,7 @@ class Output_UniqueValues :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
       mutable_params();
 
-  // @@protoc_insertion_point(class_scope:Output.UniqueValues)
+  // @@protoc_insertion_point(class_scope:UniqueValues)
  private:
   class _Internal;
 
@@ -216,23 +220,23 @@ class Output_UniqueValues :
 };
 // -------------------------------------------------------------------
 
-class Output :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Output) */ {
+class IterationOutput :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:IterationOutput) */ {
  public:
-  Output();
-  virtual ~Output();
+  IterationOutput();
+  virtual ~IterationOutput();
 
-  Output(const Output& from);
-  Output(Output&& from) noexcept
-    : Output() {
+  IterationOutput(const IterationOutput& from);
+  IterationOutput(IterationOutput&& from) noexcept
+    : IterationOutput() {
     *this = ::std::move(from);
   }
 
-  inline Output& operator=(const Output& from) {
+  inline IterationOutput& operator=(const IterationOutput& from) {
     CopyFrom(from);
     return *this;
   }
-  inline Output& operator=(Output&& from) noexcept {
+  inline IterationOutput& operator=(IterationOutput&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -257,37 +261,37 @@ class Output :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const Output& default_instance();
+  static const IterationOutput& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Output* internal_default_instance() {
-    return reinterpret_cast<const Output*>(
-               &_Output_default_instance_);
+  static inline const IterationOutput* internal_default_instance() {
+    return reinterpret_cast<const IterationOutput*>(
+               &_IterationOutput_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     1;
 
-  friend void swap(Output& a, Output& b) {
+  friend void swap(IterationOutput& a, IterationOutput& b) {
     a.Swap(&b);
   }
-  inline void Swap(Output* other) {
+  inline void Swap(IterationOutput* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Output* New() const final {
-    return CreateMaybeMessage<Output>(nullptr);
+  inline IterationOutput* New() const final {
+    return CreateMaybeMessage<IterationOutput>(nullptr);
   }
 
-  Output* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<Output>(arena);
+  IterationOutput* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<IterationOutput>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const Output& from);
-  void MergeFrom(const Output& from);
+  void CopyFrom(const IterationOutput& from);
+  void MergeFrom(const IterationOutput& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -301,10 +305,10 @@ class Output :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(Output* other);
+  void InternalSwap(IterationOutput* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Output";
+    return "IterationOutput";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -325,8 +329,6 @@ class Output :
   public:
 
   // nested types ----------------------------------------------------
-
-  typedef Output_UniqueValues UniqueValues;
 
   // accessors -------------------------------------------------------
 
@@ -356,25 +358,25 @@ class Output :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >*
       mutable_allocations();
 
-  // repeated .Output.UniqueValues phi = 2;
+  // repeated .UniqueValues phi = 2;
   int phi_size() const;
   private:
   int _internal_phi_size() const;
   public:
   void clear_phi();
-  ::Output_UniqueValues* mutable_phi(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Output_UniqueValues >*
+  ::UniqueValues* mutable_phi(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >*
       mutable_phi();
   private:
-  const ::Output_UniqueValues& _internal_phi(int index) const;
-  ::Output_UniqueValues* _internal_add_phi();
+  const ::UniqueValues& _internal_phi(int index) const;
+  ::UniqueValues* _internal_add_phi();
   public:
-  const ::Output_UniqueValues& phi(int index) const;
-  ::Output_UniqueValues* add_phi();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Output_UniqueValues >&
+  const ::UniqueValues& phi(int index) const;
+  ::UniqueValues* add_phi();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >&
       phi() const;
 
-  // @@protoc_insertion_point(class_scope:Output)
+  // @@protoc_insertion_point(class_scope:IterationOutput)
  private:
   class _Internal;
 
@@ -382,7 +384,152 @@ class Output :
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 > allocations_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Output_UniqueValues > phi_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues > phi_;
+  friend struct ::TableStruct_output_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ChainOutput :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ChainOutput) */ {
+ public:
+  ChainOutput();
+  virtual ~ChainOutput();
+
+  ChainOutput(const ChainOutput& from);
+  ChainOutput(ChainOutput&& from) noexcept
+    : ChainOutput() {
+    *this = ::std::move(from);
+  }
+
+  inline ChainOutput& operator=(const ChainOutput& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ChainOutput& operator=(ChainOutput&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ChainOutput& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ChainOutput* internal_default_instance() {
+    return reinterpret_cast<const ChainOutput*>(
+               &_ChainOutput_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(ChainOutput& a, ChainOutput& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ChainOutput* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ChainOutput* New() const final {
+    return CreateMaybeMessage<ChainOutput>(nullptr);
+  }
+
+  ChainOutput* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ChainOutput>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ChainOutput& from);
+  void MergeFrom(const ChainOutput& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ChainOutput* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ChainOutput";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_output_2eproto);
+    return ::descriptor_table_output_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kStateFieldNumber = 1,
+  };
+  // repeated .IterationOutput state = 1;
+  int state_size() const;
+  private:
+  int _internal_state_size() const;
+  public:
+  void clear_state();
+  ::IterationOutput* mutable_state(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >*
+      mutable_state();
+  private:
+  const ::IterationOutput& _internal_state(int index) const;
+  ::IterationOutput* _internal_add_state();
+  public:
+  const ::IterationOutput& state(int index) const;
+  ::IterationOutput* add_state();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >&
+      state() const;
+
+  // @@protoc_insertion_point(class_scope:ChainOutput)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput > state_;
   friend struct ::TableStruct_output_2eproto;
 };
 // ===================================================================
@@ -394,148 +541,193 @@ class Output :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// Output_UniqueValues
+// UniqueValues
 
 // repeated double params = 1;
-inline int Output_UniqueValues::_internal_params_size() const {
+inline int UniqueValues::_internal_params_size() const {
   return params_.size();
 }
-inline int Output_UniqueValues::params_size() const {
+inline int UniqueValues::params_size() const {
   return _internal_params_size();
 }
-inline void Output_UniqueValues::clear_params() {
+inline void UniqueValues::clear_params() {
   params_.Clear();
 }
-inline double Output_UniqueValues::_internal_params(int index) const {
+inline double UniqueValues::_internal_params(int index) const {
   return params_.Get(index);
 }
-inline double Output_UniqueValues::params(int index) const {
-  // @@protoc_insertion_point(field_get:Output.UniqueValues.params)
+inline double UniqueValues::params(int index) const {
+  // @@protoc_insertion_point(field_get:UniqueValues.params)
   return _internal_params(index);
 }
-inline void Output_UniqueValues::set_params(int index, double value) {
+inline void UniqueValues::set_params(int index, double value) {
   params_.Set(index, value);
-  // @@protoc_insertion_point(field_set:Output.UniqueValues.params)
+  // @@protoc_insertion_point(field_set:UniqueValues.params)
 }
-inline void Output_UniqueValues::_internal_add_params(double value) {
+inline void UniqueValues::_internal_add_params(double value) {
   params_.Add(value);
 }
-inline void Output_UniqueValues::add_params(double value) {
+inline void UniqueValues::add_params(double value) {
   _internal_add_params(value);
-  // @@protoc_insertion_point(field_add:Output.UniqueValues.params)
+  // @@protoc_insertion_point(field_add:UniqueValues.params)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
-Output_UniqueValues::_internal_params() const {
+UniqueValues::_internal_params() const {
   return params_;
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
-Output_UniqueValues::params() const {
-  // @@protoc_insertion_point(field_list:Output.UniqueValues.params)
+UniqueValues::params() const {
+  // @@protoc_insertion_point(field_list:UniqueValues.params)
   return _internal_params();
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
-Output_UniqueValues::_internal_mutable_params() {
+UniqueValues::_internal_mutable_params() {
   return &params_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
-Output_UniqueValues::mutable_params() {
-  // @@protoc_insertion_point(field_mutable_list:Output.UniqueValues.params)
+UniqueValues::mutable_params() {
+  // @@protoc_insertion_point(field_mutable_list:UniqueValues.params)
   return _internal_mutable_params();
 }
 
 // -------------------------------------------------------------------
 
-// Output
+// IterationOutput
 
 // repeated int32 allocations = 1;
-inline int Output::_internal_allocations_size() const {
+inline int IterationOutput::_internal_allocations_size() const {
   return allocations_.size();
 }
-inline int Output::allocations_size() const {
+inline int IterationOutput::allocations_size() const {
   return _internal_allocations_size();
 }
-inline void Output::clear_allocations() {
+inline void IterationOutput::clear_allocations() {
   allocations_.Clear();
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Output::_internal_allocations(int index) const {
+inline ::PROTOBUF_NAMESPACE_ID::int32 IterationOutput::_internal_allocations(int index) const {
   return allocations_.Get(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Output::allocations(int index) const {
-  // @@protoc_insertion_point(field_get:Output.allocations)
+inline ::PROTOBUF_NAMESPACE_ID::int32 IterationOutput::allocations(int index) const {
+  // @@protoc_insertion_point(field_get:IterationOutput.allocations)
   return _internal_allocations(index);
 }
-inline void Output::set_allocations(int index, ::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void IterationOutput::set_allocations(int index, ::PROTOBUF_NAMESPACE_ID::int32 value) {
   allocations_.Set(index, value);
-  // @@protoc_insertion_point(field_set:Output.allocations)
+  // @@protoc_insertion_point(field_set:IterationOutput.allocations)
 }
-inline void Output::_internal_add_allocations(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void IterationOutput::_internal_add_allocations(::PROTOBUF_NAMESPACE_ID::int32 value) {
   allocations_.Add(value);
 }
-inline void Output::add_allocations(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void IterationOutput::add_allocations(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_add_allocations(value);
-  // @@protoc_insertion_point(field_add:Output.allocations)
+  // @@protoc_insertion_point(field_add:IterationOutput.allocations)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >&
-Output::_internal_allocations() const {
+IterationOutput::_internal_allocations() const {
   return allocations_;
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >&
-Output::allocations() const {
-  // @@protoc_insertion_point(field_list:Output.allocations)
+IterationOutput::allocations() const {
+  // @@protoc_insertion_point(field_list:IterationOutput.allocations)
   return _internal_allocations();
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >*
-Output::_internal_mutable_allocations() {
+IterationOutput::_internal_mutable_allocations() {
   return &allocations_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >*
-Output::mutable_allocations() {
-  // @@protoc_insertion_point(field_mutable_list:Output.allocations)
+IterationOutput::mutable_allocations() {
+  // @@protoc_insertion_point(field_mutable_list:IterationOutput.allocations)
   return _internal_mutable_allocations();
 }
 
-// repeated .Output.UniqueValues phi = 2;
-inline int Output::_internal_phi_size() const {
+// repeated .UniqueValues phi = 2;
+inline int IterationOutput::_internal_phi_size() const {
   return phi_.size();
 }
-inline int Output::phi_size() const {
+inline int IterationOutput::phi_size() const {
   return _internal_phi_size();
 }
-inline void Output::clear_phi() {
+inline void IterationOutput::clear_phi() {
   phi_.Clear();
 }
-inline ::Output_UniqueValues* Output::mutable_phi(int index) {
-  // @@protoc_insertion_point(field_mutable:Output.phi)
+inline ::UniqueValues* IterationOutput::mutable_phi(int index) {
+  // @@protoc_insertion_point(field_mutable:IterationOutput.phi)
   return phi_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Output_UniqueValues >*
-Output::mutable_phi() {
-  // @@protoc_insertion_point(field_mutable_list:Output.phi)
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >*
+IterationOutput::mutable_phi() {
+  // @@protoc_insertion_point(field_mutable_list:IterationOutput.phi)
   return &phi_;
 }
-inline const ::Output_UniqueValues& Output::_internal_phi(int index) const {
+inline const ::UniqueValues& IterationOutput::_internal_phi(int index) const {
   return phi_.Get(index);
 }
-inline const ::Output_UniqueValues& Output::phi(int index) const {
-  // @@protoc_insertion_point(field_get:Output.phi)
+inline const ::UniqueValues& IterationOutput::phi(int index) const {
+  // @@protoc_insertion_point(field_get:IterationOutput.phi)
   return _internal_phi(index);
 }
-inline ::Output_UniqueValues* Output::_internal_add_phi() {
+inline ::UniqueValues* IterationOutput::_internal_add_phi() {
   return phi_.Add();
 }
-inline ::Output_UniqueValues* Output::add_phi() {
-  // @@protoc_insertion_point(field_add:Output.phi)
+inline ::UniqueValues* IterationOutput::add_phi() {
+  // @@protoc_insertion_point(field_add:IterationOutput.phi)
   return _internal_add_phi();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Output_UniqueValues >&
-Output::phi() const {
-  // @@protoc_insertion_point(field_list:Output.phi)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >&
+IterationOutput::phi() const {
+  // @@protoc_insertion_point(field_list:IterationOutput.phi)
   return phi_;
+}
+
+// -------------------------------------------------------------------
+
+// ChainOutput
+
+// repeated .IterationOutput state = 1;
+inline int ChainOutput::_internal_state_size() const {
+  return state_.size();
+}
+inline int ChainOutput::state_size() const {
+  return _internal_state_size();
+}
+inline void ChainOutput::clear_state() {
+  state_.Clear();
+}
+inline ::IterationOutput* ChainOutput::mutable_state(int index) {
+  // @@protoc_insertion_point(field_mutable:ChainOutput.state)
+  return state_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >*
+ChainOutput::mutable_state() {
+  // @@protoc_insertion_point(field_mutable_list:ChainOutput.state)
+  return &state_;
+}
+inline const ::IterationOutput& ChainOutput::_internal_state(int index) const {
+  return state_.Get(index);
+}
+inline const ::IterationOutput& ChainOutput::state(int index) const {
+  // @@protoc_insertion_point(field_get:ChainOutput.state)
+  return _internal_state(index);
+}
+inline ::IterationOutput* ChainOutput::_internal_add_state() {
+  return state_.Add();
+}
+inline ::IterationOutput* ChainOutput::add_state() {
+  // @@protoc_insertion_point(field_add:ChainOutput.state)
+  return _internal_add_state();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >&
+ChainOutput::state() const {
+  // @@protoc_insertion_point(field_list:ChainOutput.state)
+  return state_;
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 
