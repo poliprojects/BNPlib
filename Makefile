@@ -15,15 +15,15 @@ LDFLAGS = -O3 -D_REENTRANT -fopenmp
 SRCS_OUT = output.pb.cc
 SRCS =
 OBJS = $(subst .cc,.o, $(SRCS_OUT)) $(subst .cpp,.o, $(SRCS))
-PBFLAGS = pkg-config --cflags --libs protobuf
-PKG_CONFIG_PATH += lib/protocol_buffers/protobuf-3.11.3
+PBFLAGS = -pthread -lprotobuf -pthread
+
 
 .PHONY: all clean distclean
 
 all: main
 
 main: main.o $(OBJS) 
-	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS) `pkg-config --cflags --libs protobuf`
+	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS) $(PBFLAGS)
 
 main.o: 
 	$(CXX) $(CXXFLAGS) -c main.cpp -o main.o
