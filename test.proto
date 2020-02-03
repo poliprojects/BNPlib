@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+
+message Output {
+
+	repeated int32 allocations = 1;
+
+
+
+	message UniqueValues {
+    	repeated double params = 1;
+  	}
+
+  	repeated UniqueValues phi = 2;
+}
+
+
