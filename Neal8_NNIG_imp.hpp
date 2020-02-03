@@ -15,7 +15,7 @@
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
 // G ~ DP(M, G0)  with G0 = N-IG
-
+#include "output.pb.h"
 #include "Neal8_NNIG.hpp"
 // Normal likelihoood, Normal Inverse Gamma hierarchy
 
@@ -170,6 +170,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
     // TODO LATER
+	
     std::cout << "Iteration n. " << iter << " / " << maxiter << std::endl;
     print();
     }

@@ -11,6 +11,7 @@
 #include "NNIGHierarchy.hpp"
 #include "SimpleMixture.hpp"
 #include "HypersFixed.hpp"
+#include "output.pb.h"
 // N-NIG model == gaussian kernel + N-IG base measure:
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G

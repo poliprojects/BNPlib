@@ -8,7 +8,7 @@
 #include <stan/math/prim/mat.hpp>
 #include <boost/random/random_number_generator.hpp>
 #include <boost/random/detail/qrng_base.hpp>
-
+#include "output.pb.h"
 #include "includes_main.hpp"
 
 int main() {

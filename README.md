@@ -1,3 +1,3 @@
 
 
-'''lib/protocol\_buffers/bin/protoc -I=. --cpp_out=. test.proto'''
+'''lib/protocol_buffers/bin/protoc -I=. --cpp_out=. lib/protocol_buffers/test.proto'''

@@ -8,16 +8,18 @@ CXXFLAGS += \
 -I$(STAN_ROOT_DIR)/lib/boost_1.72.0/ \
 -I$(STAN_ROOT_DIR)/lib/sundials_4.1.0/include \
 -I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include \
+-I$(STAN_ROOT_DIR)/lib/protocol_buffers/protobuf-3.11.3/src/ \
 -D_REENTRANT
 LDFLAGS = -O3 -D_REENTRANT -fopenmp
-SRCS = 
-OBJS = $(subst .cpp,.o, $(SRCS))
+SRCS_OUT = output.pb.cc
+SRCS =
+OBJS = $(subst .cc,.o, $(SRCS_OUT)) $(subst .cpp,.o, $(SRCS))
 
 .PHONY: all clean distclean
 
 all: main
 
-main: main.o $(OBJS)
+main: main.o $(OBJS) 
 	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS)
 
 main.o: 
