@@ -10,7 +10,7 @@ CXXFLAGS += \
 -I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include \
 -D_REENTRANT
 LDFLAGS = -O3 -D_REENTRANT -fopenmp
-SRCS = NNIGHierarchy.cpp Neal8_NNIG.cpp
+SRCS = 
 OBJS = $(subst .cpp,.o, $(SRCS))
 
 .PHONY: all clean distclean
@@ -20,19 +20,8 @@ all: main
 main: main.o $(OBJS)
 	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS)
 
-main.o: includes_main.hpp includes_universal.hpp NNIGHierarchy.hpp \
-HypersFixed.hpp Neal8_NNIG.hpp SimpleMixture.hpp
+main.o: 
 	$(CXX) $(CXXFLAGS) -c main.cpp -o main.o
-
-NNIGHierarchy.o: NNIGHierarchy.hpp HypersFixed.hpp
-HypersFixed.o: HypersFixed.hpp
-Neal8_NNIG.o: Neal8_NNIG.hpp
-SimpleMixture.o: SimpleMixture.hpp
-
-%.h: %.cpp
-
-%.o : %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 -include $(dep)
 
