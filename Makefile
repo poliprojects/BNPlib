@@ -8,22 +8,27 @@ CXXFLAGS += \
 -I$(STAN_ROOT_DIR)/lib/boost_1.72.0/ \
 -I$(STAN_ROOT_DIR)/lib/sundials_4.1.0/include \
 -I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include \
--I$(STAN_ROOT_DIR)/lib/protocol_buffers/protobuf-3.11.3/src/ \
+-Ilib/protocol_buffers/protobuf-3.11.3/src/ \
+-Ilib/protocol_buffers/protobuf-3.11.3/src \
 -D_REENTRANT
 LDFLAGS = -O3 -D_REENTRANT -fopenmp
 SRCS_OUT = output.pb.cc
 SRCS =
 OBJS = $(subst .cc,.o, $(SRCS_OUT)) $(subst .cpp,.o, $(SRCS))
+PBFLAGS = pkg-config --cflags --libs protobuf
+PKG_CONFIG_PATH += lib/protocol_buffers/protobuf-3.11.3
 
 .PHONY: all clean distclean
 
 all: main
 
 main: main.o $(OBJS) 
-	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS)
+	$(CXX) $(LDFLAGS) -o main $(OBJS) main.o $(LDLIBS) `pkg-config --cflags --libs protobuf`
 
 main.o: 
 	$(CXX) $(CXXFLAGS) -c main.cpp -o main.o
+
+output.pb.o: output.pb.h
 
 -include $(dep)
 
