@@ -1,5 +1,5 @@
-#ifndef NEAL8_NNIG_IMP_HPP
-#define NEAL8_NNIG_IMP_HPP
+#ifndef NEAL2_NNIG_IMP_HPP
+#define NEAL2_NNIG_IMP_HPP
 
 #include <tuple>
 #include <vector>
@@ -21,7 +21,7 @@
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::initalize(){
+void Neal2<Hierarchy,Hypers,Mixture>::initalize(){
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution(0,numClusters);
 
@@ -35,7 +35,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::initalize(){
     }
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
+void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
     // TODO Other ideas:
     // * our own for loop for k and bool (ci is a singleton)
     // * function from std count distinct values in vector
@@ -55,62 +55,50 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
         n_unique = unique_values.size();
 
         if(card[ allocations[i] ] == 1){ // datum i is a singleton
-            k = n_unique - 1;
-            aux_unique_values[0].set_state( unique_values[ allocations[i]
-                ].get_state() ); // move phi value in aux
             singleton = 1;
-        }
-        else{
-            k = n_unique;
         }
         
         card[ allocations[i] ] -= 1;
 
-        // Draw the aux from G0
-        for(int j=singleton; j<n_aux; j++){
-            aux_unique_values[j].draw();
-        }
-
+        
         // Draw a NEW value for ci
-        Eigen::MatrixXd probas(n_unique+n_aux,1); //k or n_unique
-        //Matrix<double, Dynamic, 1> VectorXd
+        Eigen::MatrixXd probas(n_unique +(singleton-1) ,1); 
+        
 
         auto M = mixture.get_totalmass();
         double tot=0.0;
-        for(int k=0; k<n_unique ; k++){ // if datum i is a singleton, then
-            // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
 
-            // TODO LATER "meglio in logscale" (?)
+        for(int k=0; k<n_unique ; k++){ 
+
             probas(k,0) = card[k] * unique_values[k].log_like(data[i]) / (
                 n-1+M);
-            tot+=probas(k,0);
+			if(singleton==1 & k==i) // metti in i la probas c!=cj con integrale TODO
+            	tot+=probas(k,0);
         }
 
-        for(int k=0; k<n_aux; k++){
-            probas(n_unique+k,0) = (M/n_aux) *
-                aux_unique_values[k].log_like(data[i]) / (n-1+M);
-            tot += probas(n_unique+k,0);
-           }
+		if(singleton==0){
+			// add probas c!=cj
+		tot+=probas(n_unique+1,0)
+		}
+
+        
         probas = probas * (1/tot);
   
-        //for(int i=0; i<probas.size(); i++){
-        //    std::cout << "probas_" << probas(i,0) << std::endl; // DEBUG
-        //}
+        
         unsigned int c_new = stan::math::categorical_rng(probas, rng) -1;
         
-        //std::cout<<"c_new: "<<c_new<<std::endl; // DEBUG
+       
 
         if(singleton == 1){
-            if(c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
-                unique_values[ allocations[i] ].set_state(
-                    aux_unique_values[c_new-n_unique].get_state());
-                card[ allocations[i] ] += 1;
+            if(c_new == allocations[i]){ // case 1 of 4: SINGLETON - SINGLETON
+                
+				unique_values[ allocations[i] ].draw(); // TODO draw da H
+				
             }
-            else{ // case 2 of 4: SINGLETON - OLD VALUE
+            else{ // case 2 of 4: SINGLETON - CLUSTER
                 unique_values.erase(
                     unique_values.begin()+allocations[i] );
-                card.erase( card.begin()+allocations[i] );
-                card[c_new] += 1;
+                
                 int tmp = allocations[i];
                 allocations[i] = c_new;
                 for(auto &c : allocations){ // relabeling
@@ -120,14 +108,12 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
             } // end of else
         } // end of if(singleton == 1)
         else{ // if singleton == 0
-            if (c_new>=n_unique){ // case 3 of 4: NOT SINGLETON - AUX
-                unique_values.push_back(aux_unique_values[c_new-n_unique]);
-                card.push_back(1);
+            if (c_new==n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
+                unique_values.push_back(); // TODO draw da H
                 allocations[i] = n_unique;
             }
-            else{ // case 4 of 4: NOT SINGLETON - OLD VALUES
+            else{ // case 4 of 4: NOT SINGLETON - CLUSTER
                 allocations[i] = c_new;
-                card[c_new] += 1;
             }
         } // end of else
 
@@ -139,7 +125,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
+void Neal2<Hierarchy,Hypers,Mixture>::sample_unique_values(){
 
     numClusters=unique_values.size();
     std::vector<std::vector<unsigned int>> clust_idxs(numClusters);
@@ -168,7 +154,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
+void Neal2<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
     // TODO LATER
 	IterationOutput iterout;
 	
@@ -192,7 +178,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::print(){
+void Neal2<Hierarchy,Hypers,Mixture>::print(){
     for (int h = 0; h < numClusters; h++) {
         std::cout << "Cluster # " << h << std::endl;
         std::cout << "Parameters: ";
@@ -207,4 +193,4 @@ void Neal8<Hierarchy,Hypers,Mixture>::print(){
 
 
 
-#endif // NEAL8NNIG_HPP
+#endif // NEAL2NNIG_HPP
