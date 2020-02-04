@@ -169,22 +169,19 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
-    // TODO LATER
-	IterationOutput iterout;
+	// TODO PROTOBUF
+	IterationOutput iter_out;
 	
-	for (auto &c: allocations) 
-		iterout.add_allocations(c);
+    *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
-	for (auto &uv: unique_values){
-		UniqueValues temp;
-		for (auto &par: uv) 
-			temp.add_params(par);
-		
-		iterout.add_phi(temp);
+	//for (auto &unval : unique_values){
+	//	UniqueValues temp;
+	//	temp.mutable_params() = {allocations.begin(), allocations.end()};
+	//	iter_out.add_phi(temp);
+	//}
 
-	}
-
-	chain.add_state(iterout);
+	chain.add_state();
+	//*chain.mutable_state() = iter_out;
 
     std::cout << "Iteration n. " << iter+1 << " / " << maxiter << std::endl;
     print();

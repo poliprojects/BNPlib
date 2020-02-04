@@ -4,15 +4,11 @@ message UniqueValues {
     	repeated double params = 1;
   	}
 
-
 message IterationOutput {
-
 	repeated int32 allocations = 1;
-
 	repeated UniqueValues phi = 2;
 }
 
 message ChainOutput {
 	repeated IterationOutput state = 1;
 }
-
