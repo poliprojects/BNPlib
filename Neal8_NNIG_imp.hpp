@@ -16,7 +16,7 @@
 // (mu,sig^2) ~ G
 // G ~ DP(M, G0)  with G0 = N-IG
 #include "output.pb.h"
-#include "Neal2_NNIG.hpp"
+#include "Neal8_NNIG.hpp"
 // Normal likelihoood, Normal Inverse Gamma hierarchy
 
 
