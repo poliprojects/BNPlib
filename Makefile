@@ -16,13 +16,17 @@ SRCS_OUT = output.pb.cc
 SRCS =
 OBJS = main.o $(subst .cc,.o, $(SRCS_OUT)) $(subst .cpp,.o, $(SRCS))
 PBFLAGS = -pthread
+#LDLIBS = -l lib/protocol_buffers/include
 
 .PHONY: all clean distclean
 
 all: main
 
 main: $(OBJS)
-	$(CXX) $(LDFLAGS) $(LDLIBS) $(PBFLAGS) -o main $(OBJS)
+	$(CXX) $(LDFLAGS) $(PBFLAGS) -o main $(OBJS)
+
+#g++ -I /home/username/local/include -L /home/username/local/lib main.cpp \
+#person.pb.cc -lprotobuf -pthread
 
 #$(OBJS): output.pb.h HypersFixed.hpp Neal8_NNIG.hpp NNIGHierarchy_imp.hpp \
 #Neal8_NNIG_imp.hpp SimpleMixture.hpp NNIGHierarchy.hpp
