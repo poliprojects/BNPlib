@@ -16,7 +16,7 @@ SRCS_OUT = output.pb.cc
 SRCS =
 OBJS = main.o $(subst .cc,.o, $(SRCS_OUT)) $(subst .cpp,.o, $(SRCS))
 PBFLAGS = -pthread
-#LDLIBS = -l lib/protocol_buffers/include
+#LDLIBS = -l lib/protocol_buffers/include #??? or something like that
 
 .PHONY: all clean distclean
 
