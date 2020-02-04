@@ -22,7 +22,7 @@ PBFLAGS = -pthread
 all: main
 
 main: $(OBJS)
-	$(CXX) $(LDFLAGS) -o main main.o $(LDLIBS) $(PBFLAGS)
+	$(CXX) $(LDFLAGS) $(LDLIBS) $(PBFLAGS) -o main $(OBJS)
 
 #$(OBJS): output.pb.h HypersFixed.hpp Neal8_NNIG.hpp NNIGHierarchy_imp.hpp \
 #Neal8_NNIG_imp.hpp SimpleMixture.hpp NNIGHierarchy.hpp
