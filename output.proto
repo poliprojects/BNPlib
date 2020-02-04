@@ -12,4 +12,3 @@ message IterationOutput {
 message ChainOutput {
 	repeated IterationOutput state = 1;
 }
-
