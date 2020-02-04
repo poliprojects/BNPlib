@@ -9,7 +9,6 @@
 #include <boost/random/random_number_generator.hpp>
 #include <boost/random/detail/qrng_base.hpp>
 #include "includes_main.hpp"
-#include "output.pb.h"
 
 int main() {
     double mean1=5.5;

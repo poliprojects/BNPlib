@@ -6,9 +6,7 @@ message UniqueValues {
 
 
 message IterationOutput {
-
 	repeated int32 allocations = 1;
-
 	repeated UniqueValues phi = 2;
 }
 
