@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Neal8_NNIG.hpp"
+#include "Neal2_NNIG.hpp"
 #include "SimpleMixture.hpp"
 #include "HypersFixed.hpp"
 #include "NNIGHierarchy.hpp"
