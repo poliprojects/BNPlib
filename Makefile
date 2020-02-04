@@ -25,11 +25,9 @@ all: main
 main: $(OBJS)
 	$(CXX) $(LDFLAGS) $(PBFLAGS) -o main $(OBJS)
 
+# To compile the tutorial example:
 #g++ -I /home/username/local/include -L /home/username/local/lib main.cpp \
 #person.pb.cc -lprotobuf -pthread
-
-#$(OBJS): output.pb.h HypersFixed.hpp Neal8_NNIG.hpp NNIGHierarchy_imp.hpp \
-#Neal8_NNIG_imp.hpp SimpleMixture.hpp NNIGHierarchy.hpp
 
 output.pb.o: output.pb.h
 
