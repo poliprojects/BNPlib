@@ -14,19 +14,18 @@ CXXFLAGS += \
 LDFLAGS = -O3 -D_REENTRANT -fopenmp
 SRCS_OUT = output.pb.cc
 SRCS =
-OBJS = $(subst .cc,.o, $(SRCS_OUT)) $(subst .cpp,.o, $(SRCS))
+OBJS = main.o $(subst .cc,.o, $(SRCS_OUT)) $(subst .cpp,.o, $(SRCS))
 PBFLAGS = -pthread
-
 
 .PHONY: all clean distclean
 
 all: main
 
-main: main.o
+main: $(OBJS)
 	$(CXX) $(LDFLAGS) -o main main.o $(LDLIBS) $(PBFLAGS)
 
-main.o: 
-	$(CXX) $(CXXFLAGS) -c main.cpp -o main.o
+#$(OBJS): output.pb.h HypersFixed.hpp Neal8_NNIG.hpp NNIGHierarchy_imp.hpp \
+#Neal8_NNIG_imp.hpp SimpleMixture.hpp NNIGHierarchy.hpp
 
 output.pb.o: output.pb.h
 
