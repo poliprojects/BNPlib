@@ -82,24 +82,34 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 				double beta0  = unique_values[0].hypers->get_beta0();
 
 				// Compute pieces of the weight
-				double factor1 = alpha0 * sqrt(lambda) * pow(2*beta0,alpha0) *
-					tgamma(alpha0/2 + 0.25);
-				double factor2 = sqrt(M_PI) * pow(1+lambda, alpha0+1) *
-					tgamma(alpha0+1);
-				double y = 1.0; // TODO what is y?
-				double base = (y*y + lambda*mu0*mu0+2*beta0)/(1+lambda) -
-					(y+mu0)*(y+mu0) / ((1+lambda)*(1+lambda));
-
+				//double factor1 = alpha0 * sqrt(lambda) * pow(2*beta0,alpha0) *
+					//tgamma(alpha0/2 + 0.25);
+				//double factor2 = sqrt(M_PI) * pow(1+lambda, alpha0+1) *
+					//tgamma(alpha0+1);
+				//double y = 1.0; // TODO what is y?
+				//double base = (y*y + lambda*mu0*mu0+2*beta0)/(1+lambda) -
+					//(y+mu0)*(y+mu0) / ((1+lambda)*(1+lambda));
+				
 				// Compute the weight
-				probas(i,0) = factor1 / factor2 * pow(base, 1.5);
+				//probas(i,0) = factor1 / factor2 * pow(base, 1.5);
+				double sigtilde= sqrt(beta0*(lambda+1/(alpha0*lambda)));
+				probas(i,0) = M * stan::math::student_t_lpdf(data[i], 2*alpha0, mu0, sigtilde)/ (
+                n-1+M);
 
 			} // metti in i la probas c!=cj con integrale TODO done?
             tot+=probas(k,0);
         }
 
 		if(singleton==0){
-			// add probas c!=cj TODO?
-		tot+=probas(n_unique+1,0);
+			double mu0    = unique_values[0].hypers->get_mu0();
+			double lambda = unique_values[0].hypers->get_lambda();
+			double alpha0 = unique_values[0].hypers->get_alpha0();
+			double beta0  = unique_values[0].hypers->get_beta0();
+
+			double sigtilde= sqrt(beta0*(lambda+1/(alpha0*lambda)));
+			probas(n_unique+1,0) = M * stan::math::student_t_lpdf(data[i], 2*alpha0, mu0, sigtilde)/ (
+                n-1+M);
+			tot+=probas(n_unique+1,0);
 		}
 
         
