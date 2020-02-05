@@ -1,3 +1,12 @@
-*.o
-*main
+# Local files
 *.local.*
+
+# C++ object code files and executables
+*.o
+main
+
+# Libraries files
+*a
+*.lo
+*.so
+*.so.*
