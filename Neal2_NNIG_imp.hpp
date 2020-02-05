@@ -122,8 +122,19 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
         if(singleton == 1){
             if(c_new == allocations[i]){ // case 1 of 4: SINGLETON - SINGLETON
-                
-				unique_values[ allocations[i] ].draw(); // TODO draw da H
+            	double mu0    = unique_values[0].hypers->get_mu0();
+				double lambda = unique_values[0].hypers->get_lambda();
+				double alpha0 = unique_values[0].hypers->get_alpha0();
+				double beta0  = unique_values[0].hypers->get_beta0();
+
+				std::array<double,2> par_pair;
+				double sigma_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
+        			beta0+(lambda*pow(data[i]-mu0,2))/(lambda+2), rng);
+    			double mu_new = stan::math::normal_rng((lambda*mu0+data[i])/(lambda+1),
+        			sigma_new/(lambda+1), rng); 
+				par_pair[0]=mu_new;
+				par_pair[1]=sigma_new;
+				unique_values[ allocations[i]].set_state(par_pair); // TODO draw da H
 				
             }
             else{ // case 2 of 4: SINGLETON - CLUSTER
@@ -140,7 +151,21 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
         } // end of if(singleton == 1)
         else{ // if singleton == 0
             if (c_new==n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
-                unique_values.push_back(); // TODO draw da H
+				double mu0    = unique_values[0].hypers->get_mu0();
+				double lambda = unique_values[0].hypers->get_lambda();
+				double alpha0 = unique_values[0].hypers->get_alpha0();
+				double beta0  = unique_values[0].hypers->get_beta0();
+
+				std::array<double,2> par_pair;
+				double sigma_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
+        			beta0+(lambda*pow(data[i]-mu0,2))/(lambda+2), rng);
+    			double mu_new = stan::math::normal_rng((lambda*mu0+data[i])/(lambda+1),
+        			sigma_new/(lambda+1), rng); 
+				par_pair[0]=mu_new;
+				par_pair[1]=sigma_new;
+				Hierarchy<Hypers> newUnique;
+				newUnique.set_state(par_pair); 
+                unique_values.push_back(newUnique); 
                 allocations[i] = n_unique;
             }
             else{ // case 4 of 4: NOT SINGLETON - CLUSTER
