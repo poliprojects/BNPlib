@@ -27,6 +27,7 @@ public:
 
     // Getters/setters:
     state_t get_state(){return state;}
+	std::shared_ptr<Hypers> get_hypers(){return hypers;}
     void set_state(const state_t &s){state = s;}
     void set_state(int pos, par_t val){state[pos] = val;}
 

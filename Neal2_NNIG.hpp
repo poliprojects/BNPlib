@@ -25,12 +25,12 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal2{
 private:
 
-    unsigned int maxiter = 1; // TODO LATER
+    unsigned int maxiter = 100; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
     int numClusters;
     Mixture mixture;
-	ChainOutput chain;
+	//ChainOutput chain;
  
 
     std::vector<data_t> data;

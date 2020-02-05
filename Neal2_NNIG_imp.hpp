@@ -64,22 +64,23 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
         
         // Draw a NEW value for ci
-        Eigen::MatrixXd probas(n_unique +(singleton-1) ,1); 
+        Eigen::MatrixXd probas(n_unique +(1-singleton) ,1); 
         
 
         auto M = mixture.get_totalmass();
         double tot=0.0;
 
-        for(int k=0; k<n_unique ; k++){ 
-
+        for(int k=0; k<n_unique ; k++){
+		
             probas(k,0) = card[k] * unique_values[k].log_like(data[i]) / (
                 n-1+M);
-			if(singleton==1 & k==i){
+			if(singleton==1 && k==i){
 				// Take the hyperparameters
-				double mu0    = unique_values[0].hypers->get_mu0();
-				double lambda = unique_values[0].hypers->get_lambda();
-				double alpha0 = unique_values[0].hypers->get_alpha0();
-				double beta0  = unique_values[0].hypers->get_beta0();
+				std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
+				double mu0    = hy->get_mu0();
+				double lambda = hy->get_lambda();
+				double alpha0 = hy->get_alpha0();
+				double beta0  = hy->get_beta0();
 
 				// Compute pieces of the weight
 				//double factor1 = alpha0 * sqrt(lambda) * pow(2*beta0,alpha0) *
@@ -93,7 +94,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 				// Compute the weight
 				//probas(i,0) = factor1 / factor2 * pow(base, 1.5);
 				double sigtilde= sqrt(beta0*(lambda+1/(alpha0*lambda)));
-				probas(i,0) = M * stan::math::student_t_lpdf(data[i], 2*alpha0, mu0, sigtilde)/ (
+				probas(i,0) = M * exp(stan::math::student_t_lpdf(data[i], 2*alpha0, mu0, sigtilde))/ (
                 n-1+M);
 
 			} // metti in i la probas c!=cj con integrale TODO done?
@@ -101,20 +102,22 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
         }
 
 		if(singleton==0){
-			double mu0    = unique_values[0].hypers->get_mu0();
-			double lambda = unique_values[0].hypers->get_lambda();
-			double alpha0 = unique_values[0].hypers->get_alpha0();
-			double beta0  = unique_values[0].hypers->get_beta0();
+			std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
+				double mu0    = hy->get_mu0();
+				double lambda = hy->get_lambda();
+				double alpha0 = hy->get_alpha0();
+				double beta0  = hy->get_beta0();
 
 			double sigtilde= sqrt(beta0*(lambda+1/(alpha0*lambda)));
-			probas(n_unique+1,0) = M * stan::math::student_t_lpdf(data[i], 2*alpha0, mu0, sigtilde)/ (
+			probas(n_unique,0) = M * exp(stan::math::student_t_lpdf(data[i], 2*alpha0, mu0, sigtilde))/ (
                 n-1+M);
-			tot+=probas(n_unique+1,0);
+			tot+=probas(n_unique,0);
 		}
 
         
         probas = probas * (1/tot);
-  
+
+  		
         
         unsigned int c_new = stan::math::categorical_rng(probas, rng) -1;
         
@@ -122,10 +125,11 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
         if(singleton == 1){
             if(c_new == allocations[i]){ // case 1 of 4: SINGLETON - SINGLETON
-            	double mu0    = unique_values[0].hypers->get_mu0();
-				double lambda = unique_values[0].hypers->get_lambda();
-				double alpha0 = unique_values[0].hypers->get_alpha0();
-				double beta0  = unique_values[0].hypers->get_beta0();
+            	std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
+				double mu0    = hy->get_mu0();
+				double lambda = hy->get_lambda();
+				double alpha0 = hy->get_alpha0();
+				double beta0  = hy->get_beta0();
 
 				std::array<double,2> par_pair;
 				double sigma_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
@@ -151,10 +155,11 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
         } // end of if(singleton == 1)
         else{ // if singleton == 0
             if (c_new==n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
-				double mu0    = unique_values[0].hypers->get_mu0();
-				double lambda = unique_values[0].hypers->get_lambda();
-				double alpha0 = unique_values[0].hypers->get_alpha0();
-				double beta0  = unique_values[0].hypers->get_beta0();
+				std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
+				double mu0    = hy->get_mu0();
+				double lambda = hy->get_lambda();
+				double alpha0 = hy->get_alpha0();
+				double beta0  = hy->get_beta0();
 
 				std::array<double,2> par_pair;
 				double sigma_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
@@ -163,7 +168,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
         			sigma_new/(lambda+1), rng); 
 				par_pair[0]=mu_new;
 				par_pair[1]=sigma_new;
-				Hierarchy<Hypers> newUnique;
+				Hierarchy<Hypers> newUnique(hy);
 				newUnique.set_state(par_pair); 
                 unique_values.push_back(newUnique); 
                 allocations[i] = n_unique;

@@ -14,7 +14,7 @@ CXXFLAGS += \
 LDFLAGS += -O3 -D_REENTRANT -fopenmp \
 -Llib/protobuf/src/.libs -lprotobuf -pthread
 
-SRCS_OUTPUT = output.pb.cc
+SRCS_OUTPUT = #output.pb.cc
 SRCS =
 OBJS = main.o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))
 
@@ -25,7 +25,7 @@ all: main
 main: $(OBJS)
 	$(CXX) $(LDFLAGS) -o main $(OBJS)
 
-output.pb.o: output.pb.h
+#output.pb.o: output.pb.h
 
 %.h: %.cc
 

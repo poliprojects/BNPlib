@@ -11,7 +11,7 @@
 #include "NNIGHierarchy.hpp"
 #include "SimpleMixture.hpp"
 #include "HypersFixed.hpp"
-#include "output.pb.h"
+//#include "output.pb.h"
 // N-NIG model == gaussian kernel + N-IG base measure:
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
@@ -30,7 +30,7 @@ private:
     std::mt19937 rng;
     int numClusters;
     Mixture mixture;
-	ChainOutput chain;
+	//ChainOutput chain;
  
 
     std::vector<data_t> data;

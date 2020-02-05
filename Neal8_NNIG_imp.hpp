@@ -15,7 +15,7 @@
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
 // G ~ DP(M, G0)  with G0 = N-IG
-#include "output.pb.h"
+// #include "output.pb.h"
 #include "Neal8_NNIG.hpp"
 // Normal likelihoood, Normal Inverse Gamma hierarchy
 
@@ -170,20 +170,20 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
 	// TODO PROTOBUF
-	IterationOutput iter_out;
+	//IterationOutput iter_out;
 	
-    *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
+    //*iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
-	for (int i=0; i<unique_values.size(); i++){
-		UniqueValues temp;
-        for(auto &par : unique_values[i].get_state())
-            temp.add_params(par);
-        iter_out.add_phi();
-        *iter_out.mutable_phi(i) = temp;
-	}
+	//for (int i=0; i<unique_values.size(); i++){
+	//	UniqueValues temp;
+        //for(auto &par : unique_values[i].get_state())
+        //     temp.add_params(par);
+        //iter_out.add_phi();
+        //*iter_out.mutable_phi(i) = temp;
+	//}
 
-	chain.add_state();
-	*chain.mutable_state(iter) = iter_out;
+	//chain.add_state();
+	//*chain.mutable_state(iter) = iter_out;
 
     std::cout << "Iteration # " << iter << " / " << maxiter-1 << std::endl;
     print();
