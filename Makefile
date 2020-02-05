@@ -8,8 +8,8 @@ CXXFLAGS += \
 -I$(STAN_ROOT_DIR)/lib/boost_1.72.0/ \
 -I$(STAN_ROOT_DIR)/lib/sundials_4.1.0/include \
 -I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include \
--Ilib/protocol_buffers/protobuf-3.11.3/src/ \
--Ilib/protocol_buffers/protobuf-3.11.3/src \
+-Ilib/protobuf/src/ \
+-Ilib/protobuf/src \
 -D_REENTRANT
 LDFLAGS += -O3 -D_REENTRANT -fopenmp \
 -Llib/protobuf/src/.libs -lprotobuf -pthread
