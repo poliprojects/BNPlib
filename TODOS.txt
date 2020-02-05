@@ -10,3 +10,6 @@ TODO LIST
 * const everywhere
 * DEBUG
 * acceleration steps?
+
+SLIDES
+* Add PDF about the integral in the references
