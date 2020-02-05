@@ -11,19 +11,19 @@ CXXFLAGS += \
 -Ilib/protocol_buffers/protobuf-3.11.3/src/ \
 -Ilib/protocol_buffers/protobuf-3.11.3/src \
 -D_REENTRANT
-LDFLAGS = -O3 -D_REENTRANT -fopenmp
+LDFLAGS = -O3 -D_REENTRANT -fopenmp \
+-Llib/protocol_buffers/protobuf-3.11.3/src/.libs -lprotobuf -pthread
+
 SRCS_OUT = output.pb.cc
 SRCS =
 OBJS = main.o $(subst .cc,.o, $(SRCS_OUT)) $(subst .cpp,.o, $(SRCS))
-PBFLAGS = -pthread
-#LDLIBS = -l lib/protocol_buffers/include #??? or something like that
 
 .PHONY: all clean distclean
 
 all: main
 
 main: $(OBJS)
-	$(CXX) $(LDFLAGS) $(PBFLAGS) -o main $(OBJS)
+	$(CXX) $(LDFLAGS) -o main $(OBJS)
 
 # To compile the tutorial example:
 #g++ -I /home/username/local/include -L /home/username/local/lib main.cpp \
