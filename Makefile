@@ -11,12 +11,12 @@ CXXFLAGS += \
 -Ilib/protocol_buffers/protobuf-3.11.3/src/ \
 -Ilib/protocol_buffers/protobuf-3.11.3/src \
 -D_REENTRANT
-LDFLAGS = -O3 -D_REENTRANT -fopenmp \
--Llib/protocol_buffers/protobuf-3.11.3/src/.libs -lprotobuf -pthread
+LDFLAGS += -O3 -D_REENTRANT -fopenmp \
+-Llib/protobuf/src/.libs -lprotobuf -pthread
 
-SRCS_OUT = output.pb.cc
+SRCS_OUTPUT = output.pb.cc
 SRCS =
-OBJS = main.o $(subst .cc,.o, $(SRCS_OUT)) $(subst .cpp,.o, $(SRCS))
+OBJS = main.o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))
 
 .PHONY: all clean distclean
 
@@ -24,10 +24,6 @@ all: main
 
 main: $(OBJS)
 	$(CXX) $(LDFLAGS) -o main $(OBJS)
-
-# To compile the tutorial example:
-#g++ -I /home/username/local/include -L /home/username/local/lib main.cpp \
-#person.pb.cc -lprotobuf -pthread
 
 output.pb.o: output.pb.h
 
