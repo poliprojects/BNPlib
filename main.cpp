@@ -5,7 +5,7 @@
 #include "HypersFixed.hpp"
 #include "NNIGHierarchy.hpp"
 #include <vector>
-#include <Eigen/Dense> 
+#include <Eigen/Dense>
 #include <stan/math/prim/mat.hpp>
 #include <boost/random/random_number_generator.hpp>
 #include <boost/random/detail/qrng_base.hpp>
@@ -27,8 +27,8 @@ int main() {
 
     HypersFixed hy(4,1.5,2,2);
     SimpleMixture mix(1.0);
-	Neal2<NNIGHierarchy, HypersFixed, SimpleMixture> sampler(data, mix, hy);
-    //Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler(data, 3, mix, hy);
+	// Neal2<NNIGHierarchy, HypersFixed, SimpleMixture> sampler(data, mix, hy);
+    Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler(data, 3, mix, hy);
     sampler.run();
 
     //for(int i=0; i<40; i++)
@@ -37,4 +37,3 @@ int main() {
     return 0;
 
 }
-

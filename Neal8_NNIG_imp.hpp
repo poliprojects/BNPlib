@@ -3,7 +3,7 @@
 
 #include <tuple>
 #include <vector>
-#include <Eigen/Dense> 
+#include <Eigen/Dense>
 #include <stan/math/prim/mat.hpp>
 #include <type_traits>
 #include "includes_universal.hpp"
@@ -47,7 +47,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
     for(int i=0; i<n; i++){ // for each data unit data[i]
 
         // Initialize cardinalities of unique values
-        std::vector<int> card(unique_values.size(), 0);      
+        std::vector<int> card(unique_values.size(), 0);
         for(int j=0; j<n; j++)
             card[ allocations[j] ] += 1;
 
@@ -63,7 +63,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
         else{
             k = n_unique;
         }
-        
+
         card[ allocations[i] ] -= 1;
 
         // Draw the aux from G0
@@ -92,12 +92,12 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
             tot += probas(n_unique+k,0);
            }
         probas = probas * (1/tot);
-  
+
         //for(int i=0; i<probas.size(); i++){
         //    std::cout << "probas_" << probas(i,0) << std::endl; // DEBUG
         //}
         unsigned int c_new = stan::math::categorical_rng(probas, rng) -1;
-        
+
         //std::cout<<"c_new: "<<c_new<<std::endl; // DEBUG
 
         if(singleton == 1){
@@ -149,7 +149,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
     }
 
     // DEBUG:
-    for(int j=0; j<numClusters; j++){ 
+    for(int j=0; j<numClusters; j++){
         std::cout << "Cluster #" << j << ": ";
         for (unsigned int i=0; i<clust_idxs[j].size(); i++)
             std::cout << " " << clust_idxs[j][i];
@@ -170,20 +170,20 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
 	// TODO PROTOBUF
-	//IterationOutput iter_out;
-	
-    //*iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
+	IterationOutput iter_out;
 
-	//for (int i=0; i<unique_values.size(); i++){
-	//	UniqueValues temp;
-        //for(auto &par : unique_values[i].get_state())
-        //     temp.add_params(par);
-        //iter_out.add_phi();
-        //*iter_out.mutable_phi(i) = temp;
-	//}
+    *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
-	//chain.add_state();
-	//*chain.mutable_state(iter) = iter_out;
+	for (int i=0; i<unique_values.size(); i++){
+		UniqueValues temp;
+        for(auto &par : unique_values[i].get_state())
+            temp.add_params(par);
+        iter_out.add_phi();
+        *iter_out.mutable_phi(i) = temp;
+	}
+
+	chain.add_state();
+	*chain.mutable_state(iter) = iter_out;
 
     std::cout << "Iteration # " << iter << " / " << maxiter-1 << std::endl;
     print();
