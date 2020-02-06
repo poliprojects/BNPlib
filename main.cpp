@@ -27,9 +27,12 @@ int main() {
 
     HypersFixed hy(4,1.5,2,2);
     SimpleMixture mix(1.0);
-	// Neal2<NNIGHierarchy, HypersFixed, SimpleMixture> sampler(data, mix, hy);
-    Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler(data, 3, mix, hy);
-    sampler.run();
+	Neal2<NNIGHierarchy, HypersFixed, SimpleMixture> sampler2(data, mix, hy);
+    Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8(data, 3, mix, hy);
+    std::cout << "Running Neal2" << std::endl;
+    sampler2.run();
+    std::cout << "Running Neal8" << std::endl;
+    sampler8.run();
 
     //for(int i=0; i<40; i++)
       //  std::cout << i << ": " << data[i] << std::endl;
