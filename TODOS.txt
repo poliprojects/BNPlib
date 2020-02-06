@@ -1,3 +1,9 @@
+MOST IMPORTANT
+* save_to_csv()
+* cluster_estimate()
+* density_estimate()
+* Report + slides
+
 TODO LIST
 * is the posterior update given data, given clusters, correct?
 * a way to erase and add clusters more efficiently
