@@ -3,7 +3,7 @@
 
 #include <tuple>
 #include <vector>
-#include <Eigen/Dense> 
+#include <Eigen/Dense>
 #include <stan/math/prim/mat.hpp>
 #include <type_traits>
 #include "includes_universal.hpp"
@@ -11,7 +11,7 @@
 #include "NNIGHierarchy.hpp"
 #include "SimpleMixture.hpp"
 #include "HypersFixed.hpp"
-//#include "output.pb.h"
+#include "output.pb.h"
 // N-NIG model == gaussian kernel + N-IG base measure:
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
@@ -30,8 +30,8 @@ private:
     std::mt19937 rng;
     int numClusters;
     Mixture mixture;
-	//ChainOutput chain;
- 
+	ChainOutput chain;
+
 
     std::vector<data_t> data;
     std::vector<unsigned int> allocations; // the c vector
@@ -61,7 +61,7 @@ public:
         initalize();
         unsigned int iter = 0;
         while(iter < maxiter){
-            step();    
+            step();
             if(iter >= burnin)
               save_iteration(iter);
             iter++;
@@ -85,7 +85,7 @@ public:
     Neal8(std::vector<data_t> &data, int n_aux, const Mixture & mix,
         const Hypers &hy): Neal8(data, data.size(), n_aux, mix, hy) {}
 
-    
+
 
 }; // end of Class Neal8
 

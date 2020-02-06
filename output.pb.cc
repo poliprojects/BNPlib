@@ -77,34 +77,30 @@ static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_output_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_output_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  PROTOBUF_FIELD_OFFSET(::UniqueValues, _has_bits_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::UniqueValues, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::UniqueValues, params_),
-  ~0u,
-  PROTOBUF_FIELD_OFFSET(::IterationOutput, _has_bits_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::IterationOutput, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::IterationOutput, allocations_),
   PROTOBUF_FIELD_OFFSET(::IterationOutput, phi_),
-  ~0u,
-  ~0u,
-  PROTOBUF_FIELD_OFFSET(::ChainOutput, _has_bits_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ChainOutput, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::ChainOutput, state_),
-  ~0u,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 6, sizeof(::UniqueValues)},
-  { 7, 14, sizeof(::IterationOutput)},
-  { 16, 22, sizeof(::ChainOutput)},
+  { 0, -1, sizeof(::UniqueValues)},
+  { 6, -1, sizeof(::IterationOutput)},
+  { 13, -1, sizeof(::ChainOutput)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -118,7 +114,7 @@ const char descriptor_table_protodef_output_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "\030\001 \003(\001\"B\n\017IterationOutput\022\023\n\013allocations"
   "\030\001 \003(\005\022\032\n\003phi\030\002 \003(\0132\r.UniqueValues\".\n\013Ch"
   "ainOutput\022\037\n\005state\030\001 \003(\0132\020.IterationOutp"
-  "ut"
+  "utb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_output_2eproto_deps[1] = {
 };
@@ -130,7 +126,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_out
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_output_2eproto_once;
 static bool descriptor_table_output_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_output_2eproto = {
-  &descriptor_table_output_2eproto_initialized, descriptor_table_protodef_output_2eproto, "output.proto", 162,
+  &descriptor_table_output_2eproto_initialized, descriptor_table_protodef_output_2eproto, "output.proto", 170,
   &descriptor_table_output_2eproto_once, descriptor_table_output_2eproto_sccs, descriptor_table_output_2eproto_deps, 3, 0,
   schemas, file_default_instances, TableStruct_output_2eproto::offsets,
   file_level_metadata_output_2eproto, 3, file_level_enum_descriptors_output_2eproto, file_level_service_descriptors_output_2eproto,
@@ -145,7 +141,6 @@ void UniqueValues::InitAsDefaultInstance() {
 }
 class UniqueValues::_Internal {
  public:
-  using HasBits = decltype(std::declval<UniqueValues>()._has_bits_);
 };
 
 UniqueValues::UniqueValues()
@@ -156,7 +151,6 @@ UniqueValues::UniqueValues()
 UniqueValues::UniqueValues(const UniqueValues& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
-      _has_bits_(from._has_bits_),
       params_(from.params_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:UniqueValues)
@@ -189,7 +183,6 @@ void UniqueValues::Clear() {
   (void) cached_has_bits;
 
   params_.Clear();
-  _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -202,17 +195,12 @@ const char* UniqueValues::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
     switch (tag >> 3) {
       // repeated double params = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            _internal_add_params(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr));
-            ptr += sizeof(double);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<9>(ptr));
-        } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedDoubleParser(_internal_mutable_params(), ptr, ctx);
           CHK_(ptr);
+        } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9) {
+          _internal_add_params(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr));
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
       default: {
@@ -242,9 +230,8 @@ failure:
   (void) cached_has_bits;
 
   // repeated double params = 1;
-  for (int i = 0, n = this->_internal_params_size(); i < n; i++) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(1, this->_internal_params(i), target);
+  if (this->_internal_params_size() > 0) {
+    target = stream->WriteFixedPacked(1, _internal_params(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -267,8 +254,14 @@ size_t UniqueValues::ByteSizeLong() const {
   {
     unsigned int count = static_cast<unsigned int>(this->_internal_params_size());
     size_t data_size = 8UL * count;
-    total_size += 1 *
-                  ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_params_size());
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<::PROTOBUF_NAMESPACE_ID::int32>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _params_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
     total_size += data_size;
   }
 
@@ -327,7 +320,6 @@ bool UniqueValues::IsInitialized() const {
 void UniqueValues::InternalSwap(UniqueValues* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_has_bits_[0], other->_has_bits_[0]);
   params_.InternalSwap(&other->params_);
 }
 
@@ -342,7 +334,6 @@ void IterationOutput::InitAsDefaultInstance() {
 }
 class IterationOutput::_Internal {
  public:
-  using HasBits = decltype(std::declval<IterationOutput>()._has_bits_);
 };
 
 IterationOutput::IterationOutput()
@@ -353,7 +344,6 @@ IterationOutput::IterationOutput()
 IterationOutput::IterationOutput(const IterationOutput& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
-      _has_bits_(from._has_bits_),
       allocations_(from.allocations_),
       phi_(from.phi_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
@@ -389,7 +379,6 @@ void IterationOutput::Clear() {
 
   allocations_.Clear();
   phi_.Clear();
-  _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -402,16 +391,11 @@ const char* IterationOutput::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPAC
     switch (tag >> 3) {
       // repeated int32 allocations = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            _internal_add_allocations(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr));
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<8>(ptr));
-        } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_allocations(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8) {
+          _internal_add_allocations(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -454,9 +438,12 @@ failure:
   (void) cached_has_bits;
 
   // repeated int32 allocations = 1;
-  for (int i = 0, n = this->_internal_allocations_size(); i < n; i++) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_allocations(i), target);
+  {
+    int byte_size = _allocations_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt32Packed(
+          1, _internal_allocations(), byte_size, target);
+    }
   }
 
   // repeated .UniqueValues phi = 2;
@@ -487,8 +474,14 @@ size_t IterationOutput::ByteSizeLong() const {
   {
     size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       Int32Size(this->allocations_);
-    total_size += 1 *
-                  ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_allocations_size());
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<::PROTOBUF_NAMESPACE_ID::int32>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _allocations_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
     total_size += data_size;
   }
 
@@ -555,7 +548,6 @@ bool IterationOutput::IsInitialized() const {
 void IterationOutput::InternalSwap(IterationOutput* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_has_bits_[0], other->_has_bits_[0]);
   allocations_.InternalSwap(&other->allocations_);
   phi_.InternalSwap(&other->phi_);
 }
@@ -571,7 +563,6 @@ void ChainOutput::InitAsDefaultInstance() {
 }
 class ChainOutput::_Internal {
  public:
-  using HasBits = decltype(std::declval<ChainOutput>()._has_bits_);
 };
 
 ChainOutput::ChainOutput()
@@ -582,7 +573,6 @@ ChainOutput::ChainOutput()
 ChainOutput::ChainOutput(const ChainOutput& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
-      _has_bits_(from._has_bits_),
       state_(from.state_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:ChainOutput)
@@ -616,7 +606,6 @@ void ChainOutput::Clear() {
   (void) cached_has_bits;
 
   state_.Clear();
-  _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -751,7 +740,6 @@ bool ChainOutput::IsInitialized() const {
 void ChainOutput::InternalSwap(ChainOutput* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_has_bits_[0], other->_has_bits_[0]);
   state_.InternalSwap(&other->state_);
 }
 

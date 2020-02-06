@@ -11,10 +11,14 @@ CXXFLAGS += \
 -Ilib/protobuf/src/ \
 -Ilib/protobuf/src \
 -D_REENTRANT
-LDFLAGS += -O3 -D_REENTRANT -fopenmp \
--Llib/protobuf/src/.libs -lprotobuf -pthread
 
-SRCS_OUTPUT = #output.pb.cc
+LDFLAGS += -O3 -D_REENTRANT
+LDLIBS = \
+ 	$(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb \
+	-lpthread -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
+
+
+SRCS_OUTPUT = output.pb.cc
 SRCS =
 OBJS = main.o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))
 
@@ -23,9 +27,8 @@ OBJS = main.o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))
 all: main
 
 main: $(OBJS)
-	$(CXX) $(LDFLAGS) -o main $(OBJS)
+	$(CXX) $(LDFLAGS) -o main $(OBJS) $(LDLIBS)
 
-#output.pb.o: output.pb.h
 
 %.h: %.cc
 
