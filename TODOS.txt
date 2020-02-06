@@ -13,3 +13,10 @@ TODO LIST
 
 SLIDES
 * Add PDF about the integral in the references
+
+CLUSTER_ESTIMATE(): IDEAS
+vec<IterOut> chain;
+vec<double> errors;
+errors = ...;
+i = argmin(errors);
+return chain[i];
