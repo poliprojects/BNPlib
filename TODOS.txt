@@ -5,10 +5,7 @@ TODO LIST
 * deal with the extra dynamically allocated Hypers
 * density_eval: proto and csv
 * write chain to file?
-
-STYLE
-* DEBUG
-* if {}, for {}
+* debug printing lines
 
 EXTENSIONS
 * acceleration steps?

@@ -24,7 +24,7 @@ class Neal8{
 private:
     // Mehtods parameters
     unsigned int n_aux = 3;
-    unsigned int maxiter = 5000; // TODO!!!!!!!!!!!!
+    unsigned int maxiter = 5000;
     unsigned int burnin = 1000;
     unsigned int num_clusters;
 
