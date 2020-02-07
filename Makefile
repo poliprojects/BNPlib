@@ -3,13 +3,10 @@ CXX = g++
 CXXFLAGS += \
 -fopenmp \
 -I$(STAN_ROOT_DIR) \
--I$(STAN_ROOT_DIR)/lib \
 -I$(STAN_ROOT_DIR)/lib/eigen_3.3.3/ \
 -I$(STAN_ROOT_DIR)/lib/boost_1.72.0/ \
 -I$(STAN_ROOT_DIR)/lib/sundials_4.1.0/include \
 -I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include \
--Ilib/protobuf/src/ \
--Ilib/protobuf/src \
 -D_REENTRANT
 
 LDFLAGS += -O3 -D_REENTRANT
