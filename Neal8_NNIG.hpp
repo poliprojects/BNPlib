@@ -22,20 +22,25 @@
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal8{
 private:
+    // Mehtods parameters
     unsigned int n_aux = 3;
     unsigned int maxiter = 5000; // TODO!!!!!!!!!!!!
     unsigned int burnin = 1000;
-    std::mt19937 rng;
-    int num_clusters;
-    Mixture mixture;
-	ChainOutput chain;
+    unsigned int num_clusters;
 
+    // Data and values containers
     std::vector<double> data;
-    std::vector<unsigned int> allocations; // the c vector
+    std::vector<unsigned int> allocations;
     std::vector<Hierarchy<Hypers>> unique_values;
     std::vector<Hierarchy<Hypers>> aux_unique_values;
     std::pair< std::vector<double>, Eigen::VectorXf > density;
+    Mixture mixture;
+    ChainOutput chain;
 
+    // Random engine
+    std::mt19937 rng;
+
+    // Algorithm functions
     void initalize();
 
     void step(){
@@ -46,12 +51,12 @@ private:
     void sample_allocations();
 
     void sample_unique_values();
+
+    void save_iteration(unsigned int iter);
 	
 	void cluster_estimate();
 
-    void save_iteration(unsigned int iter);
-
-    void print();
+    const void print(); // TODO ?
 
 public:
 	// Running tool
@@ -67,9 +72,16 @@ public:
 	cluster_estimate();
     }
 
-    // Constructors and destructors:
+    // Other tools
+    void eval_density(const std::vector<double> grid);
+
+    const void write_clustering_to_file(std::string filename="output.csv");
+
+    const void write_density_to_file(std::string filename="density.csv");
+
+    // Constructors and destructors
     ~Neal8() = default;
-    Neal8(const std::vector<double> & data, int num_clusters,int n_aux,
+    Neal8(const std::vector<double> &data, int num_clusters, int n_aux,
         const Mixture & mix,const Hypers &hy):
         data(data), num_clusters(num_clusters), n_aux(n_aux), mixture(mix) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
@@ -81,15 +93,23 @@ public:
             }
     }
 
-    // If no # initial clusters is given, it will be set equal to the data size:
-    Neal8(std::vector<double> &data, int n_aux, const Mixture & mix,
+    // If no # initial clusters is given, it will be set equal to the data size
+    Neal8(std::vector<double> &data, int n_aux, const Mixture &mix,
         const Hypers &hy): Neal8(data, data.size(), n_aux, mix, hy) {}
 
-    void eval_density(const std::vector<double> grid);
+    // Getters
+    const unsigned int get_n_aux(){return n_aux;}
+    const unsigned int get_maxiter(){return maxiter;}
+    const unsigned int get_burnin(){return burnin;}
+    const unsigned int get_num_clusters(){return num_clusters;}
 
-    void write_clustering_to_file(std::string filename="output.csv");
-
-    void write_density_to_file(std::string filename="density.csv");
+    // Setters
+    void set_n_aux(const unsigned int n_aux){n_aux = n_aux;}
+    void set_maxiter(const unsigned int maxiter){maxiter = maxiter;}
+    void set_burnin(const unsigned int burnin){burnin = burnin;}
+    void set_num_clusters(const unsigned int num_clusters){
+        num_clusters = num_clusters;
+    }
 
 }; // end of Class Neal8
 

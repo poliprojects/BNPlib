@@ -1,26 +1,18 @@
-MOST IMPORTANT
-* save_to_csv()
-* cluster_estimate()
-* density_estimate()
-* Report + slides
-
 TODO LIST
 * CONSTRUCTORS (arguments)
 * a way to erase and add clusters more efficiently
-* Documentation with Doxygen (?)
-* readme.md for the Github repo
 * probas in a separate function?
 * deal with the extra dynamically allocated Hypers
-* empty includes.hpp as much as possible
-* acceleration steps?
 * density_eval: proto and csv
 * write chain to file?
-* getters setters Neal8
 
 STYLE
 * DEBUG
 * if {}, for {}
 * indentation
-* remove libraries and includes
-* const everywhere
-* order of methods (publ-prot-publ...)
+
+EXTENSIONS
+* acceleration steps?
+* Documentation with Doxygen
+* readme.md for the Github repo
+* Hypers not fixed

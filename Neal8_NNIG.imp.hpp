@@ -62,11 +62,9 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
         double tot=0.0;
         for(int k=0; k<n_unique ; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
-
-            // TODO LATER "meglio in logscale" (?)
             probas(k,0) = card[k] * unique_values[k].log_like(data[i]) / (
                 n-1+M);
-            tot+=probas(k,0);
+            tot += probas(k,0);
         }
 
         for(int k=0; k<n_aux; k++){
@@ -254,7 +252,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::print(){
+const void Neal8<Hierarchy,Hypers,Mixture>::print(){
     for (int h = 0; h < num_clusters; h++) {
         std::cout << "Cluster # " << h << std::endl;
         std::cout << "Parameters: ";
@@ -268,7 +266,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::print(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::write_clustering_to_file(
+const void Neal8<Hierarchy,Hypers,Mixture>::write_clustering_to_file(
     std::string filename){
     std::ofstream file;
     file.open(filename);
@@ -283,8 +281,9 @@ void Neal8<Hierarchy,Hypers,Mixture>::write_clustering_to_file(
     file.close();
 }
 
+
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::write_density_to_file(
+const void Neal8<Hierarchy,Hypers,Mixture>::write_density_to_file(
     std::string filename){
     std::ofstream file;
     file.open(filename);
@@ -296,7 +295,6 @@ void Neal8<Hierarchy,Hypers,Mixture>::write_density_to_file(
     
     file.close();
 }
-
 
 
 #endif // NEAL8NNIG_HPP
