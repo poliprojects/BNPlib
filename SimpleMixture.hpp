@@ -9,13 +9,13 @@ private:
 public:
     ~SimpleMixture() = default;
 
-    SimpleMixture(const double totalmass): totalmass(totalmass) {
+    SimpleMixture(const double totalmass): totalmass(totalmass){
         assert(totalmass >= 0);
     }
 
     double const get_totalmass(){return totalmass;}
 
-    void set_totalmass(const double totalmass_) {totalmass = totalmass_;}
+    void set_totalmass(const double totalmass_){totalmass = totalmass_;}
 
 };
 

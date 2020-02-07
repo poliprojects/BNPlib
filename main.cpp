@@ -5,7 +5,7 @@
 
 #include "includes_main.hpp"
 
-int main() {
+int main(){
     double mean1 = 5;
     double mean2 = 5;
     double sd1 = 1;

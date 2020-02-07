@@ -63,18 +63,18 @@ double NNIGHierarchy<Hypers>::eval_G0(double datum){
 template<class Hypers> 
 void NNIGHierarchy<Hypers>::sample_given_data(std::vector<double> data){
     // Get current values of parameters
-    auto mu0     = hypers->get_mu0();
-    auto lambda0 = hypers->get_lambda();
-    auto alpha0  = hypers->get_alpha0();
-    auto beta0   = hypers->get_beta0();
+    double mu0     = hypers->get_mu0();
+    double lambda0 = hypers->get_lambda();
+    double alpha0  = hypers->get_alpha0();
+    double beta0   = hypers->get_beta0();
 
     std::vector<double> temp = normal_gamma_update(data, mu0, alpha0, beta0,
         lambda0);
 
-    auto mu_post     = temp[0];
-    auto alpha_post  = temp[1];
-    auto beta_post   = temp[2];
-    auto lambda_post = temp[3];
+    double mu_post     = temp[0];
+    double alpha_post  = temp[1];
+    double beta_post   = temp[2];
+    double lambda_post = temp[3];
 
     // Get a sample
     double sigma_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
@@ -88,7 +88,7 @@ void NNIGHierarchy<Hypers>::sample_given_data(std::vector<double> data){
 template<class Hypers> 
 std::vector<double> NNIGHierarchy<Hypers>::normal_gamma_update(
     std::vector<double> data, double mu0, double alpha0, double beta0,
-    double lambda0) {
+    double lambda0){
 
     double mu_post, alpha_post, beta_post, lambda_post;
     int n = data.size();

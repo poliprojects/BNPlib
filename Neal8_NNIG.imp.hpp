@@ -220,17 +220,17 @@ void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
-    const std::vector<double> grid){
-
+        const std::vector<double> grid){
     density.first = grid;
 
     Eigen::VectorXd dens(grid.size());
-    auto M = mixture.get_totalmass();
+    double M = mixture.get_totalmass();
     int n = data.size();
     IterationOutput temp;
-    for(int i = 0; i < chain.state_size(); i++) {
+
+    for(int i = 0; i < chain.state_size(); i++){
         temp = *chain.mutable_state(i);
-        std::vector<int> card(temp.phi_size(), 0); // TODO salviamoci ste card da qualche parte
+        std::vector<unsigned int> card(temp.phi_size(), 0); // TODO salviamoci ste card da qualche parte
         for(int j = 0; j < n; j++){
             card[ temp.allocations(j) ] += 1;
         }
