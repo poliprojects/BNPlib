@@ -76,9 +76,9 @@ public:
     // Other tools
     void eval_density(const std::vector<double> grid);
 
-    const void write_clustering_to_file(std::string filename="output.csv");
+    const void write_clustering_to_file(std::string filename = "output.csv");
 
-    const void write_density_to_file(std::string filename="density.csv");
+    const void write_density_to_file(std::string filename = "density.csv");
 
     // Constructors and destructors
     ~Neal8() = default;

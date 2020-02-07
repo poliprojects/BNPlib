@@ -9,7 +9,6 @@ TODO LIST
 STYLE
 * DEBUG
 * if {}, for {}
-* indentation
 
 EXTENSIONS
 * acceleration steps?

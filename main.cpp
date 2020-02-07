@@ -6,10 +6,10 @@
 #include "includes_main.hpp"
 
 int main() {
-    double mean1=5;
-    double mean2=5;
-    double sd1=1;
-    double sd2=1;
+    double mean1 = 5;
+    double mean2 = 5;
+    double sd1 = 1;
+    double sd2 = 1;
     std::mt19937 rng_base;
     std::vector<double> data(40);
     int half = data.size()/2;

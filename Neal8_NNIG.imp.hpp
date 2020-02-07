@@ -124,7 +124,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
 
-    num_clusters=unique_values.size();
+    num_clusters = unique_values.size();
     std::vector<std::vector<unsigned int>> clust_idxs(num_clusters);
     unsigned int n = allocations.size();
     for(int i = 0; i < n; i++){ // save different cluster in each row
@@ -134,8 +134,9 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
     // DEBUG:
     //for(int j = 0; j < num_clusters; j++){
     //    std::cout << "Cluster #" << j << ": ";
-    //    for (unsigned int i=0; i<clust_idxs[j].size(); i++)
+    //    for(int i = 0; i < clust_idxs[j].size(); i++){
     //        std::cout << " " << clust_idxs[j][i];
+    //    }
     //    std::cout << std::endl;
     //}
 
