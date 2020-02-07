@@ -1,24 +1,7 @@
 #ifndef NEAL8_NNIG_IMP_HPP
 #define NEAL8_NNIG_IMP_HPP
 
-#include <tuple>
-#include <vector>
-#include <Eigen/Dense>
-#include <stan/math/prim/mat.hpp>
-#include <type_traits>
-#include "includes_universal.hpp"
-#include <math.h>
-#include "NNIGHierarchy.hpp"
-#include "SimpleMixture.hpp"
-#include "HypersFixed.hpp"
-// N-NIG model == gaussian kernel + N-IG base measure:
-// f ~ N(mu,sig^2)
-// (mu,sig^2) ~ G
-// G ~ DP(M, G0)  with G0 = N-IG
-// #include "output.pb.h"
 #include "Neal8_NNIG.hpp"
-// Normal likelihoood, Normal Inverse Gamma hierarchy
-
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::initalize(){

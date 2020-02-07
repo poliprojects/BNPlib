@@ -3,6 +3,7 @@
 
 #include <tuple>
 #include <vector>
+#include <math.h>
 #include <Eigen/Dense> 
 #include <stan/math/prim/mat.hpp>
 #include <type_traits>
@@ -12,20 +13,19 @@
 #include "SimpleMixture.hpp"
 #include "HypersFixed.hpp"
 #include "output.pb.h"
-// N-NIG model == gaussian kernel + N-IG base measure:
+
+// Normal likelihoood, Normal-InverseGamma hierarchy, that is:
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
 // G ~ DP(M, G0)  with G0 = N-IG
 
-
-// Normal likelihoood, Normal Inverse Gamma hierarchy
-
+// TODO transfer over all changes from Neal8 to here
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal2{
 private:
 
-    unsigned int maxiter = 100; // TODO LATER
+    unsigned int maxiter = 100;
     unsigned int burnin = 0;
     std::mt19937 rng;
     int num_clusters;

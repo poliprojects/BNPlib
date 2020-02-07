@@ -1,26 +1,9 @@
 #ifndef NEAL2_NNIG_IMP_HPP
 #define NEAL2_NNIG_IMP_HPP
 
-#include <tuple>
-#include <vector>
-#include <Eigen/Dense> 
-#include <stan/math/prim/mat.hpp>
-#include <type_traits>
-#include "includes_universal.hpp"
-#include <math.h>
-#include "NNIGHierarchy.hpp"
-#include "SimpleMixture.hpp"
-#include "HypersFixed.hpp"
-// N-NIG model == gaussian kernel + N-IG base measure:
-// f ~ N(mu,sig^2)
-// (mu,sig^2) ~ G
-// G ~ DP(M, G0)  with G0 = N-IG
-#include "output.pb.h"
 #include "Neal2_NNIG.hpp"
-#include <math.h> // pow, tgamma
 
-// Normal likelihoood, Normal Inverse Gamma hierarchy
-
+// TODO transfer over all changes from Neal8 to here
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy,Hypers,Mixture>::initalize(){
@@ -94,8 +77,8 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 				// Compute the weight
 				//probas(i,0) = factor1 / factor2 * pow(base, 1.5);
 				double sigtilde= sqrt(beta0*(lambda+1/(alpha0*lambda)));
-				probas(i,0) = M * exp(stan::math::student_t_lpdf(data[i], 2*alpha0, mu0, sigtilde))/ (
-                n-1+M);
+				probas(i,0) = M * exp(stan::math::student_t_lpdf(data[i],
+                    2*alpha0, mu0, sigtilde))/ (n-1+M);
 
 			} // metti in i la probas c!=cj con integrale TODO done?
             tot+=probas(k,0);
@@ -109,8 +92,8 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 				double beta0  = hy->get_beta0();
 
 			double sigtilde= sqrt(beta0*(lambda+1/(alpha0*lambda)));
-			probas(n_unique,0) = M * exp(stan::math::student_t_lpdf(data[i], 2*alpha0, mu0, sigtilde))/ (
-                n-1+M);
+			probas(n_unique,0) = M * exp(stan::math::student_t_lpdf(data[i],
+                2*alpha0, mu0, sigtilde))/ (n-1+M);
 			tot+=probas(n_unique,0);
 		}
 
