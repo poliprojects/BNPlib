@@ -36,6 +36,7 @@ private:
     std::pair< std::vector<double>, Eigen::VectorXd > density;
     Mixture mixture;
     ChainOutput chain;
+    IterationOutput best_clust;
 
     // Random engine
     std::mt19937 rng;
@@ -73,13 +74,18 @@ public:
     }
 
     // Other tools
-    void cluster_estimate();
+    unsigned int cluster_estimate();
 
     void eval_density(const std::vector<double> grid);
 
-    const void write_clustering_to_file(std::string filename = "output.csv");
+    const void write_final_clustering_to_file(
+        std::string filename = "final_clust.csv");
 
-    const void write_density_to_file(std::string filename = "density.csv");
+    const void write_best_clustering_to_file(
+        std::string filename = "best_clust.csv");
+
+    const void write_density_to_file(
+        std::string filename = "density.csv");
 
     // Constructors and destructors
     ~Neal8() = default;

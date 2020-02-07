@@ -1,16 +1,19 @@
 TODO LIST
+URGENT
+* EVAL_G0 (WTF?)
 * CONSTRUCTORS (arguments)
-* a way to erase and add clusters more efficiently
 * "log"-like?
+* Write whole chain to file?
+* Check if cluster_estimate() is correct
+NOT URGENT
+* A way to erase and add clusters more efficiently
 * probas in a separate function?
-* deal with the extra dynamically allocated Hypers
-* density_eval: proto and csv
-* write chain to file?
-* debug printing lines
-* print specifics/results of running algorithm
+* Deal with the extra dynamically allocated Hypers
+* DEBUG lines
+* Print specifics/results of running algorithm
 
 EXTENSIONS
-* acceleration steps?
+* Acceleration steps?
 * Documentation with Doxygen
-* readme.md for the Github repo
+* README.md for the Github repo
 * Hypers not fixed

@@ -27,10 +27,14 @@ int main(){
     //sampler2.run();
     sampler8.run();
     //sampler8.write_clustering_to_file();
-    std::vector<double> grid = {1,1.5,2,2.5,3,3.5,4};
-    sampler8.eval_density(grid);
-    sampler8.write_density_to_file();
-
+    //std::vector<double> grid = {1,1.5,2,2.5,3,3.5,4};
+    //sampler8.eval_density(grid);
+    //sampler8.write_density_to_file();
+    unsigned int i_cap = sampler8.cluster_estimate();
+    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+    sampler8.write_final_clustering_to_file();
+    sampler8.write_best_clustering_to_file();
+    
     //for(int i = 0; i < 40; i++){
       //  std::cout << i << ": " << data[i] << std::endl;
     //}

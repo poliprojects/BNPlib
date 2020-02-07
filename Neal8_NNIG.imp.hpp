@@ -176,8 +176,9 @@ void Neal8<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
 }
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
-    
+unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
+    // also returns the index of the estimate in the chain object
+
     unsigned int niter = maxiter - burnin;
     Eigen::VectorXd errors(niter);
     int n = data.size();
@@ -210,11 +211,13 @@ void Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
         errors(h) = (tot_diss-all_diss[h]).norm();
     }
     
-    //std::cout<<errors<<std::endl; //DEBUG
+    //std::cout << errors << std::endl; // DEBUG
     std::ptrdiff_t i;
-    int minerr = errors.minCoeff(&i);
-    //std::cout<<i << " "; //DEBUG
-    //return chain[i];
+    int min_err = errors.minCoeff(&i);
+    unsigned int i_cap(i);
+    std::cout << i << " " << i_cap << std::endl;
+    best_clust = chain.state(i_cap);
+    return i_cap;
 }
 
 
@@ -246,7 +249,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
 
             dens += card[h]/(M+n) * temp_hier.log_like(grid);
         }
-        dens += M/(M+n) * temp_hier.eval_G0(grid);
+        dens += M/(M+n) * temp_hier.eval_G0(grid); // TODO
     }
 
     density.second = dens * (1/chain.state_size());
@@ -273,8 +276,8 @@ const void Neal8<Hierarchy, Hypers, Mixture>::print(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
-    std::string filename){
+const void Neal8<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
+        std::string filename){
     std::ofstream file;
     file.open(filename);
 
@@ -283,6 +286,24 @@ const void Neal8<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
         auto params = unique_values[ allocations[i] ].get_state();
         file << i << "," << data[i] << "," << allocations[i] << "," <<
         params[0] << "," << params[1] << std::endl;
+    }
+    
+    file.close();
+}
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+const void Neal8<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
+    std::string filename){
+    std::ofstream file;
+    file.open(filename);
+
+    file << "number,datum,cluster,mu,sigma2" << std::endl;
+    for(int i = 0; i < data.size(); i++){
+        unsigned int ci = best_clust.allocations(i);
+        file << i << "," << data[i] << "," << ci <<
+        "," << best_clust.phi(ci).params(0) <<
+        "," << best_clust.phi(ci).params(1) << std::endl;
     }
     
     file.close();

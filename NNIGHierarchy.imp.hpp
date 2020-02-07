@@ -30,7 +30,7 @@ void NNIGHierarchy<Hypers>::draw(){
 
 
 template<class Hypers> 
-double NNIGHierarchy<Hypers>::eval_G0(double datum){ 
+double NNIGHierarchy<Hypers>::eval_G0(double datum){ // TODO
     return exp(
         stan::math::normal_lpdf(
             datum, hypers->get_mu0(),
@@ -43,7 +43,7 @@ double NNIGHierarchy<Hypers>::eval_G0(double datum){
 
 template<class Hypers> 
 Eigen::VectorXd NNIGHierarchy<Hypers>::eval_G0(std::vector<double> datum){
-    // TODO stan per vector??
+    // TODO stan per vector?? // TODO anche per tutto il resto
     Eigen::VectorXd result;
     for(int i = 0; i < datum.size(); i++){
         result(i) = exp(
