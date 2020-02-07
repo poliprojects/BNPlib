@@ -25,12 +25,11 @@ int main(){
     Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8(data, 3, mix, hy);
     //std::cout << "Running Neal2" << std::endl;
     //sampler2.run();
-    std::cout << "Running Neal8" << std::endl;
     sampler8.run();
     //sampler8.write_clustering_to_file();
     std::vector<double> grid = {1,1.5,2,2.5,3,3.5,4};
-    //sampler8.eval_density(grid);
-    //sampler8.write_density_to_file();
+    sampler8.eval_density(grid);
+    sampler8.write_density_to_file();
 
     //for(int i = 0; i < 40; i++){
       //  std::cout << i << ": " << data[i] << std::endl;

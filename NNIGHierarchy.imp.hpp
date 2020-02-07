@@ -11,11 +11,10 @@ double NNIGHierarchy<Hypers>::log_like(double datum){
 template<class Hypers> 
 Eigen::VectorXd NNIGHierarchy<Hypers>::log_like(std::vector<double> datum){
     // TODO stan per vector?? 
-    Eigen::VectorXd result;
+    Eigen::VectorXd result(datum.size());
     for(int i = 0; i < datum.size(); i++){
         result(i) = exp(stan::math::normal_lpdf(datum[i], state[0], state[1]));
     }
-    
     return result;
 }
 
@@ -29,35 +28,33 @@ void NNIGHierarchy<Hypers>::draw(){
     state[1] = sigma_new;
 }
 
-template<class Hypers> 
-Eigen::VectorXd NNIGHierarchy<Hypers>::eval_G0(std::vector<double> datum){
-     // TODO stan per vector??
-    Eigen::VectorXd result;
-    for(int i = 0; i < datum.size(); i++){
-        result(i) = exp(
-            stan::math::normal_lpdf(
-                datum[i], hypers->get_mu0(),
-                stan::math::inv_gamma_lpdf(
-                    datum[i],hypers->get_alpha0(),
-                    hypers->get_beta0()/hypers->get_lambda()
-                )
-            )
-        );
-    } 
-    return result;
-}
 
 template<class Hypers> 
 double NNIGHierarchy<Hypers>::eval_G0(double datum){ 
     return exp(
         stan::math::normal_lpdf(
             datum, hypers->get_mu0(),
-            stan::math::inv_gamma_lpdf(
-                datum, hypers->get_alpha0(),
-                hypers->get_beta0()/hypers->get_lambda()
-            )
+            stan::math::inv_gamma_lpdf(datum, hypers->get_alpha0(),
+            hypers->get_beta0())/hypers->get_lambda()
         )
     ); 
+}
+
+
+template<class Hypers> 
+Eigen::VectorXd NNIGHierarchy<Hypers>::eval_G0(std::vector<double> datum){
+    // TODO stan per vector??
+    Eigen::VectorXd result;
+    for(int i = 0; i < datum.size(); i++){
+        result(i) = exp(
+            stan::math::normal_lpdf(
+                datum[i], hypers->get_mu0(),
+                stan::math::inv_gamma_lpdf(datum[i], hypers->get_alpha0(),
+                hypers->get_beta0())/hypers->get_lambda()
+            )
+        );
+    }
+    return result;
 }
 
 template<class Hypers> 

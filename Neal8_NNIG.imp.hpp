@@ -4,7 +4,7 @@
 #include "Neal8_NNIG.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::initalize(){
+void Neal8<Hierarchy, Hypers, Mixture>::initalize(){
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution(0,num_clusters);
 
@@ -18,7 +18,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::initalize(){
 }
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
+void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     // TODO Other ideas:
     // * our own for loop for k and bool (ci is a singleton)
     // * function from std count distinct values in vector
@@ -121,7 +121,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
+void Neal8<Hierarchy, Hypers, Mixture>::sample_unique_values(){
 
     num_clusters = unique_values.size();
     std::vector<std::vector<unsigned int>> clust_idxs(num_clusters);
@@ -151,11 +151,11 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
+void Neal8<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
     // TODO
 
-    //DEBUG:
-    //std::cout << "Iteration # " << iter << " / " << maxiter-1 << std::endl;
+    //std::cout << "Iteration # " << iter << " / " << maxiter-1 <<
+    //    std::endl; // DEBUG
     IterationOutput iter_out;
 
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
@@ -170,43 +170,43 @@ void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
     }
 
     chain.add_state();
-    *chain.mutable_state(iter) = iter_out;
+    *chain.mutable_state(iter-burnin) = iter_out;
 
     //print();
 }
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
+void Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     
-    Eigen::VectorXd errors(maxiter);
-
+    unsigned int niter = maxiter - burnin;
+    Eigen::VectorXd errors(niter);
     int n = data.size();
-    
-    Eigen::MatrixXd tot_diss(n,n);
+    Eigen::MatrixXd tot_diss(n, n);
     tot_diss = Eigen::MatrixXd::Zero(n, n);
     std::vector<Eigen::MatrixXd> all_diss;
     IterationOutput temp;
     
-    for(int h = 0; h < maxiter; h++){
+    for(int h = 0; h < niter; h++){
         temp = *chain.mutable_state(h);
-        Eigen::MatrixXd dissim(n,n);
+        Eigen::MatrixXd dissim(n, n);
         dissim = Eigen::MatrixXd::Zero(n, n);
         for(int i = 0; i < n; i++){
-            for(int j = 0; j < n; j++){
+            for(int j = 0; j < i; j++){
                 if(temp.allocations(i) == temp.allocations(j)){
-                dissim(i,j) =1;
-            }
+                    dissim(i,j) = 1;
+                }
             }
         }
 
-        all_diss.push_back(dissim);
-        tot_diss = tot_diss + dissim;
+    all_diss.push_back(dissim);
+    tot_diss = tot_diss + dissim;
     
     }
 
-    tot_diss = tot_diss / maxiter;
+    tot_diss = tot_diss * (1/niter);
 
-    for(int h = 0; h < maxiter; h++){
+    for(int h = 0; h < niter; h++){
+        // Compute error in Frobenius norm
         errors(h) = (tot_diss-all_diss[h]).norm();
     }
     
@@ -219,41 +219,47 @@ void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
+void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         const std::vector<double> grid){
     density.first = grid;
 
     Eigen::VectorXd dens(grid.size());
     double M = mixture.get_totalmass();
     int n = data.size();
-    IterationOutput temp;
+    IterationOutput state;
+    std::array<double, 2> params;
 
-    for(int i = 0; i < chain.state_size(); i++){
-        temp = *chain.mutable_state(i);
-        std::vector<unsigned int> card(temp.phi_size(), 0); // TODO salviamoci ste card da qualche parte
+    for(int iter = 0; iter < chain.state_size(); iter++){
+        // for each iteration of the algorithm
+
+        state = *chain.mutable_state(iter);
+        std::vector<unsigned int> card(state.phi_size(),
+            0); // TODO salviamoci ste card da qualche parte
         for(int j = 0; j < n; j++){
-            card[ temp.allocations(j) ] += 1;
+            card[ state.allocations(j) ] += 1;
         }
+        Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
+        for(int h = 0; h < state.phi_size(); h++){    
+            params[0] = state.phi(h).params(0);
+            params[1] = state.phi(h).params(1);
+            temp_hier.set_state(params);
 
-       Hierarchy<Hypers> temp_uniq_v(unique_values[0].get_hypers());
-       for(int h = 0; h < temp.phi_size(); h++){ 
-        std::array<double,2> temp_state;
-        temp_state[0] = temp.phi(h).params(0);
-        temp_state[1] = temp.phi(h).params(1);
-        temp_uniq_v.set_state(temp_state);
-        dens += card[h]*temp_uniq_v.log_like(grid)/(M+data.size());
-       }
-    dens += M * temp_uniq_v.log_like(grid) / (M+data.size());
+            dens += card[h]/(M+n) * temp_hier.log_like(grid);
+        }
+        dens += M/(M+n) * temp_hier.eval_G0(grid);
     }
 
-    dens = dens / chain.state_size();
+    density.second = dens * (1/chain.state_size());
 
-    //density.second = dens;
+    // DEBUG:
+    for(int i=0; i<grid.size(); i++)
+        std::cout << density.second(i) << " ";
+    std::cout << std::endl;
 }
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy,Hypers,Mixture>::print(){
+const void Neal8<Hierarchy, Hypers, Mixture>::print(){
     for(int h = 0; h < num_clusters; h++){
         std::cout << "Cluster # " << h << std::endl;
         std::cout << "Parameters: ";
@@ -267,7 +273,7 @@ const void Neal8<Hierarchy,Hypers,Mixture>::print(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy,Hypers,Mixture>::write_clustering_to_file(
+const void Neal8<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
     std::string filename){
     std::ofstream file;
     file.open(filename);
@@ -284,7 +290,7 @@ const void Neal8<Hierarchy,Hypers,Mixture>::write_clustering_to_file(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy,Hypers,Mixture>::write_density_to_file(
+const void Neal8<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::string filename){
     std::ofstream file;
     file.open(filename);

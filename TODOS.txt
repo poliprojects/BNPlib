@@ -1,11 +1,13 @@
 TODO LIST
 * CONSTRUCTORS (arguments)
 * a way to erase and add clusters more efficiently
+* "log"-like?
 * probas in a separate function?
 * deal with the extra dynamically allocated Hypers
 * density_eval: proto and csv
 * write chain to file?
 * debug printing lines
+* print specifics/results of running algorithm
 
 EXTENSIONS
 * acceleration steps?

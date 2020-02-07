@@ -53,14 +53,13 @@ private:
     void sample_unique_values();
 
     void save_iteration(unsigned int iter);
-    
-    void cluster_estimate();
 
     const void print(); // TODO ?
 
 public:
     // Running tool
     void run(){
+        std::cout << "Running Neal8" << std::endl;
         initalize();
         unsigned int iter = 0;
         while(iter < maxiter){
@@ -70,10 +69,12 @@ public:
             }
             iter++;
         }
-    cluster_estimate();
+        std::cout << "Done" << std::endl;
     }
 
     // Other tools
+    void cluster_estimate();
+
     void eval_density(const std::vector<double> grid);
 
     const void write_clustering_to_file(std::string filename = "output.csv");
