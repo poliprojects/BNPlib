@@ -229,7 +229,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
     auto M = mixture.get_totalmass();
     int n = data.size();
     IterationOutput temp;
-    for (int i = 0; i < chain.state_size(); i++) {
+    for(int i = 0; i < chain.state_size(); i++) {
         temp = *chain.mutable_state(i);
         std::vector<int> card(temp.phi_size(), 0); // TODO salviamoci ste card da qualche parte
         for(int j = 0; j < n; j++){
