@@ -28,7 +28,7 @@ private:
     unsigned int maxiter = 100; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
-    int numClusters;
+    int num_clusters;
     Mixture mixture;
 	//ChainOutput chain;
  
@@ -69,11 +69,11 @@ public:
 
     // Constructors and destructors:
     ~Neal2() = default;
-    Neal2(const std::vector<data_t> & data, int numClusters,
+    Neal2(const std::vector<data_t> & data, int num_clusters,
         const Mixture & mix,const Hypers &hy):
-        data(data), numClusters(numClusters), mixture(mix) {
+        data(data), num_clusters(num_clusters), mixture(mix) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
-            for (int h=0; h<numClusters; h++) {
+            for (int h=0; h<num_clusters; h++) {
                 unique_values.push_back(hierarchy);
             }
             

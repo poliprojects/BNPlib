@@ -23,12 +23,12 @@
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::initalize(){
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0,numClusters);
+    std::uniform_int_distribution<int> distribution(0,num_clusters);
 
-    for (int h = 0; h < numClusters; h++) {
+    for (int h = 0; h < num_clusters; h++) {
       allocations.push_back(h);
     }
-    for (int j = numClusters; j < data.size(); j++) {
+    for (int j = num_clusters; j < data.size(); j++) {
         int num = distribution(generator); //TODO da stan?
         allocations[j] = num;
     }
@@ -141,22 +141,22 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
 
-    numClusters=unique_values.size();
-    std::vector<std::vector<unsigned int>> clust_idxs(numClusters);
+    num_clusters=unique_values.size();
+    std::vector<std::vector<unsigned int>> clust_idxs(num_clusters);
     unsigned int n = allocations.size();
     for(unsigned int i=0; i<n; i++){ // save different cluster in each row
         clust_idxs[ allocations[i] ].push_back(i);
     }
 
     // DEBUG:
-    //for(int j=0; j<numClusters; j++){
+    //for(int j=0; j<num_clusters; j++){
     //    std::cout << "Cluster #" << j << ": ";
     //    for (unsigned int i=0; i<clust_idxs[j].size(); i++)
     //        std::cout << " " << clust_idxs[j][i];
     //    std::cout << std::endl;
     //}
 
-    for (unsigned int j=0; j< numClusters; j++) {
+    for (unsigned int j=0; j< num_clusters; j++) {
         std::vector<data_t> curr_data;
         for ( auto &idx : clust_idxs[j] )
             curr_data.push_back( data[idx] );
@@ -272,7 +272,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::print(){
-    for (int h = 0; h < numClusters; h++) {
+    for (int h = 0; h < num_clusters; h++) {
         std::cout << "Cluster # " << h << std::endl;
         std::cout << "Parameters: ";
 
