@@ -16,6 +16,7 @@ TODO LIST
 * acceleration steps?
 * density_eval: proto and csv
 * write chain to file?
+* maxiter in constructor
 
 STYLE
 * DEBUG

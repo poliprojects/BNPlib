@@ -12,6 +12,7 @@
 #include "SimpleMixture.hpp"
 #include "HypersFixed.hpp"
 #include "output.pb.h"
+#include <fstream>
 // N-NIG model == gaussian kernel + N-IG base measure:
 // f ~ N(mu,sig^2)
 // (mu,sig^2) ~ G
@@ -25,7 +26,7 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal8{
 private:
     unsigned int n_aux = 3;
-    unsigned int maxiter = 3; // TODO LATER
+    unsigned int maxiter = 5000; // TODO LATER
     unsigned int burnin = 0;
     std::mt19937 rng;
     int numClusters;
@@ -106,6 +107,9 @@ public:
 
     Neal8(const std::vector<data_t> & grid, std::vector<data_t> &data, int n_aux, const Mixture & mix,
         const Hypers &hy): Neal8(grid, data, data.size(), n_aux, mix, hy) {}
+
+
+    void write_clusters_to_file(std::string filename="output.csv");
 
 }; // end of Class Neal8
 

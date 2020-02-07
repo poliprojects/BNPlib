@@ -149,12 +149,12 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
     }
 
     // DEBUG:
-    for(int j=0; j<numClusters; j++){
-        std::cout << "Cluster #" << j << ": ";
-        for (unsigned int i=0; i<clust_idxs[j].size(); i++)
-            std::cout << " " << clust_idxs[j][i];
-        std::cout << std::endl;
-    }
+    //for(int j=0; j<numClusters; j++){
+    //    std::cout << "Cluster #" << j << ": ";
+    //    for (unsigned int i=0; i<clust_idxs[j].size(); i++)
+    //        std::cout << " " << clust_idxs[j][i];
+    //    std::cout << std::endl;
+    //}
 
     for (unsigned int j=0; j< numClusters; j++) {
         std::vector<data_t> curr_data;
@@ -163,13 +163,16 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
         unique_values[j].sample_given_data(curr_data);
     }
 
-    std::cout << std::endl; // DEBUG
+    // std::cout << std::endl; // DEBUG
     }
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
-	// TODO PROTOBUF
+	// TODO
+
+    //DEBUG:
+    //std::cout << "Iteration # " << iter << " / " << maxiter-1 << std::endl;
 	IterationOutput iter_out;
 
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
@@ -185,8 +188,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
 	chain.add_state();
 	*chain.mutable_state(iter) = iter_out;
 
-    std::cout << "Iteration # " << iter << " / " << maxiter-1 << std::endl;
-    print();
+    //print();
 }
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
@@ -227,10 +229,10 @@ void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
 		
 	}
 	
-	std::cout<<errors<<std::endl;
+	//std::cout<<errors<<std::endl; //DEBUG
 	std::ptrdiff_t i;
 	int minerr = errors.minCoeff(&i);
-	std::cout<<i;
+	//std::cout<<i << " "; //DEBUG
 	//return chain[i];
 }
 
@@ -273,8 +275,24 @@ void Neal8<Hierarchy,Hypers,Mixture>::print(){
         }
         std::cout << std::endl;
     }
-    }
+}
 
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+void Neal8<Hierarchy,Hypers,Mixture>::write_clusters_to_file(
+    std::string filename){
+    std::ofstream file;
+    file.open(filename);
+
+    file << "number,datum,cluster,mu,sigma2" << std::endl;
+    for(int i=0; i<data.size(); i++){
+        auto params = unique_values[ allocations[i] ].get_state();
+        file << i << "," << data[i] << "," << allocations[i] << "," <<
+        params[0] << "," << params[1] << std::endl;
+    }
+    
+    file.close();
+}
 
 
 
