@@ -189,6 +189,51 @@ void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
     print();
 }
 
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
+	
+	Eigen::VectorXf errors(maxiter);
+
+
+	int n=data.size();
+	
+	Eigen::MatrixXd TOTdiss(n,n);
+	TOTdiss=Eigen::MatrixXd::Zero(n, n);
+	std::vector<Eigen::MatrixXd> ALLdiss;
+	IterationOutput temp;
+	
+	for(int h = 0; h < maxiter; h++){
+		temp= *chain.mutable_state(h);
+		Eigen::MatrixXd dissim(n,n);
+		dissim=Eigen::MatrixXd::Zero(n, n);
+		for(int i = 0; i < n; i++){
+			for(int j = 0; j < n; j++){
+				if(temp.allocations(i)==temp.allocations(j))
+				dissim(i,j) =1;
+			}
+		}
+
+		ALLdiss.push_back(dissim);
+		TOTdiss=TOTdiss+dissim;
+	
+	}
+
+	TOTdiss=TOTdiss/maxiter;
+
+
+	for(int h = 0; h < maxiter; h++){
+
+		errors(h)=(TOTdiss-ALLdiss[h]).norm();
+		
+	}
+	
+	std::cout<<errors<<std::endl;
+	std::ptrdiff_t i;
+	int minerr = errors.minCoeff(&i);
+	std::cout<<i;
+	//return chain[i];
+}
+
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::print(){
