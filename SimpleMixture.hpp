@@ -10,7 +10,7 @@ public:
     ~SimpleMixture() = default;
 
     SimpleMixture(const double totalmass): totalmass(totalmass) {
-      assert(totalmass >= 0);
+        assert(totalmass >= 0);
     }
 
     double const get_totalmass(){return totalmass;}

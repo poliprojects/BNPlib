@@ -7,7 +7,7 @@
 #include <vector>
 #include <stan/math/prim/mat.hpp>
 
-template<class Hypers> //Hypers = TupleWrapper, distro, ...
+template<class Hypers>
 class NNIGHierarchy {
 protected:
     using state_t = std::array<double,2>;
@@ -18,28 +18,38 @@ protected:
                                     // mu_0,Lambda0, alpha, beta
 
 public:
-    // Contructors:
+    // Contructors
     ~NNIGHierarchy() = default;
+
     NNIGHierarchy(std::shared_ptr<Hypers> hypers): hypers(hypers) {}
 
-    // Getters/setters:
+    // Getters and setters
     state_t get_state(){return state;}
+
 	std::shared_ptr<Hypers> get_hypers(){return hypers;}
+
     void set_state(const state_t &s){state = s;}
+
     void set_state(int pos, double val){state[pos] = val;}
 
     int get_count(){return hypers.use_count();}
+
+    // Computation tools
 	double eval_G0(double datum);
+
     double log_like(double datum);
+
 	Eigen::VectorXf eval_G0(std::vector<double> datum);
+
     Eigen::VectorXf log_like(std::vector<double> datum);
+
     void draw();
 
     void sample_given_data(std::vector<double> data);
 
+    std::vector<double> normal_gamma_update(std::vector<double> data,
+        double mu0, double alpha0, double beta0, double lambda0);
 
-  std::vector<double> normal_gamma_update(std::vector<double> data,
-    double mu0, double alpha0, double beta0, double lambda0);
 };
 
 #include "NNIGHierarchy.imp.hpp"

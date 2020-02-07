@@ -65,8 +65,9 @@ public:
         unsigned int iter = 0;
         while(iter < maxiter){
             step();
-            if(iter >= burnin)
+            if(iter >= burnin){
               save_iteration(iter);
+            }
             iter++;
         }
 	cluster_estimate();
@@ -85,10 +86,10 @@ public:
         const Mixture & mix,const Hypers &hy):
         data(data), num_clusters(num_clusters), n_aux(n_aux), mixture(mix) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
-            for (int h=0; h<num_clusters; h++) {
+            for(int h=0; h<num_clusters; h++){
                 unique_values.push_back(hierarchy);
             }
-            for (int h=0; h<n_aux; h++) {
+            for(int h=0; h<n_aux; h++){
                 aux_unique_values.push_back(hierarchy);
             }
     }
