@@ -32,9 +32,10 @@ public:
     void set_state(int pos, par_t val){state[pos] = val;}
 
     int get_count(){return hypers.use_count();}
-
+	double eval_G0(data_t datum);
     double log_like(data_t datum);
-
+	Eigen::VectorXf eval_G0(std::vector<data_t> datum);
+    Eigen::VectorXf log_like(std::vector<data_t> datum);
     void draw();
 
     void sample_given_data(std::vector<data_t> data);

@@ -16,6 +16,15 @@ double NNIGHierarchy<Hypers>::log_like(data_t datum){
 }
 
 template<class Hypers> 
+Eigen::VectorXf NNIGHierarchy<Hypers>::log_like(std::vector<data_t> datum){ // TODO stan per vector?? 
+	Eigen::VectorXf result;
+	for (int i=0; i< datum.size(); i++)
+	result(i)=exp(stan::math::normal_lpdf(datum[i], state[0], state[1]));
+	
+	return result;
+}
+
+template<class Hypers> 
 void NNIGHierarchy<Hypers>::draw(){
     float sigma_new = stan::math::inv_gamma_rng(hypers->get_alpha0(),
         hypers->get_beta0(), rng);
@@ -25,6 +34,21 @@ void NNIGHierarchy<Hypers>::draw(){
     state[1] = sigma_new;
     }
 
+template<class Hypers> 
+Eigen::VectorXf NNIGHierarchy<Hypers>::eval_G0(std::vector<data_t> datum){ // TODO stan per vector??
+	Eigen::VectorXf result;
+	for (int i=0; i< datum.size(); i++)
+	result(i)=exp(stan::math::normal_lpdf(datum[i] , hypers->get_mu0(), stan::math::inv_gamma_lpdf(datum[i],hypers->get_alpha0(),
+        hypers->get_beta0())/hypers->get_lambda() ) );
+	
+	return result;
+    }
+
+template<class Hypers> 
+double NNIGHierarchy<Hypers>::eval_G0(data_t datum){ 
+    return exp(stan::math::normal_lpdf(datum , hypers->get_mu0(), stan::math::inv_gamma_lpdf(datum,hypers->get_alpha0(),
+        hypers->get_beta0())/hypers->get_lambda() ) ); 
+    }
 
 template<class Hypers> 
 void NNIGHierarchy<Hypers>::sample_given_data(std::vector<data_t> data){

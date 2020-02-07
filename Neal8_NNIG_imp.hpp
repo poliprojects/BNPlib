@@ -236,6 +236,23 @@ void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
+void Neal8<Hierarchy,Hypers,Mixture>::eval_density(){
+Eigen::VectorXf density(grid.size());
+auto M = mixture.get_totalmass();
+int n=data.size();
+
+std::vector<int> card(unique_values.size(), 0); // TODO salviamoci ste card da qualche parte
+        for(int j=0; j<n; j++)
+            card[ allocations[j] ] += 1;
+
+
+	for(int h = 0; h < numClusters; h++) { // 	TODO MEAN SUGLI ITER
+	density+=card[h]*unique_values[h].log_like(grid)/(data.size()+M);
+	}
+	density+=M*unique_values[0].log_like(grid)/(M+data.size());
+}
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::print(){
     for (int h = 0; h < numClusters; h++) {
         std::cout << "Cluster # " << h << std::endl;

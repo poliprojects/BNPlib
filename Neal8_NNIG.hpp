@@ -53,6 +53,8 @@ private:
 	
 	void cluster_estimate();
 
+	void eval_density();
+
     void save_iteration(unsigned int iter);
 
     void print();
@@ -68,7 +70,9 @@ public:
               save_iteration(iter);
             iter++;
         }
-		cluster_estimate();
+	cluster_estimate();
+	if(grid.size()>0)
+	eval_density();
     }
 
     // Constructors and destructors:
