@@ -16,6 +16,8 @@ TODO LIST
 * density_eval: proto and csv
 * write chain to file?
 * maxiter in constructor
+* getters setters Neal8
+* rename files
 
 STYLE
 * DEBUG
@@ -24,14 +26,3 @@ STYLE
 * remove libraries and includes
 * const everywhere
 * order of methods (publ-prot-publ...)
-* remove typedefs
-
-SLIDES
-* Add PDF about the integral in the references
-
-CLUSTER_ESTIMATE(): IDEAS
-vec<IterOut> chain;
-vec<double> errors;
-errors = ...;
-i = argmin(errors);
-return chain[i];

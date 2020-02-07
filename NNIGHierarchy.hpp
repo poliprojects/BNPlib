@@ -2,18 +2,15 @@
 #define NNIGHIERARCHY_HPP
 
 #include <array>
+#include <memory>
 #include <random>
 #include <vector>
-#include <memory>
 #include <stan/math/prim/mat.hpp>
-
-#include "includes_universal.hpp"
-
 
 template<class Hypers> //Hypers = TupleWrapper, distro, ...
 class NNIGHierarchy {
 protected:
-    using state_t = std::array<par_t,2>;
+    using state_t = std::array<double,2>;
 
     std::mt19937 rng;
     state_t state; // current values for F's parameters: mu, sigma
@@ -29,19 +26,19 @@ public:
     state_t get_state(){return state;}
 	std::shared_ptr<Hypers> get_hypers(){return hypers;}
     void set_state(const state_t &s){state = s;}
-    void set_state(int pos, par_t val){state[pos] = val;}
+    void set_state(int pos, double val){state[pos] = val;}
 
     int get_count(){return hypers.use_count();}
-	double eval_G0(data_t datum);
-    double log_like(data_t datum);
-	Eigen::VectorXf eval_G0(std::vector<data_t> datum);
-    Eigen::VectorXf log_like(std::vector<data_t> datum);
+	double eval_G0(double datum);
+    double log_like(double datum);
+	Eigen::VectorXf eval_G0(std::vector<double> datum);
+    Eigen::VectorXf log_like(std::vector<double> datum);
     void draw();
 
-    void sample_given_data(std::vector<data_t> data);
+    void sample_given_data(std::vector<double> data);
 
 
-  parvec_t normal_gamma_update(std::vector<data_t> data,
+  std::vector<double> normal_gamma_update(std::vector<double> data,
     double mu0, double alpha0, double beta0, double lambda0);
 };
 

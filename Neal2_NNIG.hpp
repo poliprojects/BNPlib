@@ -7,7 +7,6 @@
 #include <Eigen/Dense> 
 #include <stan/math/prim/mat.hpp>
 #include <type_traits>
-#include "includes_universal.hpp"
 #include <math.h>
 #include "NNIGHierarchy.hpp"
 #include "SimpleMixture.hpp"
@@ -33,7 +32,7 @@ private:
 	//ChainOutput chain;
  
 
-    std::vector<data_t> data;
+    std::vector<double> data;
     std::vector<unsigned int> allocations; // the c vector
     std::vector<Hierarchy<Hypers>> unique_values;
 
@@ -69,7 +68,7 @@ public:
 
     // Constructors and destructors:
     ~Neal2() = default;
-    Neal2(const std::vector<data_t> & data, int num_clusters,
+    Neal2(const std::vector<double> & data, int num_clusters,
         const Mixture & mix,const Hypers &hy):
         data(data), num_clusters(num_clusters), mixture(mix) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
@@ -79,7 +78,7 @@ public:
             
     }
     // If no # initial clusters is given, it will be set equal to the data size:
-    Neal2(std::vector<data_t> &data, const Mixture & mix,
+    Neal2(std::vector<double> &data, const Mixture & mix,
         const Hypers &hy): Neal2(data, data.size(), mix, hy) {}
 
     

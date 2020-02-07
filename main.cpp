@@ -1,14 +1,8 @@
 #include <iostream>
-#include "Neal8_NNIG.hpp"
-#include "Neal2_NNIG.hpp"
-#include "SimpleMixture.hpp"
-#include "HypersFixed.hpp"
-#include "NNIGHierarchy.hpp"
-#include <vector>
-#include <Eigen/Dense>
-#include <stan/math/prim/mat.hpp>
+
 #include <boost/random/random_number_generator.hpp>
 #include <boost/random/detail/qrng_base.hpp>
+
 #include "includes_main.hpp"
 
 int main() {

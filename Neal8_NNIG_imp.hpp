@@ -140,7 +140,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
     //}
 
     for (unsigned int j=0; j< num_clusters; j++) {
-        std::vector<data_t> curr_data;
+        std::vector<double> curr_data;
         for ( auto &idx : clust_idxs[j] )
             curr_data.push_back( data[idx] );
         unique_values[j].sample_given_data(curr_data);
@@ -222,7 +222,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
-    const std::vector<data_t> grid){
+    const std::vector<double> grid){
 
     density.first = grid;
 
@@ -238,7 +238,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
 
 	   Hierarchy<Hypers> temp_uniq_v(unique_values[0].get_hypers());
 	   for(int h = 0; h < temp.phi_size(); h++) { 
-	   	std::array<par_t,2> temp_state;
+	   	std::array<double,2> temp_state;
 	   	temp_state[0] = temp.phi(h).params(0);
 	   	temp_state[1] = temp.phi(h).params(1);
 	   	temp_uniq_v.set_state(temp_state);

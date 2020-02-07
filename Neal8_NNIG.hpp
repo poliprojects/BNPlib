@@ -9,8 +9,6 @@
 #include <Eigen/Dense>
 #include <stan/math/prim/mat.hpp>
 
-#include "includes_universal.hpp"
-
 #include "HypersFixed.hpp"
 #include "NNIGHierarchy.hpp"
 #include "output.pb.h"
@@ -32,7 +30,7 @@ private:
     Mixture mixture;
 	ChainOutput chain;
 
-    std::vector<data_t> data;
+    std::vector<double> data;
     std::vector<unsigned int> allocations; // the c vector
     std::vector<Hierarchy<Hypers>> unique_values;
     std::vector<Hierarchy<Hypers>> aux_unique_values;
@@ -71,7 +69,7 @@ public:
 
     // Constructors and destructors:
     ~Neal8() = default;
-    Neal8(const std::vector<data_t> & data, int num_clusters,int n_aux,
+    Neal8(const std::vector<double> & data, int num_clusters,int n_aux,
         const Mixture & mix,const Hypers &hy):
         data(data), num_clusters(num_clusters), n_aux(n_aux), mixture(mix) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
@@ -84,10 +82,10 @@ public:
     }
 
     // If no # initial clusters is given, it will be set equal to the data size:
-    Neal8(std::vector<data_t> &data, int n_aux, const Mixture & mix,
+    Neal8(std::vector<double> &data, int n_aux, const Mixture & mix,
         const Hypers &hy): Neal8(data, data.size(), n_aux, mix, hy) {}
 
-    void eval_density(const std::vector<data_t> grid);
+    void eval_density(const std::vector<double> grid);
 
     void write_clustering_to_file(std::string filename="output.csv");
 

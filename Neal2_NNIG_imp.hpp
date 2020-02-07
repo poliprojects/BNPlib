@@ -187,7 +187,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_unique_values(){
     }
 
     for (unsigned int j=0; j< num_clusters; j++) {
-        std::vector<data_t> curr_data;
+        std::vector<double> curr_data;
         for ( auto &idx : clust_idxs[j] )
             curr_data.push_back( data[idx] );
         unique_values[j].sample_given_data(curr_data);
