@@ -80,7 +80,7 @@ std::vector<double> NNIGHierarchy<Hypers>::normal_gamma_update(
     double mu_post, alpha_post, beta_post, lambda_post;
     int n = data.size();
 
-    if (n == 0){
+    if(n == 0){
         return std::vector<double>{mu0, alpha0, beta0, lambda0};
     }
     

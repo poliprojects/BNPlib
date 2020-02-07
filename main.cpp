@@ -14,7 +14,7 @@ int main() {
     std::vector<double> data(40);
     int half = data.size()/2;
 
-    for (int i=0; i<half; i++) {
+    for(int i = 0; i < half; i++){
         data[i]      = stan::math::normal_rng(mean1, sd1, rng_base);
         data[i+half] = stan::math::normal_rng(mean2, sd2, rng_base);
     }
@@ -32,8 +32,9 @@ int main() {
     //sampler8.eval_density(grid);
     //sampler8.write_density_to_file();
 
-    //for(int i=0; i<40; i++)
+    //for(int i = 0; i < 40; i++){
       //  std::cout << i << ": " << data[i] << std::endl;
+    //}
 
     return 0;
 

@@ -60,8 +60,9 @@ public:
         unsigned int iter = 0;
         while(iter < maxiter){
             step();    
-            if(iter >= burnin)
+            if(iter >= burnin){
               save_iteration(iter);
+            }
             iter++;
         }
     }
@@ -81,7 +82,6 @@ public:
     Neal2(std::vector<double> &data, const Mixture & mix,
         const Hypers &hy): Neal2(data, data.size(), mix, hy) {}
 
-    
 
 }; // end of Class Neal2
 

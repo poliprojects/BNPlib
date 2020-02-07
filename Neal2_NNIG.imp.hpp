@@ -27,13 +27,13 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
     // * using a (multi)map?
     // Initialize some relevant variables
     unsigned int k, n_unique, singleton;
-    unsigned int n=data.size();
+    unsigned int n = data.size();
 
-    for(int i=0; i<n; i++){ // for each data unit data[i]
+    for(int i = 0; i < n; i++){ // for each data unit data[i]
 
         // Initialize cardinalities of unique values
         std::vector<int> card(unique_values.size(), 0);      
-        for(int j=0; j<n; j++)
+        for(int j = 0; j < n; j++)
             card[ allocations[j] ] += 1;
 
         singleton = 0;
@@ -53,7 +53,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
         auto M = mixture.get_totalmass();
         double tot=0.0;
 
-        for(int k=0; k<n_unique ; k++){
+        for(int k = 0; k < n_unique ; k++){
 		
             probas(k,0) = card[k] * unique_values[k].log_like(data[i]) / (
                 n-1+M);
@@ -84,7 +84,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
             tot+=probas(k,0);
         }
 
-		if(singleton==0){
+		if(singleton == 0){
 			std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
 				double mu0    = hy->get_mu0();
 				double lambda = hy->get_lambda();
@@ -102,7 +102,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
   		
         
-        unsigned int c_new = stan::math::categorical_rng(probas, rng) -1;
+        unsigned int c_new = stan::math::categorical_rng(probas, rng) - 1;
         
        
 
@@ -131,13 +131,14 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                 int tmp = allocations[i];
                 allocations[i] = c_new;
                 for(auto &c : allocations){ // relabeling
-                    if (c > tmp)
+                    if(c > tmp){
                         c -= 1;
+                    }
                 }
             } // end of else
         } // end of if(singleton == 1)
         else{ // if singleton == 0
-            if (c_new==n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
+            if(c_new == n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
 				std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
 				double mu0    = hy->get_mu0();
 				double lambda = hy->get_lambda();
@@ -161,7 +162,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
             }
         } // end of else
 
-    } // end of for(int i=0; i<n; i++) loop
+    } // end of for(int i = 0; i < n; i++) loop
 
     } // end of sample_allocations()
 
@@ -174,19 +175,19 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_unique_values(){
     num_clusters=unique_values.size();
     std::vector<std::vector<unsigned int>> clust_idxs(num_clusters);
     unsigned int n = allocations.size();
-    for(unsigned int i=0; i<n; i++){ // save different cluster in each row
+    for(int i = 0; i < n; i++){ // save different cluster in each row
         clust_idxs[ allocations[i] ].push_back(i);
     }
 
     // DEBUG:
-    for(int j=0; j<num_clusters; j++){ 
+    for(int j = 0; j < num_clusters; j++){ 
         std::cout << "Cluster #" << j << ": ";
-        for (unsigned int i=0; i<clust_idxs[j].size(); i++)
+        for (unsigned int i = 0; i < clust_idxs[j].size(); i++)
             std::cout << " " << clust_idxs[j][i];
         std::cout << std::endl;
     }
 
-    for (unsigned int j=0; j< num_clusters; j++) {
+    for (int j = 0; j < num_clusters; j++) {
         std::vector<double> curr_data;
         for ( auto &idx : clust_idxs[j] )
             curr_data.push_back( data[idx] );
