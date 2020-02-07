@@ -47,7 +47,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
         
         // Draw a NEW value for ci
-        Eigen::MatrixXd probas(n_unique +(1-singleton) ,1); 
+        Eigen::VectorXd probas(n_unique +(1-singleton)); 
         
 
         auto M = mixture.get_totalmass();
@@ -55,7 +55,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
         for(int k = 0; k < n_unique ; k++){
         
-            probas(k,0) = card[k] * unique_values[k].log_like(data[i]) / (
+            probas(k) = card[k] * unique_values[k].log_like(data[i]) / (
                 n-1+M);
             if(singleton==1 && k==i){
                 // Take the hyperparameters
@@ -81,7 +81,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                     2*alpha0, mu0, sigtilde))/ (n-1+M);
 
             } // metti in i la probas c!=cj con integrale TODO done?
-            tot+=probas(k,0);
+            tot+=probas(k);
         }
 
         if(singleton == 0){

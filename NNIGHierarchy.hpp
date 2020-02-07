@@ -34,8 +34,8 @@ public:
     double eval_G0(double datum);
     double log_like(double datum);
 
-    Eigen::VectorXf eval_G0(std::vector<double> datum);
-    Eigen::VectorXf log_like(std::vector<double> datum);
+    Eigen::VectorXd eval_G0(std::vector<double> datum);
+    Eigen::VectorXd log_like(std::vector<double> datum);
 
     void draw();
 

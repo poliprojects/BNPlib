@@ -33,7 +33,7 @@ private:
     std::vector<unsigned int> allocations;
     std::vector<Hierarchy<Hypers>> unique_values;
     std::vector<Hierarchy<Hypers>> aux_unique_values;
-    std::pair< std::vector<double>, Eigen::VectorXf > density;
+    std::pair< std::vector<double>, Eigen::VectorXd > density;
     Mixture mixture;
     ChainOutput chain;
 

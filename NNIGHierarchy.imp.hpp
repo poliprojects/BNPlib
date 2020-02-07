@@ -9,9 +9,9 @@ double NNIGHierarchy<Hypers>::log_like(double datum){
 }
 
 template<class Hypers> 
-Eigen::VectorXf NNIGHierarchy<Hypers>::log_like(std::vector<double> datum){
+Eigen::VectorXd NNIGHierarchy<Hypers>::log_like(std::vector<double> datum){
     // TODO stan per vector?? 
-    Eigen::VectorXf result;
+    Eigen::VectorXd result;
     for(int i = 0; i < datum.size(); i++){
         result(i) = exp(stan::math::normal_lpdf(datum[i], state[0], state[1]));
     }
@@ -30,9 +30,9 @@ void NNIGHierarchy<Hypers>::draw(){
 }
 
 template<class Hypers> 
-Eigen::VectorXf NNIGHierarchy<Hypers>::eval_G0(std::vector<double> datum){
+Eigen::VectorXd NNIGHierarchy<Hypers>::eval_G0(std::vector<double> datum){
      // TODO stan per vector??
-    Eigen::VectorXf result;
+    Eigen::VectorXd result;
     for(int i = 0; i < datum.size(); i++){
         result(i) = exp(
             stan::math::normal_lpdf(

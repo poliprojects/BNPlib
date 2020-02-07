@@ -15,7 +15,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::initalize(){
         int num = distribution(generator); //TODO da stan?
         allocations[j] = num;
     }
-    }
+}
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
@@ -56,27 +56,26 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
         }
 
         // Draw a NEW value for ci
-        Eigen::MatrixXd probas(n_unique+n_aux,1); //k or n_unique
-        //Matrix<double, Dynamic, 1> VectorXd
+        Eigen::VectorXd probas(n_unique+n_aux); //k or n_unique
 
         auto M = mixture.get_totalmass();
         double tot = 0.0;
         for(int k = 0; k < n_unique ; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
-            probas(k,0) = card[k] * unique_values[k].log_like(data[i]) / (
+            probas(k) = card[k] * unique_values[k].log_like(data[i]) / (
                 n-1+M);
-            tot += probas(k,0);
+            tot += probas(k);
         }
 
         for(int k = 0; k < n_aux; k++){
-            probas(n_unique+k,0) = (M/n_aux) *
+            probas(n_unique+k) = (M/n_aux) *
                 aux_unique_values[k].log_like(data[i]) / (n-1+M);
             tot += probas(n_unique+k,0);
-           }
+        }
         probas = probas * (1/tot);
 
         //for(int i = 0; i < probas.size(); i++){
-        //    std::cout << "probas_" << probas(i,0) << std::endl; // DEBUG
+        //    std::cout << "probas_" << probas(i) << std::endl; // DEBUG
         //}
         unsigned int c_new = stan::math::categorical_rng(probas, rng) -1;
 
@@ -116,7 +115,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
     } // end of for(int i = 0; i < n; i++) loop
 
-    } // end of sample_allocations()
+} // end of sample_allocations()
 
 
 
@@ -148,7 +147,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::sample_unique_values(){
     }
 
     // std::cout << std::endl; // DEBUG
-    }
+}
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
@@ -179,13 +178,13 @@ void Neal8<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
     
-    Eigen::VectorXf errors(maxiter);
+    Eigen::VectorXd errors(maxiter);
 
     int n = data.size();
     
-    Eigen::MatrixXd TOTdiss(n,n);
-    TOTdiss = Eigen::MatrixXd::Zero(n, n);
-    std::vector<Eigen::MatrixXd> ALLdiss;
+    Eigen::MatrixXd tot_diss(n,n);
+    tot_diss = Eigen::MatrixXd::Zero(n, n);
+    std::vector<Eigen::MatrixXd> all_diss;
     IterationOutput temp;
     
     for(int h = 0; h < maxiter; h++){
@@ -200,15 +199,15 @@ void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
             }
         }
 
-        ALLdiss.push_back(dissim);
-        TOTdiss = TOTdiss + dissim;
+        all_diss.push_back(dissim);
+        tot_diss = tot_diss + dissim;
     
     }
 
-    TOTdiss = TOTdiss / maxiter;
+    tot_diss = tot_diss / maxiter;
 
     for(int h = 0; h < maxiter; h++){
-        errors(h) = (TOTdiss-ALLdiss[h]).norm();
+        errors(h) = (tot_diss-all_diss[h]).norm();
     }
     
     //std::cout<<errors<<std::endl; //DEBUG
@@ -225,7 +224,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
 
     density.first = grid;
 
-    Eigen::VectorXf dens(grid.size());
+    Eigen::VectorXd dens(grid.size());
     auto M = mixture.get_totalmass();
     int n = data.size();
     IterationOutput temp;
@@ -242,7 +241,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
         temp_state[0] = temp.phi(h).params(0);
         temp_state[1] = temp.phi(h).params(1);
         temp_uniq_v.set_state(temp_state);
-        dens += card[h]*temp_uniq_v.log_like(grid)/(data.size()+M);
+        dens += card[h]*temp_uniq_v.log_like(grid)/(M+data.size());
        }
     dens += M * temp_uniq_v.log_like(grid) / (M+data.size());
     }
