@@ -13,9 +13,18 @@ TODO LIST
 * initialize() with boost::random::mt19937 (or boost::mt19937?)
 * deal with the extra dynamically allocated Hypers
 * empty includes.hpp as much as possible
-* const everywhere
-* DEBUG
 * acceleration steps?
+* density_eval: proto and csv
+* write chain to file?
+
+STYLE
+* DEBUG
+* if {}
+* indentation
+* remove libraries and includes
+* const everywhere
+* order of methods (publ-prot-publ...)
+* remove typedefs
 
 SLIDES
 * Add PDF about the integral in the references
