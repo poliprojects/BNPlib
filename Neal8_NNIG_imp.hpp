@@ -216,11 +216,11 @@ void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
 		}
 
 		ALLdiss.push_back(dissim);
-		TOTdiss=TOTdiss+dissim;
+		TOTdiss = TOTdiss + dissim;
 	
 	}
 
-	TOTdiss=TOTdiss/maxiter;
+	TOTdiss = TOTdiss / maxiter;
 
 
 	for(int h = 0; h < maxiter; h++){
@@ -238,29 +238,35 @@ void Neal8<Hierarchy,Hypers,Mixture>::cluster_estimate(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::eval_density(){
-Eigen::VectorXf density(grid.size());
-auto M = mixture.get_totalmass();
-int n=data.size();
-IterationOutput temp;
-for (int i = 0; i < maxiter; i++) {
-	temp= *chain.mutable_state(i);
-	std::vector<int> card(temp.phi_size(), 0); // TODO salviamoci ste card da qualche parte
-	for(int j=0; j<n; j++)
-        card[ temp.allocations(j) ] += 1;
+void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
+    const std::vector<data_t> grid){
 
-	Hierarchy<Hypers> temp_uniq_v(unique_values[0].get_hypers());
-	for(int h = 0; h < temp.phi_size(); h++) { 
-		std::array<par_t,2> temp_state;
-		temp_state[0]=temp.phi(h).params(0);
-		temp_state[1]=temp.phi(h).params(1);
-		temp_uniq_v.set_state(temp_state);
-		density+=card[h]*temp_uniq_v.log_like(grid)/(data.size()+M);
-	}
-	density+=M*temp_uniq_v.log_like(grid)/(M+data.size());
-}
+    density.first = grid;
 
-density=density/maxiter;
+    Eigen::VectorXf dens(grid.size());
+    auto M = mixture.get_totalmass();
+    int n = data.size();
+    IterationOutput temp;
+    for (int i = 0; i < chain.state_size(); i++) {
+    	temp = *chain.mutable_state(i);
+    	std::vector<int> card(temp.phi_size(), 0); // TODO salviamoci ste card da qualche parte
+    	for(int j=0; j<n; j++)
+            card[ temp.allocations(j) ] += 1;
+
+	   Hierarchy<Hypers> temp_uniq_v(unique_values[0].get_hypers());
+	   for(int h = 0; h < temp.phi_size(); h++) { 
+	   	std::array<par_t,2> temp_state;
+	   	temp_state[0] = temp.phi(h).params(0);
+	   	temp_state[1] = temp.phi(h).params(1);
+	   	temp_uniq_v.set_state(temp_state);
+	   	dens += card[h]*temp_uniq_v.log_like(grid)/(data.size()+M);
+	   }
+	dens += M * temp_uniq_v.log_like(grid) / (M+data.size());
+    }
+
+    dens = dens / maxiter;
+
+    density.second = dens;
 }
 
 
@@ -279,7 +285,7 @@ void Neal8<Hierarchy,Hypers,Mixture>::print(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy,Hypers,Mixture>::write_clusters_to_file(
+void Neal8<Hierarchy,Hypers,Mixture>::write_clustering_to_file(
     std::string filename){
     std::ofstream file;
     file.open(filename);
@@ -289,6 +295,20 @@ void Neal8<Hierarchy,Hypers,Mixture>::write_clusters_to_file(
         auto params = unique_values[ allocations[i] ].get_state();
         file << i << "," << data[i] << "," << allocations[i] << "," <<
         params[0] << "," << params[1] << std::endl;
+    }
+    
+    file.close();
+}
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+void Neal8<Hierarchy,Hypers,Mixture>::write_density_to_file(
+    std::string filename){
+    std::ofstream file;
+    file.open(filename);
+
+    file << "x,f(x)" << std::endl;
+    for(int i=0; i<density.first.size(); i++){
+        file << density.first[i] << "," << density.second(i) << std::endl;
     }
     
     file.close();

@@ -33,13 +33,11 @@ private:
     Mixture mixture;
 	ChainOutput chain;
 
-	std::vector<data_t> grid;
     std::vector<data_t> data;
     std::vector<unsigned int> allocations; // the c vector
     std::vector<Hierarchy<Hypers>> unique_values;
     std::vector<Hierarchy<Hypers>> aux_unique_values;
-
-
+    std::pair< std::vector<double>, Eigen::VectorXf > density;
 
     void initalize();
 
@@ -53,8 +51,6 @@ private:
     void sample_unique_values();
 	
 	void cluster_estimate();
-
-	void eval_density();
 
     void save_iteration(unsigned int iter);
 
@@ -72,8 +68,6 @@ public:
             iter++;
         }
 	cluster_estimate();
-	if(grid.size()>0)
-	eval_density();
     }
 
     // Constructors and destructors:
@@ -90,26 +84,15 @@ public:
             }
     }
 
-	Neal8(const std::vector<data_t> & grid, const std::vector<data_t> & data, int numClusters,int n_aux,
-        const Mixture & mix,const Hypers &hy):
-        grid(grid), data(data), numClusters(numClusters), n_aux(n_aux), mixture(mix) {
-            Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
-            for (int h=0; h<numClusters; h++) {
-                unique_values.push_back(hierarchy);
-            }
-            for (int h=0; h<n_aux; h++) {
-                aux_unique_values.push_back(hierarchy);
-            }
-    }
     // If no # initial clusters is given, it will be set equal to the data size:
     Neal8(std::vector<data_t> &data, int n_aux, const Mixture & mix,
         const Hypers &hy): Neal8(data, data.size(), n_aux, mix, hy) {}
 
-    Neal8(const std::vector<data_t> & grid, std::vector<data_t> &data, int n_aux, const Mixture & mix,
-        const Hypers &hy): Neal8(grid, data, data.size(), n_aux, mix, hy) {}
+    void eval_density(const std::vector<data_t> grid);
 
+    void write_clustering_to_file(std::string filename="output.csv");
 
-    void write_clusters_to_file(std::string filename="output.csv");
+    void write_density_to_file(std::string filename="density.csv");
 
 }; // end of Class Neal8
 
