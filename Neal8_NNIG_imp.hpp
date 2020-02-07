@@ -248,7 +248,7 @@ for (int i = 0; i < maxiter; i++) {
         card[ temp.allocations(j) ] += 1;
 
 	Hierarchy<Hypers> temp_uniq_v(unique_values[0].get_hypers());
-	for(int h = 0; h < temp.phi_size(); h++) { // 	TODO MEAN SUGLI ITER
+	for(int h = 0; h < temp.phi_size(); h++) { 
 		std::array<par_t,2> temp_state;
 		temp_state[0]=temp.phi(h).params(0);
 		temp_state[1]=temp.phi(h).params(1);
