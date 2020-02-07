@@ -10,3 +10,6 @@ main
 *.lo
 *.so
 *.so.*
+
+# Output files
+*.csv
