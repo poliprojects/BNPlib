@@ -240,17 +240,27 @@ void Neal8<Hierarchy,Hypers,Mixture>::eval_density(){
 Eigen::VectorXf density(grid.size());
 auto M = mixture.get_totalmass();
 int n=data.size();
+IterationOutput temp;
+for (int i = 0; i < maxiter; i++) {
+	temp= *chain.mutable_state(i);
+	std::vector<int> card(temp.phi_size(), 0); // TODO salviamoci ste card da qualche parte
+	for(int j=0; j<n; j++)
+        card[ temp.allocations(j) ] += 1;
 
-std::vector<int> card(unique_values.size(), 0); // TODO salviamoci ste card da qualche parte
-        for(int j=0; j<n; j++)
-            card[ allocations[j] ] += 1;
-
-
-	for(int h = 0; h < numClusters; h++) { // 	TODO MEAN SUGLI ITER
-	density+=card[h]*unique_values[h].log_like(grid)/(data.size()+M);
+	Hierarchy<Hypers> temp_uniq_v(unique_values[0].get_hypers());
+	for(int h = 0; h < temp.phi_size(); h++) { // 	TODO MEAN SUGLI ITER
+		std::array<par_t,2> temp_state;
+		temp_state[0]=temp.phi(h).params(0);
+		temp_state[1]=temp.phi(h).params(1);
+		temp_uniq_v.set_state(temp_state);
+		density+=card[h]*temp_uniq_v.log_like(grid)/(data.size()+M);
 	}
-	density+=M*unique_values[0].log_like(grid)/(M+data.size());
+	density+=M*temp_uniq_v.log_like(grid)/(M+data.size());
 }
+
+density=density/maxiter;
+}
+
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy,Hypers,Mixture>::print(){
