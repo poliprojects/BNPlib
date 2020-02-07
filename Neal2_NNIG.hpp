@@ -85,6 +85,6 @@ public:
 
 }; // end of Class Neal2
 
-#include "Neal2_NNIG_imp.hpp"
+#include "Neal2_NNIG.imp.hpp"
 
 #endif // NEAL2NNIG_HPP

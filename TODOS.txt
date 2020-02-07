@@ -15,13 +15,11 @@ TODO LIST
 * acceleration steps?
 * density_eval: proto and csv
 * write chain to file?
-* maxiter in constructor
 * getters setters Neal8
-* rename files
 
 STYLE
 * DEBUG
-* if {}
+* if {}, for {}
 * indentation
 * remove libraries and includes
 * const everywhere

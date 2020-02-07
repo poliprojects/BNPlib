@@ -93,6 +93,6 @@ public:
 
 }; // end of Class Neal8
 
-#include "Neal8_NNIG_imp.hpp"
+#include "Neal8_NNIG.imp.hpp"
 
 #endif // NEAL8NNIG_HPP

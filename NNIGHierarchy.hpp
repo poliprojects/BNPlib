@@ -42,6 +42,6 @@ public:
     double mu0, double alpha0, double beta0, double lambda0);
 };
 
-#include "NNIGHierarchy_imp.hpp"
+#include "NNIGHierarchy.imp.hpp"
 
 #endif // NNIGHIERARCHY_HPP
