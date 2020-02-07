@@ -53,13 +53,13 @@ private:
     void sample_unique_values();
 
     void save_iteration(unsigned int iter);
-	
-	void cluster_estimate();
+    
+    void cluster_estimate();
 
     const void print(); // TODO ?
 
 public:
-	// Running tool
+    // Running tool
     void run(){
         initalize();
         unsigned int iter = 0;
@@ -70,7 +70,7 @@ public:
             }
             iter++;
         }
-	cluster_estimate();
+    cluster_estimate();
     }
 
     // Other tools

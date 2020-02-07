@@ -26,7 +26,7 @@ public:
     // Getters and setters
     state_t get_state(){return state;}
 
-	std::shared_ptr<Hypers> get_hypers(){return hypers;}
+    std::shared_ptr<Hypers> get_hypers(){return hypers;}
 
     void set_state(const state_t &s){state = s;}
 
@@ -35,11 +35,11 @@ public:
     int get_count(){return hypers.use_count();}
 
     // Computation tools
-	double eval_G0(double datum);
+    double eval_G0(double datum);
 
     double log_like(double datum);
 
-	Eigen::VectorXf eval_G0(std::vector<double> datum);
+    Eigen::VectorXf eval_G0(std::vector<double> datum);
 
     Eigen::VectorXf log_like(std::vector<double> datum);
 

@@ -29,7 +29,7 @@ private:
     std::mt19937 rng;
     int num_clusters;
     Mixture mixture;
-	//ChainOutput chain;
+    //ChainOutput chain;
  
 
     std::vector<double> data;
@@ -54,7 +54,7 @@ private:
     void print();
 
 public:
-	// Running tool
+    // Running tool
     void run(){
         initalize();
         unsigned int iter = 0;
