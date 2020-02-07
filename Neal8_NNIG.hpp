@@ -26,8 +26,8 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal8{
 private:
     unsigned int n_aux = 3;
-    unsigned int maxiter = 5000; // TODO LATER
-    unsigned int burnin = 0;
+    unsigned int maxiter = 5000; // TODO!!!!!!!!!!!!
+    unsigned int burnin = 1000;
     std::mt19937 rng;
     int numClusters;
     Mixture mixture;

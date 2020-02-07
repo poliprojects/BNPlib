@@ -264,9 +264,9 @@ void Neal8<Hierarchy,Hypers,Mixture>::eval_density(
 	dens += M * temp_uniq_v.log_like(grid) / (M+data.size());
     }
 
-    dens = dens / maxiter;
+    dens = dens / chain.state_size();
 
-    density.second = dens;
+    //density.second = dens;
 }
 
 

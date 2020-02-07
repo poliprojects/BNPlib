@@ -5,12 +5,11 @@ MOST IMPORTANT
 * Report + slides
 
 TODO LIST
-* is the posterior update given data, given clusters, correct?
+* CONSTRUCTORS (arguments)
 * a way to erase and add clusters more efficiently
 * Documentation with Doxygen (?)
-* readme.md mide for the Github repo
+* readme.md for the Github repo
 * probas in a separate function?
-* initialize() with boost::random::mt19937 (or boost::mt19937?)
 * deal with the extra dynamically allocated Hypers
 * empty includes.hpp as much as possible
 * acceleration steps?
