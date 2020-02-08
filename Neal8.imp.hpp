@@ -228,7 +228,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     double M = mixture.get_totalmass();
     int n = data.size();
     IterationOutput state;
-    std::array<double, 2> params; // TODO specificcc
+    std::vector<double> params;
 
     for(int iter = 0; iter < chain.state_size(); iter++){
         // for each iteration of the algorithm
@@ -241,14 +241,14 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         }
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
         for(int h = 0; h < state.phi_size(); h++){
-	    	for(int i=0; i< state.phi(h).params_size(); i++){
-            	params[i] = state.phi(h).params(i);
+	    	for(int k = 0; k < state.phi(h).params_size(); k++){
+            	params[k] = state.phi(h).params(k);
 			}
             temp_hier.set_state(params);
 
             dens += card[h] * temp_hier.log_like(grid) /(M+n);
         }
-         dens += M * temp_hier.eval_marg(grid) /(M+n); // TODO FAI CON AUSILIARI
+        dens += M * temp_hier.eval_marg(grid) /(M+n); //TODO FAI CON AUSILIARI
     }
 
     // DEBUG:
@@ -282,16 +282,19 @@ const void Neal8<Hierarchy, Hypers, Mixture>::print(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 const void Neal8<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
         std::string filename){
+    // number,datum,cluster,params1,params2,...
+    
     std::ofstream file;
     file.open(filename);
 
-    file << "number,datum,cluster,mu,sigma2" << std::endl;
     for(int i = 0; i < data.size(); i++){
         auto params = unique_values[ allocations[i] ].get_state();
-        file << i << "," << data[i] << "," << allocations[i] << "," <<
-        params[0] << "," << params[1] << std::endl;
+        file << i << "," << data[i] << "," << allocations[i];
+        for(int j = 0; j < params.size(); j++){
+            file << "," << params[j];
+        }
+        std::cout << std::endl;
     }
-    
     file.close();
 }
 
@@ -299,17 +302,19 @@ const void Neal8<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 const void Neal8<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
     std::string filename){
+    // number,datum,cluster,params1,params2,...
+
     std::ofstream file;
     file.open(filename);
 
-    file << "number,datum,cluster,mu,sigma2" << std::endl;
     for(int i = 0; i < data.size(); i++){
         unsigned int ci = best_clust.allocations(i);
-        file << i << "," << data[i] << "," << ci <<
-        "," << best_clust.phi(ci).params(0) <<
-        "," << best_clust.phi(ci).params(1) << std::endl;
+        file << i << "," << data[i] << "," << ci;
+        for(int j = 0; j < best_clust.phi(ci).params_size(); j++){
+            file << "," << best_clust.phi(ci).params(j);
+        }
+        file << std::endl;
     }
-    
     file.close();
 }
 
@@ -317,19 +322,22 @@ const void Neal8<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 const void Neal8<Hierarchy, Hypers, Mixture>::write_chain_to_file(
     std::string filename){
+    // number,datum,cluster,params1,params2,...
+
     std::ofstream file;
     file.open(filename);
-    file << "iteration,number,datum,cluster,mu,sigma2" << std::endl;
 
     // for each iteration of the algorithm
     for(int iter = 0; iter < chain.state_size(); iter++){
         // for each data point
         for(int i = 0; i < data.size(); i++){
-            // std::cout << iter << " " << i << std::endl; // DEBUG
-            unsigned int ci = chain.state(iter).allocations(i);
-            file << iter << "," << i << "," << data[i] << "," << ci <<
-            "," << chain.state(iter).phi(ci).params(0) <<
-            "," << chain.state(iter).phi(ci).params(1) << std::endl;
+            auto state_iter = chain.state(iter);
+            unsigned int ci = state_iter.allocations(i);
+            file << iter << "," << i << "," << data[i] << "," << ci;
+            for(int j = 0; j < state_iter.phi(ci).params_size(); j++){
+                file << "," << state_iter.phi(ci).params(j);
+            }
+            file << std::endl;
         }
     }
 
@@ -343,7 +351,6 @@ const void Neal8<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::ofstream file;
     file.open(filename);
 
-    file << "x,f(x)" << std::endl;
     for(int i = 0; i < density.first.size(); i++){
         file << density.first[i] << "," << density.second(i) << std::endl;
     }

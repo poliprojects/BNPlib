@@ -10,10 +10,8 @@
 template<class Hypers>
 class NNIGHierarchy {
 protected:
-    using state_t = std::array<double,2>;
-
     std::mt19937 rng;
-    state_t state; // current values for F's parameters: mu, sigma
+    std::vector<double> state; // current values for F's parameters: mu, sigma
     std::shared_ptr<Hypers> hypers; // current values for G0's parameters:
                                     // mu_0,Lambda0, alpha, beta
 
@@ -21,12 +19,12 @@ public:
     // Contructors
     ~NNIGHierarchy() = default;
 
-    NNIGHierarchy(std::shared_ptr<Hypers> hypers): hypers(hypers) {}
+    NNIGHierarchy(std::shared_ptr<Hypers> hypers): hypers(hypers), state(2,1) {}
 
     // Getters and setters
-    state_t get_state(){return state;}
+    std::vector<double> get_state(){return state;}
     std::shared_ptr<Hypers> get_hypers(){return hypers;}
-    void set_state(const state_t &s){state = s;}
+    void set_state(const std::vector<double> &s){state = s;}
     void set_state(int pos, double val){state[pos] = val;}
     int get_count(){return hypers.use_count();}
 

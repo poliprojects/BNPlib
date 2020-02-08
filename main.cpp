@@ -31,7 +31,7 @@ int main(){
     // Density stuff
     std::vector<double> grid = {1,1.5,2,2.5,3,3.5,4};
     sampler8.eval_density(grid);
-    sampler8.write_density_to_file();
+    //sampler8.write_density_to_file();
 
     // Clustering stuff
     //unsigned int i_cap = sampler8.cluster_estimate();
