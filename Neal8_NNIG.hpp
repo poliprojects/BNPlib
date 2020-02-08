@@ -93,7 +93,7 @@ public:
     // Constructors and destructors
     ~Neal8() = default;
     Neal8(const std::vector<double> &data, int num_clusters, int n_aux,
-        const Mixture & mix,const Hypers &hy):
+        const Mixture &mix, const Hypers &hy):
         data(data), num_clusters(num_clusters), n_aux(n_aux), mixture(mix) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
             for(int h = 0; h < num_clusters; h++){
