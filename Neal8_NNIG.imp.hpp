@@ -311,6 +311,32 @@ const void Neal8<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
+const void Neal8<Hierarchy, Hypers, Mixture>::write_chain_to_file(
+    std::string filename){
+    std::ofstream file;
+    file.open(filename);
+    file << "iteration,number,datum,cluster,mu,sigma2" << std::endl;
+
+    // std::cout << "state=" << chain.state_size() << ", data="
+    // << data.size() << std::endl; // DEBUG
+
+    // for each iteration of the algorithm
+    for(int iter = 0; iter < chain.state_size(); iter++){
+        // for each data point
+        for(int i = 0; i < data.size(); i++){
+            //std::cout << iter << " " << i << std::endl; // DEBUG
+            unsigned int ci = chain.state(iter).allocations(i);
+            file << iter << "," << i << "," << data[i] << "," << ci <<
+            "," << best_clust.phi(ci).params(0) <<
+            "," << best_clust.phi(ci).params(1) << std::endl;
+        }
+    }
+
+    file.close();
+}
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
 const void Neal8<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::string filename){
     std::ofstream file;

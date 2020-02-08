@@ -32,13 +32,13 @@ int main(){
     //sampler8.write_density_to_file();
     unsigned int i_cap = sampler8.cluster_estimate();
     std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    sampler8.write_final_clustering_to_file();
-    sampler8.write_best_clustering_to_file();
-    
+    //sampler8.write_final_clustering_to_file();
+    //sampler8.write_best_clustering_to_file();
+    sampler8.write_chain_to_file();
+
     //for(int i = 0; i < 40; i++){
       //  std::cout << i << ": " << data[i] << std::endl;
     //}
 
     return 0;
-
 }

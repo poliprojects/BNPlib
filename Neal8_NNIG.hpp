@@ -24,7 +24,7 @@ class Neal8{
 private:
     // Mehtods parameters
     unsigned int n_aux = 3;
-    unsigned int maxiter = 5000;
+    unsigned int maxiter = 4000;
     unsigned int burnin = 1000;
     unsigned int num_clusters;
 
@@ -83,6 +83,9 @@ public:
 
     const void write_best_clustering_to_file(
         std::string filename = "best_clust.csv");
+
+    const void write_chain_to_file(
+        std::string filename = "chain.csv");
 
     const void write_density_to_file(
         std::string filename = "density.csv");

@@ -1,19 +1,21 @@
 TODO LIST
 URGENT
-* EVAL_G0 (WTF?)
-* CONSTRUCTORS (arguments)
+* eval_G0 (WTF?)
+* constructors (arguments)
 * "log"-like?
-* Write whole chain to file?
-* Check if cluster_estimate() is correct
+* write_chain stops
+* check if cluster_estimate() is correct
+
 NOT URGENT
-* A way to erase and add clusters more efficiently
+* a way to erase and add clusters more efficiently
 * probas in a separate function?
-* Deal with the extra dynamically allocated Hypers
+* deal with the extra dynamically allocated Hypers
 * DEBUG lines
-* Print specifics/results of running algorithm
+* print specifics/results of running algorithm
+* rename proto messages
 
 EXTENSIONS
-* Acceleration steps?
-* Documentation with Doxygen
+* acceleration steps?
+* documentation with Doxygen
 * README.md for the Github repo
-* Hypers not fixed
+* hypers not fixed
