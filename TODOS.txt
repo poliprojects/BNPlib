@@ -1,18 +1,18 @@
 TODO LIST
-URGENT
+DISCUSS
 * eval_G0 (WTF?)
 * constructors (arguments)
 * "log"-like?
 * write_chain stops
 * check if cluster_estimate() is correct
-
-NOT URGENT
-* a way to erase and add clusters more efficiently
 * probas in a separate function?
 * deal with the extra dynamically allocated Hypers
+* a way to erase and add clusters more efficiently
+* rename proto messages
+
+MANOVALANZA
 * DEBUG lines
 * print specifics/results of running algorithm
-* rename proto messages
 
 EXTENSIONS
 * acceleration steps?
