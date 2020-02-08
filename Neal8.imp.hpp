@@ -1,7 +1,7 @@
-#ifndef NEAL8_NNIG_IMP_HPP
-#define NEAL8_NNIG_IMP_HPP
+#ifndef NEAL8_IMP_HPP
+#define NEAL8_IMP_HPP
 
-#include "Neal8_NNIG.hpp"
+#include "Neal8.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::initalize(){
@@ -352,4 +352,4 @@ const void Neal8<Hierarchy, Hypers, Mixture>::write_density_to_file(
 }
 
 
-#endif // NEAL8NNIG_HPP
+#endif // NEAL8_IMP_HPP
