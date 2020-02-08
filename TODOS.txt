@@ -3,8 +3,6 @@ DISCUSS
 * eval_G0 (WTF?)
 * constructors (arguments)
 * "log"-like?
-* write_chain stops
-* check if cluster_estimate() is correct
 * probas in a separate function?
 * deal with the extra dynamically allocated Hypers
 * a way to erase and add clusters more efficiently
