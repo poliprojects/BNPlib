@@ -72,7 +72,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 aux_unique_values[k].log_like(data[i]) / (n-1+M);
             tot += probas(n_unique+k,0);
         }
-        probas = probas * (1/tot);
+        probas = probas / tot;
 
         //for(int i = 0; i < probas.size(); i++){
         //    std::cout << "probas_" << probas(i) << std::endl; // DEBUG
@@ -204,7 +204,7 @@ unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     
     }
 
-    tot_diss = tot_diss * (1/niter);
+    tot_diss = tot_diss / niter;
 
     for(int h = 0; h < niter; h++){
         // Compute error in Frobenius norm
@@ -249,15 +249,20 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
 
             dens += card[h]/(M+n) * temp_hier.log_like(grid);
         }
-        dens += M/(M+n) * temp_hier.eval_G0(grid); // TODO
+        // dens += M/(M+n) * temp_hier.eval_G0(grid); // TODO
     }
 
-    density.second = dens * (1/chain.state_size());
+    // DEBUG:
+    // for(int i = 0; i < grid.size(); i++)
+    //     std::cout << dens(i) << " ";
+    // std::cout << std::endl;
+
+    density.second = dens / chain.state_size();
 
     // DEBUG:
-    for(int i=0; i<grid.size(); i++)
-        std::cout << density.second(i) << " ";
-    std::cout << std::endl;
+    // for(int i = 0; i < grid.size(); i++)
+    //     std::cout << density.second(i) << " ";
+    // std::cout << std::endl;
 }
 
 
