@@ -77,7 +77,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         //for(int i = 0; i < probas.size(); i++){
         //    std::cout << "probas_" << probas(i) << std::endl; // DEBUG
         //}
-        unsigned int c_new = stan::math::categorical_rng(probas, rng) -1;
+        unsigned int c_new = stan::math::categorical_rng(probas, rng) - 1;
 
         //std::cout<<"c_new: "<<c_new<<std::endl; // DEBUG
 
@@ -254,7 +254,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         // Component from G0
         for(int h = 0; h < n_aux; h++){
             temp_hier.draw();
-            dens +=  temp_hier.log_like(grid) * (M/n_aux) / (M+n);
+            dens += (M/n_aux) * temp_hier.log_like(grid) / (M+n);
         }
     }
 

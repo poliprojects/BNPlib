@@ -73,11 +73,11 @@ public:
     }
 
 
-	unsigned int cluster_estimate();
+    unsigned int cluster_estimate();
 
     void eval_density(const std::vector<double> grid);
 
-	const void write_final_clustering_to_file(
+    const void write_final_clustering_to_file(
         std::string filename = "final_clust.csv");
 
     const void write_best_clustering_to_file(

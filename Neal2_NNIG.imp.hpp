@@ -43,78 +43,70 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
         
         // Draw a NEW value for ci
-        Eigen::VectorXd probas(n_unique +(1-singleton)); 
+        Eigen::VectorXd probas(n_unique+(1-singleton)); 
         
 
         auto M = mixture.get_totalmass();
-        double tot=0.0;
+        double tot = 0.0;
 
         for(int k = 0; k < n_unique ; k++){
         
             probas(k) = card[k] * unique_values[k].log_like(data[i]) / (
                 n-1+M);
-            if(singleton==1 && k==i){
+            if(singleton == 1 && k == i){
                 // Take the hyperparameters
-                std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
+                std::shared_ptr<Hypers> hy = unique_values[0].get_hypers();
                 double mu0    = hy->get_mu0();
                 double lambda = hy->get_lambda();
                 double alpha0 = hy->get_alpha0();
                 double beta0  = hy->get_beta0();
-
                 
                 double sigtilde= sqrt(beta0*(lambda+1)/(alpha0*lambda));
                 probas(i,0) = M * exp(stan::math::student_t_lpdf(data[i],
                     2*alpha0, mu0, sigtilde))/ (n-1+M);
 
             } 
-            tot+=probas(k);
+            tot += probas(k);
         }
 
         if(singleton == 0){
-            std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
+            std::shared_ptr<Hypers> hy = unique_values[0].get_hypers();
                 double mu0    = hy->get_mu0();
                 double lambda = hy->get_lambda();
                 double alpha0 = hy->get_alpha0();
                 double beta0  = hy->get_beta0();
 
-            double sigtilde= sqrt(beta0*(lambda+1/(alpha0*lambda)));
+            double sigtilde = sqrt(beta0*(lambda+1/(alpha0*lambda)));
             probas(n_unique,0) = M * exp(stan::math::student_t_lpdf(data[i],
-                2*alpha0, mu0, sigtilde))/ (n-1+M);
-            tot+=probas(n_unique,0);
+                2*alpha0, mu0, sigtilde)) / (n-1+M);
+            tot += probas(n_unique,0);
         }
 
-        
-        probas = probas * (1/tot);
-
-        
+        // Normalize
+        probas = probas / tot;
         
         unsigned int c_new = stan::math::categorical_rng(probas, rng) - 1;
         
-       
-
         if(singleton == 1){
             if(c_new == allocations[i]){ // case 1 of 4: SINGLETON - SINGLETON
                 std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
                 double mu0    = hy->get_mu0();
                 double lambda = hy->get_lambda();
                 double alpha0 = hy->get_alpha0();
-                double beta0  = hy->get_beta0();
+                double beta0  = hy->get_beta0();    
 
-                
-
-				std::vector<double> par_pair(2);
+                std::vector<double> par_pair(2);
                 double sigma_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
                     beta0+(lambda*pow(data[i]-mu0,2))/(lambda+2), rng);
-                double mu_new = stan::math::normal_rng((lambda*mu0+data[i])/(lambda+1),
-                    sigma_new/(lambda+1), rng); 
-                par_pair[0]=mu_new;
-                par_pair[1]=sigma_new;
-                unique_values[ allocations[i]].set_state(par_pair); 
+                double mu_new = stan::math::normal_rng(
+                    (lambda*mu0+data[i])/(lambda+1), sigma_new/(lambda+1), rng); 
+                par_pair[0] = mu_new;
+                par_pair[1] = sigma_new;
+                unique_values[ allocations[i] ].set_state(par_pair); 
                 
             }
             else{ // case 2 of 4: SINGLETON - CLUSTER
-                unique_values.erase(
-                    unique_values.begin()+allocations[i] );
+                unique_values.erase( unique_values.begin()+allocations[i] );
                 
                 int tmp = allocations[i];
                 allocations[i] = c_new;
@@ -125,6 +117,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                 }
             } // end of else
         } // end of if(singleton == 1)
+
         else{ // if singleton == 0
             if(c_new == n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
                 std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
@@ -133,30 +126,28 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                 double alpha0 = hy->get_alpha0();
                 double beta0  = hy->get_beta0();
 
-
-		std::vector<double> par_pair(2);
+               std::vector<double> par_pair(2);
 
                 double sigma_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
                     beta0+(lambda*pow(data[i]-mu0,2))/(lambda+2), rng);
-                double mu_new = stan::math::normal_rng((lambda*mu0+data[i])/(lambda+1),
-                    sigma_new/(lambda+1), rng); 
-                par_pair[0]=mu_new;
-                par_pair[1]=sigma_new;
-                Hierarchy<Hypers> newUnique(hy);
-                newUnique.set_state(par_pair); 
-                unique_values.push_back(newUnique); 
+                double mu_new = stan::math::normal_rng((lambda*mu0+data[i])/
+                    (lambda+1), sigma_new/(lambda+1), rng); 
+                par_pair[0] = mu_new;
+                par_pair[1] = sigma_new;
+                Hierarchy<Hypers> new_unique(hy);
+                new_unique.set_state(par_pair); 
+                unique_values.push_back(new_unique); 
                 allocations[i] = n_unique;
             }
             else{ // case 4 of 4: NOT SINGLETON - CLUSTER
                 allocations[i] = c_new;
             }
+
         } // end of else
 
     } // end of for(int i = 0; i < n; i++) loop
 
-    } // end of sample_allocations()
-
-
+} // end of sample_allocations()
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
@@ -179,7 +170,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_unique_values(){
 
     for (int j = 0; j < num_clusters; j++) {
         std::vector<double> curr_data;
-        for ( auto &idx : clust_idxs[j] )
+        for (auto &idx : clust_idxs[j])
             curr_data.push_back( data[idx] );
         unique_values[j].sample_given_data(curr_data);
     }
@@ -213,9 +204,8 @@ unsigned int Neal2<Hierarchy, Hypers, Mixture>::cluster_estimate(){
             }
         }
 
-    all_diss.push_back(dissim);
-    tot_diss = tot_diss + dissim;
-    
+        all_diss.push_back(dissim);
+        tot_diss = tot_diss + dissim;
     }
 
     tot_diss = tot_diss / niter;
@@ -248,24 +238,25 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
     for(int iter = 0; iter < chain.state_size(); iter++){
         // for each iteration of the algorithm
 
-
         state = *chain.mutable_state(iter);
         std::vector<unsigned int> card(state.phi_size(),
             0); // TODO salviamoci ste card da qualche parte
-		std::vector<double> params(state.phi(0).params_size());
+        std::vector<double> params(state.phi(0).params_size());
         for(int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
         for(int h = 0; h < state.phi_size(); h++){
-	    	for(int i=0; i< state.phi(h).params_size(); i++){
-            	params[i] = state.phi(h).params(i);
-			}
+            for(int k = 0; k < state.phi(h).params_size(); k++){
+                params[k] = state.phi(h).params(k);
+            }
             temp_hier.set_state(params);
 
-            dens += card[h] * temp_hier.log_like(grid) /(M+n);
+            dens += card[h] * temp_hier.log_like(grid) / (M+n);
         }
-         dens += M * temp_hier.eval_marg(grid) /(M+n); 
+
+        // Component from G0 (exploit conjugacy: we use the explicit expression)
+         dens += M * temp_hier.eval_marg(grid) / (M+n); 
     }
 
     // DEBUG:
@@ -318,7 +309,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::print(){
         }
         std::cout << std::endl;
     }
-    }
+}
 
 
 
