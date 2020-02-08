@@ -1,5 +1,5 @@
-#ifndef NEAL8_NNIG_HPP
-#define NEAL8_NNIG_HPP
+#ifndef NEAL8_HPP
+#define NEAL8_HPP
 
 #include <fstream>
 #include <math.h>
@@ -124,6 +124,6 @@ public:
 
 }; // end of Class Neal8
 
-#include "Neal8_NNIG.imp.hpp"
+#include "Neal8.imp.hpp"
 
-#endif // NEAL8NNIG_HPP
+#endif // NEAL8_HPP

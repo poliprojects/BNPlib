@@ -3,7 +3,7 @@
 
 #include "HypersFixed.hpp"
 #include "Neal2_NNIG.hpp"
-#include "Neal8_NNIG.hpp"
+#include "Neal8.hpp"
 #include "NNIGHierarchy.hpp"
 #include "SimpleMixture.hpp"
 
