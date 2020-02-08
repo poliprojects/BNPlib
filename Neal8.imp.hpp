@@ -228,14 +228,16 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     double M = mixture.get_totalmass();
     int n = data.size();
     IterationOutput state;
-    std::vector<double> params;
 
     for(int iter = 0; iter < chain.state_size(); iter++){
         // for each iteration of the algorithm
+        //std::cout << iter << std::endl; // DEBUG
 
         state = *chain.mutable_state(iter);
         std::vector<unsigned int> card(state.phi_size(),
             0); // TODO salviamoci ste card da qualche parte
+        std::vector<double> params(state.phi(0).params_size());
+
         for(int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
@@ -293,9 +295,10 @@ const void Neal8<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
         for(int j = 0; j < params.size(); j++){
             file << "," << params[j];
         }
-        std::cout << std::endl;
+        file << std::endl;
     }
     file.close();
+    std::cout << "Succesfully wrote to " << filename << std::endl;
 }
 
 
@@ -316,6 +319,7 @@ const void Neal8<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
         file << std::endl;
     }
     file.close();
+    std::cout << "Succesfully wrote to " << filename << std::endl;
 }
 
 
@@ -342,6 +346,7 @@ const void Neal8<Hierarchy, Hypers, Mixture>::write_chain_to_file(
     }
 
     file.close();
+    std::cout << "Succesfully wrote to " << filename << std::endl;
 }
 
 
@@ -356,6 +361,7 @@ const void Neal8<Hierarchy, Hypers, Mixture>::write_density_to_file(
     }
     
     file.close();
+    std::cout << "Succesfully wrote to " << filename << std::endl;
 }
 
 

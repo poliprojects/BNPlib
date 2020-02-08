@@ -23,22 +23,22 @@ int main(){
     SimpleMixture mix(1.0);
     //Neal2<NNIGHierarchy, HypersFixed, SimpleMixture> sampler2(data, mix, hy);
     Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8(data, 3, mix, hy);
-    Neal2<NNIGHierarchy, HypersFixed, SimpleMixture> sampler2(data, mix, hy);
+
     // Run samplers
     //sampler2.run();
     sampler8.run();
-    sampler2.run();
+
     // Density stuff
     std::vector<double> grid = {1,1.5,2,2.5,3,3.5,4};
     sampler8.eval_density(grid);
     //sampler8.write_density_to_file();
 
-    sampler2.eval_density(grid);
+    //sampler2.eval_density(grid);
     //sampler2.write_density_to_file();
 
     // Clustering stuff
     //unsigned int i_cap = sampler8.cluster_estimate();
-    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
     //sampler8.write_final_clustering_to_file();
     //sampler8.write_best_clustering_to_file();
     //sampler8.write_chain_to_file();
