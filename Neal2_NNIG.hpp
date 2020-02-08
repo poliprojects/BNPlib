@@ -1,6 +1,7 @@
 #ifndef NEAL2_NNIG_HPP
 #define NEAL2_NNIG_HPP
 
+#include <fstream>
 #include <tuple>
 #include <vector>
 #include <math.h>
@@ -75,6 +76,18 @@ public:
 	unsigned int cluster_estimate();
 
     void eval_density(const std::vector<double> grid);
+
+	const void write_final_clustering_to_file(
+        std::string filename = "final_clust.csv");
+
+    const void write_best_clustering_to_file(
+        std::string filename = "best_clust.csv");
+
+    const void write_chain_to_file(
+        std::string filename = "chain.csv");
+
+    const void write_density_to_file(
+        std::string filename = "density.csv");
 
     // Constructors and destructors:
     ~Neal2() = default;

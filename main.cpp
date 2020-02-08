@@ -38,7 +38,7 @@ int main(){
 
     // Clustering stuff
     //unsigned int i_cap = sampler8.cluster_estimate();
-    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
     //sampler8.write_final_clustering_to_file();
     //sampler8.write_best_clustering_to_file();
     //sampler8.write_chain_to_file();

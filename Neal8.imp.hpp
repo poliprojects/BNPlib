@@ -250,7 +250,11 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
 
             dens += card[h] * temp_hier.log_like(grid) /(M+n);
         }
-        dens += M * temp_hier.eval_marg(grid) /(M+n); //TODO FAI CON AUSILIARI
+	
+	
+	for(int h = 0; h < n_aux; h++){
+	temp_hier.draw();
+        dens += (M/n_aux) * temp_hier.log_like(grid) /(M+n);}
     }
 
     // DEBUG:

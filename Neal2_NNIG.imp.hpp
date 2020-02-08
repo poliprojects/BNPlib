@@ -100,7 +100,9 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                 double alpha0 = hy->get_alpha0();
                 double beta0  = hy->get_beta0();
 
-                std::array<double,2> par_pair;
+                
+
+				std::vector<double> par_pair(2);
                 double sigma_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
                     beta0+(lambda*pow(data[i]-mu0,2))/(lambda+2), rng);
                 double mu_new = stan::math::normal_rng((lambda*mu0+data[i])/(lambda+1),
@@ -131,7 +133,9 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                 double alpha0 = hy->get_alpha0();
                 double beta0  = hy->get_beta0();
 
-                std::array<double,2> par_pair;
+
+		std::vector<double> par_pair(2);
+
                 double sigma_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
                     beta0+(lambda*pow(data[i]-mu0,2))/(lambda+2), rng);
                 double mu_new = stan::math::normal_rng((lambda*mu0+data[i])/(lambda+1),
@@ -239,14 +243,16 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
     double M = mixture.get_totalmass();
     int n = data.size();
     IterationOutput state;
-    std::array<double, 2> params; // TODO specificcc
+
 
     for(int iter = 0; iter < chain.state_size(); iter++){
         // for each iteration of the algorithm
 
+
         state = *chain.mutable_state(iter);
         std::vector<unsigned int> card(state.phi_size(),
             0); // TODO salviamoci ste card da qualche parte
+		std::vector<double> params(state.phi(0).params_size());
         for(int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
@@ -316,5 +322,88 @@ void Neal2<Hierarchy,Hypers,Mixture>::print(){
 
 
 
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+const void Neal2<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
+        std::string filename){
+    // number,datum,cluster,params1,params2,...
+    
+    std::ofstream file;
+    file.open(filename);
+
+    for(int i = 0; i < data.size(); i++){
+        auto params = unique_values[ allocations[i] ].get_state();
+        file << i << "," << data[i] << "," << allocations[i];
+        for(int j = 0; j < params.size(); j++){
+            file << "," << params[j];
+        }
+        file << std::endl;
+    }
+    file.close();
+    std::cout << "Succesfully wrote to " << filename << std::endl;
+}
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+const void Neal2<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
+    std::string filename){
+    // number,datum,cluster,params1,params2,...
+
+    std::ofstream file;
+    file.open(filename);
+
+    for(int i = 0; i < data.size(); i++){
+        unsigned int ci = best_clust.allocations(i);
+        file << i << "," << data[i] << "," << ci;
+        for(int j = 0; j < best_clust.phi(ci).params_size(); j++){
+            file << "," << best_clust.phi(ci).params(j);
+        }
+        file << std::endl;
+    }
+    file.close();
+    std::cout << "Succesfully wrote to " << filename << std::endl;
+}
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+const void Neal2<Hierarchy, Hypers, Mixture>::write_chain_to_file(
+    std::string filename){
+    // number,datum,cluster,params1,params2,...
+
+    std::ofstream file;
+    file.open(filename);
+
+    // for each iteration of the algorithm
+    for(int iter = 0; iter < chain.state_size(); iter++){
+        // for each data point
+        for(int i = 0; i < data.size(); i++){
+            auto state_iter = chain.state(iter);
+            unsigned int ci = state_iter.allocations(i);
+            file << iter << "," << i << "," << data[i] << "," << ci;
+            for(int j = 0; j < state_iter.phi(ci).params_size(); j++){
+                file << "," << state_iter.phi(ci).params(j);
+            }
+            file << std::endl;
+        }
+    }
+
+    file.close();
+    std::cout << "Succesfully wrote to " << filename << std::endl;
+}
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+const void Neal2<Hierarchy, Hypers, Mixture>::write_density_to_file(
+    std::string filename){
+    std::ofstream file;
+    file.open(filename);
+
+    for(int i = 0; i < density.first.size(); i++){
+        file << density.first[i] << "," << density.second(i) << std::endl;
+    }
+    
+    file.close();
+    std::cout << "Succesfully wrote to " << filename << std::endl;
+}
 
 #endif // NEAL2NNIG_HPP
