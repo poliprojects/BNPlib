@@ -31,10 +31,10 @@ public:
     int get_count(){return hypers.use_count();}
 
     // Computation tools
-    double eval_G0(double datum);
+    double eval_marg(double datum);
     double log_like(double datum);
 
-    Eigen::VectorXd eval_G0(std::vector<double> datum);
+    Eigen::VectorXd eval_marg(std::vector<double> datum);
     Eigen::VectorXd log_like(std::vector<double> datum);
 
     void draw();

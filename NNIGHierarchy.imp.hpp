@@ -30,29 +30,21 @@ void NNIGHierarchy<Hypers>::draw(){
 
 
 template<class Hypers> 
-double NNIGHierarchy<Hypers>::eval_G0(double datum){ // TODO
-    return exp(
-        stan::math::normal_lpdf(
-            datum, hypers->get_mu0(),
-            stan::math::inv_gamma_lpdf(datum, hypers->get_alpha0(),
-            hypers->get_beta0())/hypers->get_lambda()
-        )
-    ); 
+double NNIGHierarchy<Hypers>::eval_marg(double datum){ // TODO
+	double sigtilde= sqrt(hypers->get_beta0()*(hypers->get_lambda()+1)/(hypers->get_alpha0()*hypers->get_lambda()));
+    return exp(stan::math::student_t_lpdf(datum,
+                    2*hypers->get_alpha0(), hypers->get_mu0(), sigtilde)); 
 }
 
 
 template<class Hypers> 
-Eigen::VectorXd NNIGHierarchy<Hypers>::eval_G0(std::vector<double> datum){
+Eigen::VectorXd NNIGHierarchy<Hypers>::eval_marg(std::vector<double> datum){
+	double sigtilde= sqrt(hypers->get_beta0()*(hypers->get_lambda()+1)/(hypers->get_alpha0()*hypers->get_lambda()));
     // TODO stan per vector?? // TODO anche per tutto il resto
-    Eigen::VectorXd result;
+    Eigen::VectorXd result(datum.size());
     for(int i = 0; i < datum.size(); i++){
-        result(i) = exp(
-            stan::math::normal_lpdf(
-                datum[i], hypers->get_mu0(),
-                stan::math::inv_gamma_lpdf(datum[i], hypers->get_alpha0(),
-                hypers->get_beta0())/hypers->get_lambda()
-            )
-        );
+        result(i) = exp(stan::math::student_t_lpdf(datum[i],
+                    2*hypers->get_alpha0(), hypers->get_mu0(), sigtilde)); 
     }
     return result;
 }

@@ -76,7 +76,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                 
                 // Compute the weight
                 //probas(i,0) = factor1 / factor2 * pow(base, 1.5);
-                double sigtilde= sqrt(beta0*(lambda+1/(alpha0*lambda)));
+                double sigtilde= sqrt(beta0*(lambda+1)/(alpha0*lambda));
                 probas(i,0) = M * exp(stan::math::student_t_lpdf(data[i],
                     2*alpha0, mu0, sigtilde))/ (n-1+M);
 

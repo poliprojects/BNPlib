@@ -245,9 +245,9 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
             params[1] = state.phi(h).params(1);
             temp_hier.set_state(params);
 
-            dens += card[h]/(M+n) * temp_hier.log_like(grid);
+            dens += card[h] * temp_hier.log_like(grid) /(M+n);
         }
-        // dens += M/(M+n) * temp_hier.eval_G0(grid); // TODO
+         dens += M * temp_hier.eval_marg(grid) /(M+n); // TODO
     }
 
     // DEBUG:
@@ -257,7 +257,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
 
     density.second = dens / chain.state_size();
 
-    // DEBUG:
+    //DEBUG:
     // for(int i = 0; i < grid.size(); i++)
     //     std::cout << density.second(i) << " ";
     // std::cout << std::endl;
