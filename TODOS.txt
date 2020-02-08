@@ -1,12 +1,14 @@
 TODO LIST
 DISCUSS
-* eval_G0 (WTF?)
+* try doing plots
 * constructors (arguments)
 * "log"-like?
 * probas in a separate function?
 * deal with the extra dynamically allocated Hypers
 * a way to erase and add clusters more efficiently
 * rename proto messages
+* blocked Gibbs?
+* all TODOS in the files
 
 MANOVALANZA
 * DEBUG lines
