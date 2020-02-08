@@ -240,14 +240,15 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
             card[ state.allocations(j) ] += 1;
         }
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
-        for(int h = 0; h < state.phi_size(); h++){    
-            params[0] = state.phi(h).params(0);
-            params[1] = state.phi(h).params(1);
+        for(int h = 0; h < state.phi_size(); h++){
+	    	for(int i=0; i< state.phi(h).params_size(); i++){
+            	params[i] = state.phi(h).params(i);
+			}
             temp_hier.set_state(params);
 
             dens += card[h] * temp_hier.log_like(grid) /(M+n);
         }
-         dens += M * temp_hier.eval_marg(grid) /(M+n); // TODO
+         dens += M * temp_hier.eval_marg(grid) /(M+n); // TODO FAI CON AUSILIARI
     }
 
     // DEBUG:
