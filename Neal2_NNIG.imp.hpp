@@ -21,11 +21,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::initalize(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
-    // TODO Other ideas:
-    // * our own for loop for k and bool (ci is a singleton)
-    // * function from std count distinct values in vector
-    // * using a (multi)map?
-    // Initialize some relevant variables
+    
     unsigned int k, n_unique, singleton;
     unsigned int n = data.size();
 
@@ -65,22 +61,12 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                 double alpha0 = hy->get_alpha0();
                 double beta0  = hy->get_beta0();
 
-                // Compute pieces of the weight
-                //double factor1 = alpha0 * sqrt(lambda) * pow(2*beta0,alpha0) *
-                    //tgamma(alpha0/2 + 0.25);
-                //double factor2 = sqrt(M_PI) * pow(1+lambda, alpha0+1) *
-                    //tgamma(alpha0+1);
-                //double y = 1.0; // TODO what is y?
-                //double base = (y*y + lambda*mu0*mu0+2*beta0)/(1+lambda) -
-                    //(y+mu0)*(y+mu0) / ((1+lambda)*(1+lambda));
                 
-                // Compute the weight
-                //probas(i,0) = factor1 / factor2 * pow(base, 1.5);
                 double sigtilde= sqrt(beta0*(lambda+1)/(alpha0*lambda));
                 probas(i,0) = M * exp(stan::math::student_t_lpdf(data[i],
                     2*alpha0, mu0, sigtilde))/ (n-1+M);
 
-            } // metti in i la probas c!=cj con integrale TODO done?
+            } 
             tot+=probas(k);
         }
 
@@ -121,7 +107,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                     sigma_new/(lambda+1), rng); 
                 par_pair[0]=mu_new;
                 par_pair[1]=sigma_new;
-                unique_values[ allocations[i]].set_state(par_pair); // TODO draw da H
+                unique_values[ allocations[i]].set_state(par_pair); 
                 
             }
             else{ // case 2 of 4: SINGLETON - CLUSTER
@@ -180,12 +166,12 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_unique_values(){
     }
 
     // DEBUG:
-    for(int j = 0; j < num_clusters; j++){ 
-        std::cout << "Cluster #" << j << ": ";
-        for (unsigned int i = 0; i < clust_idxs[j].size(); i++)
-            std::cout << " " << clust_idxs[j][i];
-        std::cout << std::endl;
-    }
+    //for(int j = 0; j < num_clusters; j++){ 
+    //    std::cout << "Cluster #" << j << ": ";
+    //    for (unsigned int i = 0; i < clust_idxs[j].size(); i++)
+    //        std::cout << " " << clust_idxs[j][i];
+    //    std::cout << std::endl;
+    //}
 
     for (int j = 0; j < num_clusters; j++) {
         std::vector<double> curr_data;
@@ -194,22 +180,131 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_unique_values(){
         unique_values[j].sample_given_data(curr_data);
     }
 
-    std::cout << std::endl; // DEBUG
+    //std::cout << std::endl; // DEBUG
     }
+
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+unsigned int Neal2<Hierarchy, Hypers, Mixture>::cluster_estimate(){
+    // also returns the index of the estimate in the chain object
+
+    unsigned int niter = maxiter - burnin;
+    Eigen::VectorXd errors(niter);
+    int n = data.size();
+    Eigen::MatrixXd tot_diss(n, n);
+    tot_diss = Eigen::MatrixXd::Zero(n, n);
+    std::vector<Eigen::MatrixXd> all_diss;
+    IterationOutput temp;
+    
+    for(int h = 0; h < niter; h++){
+        temp = *chain.mutable_state(h);
+        Eigen::MatrixXd dissim(n, n);
+        dissim = Eigen::MatrixXd::Zero(n, n);
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < i; j++){
+                if(temp.allocations(i) == temp.allocations(j)){
+                    dissim(i,j) = 1;
+                }
+            }
+        }
+
+    all_diss.push_back(dissim);
+    tot_diss = tot_diss + dissim;
+    
+    }
+
+    tot_diss = tot_diss / niter;
+
+    for(int h = 0; h < niter; h++){
+        // Compute error in Frobenius norm
+        errors(h) = (tot_diss-all_diss[h]).norm();
+    }
+    
+    //std::cout << errors << std::endl; // DEBUG
+    std::ptrdiff_t i;
+    int min_err = errors.minCoeff(&i);
+    best_clust = chain.state(i);
+    return i;
+}
+
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
+        const std::vector<double> grid){
+    density.first = grid;
+
+    Eigen::VectorXd dens(grid.size());
+    double M = mixture.get_totalmass();
+    int n = data.size();
+    IterationOutput state;
+    std::array<double, 2> params; // TODO specificcc
+
+    for(int iter = 0; iter < chain.state_size(); iter++){
+        // for each iteration of the algorithm
+
+        state = *chain.mutable_state(iter);
+        std::vector<unsigned int> card(state.phi_size(),
+            0); // TODO salviamoci ste card da qualche parte
+        for(int j = 0; j < n; j++){
+            card[ state.allocations(j) ] += 1;
+        }
+        Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
+        for(int h = 0; h < state.phi_size(); h++){
+	    	for(int i=0; i< state.phi(h).params_size(); i++){
+            	params[i] = state.phi(h).params(i);
+			}
+            temp_hier.set_state(params);
+
+            dens += card[h] * temp_hier.log_like(grid) /(M+n);
+        }
+         dens += M * temp_hier.eval_marg(grid) /(M+n); 
+    }
+
+    // DEBUG:
+    // for(int i = 0; i < grid.size(); i++)
+    //     std::cout << dens(i) << " ";
+    // std::cout << std::endl;
+
+    density.second = dens / chain.state_size();
+
+    //DEBUG:
+    // for(int i = 0; i < grid.size(); i++)
+    //     std::cout << density.second(i) << " ";
+    // std::cout << std::endl;
+}
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
-    // TODO
-    std::cout << "Iteration n. " << iter+1 << " / " << maxiter << std::endl;
-    print();
+ 
+
+    //std::cout << "Iteration # " << iter << " / " << maxiter-1 <<
+    //    std::endl; // DEBUG
+    IterationOutput iter_out;
+
+    *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
+
+    for(int i = 0; i < unique_values.size(); i++){
+        UniqueValues temp;
+        for(auto &par : unique_values[i].get_state()){
+            temp.add_params(par);
+        }
+        iter_out.add_phi();
+        *iter_out.mutable_phi(i) = temp;
     }
+
+    chain.add_state();
+    *chain.mutable_state(iter-burnin) = iter_out;
+
+    //print();
+}
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy,Hypers,Mixture>::print(){
     for (int h = 0; h < num_clusters; h++) {
-        std::cout << "Cluster # " << h << std::endl;
         std::cout << "Parameters: ";
 
         for (auto c : unique_values[h].get_state()){

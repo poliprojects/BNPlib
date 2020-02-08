@@ -29,7 +29,9 @@ private:
     std::mt19937 rng;
     int num_clusters;
     Mixture mixture;
-    //ChainOutput chain;
+    std::pair< std::vector<double>, Eigen::VectorXd > density;
+    ChainOutput chain;
+    IterationOutput best_clust;
  
 
     std::vector<double> data;
@@ -56,6 +58,7 @@ private:
 public:
     // Running tool
     void run(){
+        std::cout << "Running Neal2" << std::endl;
         initalize();
         unsigned int iter = 0;
         while(iter < maxiter){
@@ -65,7 +68,13 @@ public:
             }
             iter++;
         }
+        std::cout << "Done" << std::endl;
     }
+
+
+	unsigned int cluster_estimate();
+
+    void eval_density(const std::vector<double> grid);
 
     // Constructors and destructors:
     ~Neal2() = default;
