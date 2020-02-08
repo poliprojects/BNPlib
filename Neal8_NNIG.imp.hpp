@@ -228,7 +228,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     double M = mixture.get_totalmass();
     int n = data.size();
     IterationOutput state;
-    std::array<double, 2> params;
+    std::array<double, 2> params; // TODO specificcc
 
     for(int iter = 0; iter < chain.state_size(); iter++){
         // for each iteration of the algorithm
