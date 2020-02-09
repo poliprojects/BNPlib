@@ -15,6 +15,7 @@ MANOVALANZA
 * print specifics/results of running algorithm
 
 EXTENSIONS
+* create generic Algorithm class?
 * acceleration steps?
 * documentation with Doxygen
 * README.md for the Github repo
