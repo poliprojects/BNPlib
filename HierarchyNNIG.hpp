@@ -37,10 +37,10 @@ public:
 
     void draw();
 
-    void sample_given_data(std::vector<double> data);
-
     std::vector<double> normal_gamma_update(std::vector<double> data,
         double mu0, double alpha0, double beta0, double lambda0);
+
+    void sample_given_data(std::vector<double> data);
 
 };
 
