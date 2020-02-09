@@ -1,15 +1,15 @@
-#ifndef NNIGHIERARCHY_IMP_HPP
-#define NNIGHIERARCHY_IMP_HPP
+#ifndef HIERARCHYNNIG_IMP_HPP
+#define HIERARCHYNNIG_IMP_HPP
 
-#include "NNIGHierarchy.hpp"
+#include "HierarchyNNIG.hpp"
 
 template<class Hypers> 
-double NNIGHierarchy<Hypers>::log_like(double datum){
+double HierarchyNNIG<Hypers>::log_like(double datum){
         return exp(stan::math::normal_lpdf(datum, state[0], state[1]));
 }
 
 template<class Hypers> 
-Eigen::VectorXd NNIGHierarchy<Hypers>::log_like(std::vector<double> datum){
+Eigen::VectorXd HierarchyNNIG<Hypers>::log_like(std::vector<double> datum){
     // TODO stan per vector?? 
     Eigen::VectorXd result(datum.size());
     for(int i = 0; i < datum.size(); i++){
@@ -19,7 +19,7 @@ Eigen::VectorXd NNIGHierarchy<Hypers>::log_like(std::vector<double> datum){
 }
 
 template<class Hypers> 
-void NNIGHierarchy<Hypers>::draw(){
+void HierarchyNNIG<Hypers>::draw(){
     double sigma_new = stan::math::inv_gamma_rng(hypers->get_alpha0(),
         hypers->get_beta0(), rng);
     double mu_new = stan::math::normal_rng(hypers->get_mu0(),
@@ -30,7 +30,7 @@ void NNIGHierarchy<Hypers>::draw(){
 
 
 template<class Hypers> 
-double NNIGHierarchy<Hypers>::eval_marg(double datum){ // TODO
+double HierarchyNNIG<Hypers>::eval_marg(double datum){ // TODO
 	double sigtilde= sqrt(hypers->get_beta0()*(hypers->get_lambda()+1)/(hypers->get_alpha0()*hypers->get_lambda()));
     return exp(stan::math::student_t_lpdf(datum,
                     2*hypers->get_alpha0(), hypers->get_mu0(), sigtilde)); 
@@ -38,7 +38,7 @@ double NNIGHierarchy<Hypers>::eval_marg(double datum){ // TODO
 
 
 template<class Hypers> 
-Eigen::VectorXd NNIGHierarchy<Hypers>::eval_marg(std::vector<double> datum){
+Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(std::vector<double> datum){
 	double sigtilde= sqrt(hypers->get_beta0()*(hypers->get_lambda()+1)/(hypers->get_alpha0()*hypers->get_lambda()));
     // TODO stan per vector?? // TODO anche per tutto il resto
     Eigen::VectorXd result(datum.size());
@@ -50,7 +50,7 @@ Eigen::VectorXd NNIGHierarchy<Hypers>::eval_marg(std::vector<double> datum){
 }
 
 template<class Hypers> 
-void NNIGHierarchy<Hypers>::sample_given_data(std::vector<double> data){
+void HierarchyNNIG<Hypers>::sample_given_data(std::vector<double> data){
     // Get current values of parameters
     double mu0     = hypers->get_mu0();
     double lambda0 = hypers->get_lambda();
@@ -75,7 +75,7 @@ void NNIGHierarchy<Hypers>::sample_given_data(std::vector<double> data){
 
 
 template<class Hypers> 
-std::vector<double> NNIGHierarchy<Hypers>::normal_gamma_update(
+std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
     std::vector<double> data, double mu0, double alpha0, double beta0,
     double lambda0){
 
@@ -102,4 +102,4 @@ std::vector<double> NNIGHierarchy<Hypers>::normal_gamma_update(
     return std::vector<double>{mu_post, alpha_post, beta_post, lambda_post};
 }
 
-#endif // NNIGHIERARCHY_IMP_HPP
+#endif // HIERARCHYNNIG_IMP_HPP

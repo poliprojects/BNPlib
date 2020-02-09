@@ -7,9 +7,8 @@
 #include <math.h>
 #include <Eigen/Dense> 
 #include <stan/math/prim/mat.hpp>
-#include <type_traits>
 #include <math.h>
-#include "NNIGHierarchy.hpp"
+#include "HierarchyNNIG.hpp"
 #include "SimpleMixture.hpp"
 #include "HypersFixedNNIG.hpp"
 #include "output.pb.h"

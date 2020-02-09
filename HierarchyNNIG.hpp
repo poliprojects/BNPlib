@@ -1,5 +1,5 @@
-#ifndef NNIGHIERARCHY_HPP
-#define NNIGHIERARCHY_HPP
+#ifndef HIERARCHYNNIG_HPP
+#define HIERARCHYNNIG_HPP
 
 #include <array>
 #include <memory>
@@ -8,7 +8,7 @@
 #include <stan/math/prim/mat.hpp>
 
 template<class Hypers>
-class NNIGHierarchy {
+class HierarchyNNIG {
 protected:
     std::mt19937 rng;
     std::vector<double> state; // current values for F's parameters: mu, sigma
@@ -17,9 +17,9 @@ protected:
 
 public:
     // Contructors
-    ~NNIGHierarchy() = default;
+    ~HierarchyNNIG() = default;
 
-    NNIGHierarchy(std::shared_ptr<Hypers> hypers): hypers(hypers), state(2,1) {}
+    HierarchyNNIG(std::shared_ptr<Hypers> hypers): hypers(hypers), state(2,1) {}
 
     // Getters and setters
     std::vector<double> get_state(){return state;}
@@ -44,6 +44,6 @@ public:
 
 };
 
-#include "NNIGHierarchy.imp.hpp"
+#include "HierarchyNNIG.imp.hpp"
 
-#endif // NNIGHIERARCHY_HPP
+#endif // HIERARCHYNNIG_HPP

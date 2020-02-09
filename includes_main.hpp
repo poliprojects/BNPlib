@@ -4,7 +4,7 @@
 #include "HypersFixedNNIG.hpp"
 #include "Neal2_NNIG.hpp"
 #include "Neal8.hpp"
-#include "NNIGHierarchy.hpp"
+#include "HierarchyNNIG.hpp"
 #include "SimpleMixture.hpp"
 
 #endif // INCLUDES_MAIN_HPP

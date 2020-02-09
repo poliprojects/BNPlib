@@ -10,7 +10,7 @@
 #include <stan/math/prim/mat.hpp>
 
 #include "HypersFixedNNIG.hpp"
-#include "NNIGHierarchy.hpp"
+#include "HierarchyNNIG.hpp"
 #include "output.pb.h"
 #include "SimpleMixture.hpp"
 

@@ -21,9 +21,9 @@ int main(){
 
     HypersFixedNNIG hy(4, 1.5, 2.0, 2.0);
     SimpleMixture mix(1.0);
-    //Neal2<NNIGHierarchy, HypersFixedNNIG, SimpleMixture> sampler2(
+    //Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
     //    data, mix, hy);
-    Neal8<NNIGHierarchy, HypersFixedNNIG, SimpleMixture> sampler8(
+    Neal8<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler8(
         data, 3, mix, hy);
 
     // Run samplers
