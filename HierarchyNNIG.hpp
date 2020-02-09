@@ -26,7 +26,7 @@ public:
     std::shared_ptr<Hypers> get_hypers(){return hypers;}
     void set_state(const std::vector<double> &s){state = s;}
     void set_state(int pos, double val){state[pos] = val;}
-    int get_count(){return hypers.use_count();}
+    int get_count(){return hypers.use_count();} // TODO what?
 
     // Computation tools
     double eval_marg(double datum);
