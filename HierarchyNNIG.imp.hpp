@@ -51,30 +51,6 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(std::vector<double> datum){
     return result;
 }
 
-template<class Hypers> 
-void HierarchyNNIG<Hypers>::sample_given_data(std::vector<double> data){
-    // Get current values of parameters
-    double mu0     = hypers->get_mu0();
-    double lambda0 = hypers->get_lambda();
-    double alpha0  = hypers->get_alpha0();
-    double beta0   = hypers->get_beta0();
-
-    std::vector<double> temp = normal_gamma_update(data, mu0, alpha0, beta0,
-        lambda0);
-
-    double mu_post     = temp[0];
-    double alpha_post  = temp[1];
-    double beta_post   = temp[2];
-    double lambda_post = temp[3];
-
-    // Get a sample
-    double sigma_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
-    double mu_new = stan::math::normal_rng(mu_post, sigma_new/lambda_post,
-        rng); //? is it ok /lambda_post?
-    state[0] = mu_new;
-    state[1] = sigma_new;
-}
-
 
 template<class Hypers> 
 std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
@@ -103,5 +79,31 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
     
     return std::vector<double>{mu_post, alpha_post, beta_post, lambda_post};
 }
+
+
+template<class Hypers> 
+void HierarchyNNIG<Hypers>::sample_given_data(std::vector<double> data){
+    // Get current values of parameters
+    double mu0     = hypers->get_mu0();
+    double lambda0 = hypers->get_lambda();
+    double alpha0  = hypers->get_alpha0();
+    double beta0   = hypers->get_beta0();
+
+    std::vector<double> temp = normal_gamma_update(data, mu0, alpha0, beta0,
+        lambda0);
+
+    double mu_post     = temp[0];
+    double alpha_post  = temp[1];
+    double beta_post   = temp[2];
+    double lambda_post = temp[3];
+
+    // Get a sample
+    double sigma_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
+    double mu_new = stan::math::normal_rng(mu_post, sigma_new/lambda_post,
+        rng); // TODO is it ok /lambda_post?
+    state[0] = mu_new;
+    state[1] = sigma_new;
+}
+
 
 #endif // HIERARCHYNNIG_IMP_HPP
