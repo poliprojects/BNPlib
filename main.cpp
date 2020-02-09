@@ -19,10 +19,12 @@ int main(){
         data[i+half] = stan::math::normal_rng(mean2, sd2, rng_base);
     }
 
-    HypersFixed hy(4, 1.5, 2.0, 2.0);
+    HypersFixedNNIG hy(4, 1.5, 2.0, 2.0);
     SimpleMixture mix(1.0);
-    //Neal2<NNIGHierarchy, HypersFixed, SimpleMixture> sampler2(data, mix, hy);
-    Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8(data, 3, mix, hy);
+    //Neal2<NNIGHierarchy, HypersFixedNNIG, SimpleMixture> sampler2(
+    //    data, mix, hy);
+    Neal8<NNIGHierarchy, HypersFixedNNIG, SimpleMixture> sampler8(
+        data, 3, mix, hy);
 
     // Run samplers
     //sampler2.run();

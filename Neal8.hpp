@@ -9,7 +9,7 @@
 #include <Eigen/Dense>
 #include <stan/math/prim/mat.hpp>
 
-#include "HypersFixed.hpp"
+#include "HypersFixedNNIG.hpp"
 #include "NNIGHierarchy.hpp"
 #include "output.pb.h"
 #include "SimpleMixture.hpp"

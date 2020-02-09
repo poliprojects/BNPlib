@@ -1,15 +1,15 @@
-#ifndef HYPERSFIXED_HPP
-#define HYPERSFIXED_HPP
+#ifndef HYPERSFIXEDNNIG_HPP
+#define HYPERSFIXEDNNIG_HPP
 
-class HypersFixed {
+class HypersFixedNNIG {
 
 private:
     double mu0, lambda, alpha0, beta0;
 
 public:
-    ~HypersFixed() = default;
+    ~HypersFixedNNIG() = default;
 
-    HypersFixed(const double mu0, const double lambda, const double alpha0,
+    HypersFixedNNIG(const double mu0, const double lambda, const double alpha0,
                 const double beta0):
         mu0(mu0), lambda(lambda), alpha0(alpha0), beta0(beta0) {
             assert(lambda > 0);
@@ -30,4 +30,4 @@ public:
     void set_lambda(const double lambda_){lambda = lambda_;}
 };
 
-#endif // HYPERSFIXED_HPP
+#endif // HYPERSFIXEDNNIG_HPP

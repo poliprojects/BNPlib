@@ -11,7 +11,7 @@
 #include <math.h>
 #include "NNIGHierarchy.hpp"
 #include "SimpleMixture.hpp"
-#include "HypersFixed.hpp"
+#include "HypersFixedNNIG.hpp"
 #include "output.pb.h"
 
 // Normal likelihoood, Normal-InverseGamma hierarchy, that is:
