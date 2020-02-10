@@ -49,22 +49,19 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
         auto M = mixture.get_totalmass();
         double tot = 0.0;
 
-        for(int k = 0; k < n_unique ; k++){
-        
+        for(int k = 0; k < n_unique; k++){
             probas(k) = card[k] * unique_values[k].log_like(data[i]) / (
                 n-1+M);
             if(singleton == 1 && k == i){
-                // Take the hyperparameters
                 std::shared_ptr<Hypers> hy = unique_values[0].get_hypers();
                 double mu0    = hy->get_mu0();
                 double lambda = hy->get_lambda();
                 double alpha0 = hy->get_alpha0();
                 double beta0  = hy->get_beta0();
                 
-                double sigtilde= sqrt(beta0*(lambda+1)/(alpha0*lambda));
+                double sigtilde = sqrt(beta0*(lambda+1)/(alpha0*lambda));
                 probas(i,0) = M * exp(stan::math::student_t_lpdf(data[i],
-                    2*alpha0, mu0, sigtilde))/ (n-1+M);
-
+                    2*alpha0, mu0, sigtilde)) / (n-1+M);
             } 
             tot += probas(k);
         }
@@ -89,7 +86,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
         
         if(singleton == 1){
             if(c_new == allocations[i]){ // case 1 of 4: SINGLETON - SINGLETON
-                std::shared_ptr<Hypers> hy= unique_values[0].get_hypers();
+                std::shared_ptr<Hypers> hy = unique_values[0].get_hypers();
                 double mu0    = hy->get_mu0();
                 double lambda = hy->get_lambda();
                 double alpha0 = hy->get_alpha0();
@@ -102,7 +99,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                     (lambda*mu0+data[i])/(lambda+1), sigma_new/(lambda+1), rng); 
                 par_pair[0] = mu_new;
                 par_pair[1] = sigma_new;
-                unique_values[ allocations[i] ].set_state(par_pair); 
+                unique_values[ allocations[i] ].set_state(par_pair);
                 
             }
             else{ // case 2 of 4: SINGLETON - CLUSTER
