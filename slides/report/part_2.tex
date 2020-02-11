@@ -229,6 +229,9 @@ const void write_density_to_file(
 \end{verbatim}
 They can be called as need be from the \verb|main.cpp| file.
 If a file name is not provided, the above default names will be used.
+The former two create a \verb|.csv| file with the columns being, in order, data index, data value, allocation, unique values (one per column).
+\verb|write_chain_to_file()| has the same columns as the previous functions, but adds one more column containing the iteration number (starting from $0$) as the first one.
+Finally, \verb|write_density_to_file()| has values of $x$ in the first column and the corresponding $f(x)$ in the second one.
 
 \section{Results}
 TBD
