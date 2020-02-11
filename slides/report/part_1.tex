@@ -67,7 +67,7 @@ Extending the DP by convolving G with a kernel F, the model will have the form:
 An equivalent hierarchical model is:
 \begin{align*}
 			y_i | \theta_i &\indsim F(\cdot,\theta_i), \quad i=1,\dots,n \\
-			\theta_i | G &\iidsim G, \quad i=1,\dots,n \\
+			\theta_i | G &\iidsim G, \quad i=1,\dots,n \\ 
 			G &\sim DP(M G_0)
 \end{align*}
 
@@ -89,13 +89,50 @@ where $(p_1,...,p_K)$ represent the mixing proportions for the classes and each 
 
 
 \subsection{Normal Normal-InverseGamma Model}
+A very common choice is the Gaussian Mixture Model, opting for a Normal kernel and as base measure $G_0$ the conjugate Normal-InverseGamma:
 
+\begin{align*}
+            	k(y|\theta)&=N(y, \mu ,\sigma^2)  \\
+            	G_0(\theta|\mu_0,\lambda_0, \alpha_0, \beta_0)&=N\left(\mu | \mu_0 ,\frac{\sigma^2} {\lambda_0}\right)\text{Inv-Gamma}(\sigma^2|\alpha_0, \beta_0 )
+\end{align*}
 
+Thanks to the conjugacy the predictive distribution for a new observation $\widetilde{y}$ can be found analytically:
+
+\begin{align}
+      p(\widetilde{y}|\mu_0,\lambda_0, \alpha_0, \beta_0)= \int k(\widetilde{y}|\theta)p(\theta, G_0)d\theta= \frac{1}{\widetilde{\sigma}} \text{t-Student}\left(\frac{\widetilde{y}-\widetilde{\mu}}{\widetilde{\sigma}} ,|\widetilde{v}\right)        	
+\end{align}
+where $\widetilde{v}=2 \alpha_0$, $\widetilde{\mu}=\mu_0$ and $\widetilde{\sigma}= \sqrt{\frac{\beta_0(\lambda_0+1)}{\alpha_0 \lambda_0}} $
+
+The posterior distribution is again a Normal-InvGamma:
+
+\begin{align}
+          p(\theta|y,\mu_0,\lambda_0, \alpha_0, \beta_0)=N\left(\mu | \mu_n ,\frac{\sigma^2} {\lambda_0 + n}\right)\text{Inv-Gamma}(\sigma^2|\alpha_n, \beta_n )
+\end{align}
+with $\mu_n=\frac{\lambda_0 \mu_0 \bar{y} + n}{\lambda_0 + n}$ , $\alpha_n= \alpha_0 + \frac{n}{2} $ and $\beta_n= \beta_0 + \frac{1}{2}\sum_{i=1}^{n} (y_i-\bar{y})^2 + \frac{\lambda_0 n(\bar{y}-\mu_0)^2}{2(\lambda_0 + n)}$
 
 \section{Methods}
  
+Starting from the hierarchical model (n) a direct approach is simply drawing values for each $\theta_i$ from its conditional given the data and the other $\theta_j$, but as we discussed before there is an high probability for ties among them and this can result in a slow convergence. 
 
 \subsection{Neal2}
+
+To solve and make it more efficient Neal proposed, starting from the discrete model (n), a Gibbs sampling method, integrating out the mixing proportion $\textbf{p}$. Assuming the current state of Markov chain consists of $(c_1,...,c_n)$  and the component parameters $\phi_c$ for all c, the Gibbs sampler consists of drawing values for each $c_i$ given the conditional probabilities:
+
+
+\begin{align*}
+			\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) \propto \frac{n_{-i,c} + M/{K}}{n-1+M} F(y_{i},\phi_{c}) 
+\end{align*}
+
+and consequently a new value for each $\phi_c$ given the data belonging to that class. The passage to the infinite case is done taking the limit of $K$ to infinity in the conditional distribution of $c_i$ that becomes:
+
+
+\begin{align*}
+			\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c} }{n-1+M} F(y_{i},\phi_{c}) \\
+			\PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1+M} \int F(y_{i},\phi) \, G_0(\de\phi)
+\end{align*}
+
+e considering only the $\phi_c$ associated with some observation, keeping feasible the sampling. 
+
 
 \subsection{Neal8}
 
