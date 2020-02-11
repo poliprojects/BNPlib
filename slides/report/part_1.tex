@@ -131,10 +131,34 @@ and consequently a new value for each $\phi_c$ given the data belonging to that 
 			\PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1+M} \int F(y_{i},\phi) \, G_0(\de\phi)
 \end{align*}
 
-and considering only the $\phi_c$ associated with some observation, keeping feasible the sampling. At this point the algorithm works iteratively sampling $c$ and $\phi$. For each observation $i$ $c_i$ is updated according to its conditional distribution. It can be set either to one of the other components currently associated with some observation or to a new mixture component.  If the new value of $c_i$ is different from all the other $c_j$ a value for $\phi_{ci}$ is drawn from the posterior distribution $H_i$, based on the prior $G_0$ and the single observation $y_o$. Then for all the classes the  sample for $\phi_c$ is done considering the posterior distribution based on the prior and all the observations belonging to the specific class.
+and considering only the $\phi_c$ associated with some observation, keeping feasible the sampling. At this point the algorithm works iteratively sampling $c$ and $\phi$. For each observation $i$ $c_i$ is updated according to its conditional distribution. It can be set either to one of the other components currently associated with some observation or to a new mixture component.  If the new value of $c_i$ is different from all the other $c_j$ a value for $\phi_{ci}$ is drawn from the posterior distribution $H_i$, based on the prior $G_0$ and the single observation $y_i$. Then for all the classes the  sample for $\phi_c$ is done considering the posterior distribution based on the prior and all the observations belonging to the specific class.
 
 The probability of setting $c_i$ to a new component involves the integral $\int F(y_{i},\phi) \, G_0(\de\phi)$, which is difficult in the non-conjugate case, as well as the sample from $H_i$.
 
 \subsection{Neal8}
+To handle non-conjugate priors Neal proposed a second Markov chain sampling procedure where the state is extended by the addition of auxiliary parameters.
+This technique allows to update the $c_i$ avoiding the integration with respect to $G_0$.
+ 
+In this case the prior for $c_i$ are:
+\begin{align*}
+            \hspace{-25pt}
+            \vspace{-12pt}
+                \text{If $c=c_j$ for some $j$: } \PP(c_i=c | \mathbf c_{-i}) &= \frac{n_{-i,c}}{n-1+M}  \\
+                \PP(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1+M}                  
+\end{align*}
+            
+            	
+where the probability of selecting a new component is split among the $m$ auxiliary components.
+Maintaining the same structure as the \textit{Algorithm $2$}, the \textit{Algorithm $8$} is composed of two steps, where the components of the Markov Chain state $(c,\phi)$ are repeatedly sampled. The first step scans all the observations and evaluates each $c_i$. If this is equal to another $c_j$ then all the auxiliary variables are drawn from $G_0$. If it is a singleton then it is linked to one of the auxiliary variable with the corresponding value of $\phi_c$ while the others are drawn as before from $G_0$. Then $c_i$ is updated according to the conditional probabilities:
+
+\begin{displaymath}
+		            	\hspace{-20pt}
+		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1+M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1+M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
+		            	\end{cases}
+		            	\vspace{-5pt}
+		            	\end{displaymath}
+
+Once all the $\phi_c$ not associated anymore with any observation are discarded, the algorithm proceeds with the sampling for $\phi_c$ for all the classes.
+
 
 \subsection{Blocked Gibbs}
