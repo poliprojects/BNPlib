@@ -1,0 +1,102 @@
+
+ 
+ 
+\section{Introduction}
+This report presents the development of a Bayesian Non parametric library containing methods for density estimation and clustering. In a Bayesian Non-parametric setting we focused on the Dirichlet process (DP) and its extensions, one of the most widely used priors due to its flexibility and computational ease.
+
+\section{Dirichlet Process}
+\textbf{Formal definition} : Let $M>0$ and $G_0$ be a probability measure defined on S. A DP with parameters $(M,G_0)$ is a random probability measure $G$ defined on $S$ which assigns probability $G(B)$ to every (measurable) set B such that for each (measurable) finite partition ${B_1,...,B_k}$ of $S$, the joint distribution of the  vector $(G(B_1),...,G(B_k))$ is the Dirichlet distribution with parameters 
+
+\begin{align}
+(MG_0(B_1),...,MG_0(B_k)).
+\end{align}
+
+The parameter $M$ is called the precision or total mass parameter, $G_0$ is
+the centering measure, and the product $MG_0$ is referred to as the base measure
+of the DP.
+
+The basic DP model has the form:
+
+\begin{align*}
+		y_i | G &\iidsim G, \quad i=1,\dots,n \\
+		G &\sim DP(MG_0)
+\end{align*}
+
+
+
+A key property is that the DP is conjugate with respect to i.i.d sampling so that
+the posterior base distribution is a weighted average of the prior base distribution $G_0$ and the empirical distribution of the data, with the weighting controlled by $M$ :
+
+\begin{align}
+	G | \mathbf{y} \sim DP(M G_0 + \sum_{i=1}^n \delta_{y_i}) .
+\end{align}
+
+And the marginal distribution will be the result of the product of the conditionals:
+
+\begin{align}
+	p(y_i|y_1,...,y_{i-1})= \frac{1}{M+i-1}\sum_{h=1}^{n-1} \delta_{y_h}(y_i) +\frac{M}{M+i-1} G_0(y_i).
+\end{align}
+
+An important property of the DP is the discrete nature of $G$. As a discrete
+random probability measure we can always write $G$ as a weighted sum of point masses.
+A useful  property based on the discrete nature of the process is his stick-breaking representation, i.e. $G$ can be written as:
+
+\begin{align}
+ G(\cdot) = \sum_{k=1}^{+\infty} w_k \delta_{m_k} (\cdot)
+ \end{align}
+ 
+ with $m_k \iidsim G_0$ and the random weights constructed as $w_k =v_k\prod\limits_{l<k} (1-v_l)$ where $v_k$ are independent Be(1,M)random variables.
+
+
+
+
+In many applications in which we are interested in a continuous density estimation this discreteness can represents a limit.
+ It's common choice to use a Dirichlet Process Mixture (DPM) model where  the DP random measure is the mixing measure for the parameters of a parametric continuous kernel function.
+
+
+\section{Dirichlet Process Mixture Model}
+
+Extending the DP by convolving G with a kernel F, the model will have the form:
+
+\begin{align*}
+			y_i | G &\sim F_G(y) = \int F(y,\theta) \, G(\de\theta), \quad i=1,\dots,n \\
+			G &\sim DP(M G_0)
+\end{align*}
+
+
+An equivalent hierarchical model is:
+\begin{align*}
+			y_i | \theta_i &\indsim F(\cdot,\theta_i), \quad i=1,\dots,n \\
+			\theta_i | G &\iidsim G, \quad i=1,\dots,n \\
+			G &\sim DP(M G_0)
+\end{align*}
+
+where the \textit{latent variables} $\theta_i$ are introduced, one per unit. Since G is discrete, we know that two independent draws $\theta_i$ and $\theta_j$ from G can be equal with positive probability. In this way the DPM model induces a probability model on clusters and an object of interest starting from this model is the partitioning induced by the clustering as well as the density estimation. 
+
+
+Considering n data units, each $\theta_i$ will have one of the $k$ unique values $phi_j$. An estimation of the number of the unique values is $M\log(n) \ll n$. Calling  $c_i$ the \textit{allocation} parameters to the clusters such that $c_i = j$ if $\theta_i = \phi_j$ the model can be thought as the limit as K goes to infinity of
+finite mixture model with $K$ components:
+
+\begin{align*}
+            	(Y_{i}|\mathbf{\phi},c_{i})&\sim F(\cdot,\phi_{c_{i}}) \\
+            	(c_{i}|\mathit{\mathbf{p}})&\sim \sum_{k=1}^K\mathit{p_k} \delta_k(\cdot) \\
+            	\phi_{c} & \sim G_{0} \\
+            	\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K)
+\end{align*}
+        
+
+where $(p_1,...,p_K)$ represent the mixing proportions for the classes and each theta is defined by the latent class $c$ and the corresponding parameters $\phi_c$.
+
+
+\subsection{Normal Normal-InverseGamma Model}
+
+
+
+\section{Methods}
+ 
+
+\subsection{Neal2}
+
+\subsection{Neal8}
+
+\subsection{Blocked Gibbs}
