@@ -239,7 +239,7 @@ The \verb|bnplib| library has several possible extensions:
 	\item New types of \verb|Hypers| classes can be implemented, for example ones containing hyper-priors for some of the parameters if the model.
 	The algorithm must be modified accordingly, for instance by adding extra steps (which are skipped if the hyperparameters are fixed).
 	Changes depend on the type of parameter for which a prior is used; for example, a prior on the total mass parameter involves different steps than a prior on the parameters of the base measure.
-	For a general outline of the necessary changes, see Neal(2000) section 7. %TODO ref
+	For a general outline of the necessary changes, see \cite{neal} section 7.
 	\item Hierarchies other than the Normal-NIG can be created.
 	This is enough to run \verb|Neal8| by passing the class name as parameter, but other algorithms such as the conjugacy-dependent \verb|Neal2| may need an hoc implementation of some segments of code. %TODO revise
 	\item Interfaces with both R and Python can be easily implemented, thanks to the data structures provided by \verb|protobuf| and the already-available libraries \verb|Rcpp| and \verb|pybind| respectively.
