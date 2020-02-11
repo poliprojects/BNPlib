@@ -2,7 +2,7 @@
  
  
 \section{Introduction}
-This report presents the development of a Bayesian Non parametric library containing methods for density estimation and clustering. In a Bayesian Non-parametric setting we focused on the Dirichlet process (DP) and its extensions, one of the most widely used priors due to its flexibility and computational ease.
+This report presents the development of a C++ Bayesian Non parametric library containing Marcov Chain sampling methods for density estimation and clustering. In a Bayesian Non-parametric setting we focused on the Dirichlet process (DP) and its extensions, one of the most widely used priors due to its flexibility and computational ease.
 
 \section{Dirichlet Process}
 \textbf{Formal definition} : Let $M>0$ and $G_0$ be a probability measure defined on S. A DP with parameters $(M,G_0)$ is a random probability measure $G$ defined on $S$ which assigns probability $G(B)$ to every (measurable) set B such that for each (measurable) finite partition ${B_1,...,B_k}$ of $S$, the joint distribution of the  vector $(G(B_1),...,G(B_k))$ is the Dirichlet distribution with parameters 
@@ -74,7 +74,7 @@ An equivalent hierarchical model is:
 where the \textit{latent variables} $\theta_i$ are introduced, one per unit. Since G is discrete, we know that two independent draws $\theta_i$ and $\theta_j$ from G can be equal with positive probability. In this way the DPM model induces a probability model on clusters and an object of interest starting from this model is the partitioning induced by the clustering as well as the density estimation. 
 
 
-Considering n data units, each $\theta_i$ will have one of the $k$ unique values $phi_j$. An estimation of the number of the unique values is $M\log(n) \ll n$. Calling  $c_i$ the \textit{allocation} parameters to the clusters such that $c_i = j$ if $\theta_i = \phi_j$ the model can be thought as the limit as K goes to infinity of
+Considering n data units, each $\theta_i$ will have one of the $k$ unique values $\phi_{j}$. An estimation of the number of the unique values is $M\log(n) \ll n$. Calling  $c_i$ the \textit{allocation} parameters to the clusters such that $c_i = j$ if $\theta_i = \phi_j$ the model can be thought as the limit as K goes to infinity of
 finite mixture model with $K$ components:
 
 \begin{align*}
@@ -116,7 +116,7 @@ Starting from the hierarchical model (n) a direct approach is simply drawing val
 
 \subsection{Neal2}
 
-To solve and make it more efficient Neal proposed, starting from the discrete model (n), a Gibbs sampling method, integrating out the mixing proportion $\textbf{p}$. Assuming the current state of Markov chain consists of $(c_1,...,c_n)$  and the component parameters $\phi_c$ for all c, the Gibbs sampler consists of drawing values for each $c_i$ given the conditional probabilities:
+To solve and make it more efficient Neal proposed, starting from the discrete model (n), a Gibbs sampling method, integrating out the mixing proportion $\textbf{p}$. Assuming the current state of Markov chain consists of $(c_1,...,c_n)$  and the component parameters $\phi_c$ for all $c$, the Gibbs sampler consists of drawing values for each $c_i$ given the conditional probabilities:
 
 
 \begin{align*}
@@ -131,8 +131,9 @@ and consequently a new value for each $\phi_c$ given the data belonging to that 
 			\PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1+M} \int F(y_{i},\phi) \, G_0(\de\phi)
 \end{align*}
 
-e considering only the $\phi_c$ associated with some observation, keeping feasible the sampling. 
+and considering only the $\phi_c$ associated with some observation, keeping feasible the sampling. At this point the algorithm works iteratively sampling $c$ and $\phi$. For each observation $i$ $c_i$ is updated according to its conditional distribution. It can be set either to one of the other components currently associated with some observation or to a new mixture component.  If the new value of $c_i$ is different from all the other $c_j$ a value for $\phi_{ci}$ is drawn from the posterior distribution $H_i$, based on the prior $G_0$ and the single observation $y_o$. Then for all the classes the  sample for $\phi_c$ is done considering the posterior distribution based on the prior and all the observations belonging to the specific class.
 
+The probability of setting $c_i$ to a new component involves the integral $\int F(y_{i},\phi) \, G_0(\de\phi)$, which is difficult in the non-conjugate case, as well as the sample from $H_i$.
 
 \subsection{Neal8}
 
