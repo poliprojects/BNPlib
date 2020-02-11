@@ -6,7 +6,7 @@
 // TODO transfer over all changes from Neal8 to here
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal2<Hierarchy,Hypers,Mixture>::initalize(){
+void Neal2<Hierarchy,Hypers,Mixture>::initialize(){
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution(0,num_clusters);
 
