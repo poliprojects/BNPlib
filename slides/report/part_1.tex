@@ -162,3 +162,17 @@ Once all the $\phi_c$ not associated anymore with any observation are discarded,
 
 
 \subsection{Blocked Gibbs}
+Another Gibbs Sampling method applicable in the considered Bayesian hierarchical models is the one proposed by Hemant Ishwaran and Lancelot F. James, where the prior $P$ is assumed to be a finite dimensional stick-breaking measure allowing in this way to update blocks of parameters. A key point of the method is that it does not marginalize over the prior, instead, grouping more variables together, it samples from their joint distribution conditioned on all other variables. 
+
+It needs to draw from the conditionals:
+	\begin{align*}
+			\boldsymbol\phi &\sim \Lc(\boldsymbol\phi | \mathbf{c}, \mathbf{y}) \\
+			\mathbf{c} &\sim \Lc (\mathbf{c}| \boldsymbol\phi,\mathbf{p}, \mathbf{y}) \\
+			\mathbf{p} &\sim \Lc (\mathbf{p}| \mathbf{c})
+		\end{align*}
+
+The draw for the unique values can be handled easily also in the non-conjugate case applying standard Markov Chain Monte Carlo methods.
+
+
+
+\subsection{Hierarchical Extensions}
