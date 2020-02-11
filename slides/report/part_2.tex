@@ -45,9 +45,9 @@ Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8;
 	\item The \verb|Hypers| classes contain all information about the hyperparameters of the hierarchy, including their values (if fixed) or their prior distributions (if not).
 	We implemented the \verb|HypersFixedNNIG| class, which contains the four fixed parameters \verb|mu0|, \verb|lambda|, \verb|alpha0|, and \verb|beta0| of the Normal-NIG hierarchical model, and their respective getters and setters.
 	\item The \verb|Hierarchy<Hypers>| classes are template classes themselves and accept any \verb|Hypers| class as template parameter.
-	A \verb|Hierarchy| class contains a vector \verb|state| which stores the current values of the likelihood parameters, as well as a pointer to a \verb|Hypers| object -- this is why \verb|Hypers| is required as a parameter for \verb|Hierarchy|.
-	A pointer is chosen instead of an actual object, since multiple \verb|Hierarchy| objects will be created and stored by the algorithms; the \verb|state|s of these objects will of course share the same prior, and with a pointer to \verb|Hypers| the updating of the prior will only happen once rather than one time per object.
-	A \verb|Hierarchy| class also contains functions to:
+	A \verb|Hierarchy<>| class contains a vector \verb|state| which stores the current values of the likelihood parameters, as well as a pointer to a \verb|Hypers| object -- this is why \verb|Hypers| is required as a parameter for \verb|Hierarchy<>|.
+	A pointer is chosen instead of an actual object, since multiple \verb|Hierarchy<>| objects will be created and stored by the algorithms; the \verb|state|s of these objects will of course share the same prior, and with a pointer to \verb|Hypers| the updating of the prior will only happen once rather than one time per object.
+	A \verb|Hierarchy<>| class also contains functions to:
 	\begin{itemize}
 		\item evaluate the marginal distribution (provided it is known in closed form) and the log-likelihood in a given set of points, given the current \verb|state|;
 		\item compute the posterior parameters with respect to a given set of data points;
@@ -82,7 +82,7 @@ Mixture mixture;
 The algorithm will keep track of the labels representing assignments to clusters via the \verb|allocations| vector.
 For instance, if one has \verb|allocations[5] = 2|, it means that datum number 5 is associated to cluster number 2.
 Note that indexing for both data and clusters starts at zero, so this actually means that we have the sixth datum being assigned to the third cluster. \\
-The containers for the unique values $\phi$ hold objects of type \verb|Hierarchy<Hypers>| because each $\phi$ is associated to a cluster, which is in fact a small hierarchy that can have its own hyperprior in the general case.
+The containers for the unique values $\phi$ hold objects of type \verb|Hierarchy<>| because each $\phi$ is associated to a cluster, which is in fact a small hierarchy that can have its own hyperprior in the general case.
 The same reasoning goes for \verb|aux_unique_values|, which will be referred to as the vector of \emph{auxiliary blocks}, from which the algorithm may draw in order to generate new clusters. \\
 As for the members used for running the algorithm:
 \begin{verbatim}
@@ -199,7 +199,7 @@ Then, for each point $x$ in \verb|grid|, we compute the local estimate of the de
 $$
 f^{(k)}(x) \ = \ \sum_j \frac{n^{(k)}_j}{M+n} F\left(x | \phi^{(k)}_j\right) \ + \ \frac{M}{M+n} m(x)
 $$
-That is, the local estimate is a weighted mean of the likelihood given the unique values $\phi^{(k)}_j$ of cluster $j$ and the marginal distribution $m(x)$, taken from the appropriate function in the \verb|Hierarchy| class.
+That is, the local estimate is a weighted mean of the likelihood given the unique values $\phi^{(k)}_j$ of cluster $j$ and the marginal distribution $m(x)$, taken from the appropriate function in the \verb|Hierarchy<>| class.
 The weights of the clusters are proportional to their size $n^{(k)}_j$, while the ``virtual'' cluster of the marginal counts as having size $M$, the total mass parameter ($n$ is instead the number of data points, as per usual).
 The marginal distribution is only known under the conjugacy assumption in the \verb|Neal2| algorithm.
 In particular, for a Normal-NIG model $m(x)$ is a Student's $t$ as explained in section ?. %TODO reference 
@@ -216,7 +216,7 @@ $$
 and saved into the \verb|density| object.
 
 \subsection{Saving estimates to files}
-We also implemented the following functions, which save data from the class into text files in order to ease exportation to other programs or computers:
+We also implemented the following functions in each \verb|Algorithm| class, which save data from the class into text files in order to ease exportation to other programs or computers:
 \begin{verbatim}
 const void write_final_clustering_to_file(
            std::string filename = "final_clust.csv");
@@ -227,8 +227,11 @@ const void write_chain_to_file(
 const void write_density_to_file(
            std::string filename = "density.csv");
 \end{verbatim}
-They can be called as need be from the \verb|main|.
-If a file name is not provided, the above default names and file formats will be used.
+They can be called as need be from the \verb|main.cpp|.
+If a file name is not provided, the above default names will be used.
+
+\section{Results}
+TBD
 
 \section{Extensions} %TODO rivedi bene
 The \verb|bnplib| library has several possible extensions:
@@ -237,8 +240,38 @@ The \verb|bnplib| library has several possible extensions:
 	The algorithm must be modified accordingly, for instance by adding extra steps (which are skipped if the hyperparameters are fixed).
 	Changes depend on the type of parameter for which a prior is used; for example, a prior on the total mass parameter involves different steps than a prior on the parameters of the base measure.
 	For a general outline of the necessary changes, see Neal(2000) section 7. %TODO ref
+	\item Hierarchies other than the Normal-NIG can be created.
+	This is enough to run \verb|Neal8| by passing the class name as parameter, but other algorithms such as the conjugacy-dependent \verb|Neal2| may need an hoc implementation of some segments of code. %TODO revise
+	\item Interfaces with both R and Python can be easily implemented, thanks to the data structures provided by \verb|protobuf| and the already-available libraries \verb|Rcpp| and \verb|pybind| respectively.
+	\item Algorithms can be readapted for the use of other mixture models, such as the Pitman-Yor process. %TODO rly?
+	\item Conjugacy-dependent algorithms such as \verb|Neal2| can be re-adapted to account for non-conjugacy, for example by using an Hamiltonian Monte Carlo sampler.
+	\item Finally, a \emph{full generalization} of the library might be possible.
+	That is, given the distributions of the likelihood, hyperparameters, etc, one might want an algorithm that works for the chosen specific model without needing and explicit implementation for it.
+	This means, among other things, that one has to handle non-conjugacy for the general case.
+	The main issue is that Stan distribution functions do not accept vectors of parameter values as arguments; thus, the updated values for distributions must be explicitly enumerated and given as arguments one by one to the Stan function.
+	This requires to know in advance the number of parameters for all such distributions, which is impossible in the general case.
+	Some advanced C++ techniques may be used to circumvent this hindrance, such as argument unpackers that transform a vector into a list of function arguments, and variadic templates, which are templates that accept any number of arguments.
+	Theoretically, the latter would also allow the use of priors on the parameters of the hyper-prior itself, and so on, adding layers of uncertainty ad libitum.
+	Of course this is a daunting task that is far beyond the scope of this library, although we do think it is possible to achieve with reasonable effort. %TODO too sincere?
 \end{itemize}
 
-\section{References}
-\dots
-% TODO all papers, including the one from the integral; all Github repos of the libraries and their documentation
+\begin{thebibliography}{9}
+\bibitem{book} Muller, Quintana, \textit{Bayesian Nonparametric Data Analysis}
+
+\bibitem{neal} Neal (2000), \textit{Markov Chain Sampling Methods for Dirichlet Process Mixture Models}
+
+\bibitem{james} Ishwaran, James (2001), \textit{Gibbs Sampling Methods for Stick-Breaking Priors}
+
+\bibitem{integral} Ross, Markwick, \textit{\texttt{dirichletprocess}: An R Package for Fitting Complex Bayesian Nonparametric Models}, found at \url{https://cran.r-project.org/package=dirichletprocess}
+
+\bibitem{stan} Stan documentation: \url{http://mc-stan.org/math}.
+Code found at \url{https://github.com/stan-dev/math} (version 3.0.0 was used) and it also includes other needed libraries: Boost, Eigen, SUNDIALS, Intel TBB
+
+\bibitem{eigen} Eigen documentation: \url{https://eigen.tuxfamily.org/dox}. \\
+Code is included in the Stan package (version 3.3.3 is used there)
+
+\bibitem{proto} Protocol Buffers Tutorial for C++: \url{https://developers.google.com/protocol-buffers/docs/cpptutorial}. \\
+Code found at \url{https://github.com/protocolbuffers/protobuf} (version 3.11.0 was used)
+
+%TODO codici di Mario e Riccardo? :D
+\end{thebibliography}
