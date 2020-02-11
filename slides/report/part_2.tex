@@ -1,4 +1,3 @@
-% TODO for part 1: NNIG model with student's t marginal etc
 % TODO introduce the concept of "chain" somewhere
 % TODO libraries (eigen, stan, protobuf)
 % TODO Neal2 -> Neal2_NNIG?
@@ -33,12 +32,13 @@ template<template <class> class Hierarchy, class Hypers,
 \end{verbatim}
 That is, \verb|Hierarchy<>|, \verb|Hypers|, and \verb|Mixture| are not actual implemented classes, but rather proxy names for classes which will be received as \emph{parameters} by the algorithm class.
 These classes must have a \emph{common interface} in order for them to be passed as parameters, as explained in the following section.
-An example with actual class names (as it would be called from the \verb|main.cpp|) is:
+An example with actual class names, as found in the \verb|main.cpp| file, is:
 \begin{verbatim}
 Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8;
 \end{verbatim}
 
 \subsection{Auxiliary classes}
+First of all, we must briefly describe the auxiliary classes that are used as parameters for the algorithms:
 \begin{itemize}
 	\item The \verb|Mixture| classes contain all information about the mixing part of the DPM model, namely the total mass parameter and its prior distribution, if any.
 	We implemented the \verb|SimpleMixture| class, which represents a fixed total mass parameter without any prior on it, and contains the \verb|totalmass| member as well as a getter and a setter (\verb|get_totalmass()|, \verb|set_totalmass()|).
@@ -227,7 +227,7 @@ const void write_chain_to_file(
 const void write_density_to_file(
            std::string filename = "density.csv");
 \end{verbatim}
-They can be called as need be from the \verb|main.cpp|.
+They can be called as need be from the \verb|main.cpp| file.
 If a file name is not provided, the above default names will be used.
 
 \section{Results}
