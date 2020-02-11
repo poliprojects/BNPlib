@@ -9,6 +9,7 @@ DISCUSS
 * rename proto messages
 * blocked Gibbs?
 * all TODOS in the files
+* Neal2::sample_allocations() does not use eval_marg?
 
 MANOVALANZA
 * DEBUG lines
