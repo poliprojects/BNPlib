@@ -4,7 +4,7 @@
 #include "Neal8.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy, Hypers, Mixture>::initalize(){
+void Neal8<Hierarchy, Hypers, Mixture>::initialize(){
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution(0,num_clusters);
 

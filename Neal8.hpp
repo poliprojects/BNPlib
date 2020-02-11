@@ -42,7 +42,7 @@ private:
     std::mt19937 rng;
 
     // Algorithm functions
-    void initalize();
+    void initialize();
 
     void step(){
         sample_allocations();
@@ -61,7 +61,7 @@ public:
     // Running tool
     void run(){
         std::cout << "Running Neal8" << std::endl;
-        initalize();
+        initialize();
         unsigned int iter = 0;
         while(iter < maxiter){
             step();

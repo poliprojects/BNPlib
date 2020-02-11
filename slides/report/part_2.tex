@@ -13,7 +13,7 @@ void step(){
 }
 
 void run(){
-    initalize();
+    initialize();
     unsigned int iter = 0;
     while(iter < maxiter){
         step();
@@ -68,8 +68,8 @@ unsigned int burnin;
 unsigned int num_clusters;
 std::mt19937 rng; // random number generating engine
 \end{verbatim}
-These are the parameters of the method, and are rather self-explainatory.
-Their values are initialied either via the constructors or the setters.
+These are the parameters of the method, and are rather self-explanatory.
+Their values are initialized either via the constructors or the setters.
 If \verb|num_clusters| is not provided, it will be automatically set equal to the number of data points, thus starting the algorithm with one datum per cluster. \\
 The data and values containers are as follows:
 \begin{verbatim}
@@ -86,7 +86,7 @@ The containers for the unique values $\phi$ hold objects of type \verb|Hierarchy
 The same reasoning goes for \verb|aux_unique_values|, which will be referred to as the vector of \emph{auxiliary blocks}, from which the algorithm may draw in order to generate new clusters. \\
 As for the members used for running the algorithm:
 \begin{verbatim}
-void initalize();
+void initialize();
 void sample_allocations();
 void sample_unique_values();
 void step(){
@@ -165,7 +165,7 @@ We will be explaining in thorough detail these two useful applications in the ne
 Suppose we wish to estimate the real clustering of the data, assuming the DPM model holds true.
 A first rough estimate is the \emph{final clustering}, that is, the state values corresponding to the last iteration of the algorithm.
 This estimate does not require an appropriate function to be implemented, since the state values are already available in \verb|allocations| and \verb|unique_values| after the algorithm is \verb|run()|.
-However, due to oscillating behaviour, %TODO is that correct?
+However, due to oscillating behavior, %TODO is that correct?
 the last clustering may not be the optimal one.
 Instead, we chose to implement a \emph{least square} estimate in the following function:
 \begin{verbatim}
@@ -243,7 +243,7 @@ The \verb|bnplib| library has several possible extensions:
 	\item Hierarchies other than the Normal-NIG can be created.
 	This is enough to run \verb|Neal8| by passing the class name as parameter, but other algorithms such as the conjugacy-dependent \verb|Neal2| may need an hoc implementation of some segments of code. %TODO revise
 	\item Interfaces with both R and Python can be easily implemented, thanks to the data structures provided by \verb|protobuf| and the already-available libraries \verb|Rcpp| and \verb|pybind| respectively.
-	\item Algorithms can be readapted for the use of other mixture models, such as the Pitman-Yor process. %TODO rly?
+	\item Algorithms can be re-adapted for the use of other mixture models, such as the Pitman-Yor process. %TODO rly?
 	\item Conjugacy-dependent algorithms such as \verb|Neal2| can be re-adapted to account for non-conjugacy, for example by using an Hamiltonian Monte Carlo sampler.
 	\item Finally, a \emph{full generalization} of the library might be possible.
 	That is, given the distributions of the likelihood, hyperparameters, etc, one might want an algorithm that works for the chosen specific model without needing and explicit implementation for it.

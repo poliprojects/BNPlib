@@ -40,7 +40,7 @@ private:
 
 
 
-    void initalize();
+    void initialize();
 
     void step(){
         sample_allocations();
@@ -59,7 +59,7 @@ public:
     // Running tool
     void run(){
         std::cout << "Running Neal2" << std::endl;
-        initalize();
+        initialize();
         unsigned int iter = 0;
         while(iter < maxiter){
             step();    
