@@ -8,13 +8,13 @@
 
 int main(){
     unsigned int n = 100;
+    std::vector<double> data(n);
+    unsigned int half = data.size()/2;
+
     double mean1 = 4.0;
     double mean2 = 6.0;
     double sd1   = 1.0;
     double sd2   = 1.0;
-    std::mt19937 rng_base;
-    std::vector<double> data(n);
-    unsigned int half = data.size()/2;
 
     std::default_random_engine generator;
     std::normal_distribution<double> N1(mean1,sd1);
@@ -25,16 +25,15 @@ int main(){
         data[i+half] = N2(generator);
     }
 
-    std::ofstream file;
-    file.open("data.csv");
-    for(auto &d : data){
-        file << d << ",";
-    }
-    file << std::endl;
-    file.close();
-    return 0;
+    //std::ofstream file;
+    //file.open("data.csv");
+    //for(auto &d : data){
+    //    file << d << ",";
+    //}
+    //file << std::endl;
+    //file.close();
 
-    HypersFixedNNIG hy(5.0, 1, 2.0, 2.0); // mu0, lambda, alpha0, beta0
+    HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
     SimpleMixture mix(1.0); // total mass
     //Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
     //    data, mix, hy);
@@ -47,9 +46,9 @@ int main(){
 
     // Density stuff
     std::vector<double> grid;
-    double temp = 2.0;
-    double step = 0.1;
-    double upp_bnd = 8.0;
+    double temp = 0.0;
+    double step = 0.05;
+    double upp_bnd = 10.0;
     while(temp <= upp_bnd){
         grid.push_back(temp);
         temp += step;
