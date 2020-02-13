@@ -1,6 +1,8 @@
 #ifndef HYPERSFIXEDNNIG_HPP
 #define HYPERSFIXEDNNIG_HPP
 
+#include <cassert>
+
 class HypersFixedNNIG {
 
 private:

@@ -131,13 +131,13 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_unique_values(){
     }
 
     // DEBUG:
-    //for(int j = 0; j < num_clusters; j++){
-    //    std::cout << "Cluster #" << j << ": ";
-    //    for(int i = 0; i < clust_idxs[j].size(); i++){
-    //        std::cout << " " << clust_idxs[j][i];
-    //    }
-    //    std::cout << std::endl;
-    //}
+    for(int j = 0; j < num_clusters; j++){
+        std::cout << "Cluster #" << j << ": ";
+        for(int i = 0; i < clust_idxs[j].size(); i++){
+            std::cout << " " << clust_idxs[j][i];
+        }
+        std::cout << std::endl;
+    }
 
     for(int j = 0; j < num_clusters; j++){
         std::vector<double> curr_data;
@@ -154,8 +154,6 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
     // TODO
 
-    //std::cout << "Iteration # " << iter << " / " << maxiter-1 <<
-    //    std::endl; // DEBUG
     IterationOutput iter_out;
 
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
@@ -172,7 +170,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
     chain.add_state();
     *chain.mutable_state(iter-burnin) = iter_out;
 
-    //print();
+    print();
 }
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
@@ -215,6 +213,7 @@ unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     std::ptrdiff_t i;
     int min_err = errors.minCoeff(&i);
     best_clust = chain.state(i);
+    std::cout << best_clust.phi_size() << " clusters were found" << std::endl;
     return i;
 }
 
@@ -275,14 +274,14 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 const void Neal8<Hierarchy, Hypers, Mixture>::print(){
     for(int h = 0; h < num_clusters; h++){
-        std::cout << "Cluster # " << h << std::endl;
-        std::cout << "Parameters: ";
+        std::cout << "Cluster # " << h << " parameters: ";
 
         for(auto c : unique_values[h].get_state()){
-            std::cout << c << " " << std::endl;
+            std::cout << c << " ";
         }
         std::cout << std::endl;
     }
+    std::cout << std::endl << std::endl;
 }
 
 

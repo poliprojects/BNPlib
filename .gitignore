@@ -12,5 +12,4 @@ main
 *.so.*
 
 # Output files
-*.csv
 Rplots.pdf

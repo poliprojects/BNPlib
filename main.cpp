@@ -1,26 +1,41 @@
 #include <iostream>
+#include  <fstream>
 
-#include <boost/random/random_number_generator.hpp>
-#include <boost/random/detail/qrng_base.hpp>
+//#include <boost/random/random_number_generator.hpp>
+//#include <boost/random/detail/qrng_base.hpp>
 
 #include "includes_main.hpp"
 
 int main(){
+    unsigned int n = 100;
     double mean1 = 4.0;
     double mean2 = 6.0;
-    double sd1   = 1.33;
-    double sd2   = 1.33;
+    double sd1   = 1.0;
+    double sd2   = 1.0;
     std::mt19937 rng_base;
-    std::vector<double> data(40);
-    int half = data.size()/2;
+    std::vector<double> data(n);
+    unsigned int half = data.size()/2;
+
+    std::default_random_engine generator;
+    std::normal_distribution<double> N1(mean1,sd1);
+    std::normal_distribution<double> N2(mean2,sd2);
 
     for(int i = 0; i < half; i++){
-        data[i]      = stan::math::normal_rng(mean1, sd1, rng_base);
-        data[i+half] = stan::math::normal_rng(mean2, sd2, rng_base);
+        data[i]      = N1(generator);
+        data[i+half] = N2(generator);
     }
 
-    HypersFixedNNIG hy(5.0, 1.5, 2.0, 2.0); // mu0, lambda, alpha0, beta0
-    SimpleMixture mix(5.0); // total mass
+    std::ofstream file;
+    file.open("data.csv");
+    for(auto &d : data){
+        file << d << ",";
+    }
+    file << std::endl;
+    file.close();
+    return 0;
+
+    HypersFixedNNIG hy(5.0, 1, 2.0, 2.0); // mu0, lambda, alpha0, beta0
+    SimpleMixture mix(1.0); // total mass
     //Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
     //    data, mix, hy);
     Neal8<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler8(

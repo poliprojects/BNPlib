@@ -24,8 +24,8 @@ class Neal8{
 private:
     // Mehtods parameters
     unsigned int n_aux = 3;
-    unsigned int maxiter = 5000;
-    unsigned int burnin = 1000;
+    unsigned int maxiter = 20000;
+    unsigned int burnin = 5000;
     unsigned int num_clusters;
 
     // Data and values containers
@@ -64,6 +64,8 @@ public:
         initialize();
         unsigned int iter = 0;
         while(iter < maxiter){
+            std::cout << "Iteration # " << iter << " / " <<
+                maxiter << std::endl; // DEBUG
             step();
             if(iter >= burnin){
               save_iteration(iter);
