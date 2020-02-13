@@ -131,13 +131,13 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_unique_values(){
     }
 
     // DEBUG:
-    for(int j = 0; j < num_clusters; j++){
-        std::cout << "Cluster #" << j << ": ";
-        for(int i = 0; i < clust_idxs[j].size(); i++){
-            std::cout << " " << clust_idxs[j][i];
-        }
-        std::cout << std::endl;
-    }
+    //for(int j = 0; j < num_clusters; j++){
+    //    std::cout << "Cluster #" << j << ": ";
+    //    for(int i = 0; i < clust_idxs[j].size(); i++){
+    //        std::cout << " " << clust_idxs[j][i];
+    //    }
+    //    std::cout << std::endl;
+    //}
 
     for(int j = 0; j < num_clusters; j++){
         std::vector<double> curr_data;

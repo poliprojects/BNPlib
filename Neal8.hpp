@@ -60,6 +60,8 @@ private:
 public:
     // Running tool
     void run(){
+	std::ofstream file;
+	file.open("clust_card.csv");
         std::cout << "Running Neal8" << std::endl;
         initialize();
         unsigned int iter = 0;
@@ -69,10 +71,12 @@ public:
             step();
             if(iter >= burnin){
               save_iteration(iter);
+			  file<<unique_values.size()<<",";
             }
             iter++;
         }
         std::cout << "Done" << std::endl;
+		file.close();
     }
 
     // Other tools
