@@ -170,7 +170,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
     chain.add_state();
     *chain.mutable_state(iter-burnin) = iter_out;
 
-    print();
+    //print();
 }
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
@@ -196,6 +196,7 @@ unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
                 }
             }
         }
+	
 
     all_diss.push_back(dissim);
     tot_diss = tot_diss + dissim;
@@ -203,7 +204,10 @@ unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     }
 
     tot_diss = tot_diss / niter;
+	
 
+
+	
     for(int h = 0; h < niter; h++){
         // Compute error in Frobenius norm
         errors(h) = (tot_diss-all_diss[h]).norm();
@@ -212,6 +216,22 @@ unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     //std::cout << errors << std::endl; // DEBUG
     std::ptrdiff_t i;
     int min_err = errors.minCoeff(&i);
+
+
+
+	
+    std::ofstream file;
+    file.open("mean_diss.csv");
+	file<<tot_diss;
+	file.close();
+
+
+	std::ofstream file2;
+
+    file2.open("best_diss.csv");
+	file2<<all_diss[i];
+	file2.close();
+
     best_clust = chain.state(i);
     std::cout << best_clust.phi_size() << " clusters were found" << std::endl;
     return i;
