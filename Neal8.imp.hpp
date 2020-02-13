@@ -202,8 +202,11 @@ unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     tot_diss = tot_diss + dissim;
     
     }
-
+	
+	std::cout<<"pre-divisione: \n"<<tot_diss<<std::endl;
     tot_diss = tot_diss / niter;
+	
+	std::cout<<"post-divisione: \n"<<tot_diss<<std::endl;
 	
 
 
