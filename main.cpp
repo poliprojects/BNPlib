@@ -6,10 +6,10 @@
 #include "includes_main.hpp"
 
 int main(){
-    double mean1 = 5.0;
-    double mean2 = 5.0;
-    double sd1   = 1.0;
-    double sd2   = 1.0;
+    double mean1 = 4.0;
+    double mean2 = 6.0;
+    double sd1   = 1.33;
+    double sd2   = 1.33;
     std::mt19937 rng_base;
     std::vector<double> data(40);
     int half = data.size()/2;
@@ -19,8 +19,8 @@ int main(){
         data[i+half] = stan::math::normal_rng(mean2, sd2, rng_base);
     }
 
-    HypersFixedNNIG hy(4, 1.5, 2.0, 2.0);
-    SimpleMixture mix(1.0);
+    HypersFixedNNIG hy(5.0, 1.5, 2.0, 2.0); // mu0, lambda, alpha0, beta0
+    SimpleMixture mix(5.0); // total mass
     //Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
     //    data, mix, hy);
     Neal8<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler8(
@@ -31,18 +31,25 @@ int main(){
     sampler8.run();
 
     // Density stuff
-    std::vector<double> grid = {1,1.5,2,2.5,3,3.5,4};
+    std::vector<double> grid;
+    double temp = 2.0;
+    double step = 0.1;
+    double upp_bnd = 8.0;
+    while(temp <= upp_bnd){
+        grid.push_back(temp);
+        temp += step;
+    }
     sampler8.eval_density(grid);
-    //sampler8.write_density_to_file();
+    sampler8.write_density_to_file();
 
     //sampler2.eval_density(grid);
     //sampler2.write_density_to_file();
 
     // Clustering stuff
-    //unsigned int i_cap = sampler8.cluster_estimate();
-    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    //sampler8.write_final_clustering_to_file();
-    //sampler8.write_best_clustering_to_file();
+    unsigned int i_cap = sampler8.cluster_estimate();
+    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+    sampler8.write_final_clustering_to_file();
+    sampler8.write_best_clustering_to_file();
     //sampler8.write_chain_to_file();
 
     return 0;

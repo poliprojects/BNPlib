@@ -21,3 +21,6 @@ EXTENSIONS
 * documentation with Doxygen
 * README.md for the Github repo
 * hypers not fixed
+
+REPORT
+* Neal's Algorithm 2 (\verb|Neal2|)
