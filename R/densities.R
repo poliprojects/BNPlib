@@ -3,14 +3,14 @@ dens  = read.csv("../density.csv", header=F)
 cards = read.csv("../clust_cardinalities.csv", header=F)
 
 # Pre-processing
-data  =  data[1:(length(data)-1)]
+data  = as.numeric(data[1:(length(data)-1)])
 cards = cards[1:(length(cards)-1)]
 
-print(dim(cards))
+#print(dim(cards))
 
 svg(filename="density_pure.svg")
-plot(dens)
-hist(data)
+hist(data, freq=T)
+lines(dens)
 dev.off()
 
 # TODO check if it works

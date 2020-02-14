@@ -1,9 +1,9 @@
-data      = read.csv("../data.csv", header=F)
+#data      = read.csv("../data.csv", header=F)
 diss.mean = read.csv("../dissim_matr_mean.csv", header=F)
 diss.best = read.csv("../dissim_matr_best.csv", sep=" ", header=F)
 
 # Pre-processing
-data = data[1:(length(data)-1)]
+#data = as.numeric(data[1:(length(data)-1)])
 diss.mean = diss.mean[,1:(length(diss.mean)-1)]
 diss.mean = as.matrix(diss.mean)
 diss.best = as.matrix(diss.best)
