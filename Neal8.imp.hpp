@@ -224,14 +224,14 @@ unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
 
 	
     std::ofstream file;
-    file.open("mean_diss.csv");
+    file.open("dissim_matr_mean.csv");
 	file<<tot_diss;
 	file.close();
 
 
 	std::ofstream file2;
 
-    file2.open("best_diss.csv");
+    file2.open("dissim_matr_best.csv");
 	file2<<all_diss[i];
 	file2.close();
 

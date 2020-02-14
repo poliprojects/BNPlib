@@ -61,7 +61,7 @@ public:
     // Running tool
     void run(){
 	std::ofstream file;
-	file.open("clust_card.csv");
+	file.open("clust_cardinalities.csv");
         std::cout << "Running Neal8" << std::endl;
         initialize();
         unsigned int iter = 0;
@@ -85,10 +85,10 @@ public:
     void eval_density(const std::vector<double> grid);
 
     const void write_final_clustering_to_file(
-        std::string filename = "final_clust.csv");
+        std::string filename = "clust_final.csv");
 
     const void write_best_clustering_to_file(
-        std::string filename = "best_clust.csv");
+        std::string filename = "clust_best.csv");
 
     const void write_chain_to_file(
         std::string filename = "chain.csv");
