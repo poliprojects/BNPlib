@@ -4,6 +4,7 @@
 \section{Introduction}
 This report presents the development of a C++ Bayesian nonparametric library containing Marcov Chain sampling methods for density estimation and clustering. 
 
+TODO: add
 
 \section{The model}
 
@@ -18,7 +19,7 @@ Let $M>0$ and $G_0$ be a probability measure defined on $S$. A $DP$ with paramet
 \end{align*}
 
 The parameter $M$ is called the precision or total mass parameter, $G_0$ is
-the centering measure, and the product $MG_0$ is referred to as the base measure
+the centering measure, and the product $MG_0$ the base measure
 of the $DP$.
 
 Having observed the independent and identically distributed sample $\{y_1,\dots,y_n\}$, the basic $DP$ model takes the following form:
@@ -67,18 +68,19 @@ In many applications in which we are interested in a continuous density estimati
 
 
 \subsection{Dirichlet Process Mixture Model}
-TODO: chi è F? theta space
-Extending the $DP$ by convolving $G$ with a kernel $F$, the model will have the form:
+
+
+Letting $\Theta$ be a finite-dimensional parameter space and $G_0$ a probability measure on $\Theta$, the $DPM$ convolves the densities $f_\theta$ from a parametric family $F =\{f_\theta| \theta \in \Theta \}$ using the $DP$ as mixture weights. The obtained model has the following form:
 
 \begin{align}
-			y_i | G &\sim F_G(\cdot) = \int F(\cdot | \theta) \, G(\de\theta), \quad i=1,\dots,n \\
+			y_i | G &\sim f_G(\cdot) = \int_\Theta f_{\theta}(\cdot) \, G(\de\theta), \quad i=1,\dots,n \\
 			G &\sim DP(M G_0) \nonumber
 \end{align}
 
 
 An equivalent hierarchical model is:
 \begin{align}
-			y_i | \theta_i &\indsim F(\cdot |\theta_i), \quad i=1,\dots,n \\
+			y_i | \theta_i &\indsim f_{\theta_i}(\cdot), \quad i=1,\dots,n \\
 			\theta_i | G &\iidsim G, \quad i=1,\dots,n \nonumber \\ 
 			G &\sim DP(M G_0) \nonumber
 \end{align}
@@ -90,28 +92,28 @@ Considering $n$ data units, each $\theta_i$ will have one of the $k$ unique valu
 finite mixture model with $K$ components:
 
 \begin{align}
-            	(Y_{i}|\mathbf{\phi},c_{i})&\sim F(\cdot,\phi_{c_{i}}) \\
-            	(c_{i}|\mathit{\mathbf{p}})&\sim \sum_{k=1}^K\mathit{p_k} \delta_k(\cdot) \nonumber \\
+            	y_{i}|\mathbf{\phi},c_{i} &\sim f_{\phi_{c_{i}}}(\cdot) \\
+            	c_{i}|\mathit{\mathbf{p}}&\sim \sum_{k=1}^K\mathit{p_k} \delta_k(\cdot) \nonumber \\
             	\phi_{c} & \sim G_{0} \nonumber \\
             	\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K) \nonumber
 \end{align}
         
 
-where $(p_1,\dots,p_K)$ represent the mixing proportions for the classes and each $\theta$ is characterized by the latent class $c$ and the corresponding parameters $\phi_c$.
+where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportion for the classes and each $\theta$ is characterized by the latent class $c$ and the corresponding parameters $\phi_c$.
 
 
 \subsubsection{Normal Normal-InverseGamma Model}
-A very common choice for the $DPM$ model is the Gaussian Mixture Model, opting for a Normal kernel and as base measure $G_0$ the conjugate Normal-InverseGamma:
+A very common choice for the $DPM$ model is the Gaussian Mixture Model, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. With $\theta=(\mu,\sigma^2)$, we have:
 
 \begin{align}
-            	k(y|\theta)&=N(y| \mu ,\sigma^2)  \\
+            	f_\theta(y)&=N(y| \mu ,\sigma^2)  \\
             	G_0(\theta|\mu_0,\lambda_0, \alpha_0, \beta_0)&=N\left(\mu | \mu_0 ,\frac{\sigma^2} {\lambda_0}\right)\text{Inv-Gamma}(\sigma^2|\alpha_0, \beta_0 )
 \end{align}
 
 Thanks to the conjugacy, the predictive distribution for a new observation $\widetilde{y}$ can be computed analytically:
 
 \begin{align}
-      p(\widetilde{y}|\mu_0,\lambda_0, \alpha_0, \beta_0)= \int k(\widetilde{y}|\theta)p(\theta, G_0)d\theta= \frac{1}{\widetilde{\sigma}} \text{t-Student}\left(\frac{\widetilde{y}-\widetilde{\mu}}{\widetilde{\sigma}} ,|\widetilde{v}\right)        	
+      p(\widetilde{y}|\mu_0,\lambda_0, \alpha_0, \beta_0)= \int_\Theta f_\theta(\widetilde{y})G_0(\de\theta)= \frac{1}{\widetilde{\sigma}} \text{t-Student}\left(\frac{\widetilde{y}-\widetilde{\mu}}{\widetilde{\sigma}} ,|\widetilde{v}\right)        	
 \end{align}
 where $\widetilde{v}=2 \alpha_0$, $\widetilde{\mu}=\mu_0$ and $\widetilde{\sigma}= \sqrt{\frac{\beta_0(\lambda_0+1)}{\alpha_0 \lambda_0}}$.
 
@@ -123,30 +125,35 @@ The posterior distribution is again a Normal-InvGamma:
 with $\mu_n=\frac{\lambda_0 \mu_0 \bar{y} + n}{\lambda_0 + n}$ , $\alpha_n= \alpha_0 + \frac{n}{2} $ and $\beta_n= \beta_0 + \frac{1}{2}\sum_{i=1}^{n} (y_i-\bar{y})^2 + \frac{\lambda_0 n(\bar{y}-\mu_0)^2}{2(\lambda_0 + n)}$.
 
 \section{Algorithms}
-TODO: AGGIUNGI intro sui gibbs, same structure, hierarchical extension. why slow convergence?
 
-Starting from the hierarchical model $(7)$, a first direct approach is simply drawing values for each $\theta_i$ from its conditional given the data and the other $\theta_j$, but as we discussed before there is high probability for ties among them and this can result in a slow convergence. 
+For the task of density estimation, we investigated several Markov chain methods to sample from the posterior distribution of a Dirichlet process mixture model.
+
+Starting from the hierarchical model $(7)$, a first direct approach is simply drawing values for each $\theta_i$ from its conditional given the data and the other $\theta_j$. However, as we discussed before, there is high probability for ties among them which can lead to slow convergence, since the $\theta$ values are not updated for more than one observation simultaneously.
+
+For this reason we paid special attention to the three of them we presents in this chapter. They are Gibbs samplers with a similar base structure, sharing the two steps for the sampling of the allocations $\mathbf{c}$ and of the unique values $\mathbf{\phi_c}$. 
+
+All the methods can moreover be extended with additional steps for hierarchical extensions. We can think to place priors to hyperparamaters of the centering measure $G_0$ or to the total mass $M$.
+
+
 
 \subsection{Neal's Algorithm 2 (Neal2)}
-
-To solve and make it more efficient Neal proposed, starting from the discrete model (n), a Gibbs sampling method which integrates out the mixing proportions $\textbf{p}$. Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$  and the component parameters $\phi_c$ for all $c$, the Gibbs sampler consists of drawing values for each $c_i$ given the following conditional probabilities:
+In order to speed up the convergence in case of ties, Neal first proposed a more efficient Gibbs sampling method based on the discrete model $(8)$, where the mixing proportions $\textbf{p}$ have been integrated out. Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$  and the component parameters $\phi_c$ for all $c$, the Gibbs sampler first draws values for each $c_i$ given the following conditional probabilities:
 
 
 \begin{align}
-			\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) \propto \frac{n_{-i,c} + M/{K}}{n-1+M} F(y_{i}| \phi_{c}) 
+			\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) \propto \frac{n_{-i,c} + M/{K}}{n-1+M} f_{\phi_{c}}(y_{i}) 
 \end{align}
-TODO: nic def
-and consequently a new value for each $\phi_c$ given the data belonging to that class. The passage to the infinite case is done taking the limit as $K$ goes to infinity in the conditional distribution of $c_i$ which becomes:
+where $n_{-i,c}$ is the number of $c_j$ equal to $c$ excluding $c_i$. Consequently it draws a new value for each $\phi_c$ given the data belonging to that class. The passage to the infinite case is done taking the limit as $K$ goes to infinity in the conditional distribution of $c_i$ which becomes:
 
 
 \begin{align}
-			\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c} }{n-1+M} F(y_{i}| \phi_{c}) \\
-			\PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1+M} \int F(y_{i}| \phi) \, G_0(\de\phi)
+			\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c} }{n-1+M} f_{\phi_{c}}(y_{i}) \\
+			\PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1+M} \int_{\Theta} f_{\phi}(y_{i}) \, G_0(\de\phi) \nonumber 
 \end{align}
 
 and considering only the $\phi_c$ associated with some observation, keeping the sampling finite and thus computational feasible. At this point the algorithm works iteratively by sampling $c$ and $\phi$. For each observation $i$, $c_i$ is updated according to its conditional distribution. It can be set either to one of the other components currently associated with some observation, or to a new mixture component.  If the new value of $c_i$ is different from all the other $c_j$, a value for $\phi_{c_i}$ is drawn from the posterior distribution $H_i$, based on the prior $G_0$ and the single observation $y_i$. Then for all the classes the  sample for $\phi_c$ is done considering the posterior distribution based on the prior and all the observations belonging to the specific class.
 
-The probability of setting $c_i$ to a new component involves the integral $\int F(y_{i},\phi) \, G_0(\de\phi)$, which is difficult in the non-conjugate case, as well as the sample from the posterior $H_i$.
+The probability of setting $c_i$ to a new component involves the integral $\int_{\Theta} f_{\phi}(y_{i}) \, G_0(\de\phi)$, which is difficult in the non-conjugate case, as well as the sample from the posterior $H_i$.
 
 \subsection{Neal's Algorithm 8 (Neal8)}
 To handle non-conjugate priors, Neal proposed a second Markov chain sampling procedure where the state is extended by the addition of auxiliary parameters.
@@ -156,23 +163,23 @@ In this case the prior for $c_i$ is:
 \begin{align}
             \hspace{-25pt}
             \vspace{-12pt}
-                \text{If $c=c_j$ for some $j$: } \PP(c_i=c | \mathbf c_{-i}) &= \frac{n_{-i,c}}{n-1+M}  \\
-                \PP(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1+M}                  
+                \text{If $c=c_j$ for some $j$: } \PP(c_i=c | \mathbf c_{-i}) &= \frac{n_{-i,c}}{n-1+M}   \\
+                \PP(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1+M}                  \nonumber
 \end{align}
             
             	
 where the probability of selecting a new component is evenly split among the $m$ auxiliary components.
 Maintaining the same structure as the \textit{Algorithm $2$}, the \textit{Algorithm $8$} is composed of two steps, where the components of the Markov chain state $(c,\phi)$ are repeatedly sampled. The first step scans all the observations and evaluates each $c_i$. If it is equal to another $c_j$, then all the auxiliary variables are drawn from $G_0$. If the corresponding cluster is a singleton, then it is linked to one of the auxiliary variable with the corresponding value of $\phi_c$, while the others are drawn as before from $G_0$. Then, $c_i$ is updated according to the following conditional probabilities:
-TODO : k? h?
 
 \begin{displaymath}
 		            	\hspace{-20pt}
-		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1+M}F(y_{i},\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1+M}F(y_{i},\phi_{c}), & \mbox{for } k^{-}+1 < c \leq h
+		            	P(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto \begin{cases}  \frac{n_{-i,c}}{n-1+M}f_{\phi_{c}}(y_{i}), & \mbox{for } 1 \leq c \leq k^{-} \\ \frac{M/m}{n-1+M}f_{\phi_{c}}(y_{i}), & \mbox{for } k^{-}+1 < c \leq h
 		            	\end{cases}
 		            	\vspace{-5pt}
 \end{displaymath}
+,indicating with $k^{-}$ the number of distinct $c_j$ excluding the current $c_i$ and setting $h=k^{-}+m$.
 
-TODO: numero?? perché non va con align?
+TODO: numero?? perché non va con align? \\
 
 Once all the $\phi_c$ that are no longer associated with any observation are discarded, the algorithm proceeds with the sampling for $\phi_c$ for all the classes.
 
@@ -182,9 +189,9 @@ Another Gibbs Sampling method applicable in the considered Bayesian hierarchical
 
 It needs to draw from the conditionals:
 	\begin{align}
-			\boldsymbol\phi &\sim \Lc(\boldsymbol\phi | \mathbf{c}, \mathbf{y}) \\
-			\mathbf{c} &\sim \Lc (\mathbf{c}| \boldsymbol\phi,\mathbf{p}, \mathbf{y}) \\
-			\mathbf{p} &\sim \Lc (\mathbf{p}| \mathbf{c})
+			\boldsymbol\phi &\sim \Lc(\boldsymbol\phi | \mathbf{c}, \mathbf{y}) \nonumber \\
+			\mathbf{c} &\sim \Lc (\mathbf{c}| \boldsymbol\phi,\mathbf{p}, \mathbf{y}) \nonumber \\
+			\mathbf{p} &\sim \Lc (\mathbf{p}| \mathbf{c}) \nonumber
 		\end{align}
 
 The draw for the unique values can be handled easily also in the non-conjugate case applying standard Markov chain Monte Carlo methods.
