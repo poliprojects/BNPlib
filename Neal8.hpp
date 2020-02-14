@@ -85,11 +85,12 @@ public:
             step();
             if(iter >= burnin){
               save_iteration(iter);
-              file<<unique_values.size()<<",";
+              file << unique_values.size() << ",";
             }
             iter++;
         }
         std::cout << "Done" << std::endl;
+        file << std::endl;
         file.close();
     }
 
