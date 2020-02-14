@@ -152,10 +152,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_unique_values(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
-    // TODO
-
     IterationOutput iter_out;
-
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
     for(int i = 0; i < unique_values.size(); i++){
@@ -170,7 +167,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
     chain.add_state();
     *chain.mutable_state(iter-burnin) = iter_out;
 
-    //print();
+    //print(); //DEBUG
 }
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
@@ -196,20 +193,11 @@ unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
                 }
             }
         }
-	
-
     all_diss.push_back(dissim);
     tot_diss = tot_diss + dissim;
-    
     }
 	
-	std::cout<<"pre-divisione: \n"<<tot_diss<<std::endl;
     tot_diss = tot_diss / niter;
-	
-	std::cout<<"post-divisione: \n"<<tot_diss<<std::endl;
-	
-
-
 	
     for(int h = 0; h < niter; h++){
         // Compute error in Frobenius norm
@@ -219,24 +207,20 @@ unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     //std::cout << errors << std::endl; // DEBUG
     std::ptrdiff_t i;
     int min_err = errors.minCoeff(&i);
-
-
-
 	
-    std::ofstream file;
-    file.open("dissim_matr_mean.csv");
-	file<<tot_diss;
-	file.close();
+    //std::ofstream file;
+    //file.open("dissim_matr_mean.csv");
+	//file << tot_diss;
+	//file.close();
 
-
-	std::ofstream file2;
-
-    file2.open("dissim_matr_best.csv");
-	file2<<all_diss[i];
-	file2.close();
+	//std::ofstream file2;
+    //file2.open("dissim_matr_best.csv");
+	//file2 << all_diss[i];
+	//file2.close();
 
     best_clust = chain.state(i);
-    std::cout << best_clust.phi_size() << " clusters were found" << std::endl;
+    std::cout << best_clust.phi_size() <<
+        " clusters were found via least square minimization" << std::endl;
     return i;
 }
 
