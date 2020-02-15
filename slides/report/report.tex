@@ -12,7 +12,7 @@
 \include{etc/commands}
 
 %opening
-\title{}
+\title{\texttt{bnplib}: A Nonparametric C++ Library}
 \author{Bruno Guindani, Elena Zazzetti}
 \date{February 19, 2020}
 
@@ -23,11 +23,11 @@
 \begin{abstract}
 We present a C++ library that exploits a Bayesian nonparametric setting in order to conduct monodimensional data analysis.
 In such a setting, our main goals are density estimation and clustering analysis.
-Several algorithms are available that make use of Markov chain sampling 
-The library can then be expanded to suit the user's needs TODO
+Several algorithms are available that make use of Gibbs sampling, building a Markov chain that reaches convergence at a reasonably fast pace.
+In particular, we focused on implementing some algorithms introduced by Neal in 2000.
+After running one of these algorithms, density and cluster estimation can then be conducted by using the provided auxiliary tools.
+In this report, after an overview of the underlying Bayesian model and a roundup of the algorithms' state of the art, we delve into the details of our implementation and then present an example of data analysis, whilst providing the theoretical background for our estimates.
 \end{abstract}
-
-\section{}
 
 \include{part_1}
 \include{part_2}
