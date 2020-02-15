@@ -3,10 +3,18 @@ URGENT
 * README.md for the Github repo
 * "log"-like?
 * Neal2::sample_allocations() does not use eval_marg?
-* Neal2
-* References
-* TODOS in the report
 * print() -> print_state()
+
+REPORT (URGENT)
+* TODOS in the report
+* Check references
+* Results:
+** "la prior nconta ncazz" (sic)
+** if the two means are too close, the density estimate mistakens them as only
+   one gaussian
+** varying M (total mass)
+** varying m (auxiliary blocks)
+** Neal8 vs Neal2
 
 OTHER
 * constructors (arguments)
