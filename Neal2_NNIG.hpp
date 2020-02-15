@@ -24,8 +24,8 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal2{
 
 private:
-    unsigned int maxiter = 100;
-    unsigned int burnin = 0;
+    unsigned int maxiter = 10000;
+    unsigned int burnin = 1000;
     std::mt19937 rng;
     int num_clusters;
     Mixture mixture;

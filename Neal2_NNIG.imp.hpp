@@ -216,6 +216,8 @@ unsigned int Neal2<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     std::ptrdiff_t i;
     int min_err = errors.minCoeff(&i);
     best_clust = chain.state(i);
+    std::cout << best_clust.phi_size() <<
+        " clusters were found via least square minimization" << std::endl;
     return i;
 }
 
