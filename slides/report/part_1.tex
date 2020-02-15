@@ -91,17 +91,16 @@ The posterior distribution is again a Normal-InvGamma:
 with $\mu_n=\frac{\lambda_0 \mu_0 \bar{y} + n}{\lambda_0 + n}$ , $\alpha_n= \alpha_0 + \frac{n}{2} $ and $\beta_n= \beta_0 + \frac{1}{2}\sum_{i=1}^{n} (y_i-\bar{y})^2 + \frac{\lambda_0 n(\bar{y}-\mu_0)^2}{2(\lambda_0 + n)}$.
 
 \section{Algorithms}
-
 For the task of density estimation, we investigated several Markov chain methods to sample from the posterior distribution of a Dirichlet process mixture model. \\
-Starting from the hierarchical model $(7)$, a first direct approach is simply drawing values for each $\theta_i$ from its conditional given the data and the other $\theta_j$. %TODO ref
-However, as we discussed before, there is high probability for ties among them which can lead to slow convergence, since the $\theta$ values are not updated for more than one observation simultaneously. \\
+Starting from the hierarchical model (\ref{dpm-1}), a first direct approach is simply drawing values for each $\theta_i$ from its conditional given the data and the other $\theta_j$.
+However, as previously discussed, we have high probability for ties among them which can lead to slow convergence, since the $\theta$ values are not updated for more than one observation simultaneously. \\
 For this reason, special attention was paid to the three of them we presents in this chapter.
 They are Gibbs samplers with a similar base structure, sharing the two steps for the sampling of the allocations $\mathbf{c}$ and of the unique values $\mathbf{\phi_c}$. \\
 Moreover, all methods can be extended with additional steps for hierarchical extensions.
 We can think to place priors to hyperparamaters of the centering measure $G_0$ or to the total mass $M$.
 
 \subsection{Neal's Algorithm 2 (\texttt{Neal2})}
-In order to speed up the convergence in case of ties, Neal first proposed (see \cite{neal} section 3) a more efficient Gibbs sampling method based on the discrete model $(8)$, where the mixing proportions $\textbf{p}$ have been integrated out. %TODO ref
+In order to speed up the convergence in case of ties, Neal first proposed (see \cite{neal} section 3) a more efficient Gibbs sampling method based on the discrete model (\ref{dpm-disc}), where the mixing proportions $\textbf{p}$ have been integrated out.
 Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$  and the component parameters $\phi_c$ for all $c$, the Gibbs sampler first draws values for each $c_i$ given the following conditional probabilities:
 \begin{align}
 			\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) \propto \frac{n_{-i,c} + M/{K}}{n-1+M} f_{\phi_{c}}(y_{i}) 
@@ -121,7 +120,7 @@ If the new value of $c_i$ is different from all the other $c_j$, a value for $\p
 Then for all the classes the  sample for $\phi_c$ is done considering the posterior distribution based on the prior and all the observations belonging to the specific class.
 The probability of setting $c_i$ to a new component involves the integral $\int_{\Theta} f_{\phi}(y_{i}) \, G_0(\de\phi)$, which is difficult in the non-conjugate case, as well as the sample from the posterior $H_i$.
 
-\subsection{Neal's Algorithm 8 (\texttt{Neal8})}
+\subsection{Neal's Algorithm 8 (\texttt{Neal8})} \label{neal8}
 To handle non-conjugate priors, Neal proposed (see \cite{neal} section 6) a second Markov chain sampling procedure where the state is extended by the addition of auxiliary parameters.
 This technique allows to update the $c_i$ while avoiding the integration with respect to $G_0$. \\
 In this case the prior for $c_i$ is:
@@ -154,6 +153,3 @@ It needs to draw from the conditionals:
 	\mathbf{p} &\sim \Lc (\mathbf{p}| \mathbf{c}) \nonumber
 \end{align}
 The draw for the unique values can be easily handled also in the non-conjugate case by applying standard Markov chain Monte Carlo methods.
-
-
-TODO: REFERENCEs

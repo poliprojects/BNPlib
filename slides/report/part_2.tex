@@ -105,7 +105,7 @@ Aside from \verb|run()|, whose code was shown at the beginning of this section, 
 	Then, each auxiliary block (except the first one if the above case occurred) generates new $\phi$ values via the hierarchy's \verb|draw()| function.
 	Now, a new cluster, that is a new $\phi$ value, for \verb|data[i]| needs to be drawn.
 	A vector \verb|probas| with \verb|n_unique+n_aux| components is filled with the probabilities of each $\phi$ being extracted.
-	Computations involve, among other things, the \verb|card| vector, the \verb|log_like()| evaluated in \verb|data[i]|, and the total mass parameter, as shown in the previous sections. % TODO specify
+	Computations involve, among other things, the \verb|card| vector, the \verb|log_like()| evaluated in \verb|data[i]|, and the total mass parameter, as shown in section \ref{neal8}.
 	Then, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|.
 	Finally, four different cases of updating \verb|unique_values| and \verb|card| are handled separately, depending on whether the old cluster was a singleton or not, and whether an auxiliary block or an already existing cluster was chosen as the new cluster for \verb|data[i]|.
 	This is done because depending on the case, clusters are either unchanged, increased by one, decreased by one, or moved around. % TODO is it correct? explain better?
@@ -200,7 +200,7 @@ $$
 That is, the local estimate is a weighted mean of the likelihood given the unique values $\phi^{(k)}_j$ of cluster $j$ and the marginal distribution $m(x)$, taken from the appropriate function in the \verb|Hierarchy<>| class.
 The weights of the clusters are proportional to their size $n^{(k)}_j$, while the ``virtual'' cluster of the marginal counts as having size $M$, the total mass parameter ($n$ is instead the number of data points, as per usual).
 The marginal distribution is only known under the conjugacy assumption in the \verb|Neal2| algorithm.
-In particular, for a Normal-NIG model $m(x)$ is a Student's $t$ as explained in section \ref{nnig}. %TODO reference 
+In particular, for a Normal-NIG model $m(x)$ is a Student's $t$ as explained in section \ref{nnig}.
 In the \verb|Neal8| algorithm, $m(x)$ is not available in closed form, and thus it is replaced in the above formula by the following approximation:
 $$
 \tilde m(x) = \sum_{h=0}^{m-1} \frac{M}{m}  F\left(x | \phi_h\right)
