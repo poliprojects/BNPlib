@@ -1,11 +1,13 @@
 library(ggplot2)
+library(gridExtra)
 
 
 data= as.numeric(read.csv("data.csv", sep=",", header=F))[1:100]
 
-density5= read.csv("density5.csv", sep=",", header=F) #24 clusters
-density1= read.csv("density1.csv", sep=",", header=F) #9 clusters
-density035= read.csv("density035.csv", sep=",", header=F) # 1 cluster
+density5= read.csv("density5.csv", sep=",", header=F) #9 clusters best/ 4 final
+density1= read.csv("density1.csv", sep=",", header=F) #9 clusters best / 4 final
+density05= read.csv("density05.csv", sep=",", header=F) # 4 cluster best / 5 final
+density035= read.csv("density035.csv", sep=",", header=F) # 1 cluster best /4 final
 
 
 h<-hist(data, plot=F)
@@ -37,18 +39,23 @@ hist(clust_best1[,3])
 hist(clust_final1[,3])
 
 
+clust_best05= read.csv("clust_best05.csv", sep=",", header=F)
+clust_final05= read.csv("clust_final05.csv", sep=",", header=F)
+hist(clust_best05[,3])
+hist(clust_final05[,3])
+
 
 clust_best5= read.csv("clust_best5.csv", sep=",", header=F) 
 clust_final5= read.csv("clust_final5.csv", sep=",", header=F) 
 
 #############################################
-#M=1
+#M=1 with final
 
 
-a=dnorm(density1[,1],mean=4.81909	,sd=sqrt(1.672570)) #0
-b=dnorm(density1[,1],mean=5.26594, sd=sqrt(2.783170)) #1
-c=dnorm(density1[,1],mean=5.17475	, sd=sqrt(1.166610)) #2
-d=dnorm(density1[,1],mean=4.67092, sd=sqrt(0.349494)) #3
+a=dnorm(density1[,1],mean=	4.81909, sd=	1.672570)#0
+b=dnorm(density1[,1],mean=	5.26594, sd=	2.783170) #1
+c=dnorm(density1[,1],mean=5.17475, sd	=1.166610) #2
+d=dnorm(density1[,1],mean=	4.67092, sd=	0.349494)#3
 
 
 dat=data.frame(table(clust_final1[,3]))
@@ -81,7 +88,6 @@ p2=ggplot(data = dat, aes(x = reorder(Var1, -Freq), Freq)) +
   geom_bar(stat = "identity", color='black',fill='gray') +
   ggtitle("Barplot of Clusters") +
   xlab("Clusters") + ylab("Relative frequency")
-
 
 
 grid.arrange(p1, p2, widths = c(3,2))

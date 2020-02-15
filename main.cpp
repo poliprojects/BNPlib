@@ -12,7 +12,7 @@ int main(){
     unsigned int half = data.size()/2;
 
     double mean1 = 4.0;
-    double mean2 = 6.0;
+    double mean2 = 7.0;
     double sd1   = 1.0;
     double sd2   = 1.0;
 
@@ -33,22 +33,28 @@ int main(){
     //file << std::endl;
     //file.close();
 
+	//std::vector<double> mass;
+	//std::vector<double> num_clust_best;
+    //double tempm = 0.5;
+    //double stepm = 0.5;
+    //double upp_bndm = 5.0;
+    //while(tempm <= upp_bndm){
+    //    mass.push_back(tempm);
+    //    tempm += stepm;
+    //}
 	
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
 
-
     SimpleMixture mix(1); // total mass
-    //Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
-      //  data, mix, hy);
-    Neal8<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler8(
-        data, 3, mix, hy);
+    Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
+        data, mix, hy);
+    //Neal8<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler8(
+      //  data, 3, mix, hy);
 	
     // Run samplers
-    //sampler2.run();
-    sampler8.run();
+    sampler2.run();
+    //sampler8.run();
 	
-
-
 
 
     // Density stuff
@@ -60,21 +66,21 @@ int main(){
         grid.push_back(temp);
         temp += step;
     }
-    sampler8.eval_density(grid);
-    sampler8.write_density_to_file();
+    //sampler8.eval_density(grid);
+    //sampler8.write_density_to_file();
 
-    //sampler2.eval_density(grid);
-    //sampler2.write_density_to_file();
-	//unsigned int i_cap = sampler2.cluster_estimate();
-    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    //sampler2.write_final_clustering_to_file();
-    //sampler2.write_best_clustering_to_file();
+    sampler2.eval_density(grid);
+    sampler2.write_density_to_file();
+	unsigned int i_cap = sampler2.cluster_estimate();
+    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+    sampler2.write_final_clustering_to_file();
+    sampler2.write_best_clustering_to_file();
 
     // Clustering stuff
-    unsigned int i_cap = sampler8.cluster_estimate();
-    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    sampler8.write_final_clustering_to_file();
-    sampler8.write_best_clustering_to_file();
+    //unsigned int i_cap = sampler8.cluster_estimate();
+    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+    //sampler8.write_final_clustering_to_file();
+    //sampler8.write_best_clustering_to_file();
     //sampler8.write_chain_to_file();
 
     return 0;

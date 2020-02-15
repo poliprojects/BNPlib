@@ -24,8 +24,8 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal2{
 
 private:
-    unsigned int maxiter = 10000;
-    unsigned int burnin = 1000;
+    unsigned int maxiter = 20000;
+    unsigned int burnin = 5000;
     std::mt19937 rng;
     int num_clusters;
     Mixture mixture;
@@ -86,7 +86,7 @@ public:
         std::string filename = "chain.csv");
 
     const void write_density_to_file(
-        std::string filename = "density.csv");
+        std::string filename = "density2.csv");
 
     // Constructors and destructors:
     ~Neal2() = default;

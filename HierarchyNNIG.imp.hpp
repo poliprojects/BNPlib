@@ -5,7 +5,7 @@
 
 template<class Hypers> 
 double HierarchyNNIG<Hypers>::log_like(double datum){
-        return exp(stan::math::normal_lpdf(datum, state[0], state[1]));
+        return exp(stan::math::normal_lpdf(datum, state[0], sqrt(state[1])));
 }
 
 template<class Hypers> 
@@ -13,7 +13,7 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::log_like(std::vector<double> datum){
     // TODO stan per vector?? 
     Eigen::VectorXd result(datum.size());
     for(int i = 0; i < datum.size(); i++){
-        result(i) = exp(stan::math::normal_lpdf(datum[i], state[0], state[1]));
+        result(i) = exp(stan::math::normal_lpdf(datum[i], state[0], sqrt(state[1])));
     }
     return result;
 }
