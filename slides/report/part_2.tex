@@ -8,7 +8,6 @@ As far as code implementation goes, the aforementioned algorithms all share the 
 void step(){
     sample_allocations();
     sample_unique_values();
-    sample_weights();
 }
 
 void run(){
@@ -23,7 +22,7 @@ void run(){
     }
 }
 \end{verbatim}
-In particular, the Neal2 and Neal8 algorithms do not have a \verb|sample_weights()| phase.
+In particular, the blocked Gibbs algorithm has an additional phase in \verb|step()|, \verb|sample_weights()|.
 Each implemented algorithm will be discussed in detail in its own section.
 As for the general structure of an algorithm class, a template approach was chosen, to allow the use of several layers of complexity based on the needs of the user:
 \begin{verbatim}
