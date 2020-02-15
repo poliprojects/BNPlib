@@ -149,7 +149,6 @@ In this case the prior for $c_i$ is:
 		\PP(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1+M}
 	\end{aligned}	
 \end{equation}
-
 where the probability of selecting a new component is evenly split among the $m$ auxiliary components.
 Whilst maintaining the same structure as the \verb|Neal2|, the \verb|Neal8| is composed of two steps, where the components of the Markov chain state $(c,\phi)$ are repeatedly sampled.
 The first step scans all the observations and evaluates each $c_i$.
