@@ -1,4 +1,4 @@
-% TODO introduce the concept of "chain" somewhere
+% TODO introduce the concept of "chain" and "aux block" somewhere
 % TODO libraries (eigen, stan, protobuf)
 % TODO Neal2 -> Neal2_NNIG?
 
@@ -53,7 +53,7 @@ First of all, we must briefly describe the auxiliary classes that are used as pa
 		\item generate new values for the \verb|state| both according to its prior and to its posterior distribution;
 		\item get and set class members, as with the other classes.
 	\end{itemize}
-	In particular, we implemented the \verb|HierarchyNNIG| class, which represents the Normal-NIG model described earlier. %TODO specify "earlier"!
+	In particular, we implemented the \verb|HierarchyNNIG| class, which represents the Normal-NIG model described in section \ref{nnig}. %TODO
 \end{itemize}
 Any class representing any type of hierarchy or parameters can be built as long as it possesses the above interface, which is required for their use in the implemented algorithms. \\
 We will be now first examining the \verb|Neal8| class as an example.
@@ -200,13 +200,12 @@ $$
 That is, the local estimate is a weighted mean of the likelihood given the unique values $\phi^{(k)}_j$ of cluster $j$ and the marginal distribution $m(x)$, taken from the appropriate function in the \verb|Hierarchy<>| class.
 The weights of the clusters are proportional to their size $n^{(k)}_j$, while the ``virtual'' cluster of the marginal counts as having size $M$, the total mass parameter ($n$ is instead the number of data points, as per usual).
 The marginal distribution is only known under the conjugacy assumption in the \verb|Neal2| algorithm.
-In particular, for a Normal-NIG model $m(x)$ is a Student's $t$ as explained in section ?. %TODO reference 
+In particular, for a Normal-NIG model $m(x)$ is a Student's $t$ as explained in section \ref{nnig}. %TODO reference 
 In the \verb|Neal8| algorithm, $m(x)$ is not available in closed form, and thus it is replaced in the above formula by the following approximation:
 $$
 \tilde m(x) = \sum_{h=0}^{m-1} \frac{M}{m}  F\left(x | \phi_h\right)
 $$ %TODO is M/m correct? It doesn't look like it is
-where we use $m$ unique values, that is, one for each of the $m = \verb|n_aux|$ auxiliary blocks of the algorithm, drawn from the base measure: $\phi_{h} \overset{\text{iid}}{\sim} G_0, \ h=0:m-1$.
-
+where we use $m$ unique values, that is, one for each of the $m = \verb|n_aux|$ auxiliary blocks of the algorithm, drawn from the base measure: $\phi_{h} \overset{\text{iid}}{\sim} G_0, \ h=0:m-1$. \\
 Finally, the \emph{empirical density} is computed as the mean over all iterations:
 $$
 f(x) = \frac{1}{K} \sum_k f^{(k)}(x)
