@@ -1,7 +1,3 @@
-% TODO introduce the concept of "chain" and "aux block" somewhere
-% TODO libraries (eigen, stan, protobuf)
-% TODO Neal2 -> Neal2_NNIG?
-
 \section{Implementation}
 As far as code implementation goes, the aforementioned algorithms all share the following structure:
 \begin{verbatim}
@@ -35,6 +31,7 @@ An example with actual class names, as found in the \verb|main.cpp| file, is:
 \begin{verbatim}
 Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8;
 \end{verbatim}
+As a final introductory note, probability distributions and random sampling were handled through the \verb|Stan| library, whilst the popular \verb|Eigen| library was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code.
 
 \subsection{Auxiliary classes}
 First of all, we must briefly describe the auxiliary classes that are used as parameters for the algorithms:
@@ -53,7 +50,7 @@ First of all, we must briefly describe the auxiliary classes that are used as pa
 		\item generate new values for the \verb|state| both according to its prior and to its posterior distribution;
 		\item get and set class members, as with the other classes.
 	\end{itemize}
-	In particular, we implemented the \verb|HierarchyNNIG| class, which represents the Normal-NIG model described in section \ref{nnig}. %TODO
+	In particular, we implemented the \verb|HierarchyNNIG| class, which represents the Normal-NIG model described in section \ref{nnig}.
 \end{itemize}
 Any class representing any type of hierarchy or parameters can be built as long as it possesses the above interface, which is required for their use in the implemented algorithms. \\
 We will be now first examining the \verb|Neal8| class as an example.
@@ -70,7 +67,7 @@ std::mt19937 rng; // random number generating engine
 These are the parameters of the method, and are rather self-explanatory.
 Their values are initialized either via the constructors or the setters.
 If \verb|num_clusters| is not provided, it will be automatically set equal to the number of data points, thus starting the algorithm with one datum per cluster. \\
-The data and values containers are as follows:
+The data and values containers were implemented as follows:
 \begin{verbatim}
 std::vector<double> data;
 std::vector<unsigned int> allocations;
@@ -82,7 +79,7 @@ The algorithm will keep track of the labels representing assignments to clusters
 For instance, if one has \verb|allocations[5] = 2|, it means that datum number 5 is associated to cluster number 2.
 Note that indexing for both data and clusters starts at zero, so this actually means that we have the sixth datum being assigned to the third cluster. \\
 The containers for the unique values $\phi$ hold objects of type \verb|Hierarchy<>| because each $\phi$ is associated to a cluster, which is in fact a small hierarchy that can have its own hyperprior in the general case.
-The same reasoning goes for \verb|aux_unique_values|, which will be referred to as the vector of \emph{auxiliary blocks}, from which the algorithm may draw in order to generate new clusters. \\
+The same reasoning goes for \verb|aux_unique_values|, the $m$ auxiliary blocks, from which the algorithm may draw in order to generate new clusters. \\
 As for the members used for running the algorithm:
 \begin{verbatim}
 void initialize();
@@ -297,5 +294,5 @@ Code is included in the Stan package (version 3.3.3 is used there)
 \bibitem{proto} Protocol Buffers Tutorial for C++: \url{https://developers.google.com/protocol-buffers/docs/cpptutorial}. \\
 Code found at \url{https://github.com/protocolbuffers/protobuf} (version 3.11.0 was used)
 
-%TODO codici di Mario e Riccardo? :D
+\bibitem{tutors} Codes of Mario Beraha and Riccardo Corradin for similar projects, found at \url{https://github.com/mberaha/partial_exchangeability} and \url{https://github.com/rcorradin/BNPmix} respectively
 \end{thebibliography}
