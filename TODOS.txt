@@ -1,26 +1,22 @@
 TODO LIST
-DISCUSS
-* try doing plots
-* constructors (arguments)
+URGENT
+* README.md for the Github repo
 * "log"-like?
+* Neal2::sample_allocations() does not use eval_marg?
+
+OTHER
+* constructors (arguments)
 * probas in a separate function?
 * deal with the extra dynamically allocated Hypers
 * a way to erase and add clusters more efficiently
 * rename proto messages
 * blocked Gibbs?
 * all TODOS in the files
-* Neal2::sample_allocations() does not use eval_marg?
+* create generic Algorithm class
+* acceleration steps?
+* Hypers not fixed
 
 MANOVALANZA
 * DEBUG lines
 * print specifics/results of running algorithm
-
-EXTENSIONS
-* create generic Algorithm class?
-* acceleration steps?
 * documentation with Doxygen
-* README.md for the Github repo
-* hypers not fixed
-
-REPORT
-* Neal's Algorithm 2 (\verb|Neal2|)
