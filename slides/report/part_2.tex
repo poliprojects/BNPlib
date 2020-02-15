@@ -165,8 +165,7 @@ We will be explaining in thorough detail these two useful applications in the ne
 Suppose we wish to estimate the real clustering of the data, assuming the DPM model holds true.
 A first rough estimate is the \emph{final clustering}, that is, the state values corresponding to the last iteration of the algorithm.
 This estimate does not require an appropriate function to be implemented, since the state values are already available in \verb|allocations| and \verb|unique_values| after the algorithm is \verb|run()|.
-However, due to oscillating behavior, %TODO is that correct?
-the last clustering may not be the optimal one.
+However, due to the oscillating behavior of the clusters (as we shall see later on), the last clustering may not be the optimal one.
 Instead, we chose to implement a \emph{least square} estimate in the following function:
 \begin{verbatim}
 unsigned int cluster_estimate();
@@ -238,43 +237,27 @@ Finally, \verb|write_density_to_file()| has values of $x$ in the first column an
 Our clustering analysis was conducted on 100 data points, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(6,1)$.
 The \verb|Neal8| algorithm with $m=3$ auxiliary blocks was run for 20000 iterations, and the first 5000 were discarded as burn-in. Then, \verb|cluster_estimate()| was called.
 The resulting best clustering is found at iteration 2975 and has 9 clusters in it. \\
-The obtained clusterings are highly fluctuating in the creation and destruction of clusters, as shown by the below plot:
+The obtained clusterings are highly fluctuating in terms of the number of clusters, as shown by the below plot:
 \begin{center}
-	%\includegraphics[scale=0.7]{cardinalities_thinned.png}
+	\includegraphics[scale=0.7]{etc/cardinalities_thinned.png}
 \end{center}
 A thinning of one iteration every 100 was performed for better readability of the plot.
-Here, one can clearly see that the number of clusters at all iterations varies significantly bewteen 2 and 14, even in the last thousands of iterations, with most of the iterations hovering between 6 and 9 clusters. \\
-This shows that the \emph{``best''} clustering in a \emph{least sqaure} sense (via Binder's loss function, as previously discussed) does not necessarily have a small number of clusters.
-Indeed, let us take a closer look at the structured produced by the \verb|cluster_estimate()| function by looking at the heat map for the mean dissimilarity matrix $\bar D$:
-\begin{center}
-	%\includegraphics[scale=0.7]{diss_mean.png}
-\end{center}
+Here, one can clearly see that the number of clusters at all iterations varies significantly bewteen 2 and 14, even in the last thousands of iterations, with most of the iterations hovering between 6 and 9 clusters.
+This shows that the best clustering in a \emph{least sqaure} sense (via Binder's loss function, as previously discussed) does not necessarily have a small number of clusters. \\
+Let us now take a closer look at the structure produced by \verb|cluster_estimate()| by looking at the heat map for the mean dissimilarity matrix $\bar D$ (below, on the left) and for the best clustering (on the right).
 Darker, reddish colors indicate values closer to 1 (both data are in the same cluster), while light, yellowish colors indicate values closer to 0 (both data are in different clusters).
-We only show the lower triangular part, as the matrix is symmetric and the diagonal entries are obviously all equal to 1.
-In this mean dissimilarity matrix, entries are numbers from 0 to 1, and they can be interpreted as probabilities of data points belonging to the same cluster.
+We only show the lower triangular parts, as the matrices are symmetric and the diagonal entries are obviously all equal to 1.
+In the mean dissimilarity matrix, entries are numbers from 0 to 1, and they can be interpreted as probabilities of data points belonging to the same cluster.
 More specifically, the more iterations keep datum $i$ and $j$ in the same cluster, the closer to $1$ the corresponding entry $\bar D_{ij}$.
-Since actual dissimilarity matrices are binary, the least square approach means finding the matrix which is the closest to the \emph{rounded} mean matrix.
-On the left side below, we have the heat map for dissimilarity matrix number 2975 (the ``best'' clustering), which we can compare to the rounded mean dissimilarity matrix on the right side.
-The bottom matrix instead represents the difference (in absolute value) between the two above matrices.
-As we can see, the two matrices look pretty similar, but not overwhelmingly so.
 \begin{figure}
+	\centering
 	\begin{minipage}{0.5\textwidth}
-		%\includegraphics[scale=0.35]{diss_best.png}
+		\includegraphics[scale=0.35]{etc/diss_mean.png}
 	\end{minipage}%
 	\begin{minipage}{0.5\textwidth}
-		%\includegraphics[scale=0.35]{diss_mean_round.png}
+		\includegraphics[scale=0.35]{etc/diss_best.png}
 	\end{minipage}
 \end{figure}
-\begin{center}
-	%\includegraphics[scale=0.7]{diss_comparison.png}
-\end{center}
-
-
-
-
-
-
-
 
 \section{Extensions} %TODO rivedi bene
 The \verb|bnplib| library has several possible extensions:

@@ -5,6 +5,7 @@ URGENT
 * Neal2::sample_allocations() does not use eval_marg?
 * Neal2
 * References
+* TODOS in the report
 
 OTHER
 * constructors (arguments)
