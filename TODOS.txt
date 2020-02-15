@@ -6,6 +6,7 @@ URGENT
 * Neal2
 * References
 * TODOS in the report
+* print() -> print_state()
 
 OTHER
 * constructors (arguments)
