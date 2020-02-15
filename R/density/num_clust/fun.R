@@ -1,9 +1,7 @@
 library(ggplot2)
 
-num_clust_best= as.numeric(read.csv("num_clust_best.csv", sep=",", header=F))[1:10]
-#num_clust_fin= as.numeric(read.csv("num_clusters_final.csv", sep=",", header=F))[1:10]
+num_clust= as.numeric(read.csv("num_clust_best.csv", sep=",", header=F))[1:10]
 
-num_clust=num_clust_best
 mass= as.numeric(read.csv("values_mass.csv", sep=",", header=F))[1:10]
 plot(mass,num_clust)
 

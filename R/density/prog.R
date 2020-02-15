@@ -2,12 +2,13 @@ library(ggplot2)
 library(gridExtra)
 
 
-data= as.numeric(read.csv("data.csv", sep=",", header=F))[1:100]
+data= data.frame(as.numeric(read.csv("data.csv", sep=",", header=F))[1:100])
+names(data)<-c("data")
 
-density5= read.csv("density5.csv", sep=",", header=F) #9 clusters best/ 4 final
-density1= read.csv("density1.csv", sep=",", header=F) #9 clusters best / 4 final
-density05= read.csv("density05.csv", sep=",", header=F) # 4 cluster best / 5 final
-density035= read.csv("density035.csv", sep=",", header=F) # 1 cluster best /4 final
+density5= read.csv("density5.csv", sep=",", header=F) 
+density1= read.csv("density1.csv", sep=",", header=F) 
+density05= read.csv("density05.csv", sep=",", header=F) 
+density035= read.csv("density035.csv", sep=",", header=F) 
 
 
 h<-hist(data, plot=F)
@@ -15,34 +16,42 @@ h$counts <- h$counts / sum(h$counts)
 
 x11()
 plot(h, freq=TRUE, ylab="Relative Frequency", ylim=c(0,0.4), xlim=c(0,10))
-
-lines(density5[,1], density5[,2], col="green",  lwd = 1.5)
-lines(density1[,1], density1[,2], col="red",  lwd = 1.5)
-lines(density035[,1], density035[,2], col="blue",  lwd = 1.5)
+lines(density035[,1], density035[,2], col="green",  lwd = 1.5)
+#lines(density05[,1], density05[,2], col="blue",  lwd = 1.5)
+lines(density1[,1], density1[,2], col="orange",  lwd = 1.5)
+lines(density5[,1], density5[,2], col="red",  lwd = 1.5)
 
 
 legend("topright",  c("Estimated posterior density with:", "M=0.35", "M=1.0", "M=5.0"), 
        lty=c(0,1,1,1), 
-       col=c("blue","red", "green"))
+       col=c("green","orange", "red"))
 
 
 
+ggplot(data, aes(x=data)) +geom_histogram(aes(y=..density..),binwidth=0.72, fill="white", color="black")+
+  
+geom_line(data = density035, aes(x = V1, y = V2,col = '1'))+
+geom_line(data = density1, aes(x = V1, y = V2,col = '2'))+
+geom_line(data = density5, aes(x = V1, y = V2,col = '3'))+
+ggtitle("Estimated posterior density")  +
+xlab("data") +
+ylab("density") +scale_color_manual(name="",values =c('1'="red",'2'="green",'3'= "blue"), 
+                                                 labels = c( "M=0.35", "M=1.0", "M=5.0"))
+
+
+              
 
 clust_best035= read.csv("clust_best035.csv", sep=",", header=F)
 clust_final035= read.csv("clust_final035.csv", sep=",", header=F)
 
-hist(clust_final035[,3])
 
 clust_best1= read.csv("clust_best1.csv", sep=",", header=F) 
 clust_final1= read.csv("clust_final1.csv", sep=",", header=F) 
-hist(clust_best1[,3])
-hist(clust_final1[,3])
+
 
 
 clust_best05= read.csv("clust_best05.csv", sep=",", header=F)
 clust_final05= read.csv("clust_final05.csv", sep=",", header=F)
-hist(clust_best05[,3])
-hist(clust_final05[,3])
 
 
 clust_best5= read.csv("clust_best5.csv", sep=",", header=F) 
