@@ -6,7 +6,7 @@ URGENT
 * print() -> print_state()
 
 REPORT (URGENT)
-* TODOS in the report
+* TODOS in the report!!!!!
 * Check references
 * Results:
 ** "la prior nconta ncazz" (sic)
@@ -15,6 +15,7 @@ REPORT (URGENT)
 ** varying M (total mass)
 ** varying m (auxiliary blocks)
 ** Neal8 vs Neal2
+** unique values do not matter for allocation (and best allocation)
 
 OTHER
 * constructors (arguments)
