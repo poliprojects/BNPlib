@@ -192,7 +192,7 @@ Suppose this iterations has $J$ clusters, that is, $j=0:J-1$.
 The \verb|card| vector is once again computed, where $\texttt{card[j]} = n^{(k)}_j$ is the cardinality of cluster $j$.
 Then, for each point $x$ in \verb|grid|, we compute the local estimate of the density, that is, only taking iteration $k$ into account:
 $$
-f^{(k)}(x) \ = \ \sum_j \frac{n^{(k)}_j}{M+n} F\left(x | \phi^{(k)}_j\right) \ + \ \frac{M}{M+n} m(x)
+\hat f^{(k)}(x) \ = \ \sum_j \frac{n^{(k)}_j}{M+n} f\left(x | \phi^{(k)}_j\right) \ + \ \frac{M}{M+n} m(x)
 $$
 That is, the local estimate is a weighted mean of the likelihood given the unique values $\phi^{(k)}_j$ of cluster $j$ and the marginal distribution $m(x)$, taken from the appropriate function in the \verb|Hierarchy<>| class.
 The weights of the clusters are proportional to their size $n^{(k)}_j$, while the ``virtual'' cluster of the marginal counts as having size $M$, the total mass parameter ($n$ is instead the number of data points, as per usual).
@@ -200,12 +200,12 @@ The marginal distribution is only known under the conjugacy assumption in the \v
 In particular, for a Normal-NIG model $m(x)$ is a Student's $t$ as explained in section \ref{nnig}.
 In the \verb|Neal8| algorithm, $m(x)$ is not available in closed form, and thus it is replaced in the above formula by the following approximation:
 $$
-\tilde m(x) = \sum_{h=0}^{m-1} \frac{M}{m}  F\left(x | \phi_h\right)
+\tilde m(x) = \sum_{h=0}^{m-1} \frac{M}{m}  f\left(x | \phi_h\right)
 $$ %TODO is M/m correct? It doesn't look like it is
 where we use $m$ unique values, that is, one for each of the $m = \verb|n_aux|$ auxiliary blocks of the algorithm, drawn from the base measure: $\phi_{h} \overset{\text{iid}}{\sim} G_0, \ h=0:m-1$. \\
 Finally, the \emph{empirical density} is computed as the mean over all iterations:
 $$
-f(x) = \frac{1}{K} \sum_k f^{(k)}(x)
+\hat f(x) = \frac{1}{K} \sum_k \hat f^{(k)}(x)
 $$
 and saved into the \verb|density| object.
 
@@ -225,7 +225,7 @@ They can be called as need be from the \verb|main.cpp| file.
 If a file name is not provided, the above default names will be used.
 The former two create a \verb|.csv| file with the columns being, in order, data index, data value, allocation, unique values (one per column).
 \verb|write_chain_to_file()| has the same columns as the previous functions, but adds one more column containing the iteration number (starting from $0$) as the first one.
-Finally, \verb|write_density_to_file()| has values of $x$ in the first column and the corresponding $f(x)$ in the second one.
+Finally, \verb|write_density_to_file()| has values of $x$ in the first column and the corresponding $\hat f(x)$ in the second one.
 
 \section{Results}
 \subsection{Clustering analysis}

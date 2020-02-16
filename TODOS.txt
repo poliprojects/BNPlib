@@ -14,7 +14,7 @@ REPORT (URGENT)
    one gaussian
 ** varying M (total mass)
 ** varying m (auxiliary blocks)
-** Neal8 vs Neal2
+** Neal8 vs Neal2: similar results (b/c they both converged?)
 ** unique values do not matter for allocation (and best allocation)
 
 OTHER
