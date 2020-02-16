@@ -2,27 +2,30 @@ library(ggplot2)
 library(gridExtra)
 
 
-data= data.frame(as.numeric(read.csv("data.csv", sep=",", header=F))[1:100])
+data = as.numeric(read.csv("data.csv", sep=",", header=F))[1:100]
 names(data)<-c("data")
 
-density5= read.csv("density5.csv", sep=",", header=F) 
-density1= read.csv("density1.csv", sep=",", header=F) 
-density05= read.csv("density05.csv", sep=",", header=F) 
-density035= read.csv("density035.csv", sep=",", header=F) 
+density0.25 = read.csv("../../density0.25.csv", header=F) 
 
+dens.matrix = read.csv("../../dens_estimate_iterations.csv", header=F)
 
 h<-hist(data, plot=F)
 h$counts <- h$counts / sum(h$counts)
 
-x11()
-plot(h, freq=TRUE, ylab="Relative Frequency", ylim=c(0,0.4), xlim=c(0,10))
-lines(density035[,1], density035[,2], col="green",  lwd = 1.5)
-#lines(density05[,1], density05[,2], col="blue",  lwd = 1.5)
-lines(density1[,1], density1[,2], col="orange",  lwd = 1.5)
-lines(density5[,1], density5[,2], col="red",  lwd = 1.5)
+#x11()
+pdf("densities_iters.pdf")
+plot(h, freq=TRUE, ylab="Densities", xlim=c(0,10), ylim=c(0,0.4),
+  main="Predictive densities")
+for(i in 1:nrow(dens.matrix)){
+  lines(density0.25[,1], dens.matrix[i,], col="gray", lwd = 1)
+}
+lines(density0.25[,1], density0.25[,2], col="black", lwd = 2)
+legend("topright", c("Densities at iterations 1000,2000,...,15000",
+  "Mean density"), lty=c(1,1), col=c("gray","black"))
+dev.off()
 
 
-legend("topright",  c("Estimated posterior density with:", "M=0.35", "M=1.0", "M=5.0"), 
+legend("bottomright",  c("Estimated posterior density with:", "M=0.35", "M=1.0", "M=5.0"), 
        lty=c(0,1,1,1), 
        col=c("green","orange", "red"))
 
