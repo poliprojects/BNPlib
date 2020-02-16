@@ -247,7 +247,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         std::vector<unsigned int> card(state.phi_size(),
             0); // TODO salviamoci ste card da qualche parte
         std::vector<double> params(state.phi(0).params_size());
-        Eigen::VectorXd dens_addendum(grid.size());
+        Eigen::VectorXd dens_addendum=Eigen::MatrixXd::Zero(grid.size(),1);
 
         for(int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
@@ -272,6 +272,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
 
         if(iter % step == 0){
             for(int i=0; i<dens_addendum.size()-1; i++){
+
 	        file << dens_addendum(i)<< ",";
             }
             file <<dens_addendum(dens_addendum.size()-1) << std::endl;
