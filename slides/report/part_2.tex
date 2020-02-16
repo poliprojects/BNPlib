@@ -51,6 +51,7 @@ First of all, we must briefly describe the auxiliary classes that are used as pa
 		\item get and set class members, as with the other classes.
 	\end{itemize}
 	In particular, we implemented the \verb|HierarchyNNIG| class, which represents the Normal-NIG model described in section \ref{nnig}.
+	The \verb|state| holds the values for $\phi = (\mu,\sigma)$.
 \end{itemize}
 Any class representing any type of hierarchy or parameters can be built as long as it possesses the above interface, which is required for their use in the implemented algorithms. \\
 We will be now first examining the \verb|Neal8| class as an example.
@@ -283,7 +284,7 @@ The \verb|bnplib| library has several possible extensions:
 
 \bibitem{james} Ishwaran, James (2001), \textit{Gibbs Sampling Methods for Stick-Breaking Priors}
 
-\bibitem{integral} Ross, Markwick, \textit{\texttt{dirichletprocess}: An R Package for Fitting Complex Bayesian Nonparametric Models}, found at \url{https://cran.r-project.org/package=dirichletprocess}
+\bibitem{integral} Ross, Markwick, \textit{\texttt{dirichletprocess}: An R Package for Fitting Complex Bayesian Nonparametric Models}, found at \url{https://cran.r-project.org/package=dirichletprocess} %TODO change
 
 \bibitem{stan} Stan documentation: \url{http://mc-stan.org/math}.
 Code found at \url{https://github.com/stan-dev/math} (version 3.0.0 was used) and it also includes other needed libraries: Boost, Eigen, SUNDIALS, Intel TBB

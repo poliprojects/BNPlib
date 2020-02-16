@@ -1,8 +1,7 @@
 TODO LIST
 URGENT
-* "log"-like?
 * Neal2::sample_allocations() does not use eval_marg?
-* print() -> print_state()
+* print last column data + file names (density2)
 
 REPORT (URGENT)
 * TODOS in the report!!!!!
