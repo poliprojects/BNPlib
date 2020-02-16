@@ -46,7 +46,7 @@ int main(){
 	
     // Run samplers
     //sampler2.run();
-    sampler8.run();
+    sampler8.run_and_save_cards();
 
     
 	
@@ -62,8 +62,8 @@ int main(){
         grid.push_back(temp);
         temp += step;
     }
-    sampler8.eval_density(grid);
-    sampler8.write_density_to_file("density0.25.csv");
+    //sampler8.eval_density(grid);
+    //sampler8.write_density_to_file("density0.25.csv");
 
     //sampler2.eval_density(grid);
     //sampler2.write_density_to_file();
@@ -75,7 +75,7 @@ int main(){
     // Clustering stuff
     //unsigned int i_cap = sampler8.cluster_estimate();
     //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    sampler8.write_final_clustering_to_file("clust_final0.25.csv");
+    //sampler8.write_final_clustering_to_file("clust_final0.25.csv");
     //sampler8.write_best_clustering_to_file();
     //sampler8.write_chain_to_file();
 
