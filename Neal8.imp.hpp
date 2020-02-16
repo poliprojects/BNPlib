@@ -231,7 +231,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     density.first = grid;
 
     std::ofstream file;
-    unsigned int step = 2500;
+    unsigned int step = 1000;
     file.open("dens_estimate_iterations.csv");
 
     Eigen::VectorXd dens(grid.size());
