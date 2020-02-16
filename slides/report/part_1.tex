@@ -75,7 +75,7 @@ finite mixture model with $K$ components:
 where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the classes and each $\theta$ is characterized by the latent class $c$ and the corresponding parameters $\phi_c$.
 
 \subsubsection{Normal Normal-InverseGamma model} \label{nnig}
-A very common choice for the DPM model is the gaussian mixture model, also known as Normal Normal-InverseGamma (Normal-NIG) model, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. That is, letting $\theta=(\mu,\sigma^2)$, we have:
+A very common choice for the DPM model is the gaussian mixture model, also known as Normal Normal-InverseGamma (Normal-NIG) model, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. That is, letting $\theta=(\mu,\sigma)$, we have:
 \begin{equation}
 	\begin{aligned}
 		f(y|\theta)&=N(y| \mu ,\sigma^2)  \\
@@ -84,17 +84,19 @@ A very common choice for the DPM model is the gaussian mixture model, also known
 	\end{aligned}
 \end{equation}
 Note that in this model we have a full prior for $\sigma^2$ and instead a prior for $\mu$ that is conditioned on the value of $\sigma^2$.
-Thanks to conjugacy, the predictive distribution for a new observation $\widetilde{y}$ can be computed analitically, finding a Student's $t$ (see \cite{integral} section 2.3):
+Thanks to conjugacy, the predictive distribution for a new observation $\widetilde{y}$ can be computed analitically, finding a Student's $t$ (see \cite{integral} section 3.5):
 \begin{align*}
-	p(\widetilde{y}|\mu_0,\lambda_0, \alpha_0, \beta_0)= \int_\Theta f(\widetilde{y}|\theta)G_0(\de\theta)= \frac{1}{\widetilde{\sigma}} \text{t}\left(\frac{\widetilde{y}-\widetilde{\mu}}{\widetilde{\sigma}} ,|\widetilde{v}\right)        	
+	p(\widetilde{y}|\mu_0,\lambda_0, \alpha_0, \beta_0) =
+	\int_\Theta f(\widetilde{y}|\theta) \, G_0(\de\theta) =
+	\text{t}_{\widetilde \nu}\left(\widetilde{y}|\widetilde{\mu},\widetilde{\sigma}\right)
 \end{align*}
 where the following parameters are set:
 $$
-	\widetilde{v}=2 \alpha_0, \quad
+	\widetilde{\nu}=2 \alpha_0, \quad
 	\widetilde{\mu}=\mu_0, \quad
 	\widetilde{\sigma}^2= \frac{\beta_0(\lambda_0+1)}{\alpha_0 \lambda_0}
 $$
-The posterior distribution is again a Normal-InvGamma:
+The posterior distribution is again a Normal-InvGamma (see \cite{integral} section 3.3):
 \begin{align*}
 	p(\theta|y,\mu_0,\lambda_0, \alpha_0, \beta_0)=N\left(\mu | \mu_n ,\frac{\sigma^2} {\lambda_0 + n}\right) \times \text{Inv-Gamma}(\sigma^2|\alpha_n, \beta_n )
 \end{align*}
