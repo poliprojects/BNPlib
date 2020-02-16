@@ -8,19 +8,19 @@ diss.mean = diss.mean[,1:(length(diss.mean)-1)]
 diss.mean = as.matrix(diss.mean)
 diss.best = as.matrix(diss.best)
 
-svg(filename="diss_mean.svg")
+pdf("diss_mean.pdf")
 image(diss.mean)
 dev.off()
 
-svg(filename="diss_best.svg")
+pdf("diss_best.pdf")
 image(diss.best)
 dev.off()
 
 diss.mean.round = round(diss.mean)
-svg(filename="diss_mean_round.svg")
+pdf("diss_mean_round.pdf")
 image(diss.mean.round)
 dev.off()
 
-svg(filename="diss_comparison.svg")
+pdf("diss_comparison.pdf")
 image(abs(diss.mean.round-diss.best))
 dev.off()
