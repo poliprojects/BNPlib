@@ -39,14 +39,14 @@ int main(){
 
    
     SimpleMixture mix(0.25); // total mass
-    //Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
-    //    data, mix, hy);
-    Neal8<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler8(
-        data, 3, mix, hy);
+    Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
+        data, mix, hy);
+    //Neal8<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler8(
+    //    data, 3, mix, hy);
 	
     // Run samplers
-    //sampler2.run();
-    sampler8.run();
+    sampler2.run();
+    //sampler8.run();
 
     
 	
@@ -62,11 +62,11 @@ int main(){
         grid.push_back(temp);
         temp += step;
     }
-    sampler8.eval_density(grid);
-    //sampler8.write_density_to_file("density0.25.csv");
+    //sampler8.eval_density(grid);
+    //sampler8.write_density_to_file("densityfinal0.25.csv");
 
-    //sampler2.eval_density(grid);
-    //sampler2.write_density_to_file();
+    sampler2.eval_density(grid);
+    sampler2.write_density_to_file("densityneal2.csv");
 	//unsigned int i_cap = sampler2.cluster_estimate();
     //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
     //sampler2.write_final_clustering_to_file();
@@ -76,7 +76,7 @@ int main(){
     //unsigned int i_cap = sampler8.cluster_estimate();
     //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
     //sampler8.write_final_clustering_to_file("clust_final0.25.csv");
-    //sampler8.write_best_clustering_to_file();
+    //sampler8.write_best_clustering_to_file("clust_best0.25.csv");
     //sampler8.write_chain_to_file();
 
     return 0;
