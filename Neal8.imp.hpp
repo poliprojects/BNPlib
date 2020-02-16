@@ -239,7 +239,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     int n = data.size();
     IterationOutput state;
 
-    for(int iter = 0 ; iter < chain.state_size(); iter++){
+    for(int iter = 2490 ; iter < 2491; iter++){
         // for each iteration of the algorithm
         //std::cout << iter << std::endl; // DEBUG
 
@@ -272,9 +272,9 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
 	dens += dens_addendum;
 
         //if(iter % step == 0){
-        //    for(int i=0; i<dens_addendum.size()-1; i++){
+           // for(int i=0; i<dens_addendum.size()-1; i++){
 
-	//        file << dens_addendum(i)<< ",";
+	     //   file << dens_addendum(i)<< ",";
         //    }
         //    file <<dens_addendum(dens_addendum.size()-1) << std::endl;
         //}
@@ -285,7 +285,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     //     std::cout << dens(i) << " ";
     // std::cout << std::endl;
 
-    density.second = dens/ chain.state_size();
+    density.second = dens;
 
     //DEBUG:
     // for(int i = 0; i < grid.size(); i++)
