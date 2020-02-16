@@ -25,6 +25,8 @@ OTHER
 * all TODOS in the files
 * create generic Algorithm class
 * acceleration steps?
+* check, in write_clust_...(), if clust_estimate() has been called, and similar
+  flags
 * Hypers not fixed
 
 MANOVALANZA
