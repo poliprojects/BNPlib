@@ -86,7 +86,7 @@ public:
         std::string filename = "chain.csv");
 
     const void write_density_to_file(
-        std::string filename = "density2.csv");
+        std::string filename = "density.csv");
 
     // Constructors and destructors:
     ~Neal2() = default;
