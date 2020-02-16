@@ -259,7 +259,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
             }
             temp_hier.set_state(params);
 
-            dens_addendum = card[h] * temp_hier.like(grid) / (M+n);
+            dens_addendum += card[h] * temp_hier.like(grid) / (M+n);
         }
     
         // Component from G0
