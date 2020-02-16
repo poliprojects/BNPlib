@@ -62,14 +62,14 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         double tot = 0.0;
         for(int k = 0; k < n_unique ; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
-            probas(k) = card[k] * unique_values[k].log_like(data[i]) / (
+            probas(k) = card[k] * unique_values[k].like(data[i]) / (
                 n-1+M);
             tot += probas(k);
         }
 
         for(int k = 0; k < n_aux; k++){
             probas(n_unique+k) = (M/n_aux) *
-                aux_unique_values[k].log_like(data[i]) / (n-1+M);
+                aux_unique_values[k].like(data[i]) / (n-1+M);
             tot += probas(n_unique+k,0);
         }
         probas = probas / tot;
@@ -167,7 +167,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
     chain.add_state();
     *chain.mutable_state(iter-burnin) = iter_out;
 
-    //print(); //DEBUG
+    //print_state(); //DEBUG
 }
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
@@ -254,13 +254,13 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
             }
             temp_hier.set_state(params);
 
-            dens += card[h] * temp_hier.log_like(grid) / (M+n);
+            dens += card[h] * temp_hier.like(grid) / (M+n);
         }
     
         // Component from G0
         for(int h = 0; h < n_aux; h++){
             temp_hier.draw();
-            dens += (M/n_aux) * temp_hier.log_like(grid) / (M+n);
+            dens += (M/n_aux) * temp_hier.like(grid) / (M+n);
         }
     }
 
@@ -279,7 +279,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy, Hypers, Mixture>::print(){
+const void Neal8<Hierarchy, Hypers, Mixture>::print_state(){
     for(int h = 0; h < num_clusters; h++){
         std::cout << "Cluster # " << h << " parameters: ";
 

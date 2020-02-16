@@ -50,7 +50,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
         double tot = 0.0;
 
         for(int k = 0; k < n_unique; k++){
-            probas(k) = card[k] * unique_values[k].log_like(data[i]) / (
+            probas(k) = card[k] * unique_values[k].like(data[i]) / (
                 n-1+M);
             if(singleton == 1 && k == i){
                 std::shared_ptr<Hypers> hy = unique_values[0].get_hypers();
@@ -59,7 +59,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                 double alpha0 = hy->get_alpha0();
                 double beta0  = hy->get_beta0();
                 
-                double sigtilde = sqrt(beta0*(lambda+1)/(alpha0*lambda));
+                double sigtilde = sqrt( beta0*(lambda+1)/(alpha0*lambda) );
                 probas(i,0) = M * exp(stan::math::student_t_lpdf(data[i],
                     2*alpha0, mu0, sigtilde)) / (n-1+M);
             } 
@@ -73,7 +73,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                 double alpha0 = hy->get_alpha0();
                 double beta0  = hy->get_beta0();
 
-            double sigtilde = sqrt(beta0*(lambda+1/(alpha0*lambda)));
+            double sigtilde = sqrt( beta0*(lambda+1)/(alpha0*lambda) );
             probas(n_unique,0) = M * exp(stan::math::student_t_lpdf(data[i],
                 2*alpha0, mu0, sigtilde)) / (n-1+M);
             tot += probas(n_unique,0);
@@ -93,12 +93,12 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
                 double beta0  = hy->get_beta0();    
 
                 std::vector<double> par_pair(2);
-                double sigma_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
-                    beta0+(lambda*pow(data[i]-mu0,2))/(lambda+2), rng);
+                double sigma2_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
+                    beta0+(lambda*pow(data[i]-mu0,2))/(2*(lambda+1)), rng);
                 double mu_new = stan::math::normal_rng(
-                    (lambda*mu0+data[i])/(lambda+1), sigma_new/(lambda+1), rng); 
+                    (lambda*mu0+data[i])/(lambda+1), sqrt(sigma2_new/(lambda+1)), rng); 
                 par_pair[0] = mu_new;
-                par_pair[1] = sigma_new;
+                par_pair[1] = sqrt(sigma2_new);
                 unique_values[ allocations[i] ].set_state(par_pair);
                 
             }
@@ -125,12 +125,12 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
                std::vector<double> par_pair(2);
 
-                double sigma_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
-                    beta0+(lambda*pow(data[i]-mu0,2))/(lambda+2), rng);
+                double sigma2_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
+                    beta0+(lambda*pow(data[i]-mu0,2))/(2*(lambda+1)), rng);
                 double mu_new = stan::math::normal_rng((lambda*mu0+data[i])/
-                    (lambda+1), sigma_new/(lambda+1), rng); 
+                    (lambda+1), sqrt(sigma2_new/(lambda+1)), rng); 
                 par_pair[0] = mu_new;
-                par_pair[1] = sigma_new;
+                par_pair[1] = sqrt(sigma2_new);
                 Hierarchy<Hypers> new_unique(hy);
                 new_unique.set_state(par_pair); 
                 unique_values.push_back(new_unique); 
@@ -251,7 +251,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
             }
             temp_hier.set_state(params);
 
-            dens += card[h] * temp_hier.log_like(grid) / (M+n);
+            dens += card[h] * temp_hier.like(grid) / (M+n);
         }
 
         // Component from G0 (exploit conjugacy: we use the explicit expression)
@@ -294,12 +294,12 @@ void Neal2<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
     chain.add_state();
     *chain.mutable_state(iter-burnin) = iter_out;
 
-    //print();
+    //print_state();
 }
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal2<Hierarchy,Hypers,Mixture>::print(){
+void Neal2<Hierarchy,Hypers,Mixture>::print_state(){
     for (int h = 0; h < num_clusters; h++) {
         std::cout << "Parameters: ";
 

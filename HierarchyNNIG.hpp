@@ -30,10 +30,10 @@ public:
 
     // Computation tools
     double eval_marg(double datum);
-    double log_like(double datum);
+    double like(double datum);
 
     Eigen::VectorXd eval_marg(std::vector<double> datum);
-    Eigen::VectorXd log_like(std::vector<double> datum);
+    Eigen::VectorXd like(std::vector<double> datum);
 
     void draw();
 

@@ -53,7 +53,7 @@ private:
 
     void save_iteration(unsigned int iter);
 
-    void print();
+    void print_state();
 
 public:
     // Running tool
