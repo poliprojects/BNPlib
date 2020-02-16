@@ -9,7 +9,7 @@ REPORT (URGENT)
 * Results:
 ** "la prior nconta ncazz" (sic)
 ** if the two means are too close, the density estimate mistakens them as only
-   one gaussian
+   one gaussian (?)
 ** varying M (total mass)
 ** varying m (auxiliary blocks)
 ** Neal8 vs Neal2: similar results (b/c they both converged?)
