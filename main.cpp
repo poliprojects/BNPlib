@@ -34,42 +34,23 @@ int main(){
     //file << std::endl;
     //file.close();
 
-    std::vector<double> mass;
-	std::vector<double> num_clust_best;
-    double tempm = -1.0;
-    double stepm = 0.1;
-    double upp_bndm = 2.3;
-    while(tempm <= upp_bndm){
-        mass.push_back(exp(tempm));
-        tempm += stepm;
-    }
-	
+  
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
 
-    for (int i=0; i<mass.size(); i++){
-    SimpleMixture mix(mass[i]); // total mass
-    //Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
-    //    data, mix, hy);
-    Neal8<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler8(
-        data, 3, mix, hy);
+   
+    SimpleMixture mix(10); // total mass
+    Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
+        data, mix, hy);
+    //Neal8<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler8(
+    //    data, 3, mix, hy);
 	
     // Run samplers
-    //sampler2.run();
-    sampler8.run();
+    sampler2.run();
+    //sampler8.run();
 
-    unsigned int i_cap = sampler8.cluster_estimate();
-    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    num_clust_best.push_back(sampler8.get_num_clusters_best());
-    }
+    
 	
 
-    std::ofstream file;
-    file.open("num_clust_best.csv");
-    for(auto &d : num_clust_best){
-        file << d << ",";
-    }
-    file << std::endl;
-    file.close();
 
 
     // Density stuff
@@ -82,19 +63,19 @@ int main(){
         temp += step;
     }
     //sampler8.eval_density(grid);
-    //sampler8.write_density_to_file();
+    //sampler8.write_density_to_file("density10.csv");
 
-    //sampler2.eval_density(grid);
-    //sampler2.write_density_to_file();
-	//unsigned int i_cap = sampler2.cluster_estimate();
-    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    //sampler2.write_final_clustering_to_file();
-    //sampler2.write_best_clustering_to_file();
+    sampler2.eval_density(grid);
+    sampler2.write_density_to_file();
+	unsigned int i_cap = sampler2.cluster_estimate();
+    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+    sampler2.write_final_clustering_to_file();
+    sampler2.write_best_clustering_to_file();
 
     // Clustering stuff
     //unsigned int i_cap = sampler8.cluster_estimate();
     //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    //sampler8.write_final_clustering_to_file();
+    //sampler8.write_final_clustering_to_file("clust_final10.csv");
     //sampler8.write_best_clustering_to_file();
     //sampler8.write_chain_to_file();
 

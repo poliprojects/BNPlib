@@ -74,7 +74,7 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
     double ss = std::inner_product( data.begin(), data.end(), data.begin(),
         0.0 ) - n*y_bar*y_bar;
     beta_post = beta0 + 0.5 * ss + 0.5 * lambda0 * n * std::pow((y_bar - mu0), 2) /
-        (n + lambda0));
+        (n + lambda0);
     lambda_post = lambda0 + n;
     
     return std::vector<double>{mu_post, alpha_post, beta_post, lambda_post};
