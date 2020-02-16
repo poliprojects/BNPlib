@@ -23,13 +23,6 @@ lines(density0.25[,1], density0.25[,2], col="black", lwd = 2)
 legend("topright", c("Densities at iterations 1000,2000,...,15000",
   "Mean density"), lty=c(1,1), col=c("gray","black"))
 dev.off()
-q("no")
-
-
-
-
-
-
 
 
 legend("bottomright",  c("Estimated posterior density with:", "M=0.35", "M=1.0", "M=5.0"), 
