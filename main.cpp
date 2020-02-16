@@ -46,7 +46,7 @@ int main(){
 	
     // Run samplers
     //sampler2.run();
-    sampler8.run_and_save_cards();
+    sampler8.run();
 
     
 	
@@ -62,7 +62,7 @@ int main(){
         grid.push_back(temp);
         temp += step;
     }
-    //sampler8.eval_density(grid);
+    sampler8.eval_density(grid);
     //sampler8.write_density_to_file("density0.25.csv");
 
     //sampler2.eval_density(grid);

@@ -230,6 +230,10 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         const std::vector<double> grid){
     density.first = grid;
 
+    std::ofstream file;
+    unsigned int step = 2500;
+    file.open("dens_estimate_iterations.csv");
+
     Eigen::VectorXd dens(grid.size());
     double M = mixture.get_totalmass();
     int n = data.size();
@@ -243,6 +247,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         std::vector<unsigned int> card(state.phi_size(),
             0); // TODO salviamoci ste card da qualche parte
         std::vector<double> params(state.phi(0).params_size());
+        Eigen::VectorXd dens_addendum(grid.size());
 
         for(int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
@@ -254,13 +259,22 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
             }
             temp_hier.set_state(params);
 
-            dens += card[h] * temp_hier.like(grid) / (M+n);
+            dens_addendum = card[h] * temp_hier.like(grid) / (M+n);
         }
     
         // Component from G0
         for(int h = 0; h < n_aux; h++){
             temp_hier.draw();
-            dens += (M/n_aux) * temp_hier.like(grid) / (M+n);
+            dens_addendum += (M/n_aux) * temp_hier.like(grid) / (M+n);
+        }
+
+	dens += dens_addendum;
+
+        if(iter % step == 0){
+            for(int i=0; i<dens_addendum.size()-1; i++){
+	        file << dens_addendum(i)<< ",";
+            }
+            file <<dens_addendum(dens_addendum.size()-1) << std::endl;
         }
     }
 
@@ -275,6 +289,8 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     // for(int i = 0; i < grid.size(); i++)
     //     std::cout << density.second(i) << " ";
     // std::cout << std::endl;
+
+    file.close();
 }
 
 
