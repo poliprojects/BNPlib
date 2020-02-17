@@ -1,6 +1,6 @@
 #data      = read.csv("../data.csv", header=F)
-diss.mean = read.csv("../dissim_matr_mean.csv", header=F)
-diss.best = read.csv("../dissim_matr_best.csv", sep=" ", header=F)
+diss.mean = read.csv("../../dissim_matr_mean.csv", header=F)
+diss.best = read.csv("../../dissim_matr_best.csv", sep=" ", header=F)
 
 # Pre-processing
 #data = as.numeric(data[1:(length(data)-1)])
