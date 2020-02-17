@@ -278,23 +278,24 @@ Moreover, the density estimates for some of the values of $M$ (again, compared w
 	\includegraphics[scale=0.6]{etc/dens_withMm3.pdf}
 \end{figure}
 
-Lower values for the total mass account better for the distribution of the data points, with the modes being near the real expected values of the two normal distributions, 4 and 7.
+In our case lower values for the total mass account better for the distribution of the data points, with the modes being near the real expected values of the two normal distributions, 4 and 7.
 On the other hand, higher values tend to clump together all 100 data points as though they were extracted from a single distribution.
-This is because TODO
+As we can notice, it represents a smoothing parameter and, given the strong influence on the number of mixture components, it would be a good idea to add a prior to it.
+
 \clearpage
 
 \subsection{Auxiliary blocks}
 We shall now try and change the number of auxiliary blocks, $m$, and check how this impacts the the density estimation.
 For this test, a large total mass $M=10$ was chosen; the reason being that a small $M$ would not allow significant differences as $m$ changes.
-Indeed, the only direct impact of $m$ is in the estimate (\ref{margneal8}) of the marginal distribution, that has a weight of $\frac{M}{M+n}$ (as seen in (\ref{localdens})), which is negligible if $M$ is small.
+Indeed, a direct impact of $m$ is in the estimate (\ref{margneal8}) of the marginal distribution, that has a weight of $\frac{M}{M+n}$ (as seen in (\ref{localdens})), which is negligible if $M$ is small.
 Therefore, by picking $M=10$, the result was the following:
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.6]{etc/dens_withmM10.pdf}
 \end{figure}
 
-A larger $m$ gives a better estimate of the marginal, because the sample mean is computed over a larger number of terms.
-TODO?
+A larger $m$ gives a better estimate of the marginal, because the sample mean is computed over a larger number of terms and the algorithm approximates the behavior of the algorithm \verb|Neal2|.
+
 \clearpage
 
 \subsection{Density components}
