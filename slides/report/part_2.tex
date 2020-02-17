@@ -229,18 +229,102 @@ The former two create a \verb|.csv| file with the columns being, in order, data 
 \verb|write_chain_to_file()| has the same columns as the previous functions, but adds one more column containing the iteration number (starting from $0$) as the first one.
 Finally, \verb|write_density_to_file()| has values of $x$ in the first column and the corresponding $\hat f(x)$ in the second one.
 
+\clearpage
+
 \section{Results}
-\subsection{Clustering analysis}
-Our clustering analysis was conducted on 100 data points, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(6,1)$.
-The \verb|Neal8| algorithm with $m=3$ auxiliary blocks was run for 20000 iterations, and the first 5000 were discarded as burn-in. Then, \verb|cluster_estimate()| was called.
-The resulting best clustering is found at iteration 2975 and has 9 clusters in it. \\
-The obtained clusterings are highly fluctuating in terms of the number of clusters, as shown by the below plot:
-\begin{center}
-	\includegraphics[scale=0.7]{etc/cardinalities_thinned.png}
-\end{center}
-A thinning of one iteration every 100 was performed for better readability of the plot.
-Here, one can clearly see that the number of clusters at all iterations varies significantly bewteen 2 and 14, even in the last thousands of iterations, with most of the iterations hovering between 6 and 9 clusters.
-This shows that the best clustering in a \emph{least sqaure} sense (via Binder's loss function, as previously discussed) does not necessarily have a small number of clusters. \\
+Our clustering analysis was conducted on 100 data points, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(7,1)$, which were saved in the \verb|data.csv| file.
+We chose the prior parameters for the Normal-NIG model \ref{???} as follows: $\mu_0 = 5, \lambda = 1, \alpha_0 = 2, \beta_0 = 2$.
+The \verb|Neal8| algorithm with $m=3$ auxiliary blocks was run for 20000 iterations, and the first 5000 were discarded as burn-in.
+We will keep these parameters values fixed unless explicitly noted.
+
+\subsection{Oscillations}
+After running the algorithm as described above, we find that the obtained best clusterings (again, in the lest square sense) and local density estimates are highly fluctuating over the iterations of the algorithm:
+\begin{figure}[h]
+	\centering
+	\begin{minipage}{0.5\textwidth}
+		\includegraphics[scale=0.35]{etc/cardinalities_thinned.pdf}
+	\end{minipage}%
+	\begin{minipage}{0.5\textwidth}
+		\includegraphics[scale=0.35]{etc/densities_iters.pdf}
+	\end{minipage} %TODO change "Predictive densities" title
+\end{figure}
+
+In both plots, a thinning of one iteration every 100 and every 2500, respectively, was performed for better readability of the plot.
+In the right side plot, the local densities are compared with the histogram of the data as well as the final estimate provided by the mean density.
+We can see that the number of clusters at all iterations varies significantly between 1 and 6, even in the last thousands of iterations, and the same behavior applies to the local density estimates. 
+This is further confirmation of the fact that the single iterations themselves do not converge.
+Instead, as previously discussed, the convergence is in the \emph{mean}, both for the density estimate and for the average dissimilarity matrix which we use to find the best clustering.
+
+\subsection{Total mass}
+Let us now examine the role of the total mass parameter, $M$.
+We ran the algorithm with several values for $M$ whilst keeping the other parameters unchanged from the ones indicated at the beginning of the section.
+For each $M$, we saved the number of clusters of the best clustering produced by the algorithm, and plotted it against the corresponding $M$:
+\clearpage
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.55]{etc/num_clust_M.pdf}
+\end{figure}
+
+Note that the values for $M$ were chosen so as to be evenly spaced in log-scale, thus the abscissa is in log-scale as well.
+We can note that the clusters are increasing with the total mass.
+This is consistent with the fact that the probability of creating a new cluster is proportional to $M$, as seen in \ref{???}. \\ %TODO ref
+Moreover, the density estimates for some of the values of $M$ (again, compared with the histogram of the data) are as follows:
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.6]{etc/dens_withMm3.pdf}
+\end{figure}
+
+Lower values for the total mass account better for the distribution of the data points, with the modes being near the real expected values of the two normal distributions, 4 and 7.
+On the other hand, higher values tend to clump together all 100 data points as though they were extracted from a single distribution.
+This is because TODO
+\clearpage
+
+\subsection{Auxiliary blocks}
+We shall now try and change the number of auxiliary blocks, $m$, and check how this impacts the the density estimation.
+For this test, a large total mass $M=10$ was chosen; the reason being that a small $M$ would not allow significant differences as $m$ changes.
+Indeed, the only direct impact of $m$ is in the estimation of the marginal distribution (see \ref{???}) that has a weight of $\frac{M}{M+n}$, which is negligible if $M$ is small. %TODO ref
+Therefore, by picking $M=10$, the result was the following:
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.6]{etc/dens_withmM10.pdf}
+\end{figure}
+
+A larger $m$ gives a better estimate of the marginal, because the sample mean is computed over a larger number of terms.
+TODO?
+\clearpage
+
+\subsection{Density components}
+We now wish to visualize how the local density is computed at a given sample iteration.
+Let us run again the \verb|Neal8| algorithm with both $M=0.25$ and $m=3$ fixed, and then use the \verb|cluster_estimate()| function to extract the best clustering for the data.
+We find that it is at iteration 2490, which gives 2 clusters.
+As shown in \ref{???}, each of these clusters has its own density estimate, which we refer to as \emph{component}, and a weight attached to it proportional to its cardinality. %TODO ref
+The weighted sum of these components gives the ``full'' local estimate of the density for that iteration.
+This plot shows both the \emph{weighted} components and their sum:
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.62]{etc/componentsM025m3_best.pdf}
+\end{figure}
+
+In this case the weights turn out to be approximately equal (??? and ??? respectively). %TODO values
+Again, the two components are concentrated around the true means (4 and 7) of the likelihoods of the data points, as expected. \\
+In other cases, the best clustering may produce more than 2 clusters.
+One such example is given by the best clustering of \verb|Neal8| run with $M=1$ (and $m=3$ as before), found at iteration ???. %TODO value
+Although there are 7 clusters, all weights bar the first two are insignificant, making the corresponding components have almost zero impact in the weighted sum of the local estimate:
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.44]{etc/barplotM1m3.pdf}
+\end{figure}
+
+\subsection{\texttt{Neal2} vs \texttt{Neal8}}
+Finally, we ran the \verb|Neal2| algorithm with the same parameters as \verb|Neal8| (indicated at the beginning of the section) as well as $M=10$ for both.
+Again, a rather large total mass was chosen in order to better highlight the difference in the marginal estimate.
+In fact, in the \verb|Neal2| case, since the marginal distribution is known in closed form, the estimate is more accurate:
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{etc/neal2_M10.pdf}
+\end{figure}
+
+
 Let us now take a closer look at the structure produced by \verb|cluster_estimate()| by looking at the heat map for the mean dissimilarity matrix $\bar D$ (below, on the left) and for the best clustering (on the right).
 Darker, reddish colors indicate values closer to 1 (both data are in the same cluster), while light, yellowish colors indicate values closer to 0 (both data are in different clusters).
 We only show the lower triangular parts, as the matrices are symmetric and the diagonal entries are obviously all equal to 1.
