@@ -112,7 +112,7 @@ Aside from \verb|run()|, whose code was shown at the beginning of this section, 
 	Since we only keep track of clusters via their labels in \verb|allocations|, we do not have a vector of actual data points stored for each cluster.
 	Thus we must fill, before the loop on $j$, a matrix \verb|clust_idxs| whose column $k$ contains the index of data points belonging to cluster $k$.
 	\verb|clust_idxs| is then used in the $j$ loop to fill \verb|curr_data| with the actual data points of cluster $j$.
-	\item \verb|save_iteration| will be examined in a later section.
+	\item \verb|save_iteration| will be examined in the next section.
 \end{itemize}
 
 \subsection{\texttt{Neal2} algorithm}
@@ -128,9 +128,7 @@ Indeed, in such a case, a new $\boldsymbol\phi$ value for it must be generated, 
 \section{Applications}
 These algorithms can also be used for two useful practical purposes: \emph{cluster estimation} and \emph{density estimation}.
 Both processes, however, require the whole chain to be saved, that is, at each iteration the current values of states and allocations must be stored in some data structure.
-For this purpose, we used the Protocol Buffers library, which needs a short introduction.
-
-\subsection{Storing values with \texttt{protobuf}}
+For this purpose, we used the Protocol Buffers library, which needs a short introduction. \\
 Protocol Buffers, or \verb|protobuf| for short, was developed by Google and allows automatic generation of data-storing C++ classes by defining a class skeleton in a \verb|.proto| file.
 This also allows easy interfacing with other programming languages such as R and Python. \\
 We built our template as follows:

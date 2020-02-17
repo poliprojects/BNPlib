@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper]{report}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{caption}
@@ -11,7 +11,8 @@
 \include{etc/commands}
 
 \title{\texttt{bnplib}: A Nonparametric C++ Library}
-\author{Bruno Guindani, Elena Zazzetti}
+\author{Bruno Guindani, Elena Zazzetti \\
+Advisors: \dots}
 \date{February 19, 2020}
 
 \begin{document}
@@ -26,6 +27,9 @@ In particular, we focused on implementing some algorithms introduced by Neal in 
 After running one of these algorithms, density and cluster estimation can then be conducted by using the provided auxiliary tools.
 In this report, after an overview of the underlying Bayesian model and a roundup of the algorithms' state of the art, we delve into the details of our implementation and then present an example of data analysis, whilst providing the theoretical background for our estimates.
 \end{abstract}
+\clearpage
+
+\tableofcontents
 
 \include{part_1}
 \include{part_2}

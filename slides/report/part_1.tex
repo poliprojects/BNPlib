@@ -129,10 +129,6 @@ Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$
 	\text{If $c=c_j$ for some $j$: }
 	\PP(c_{i}=c | \boldsymbol c_{-i}, y_{i},\boldsymbol\phi) \propto \frac{n_{-i,c} + M/{K}}{n-1+M} f(y_{i}|\phi_{c}) 
 \end{align}
-<<<<<<< HEAD
-where $\mathbf c_{-i}$ is $\mathbf c$ minus the $i$-th component, and $n_{-i,c}$ is the number of $c_j$ equal to $c$ excluding $c_i$. \\
-Afterwards, the sampler draws a new value for each unique value $\phi_c$ from the posterior distribution given the prior $G_0$ and the data belonging to that class. \\ %TODO but how?
-=======
 where $\boldsymbol c_{-i}$ is $\boldsymbol c$ minus the $i$-th component, and $n_{-i,c}$ is the number of $c_j$ equal to $c$ excluding $c_i$. \\
 Afterwards, the sampler draws a new value for each unique value $\phi_c$ given the data belonging to that class. 
 In regards to the first step in which allocations are drawn, the transition to the infinite case (\ref{dpm-2}) is done by taking the limit as $K$ goes to infinity in the conditional distribution of $c_i$ which becomes as follows:
