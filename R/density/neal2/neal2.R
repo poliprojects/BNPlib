@@ -7,11 +7,6 @@ density0.25= read.csv("density0.25.csv", sep=",", header=F)
 
 names(data)<-c("data")
 
-x11()
-plot(h, freq=TRUE, ylab="Relative Frequency", ylim=c(0,0.4), xlim=c(0,10))
-lines(densityneal2[,1], densityneal2[,2], col="green",  lwd = 1.5)
-lines(density0.25[,1], density0.25[,2], col="red",  lwd = 1.5)
-
 
 
 
