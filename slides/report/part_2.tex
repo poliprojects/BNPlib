@@ -125,7 +125,9 @@ The \verb|probas| vector of weights for the new allocation value is computed, ac
 After the new \verb|allocations[i]| is drawn according to \verb|probas|, four cases are handled separately as before, depending on whether the old cluster was a singleton and whether \verb|data[i]| is assigned to a new cluster.
 Indeed, in such a case, a new $\boldsymbol\phi$ value for it must be generated, and this must be handled differently by the code if an old singleton cluster was just destroyed (as the new cluster must take its former place).
 
-\section{Applications}
+\part{Applications}
+
+\section{Estimates}
 These algorithms can also be used for two useful practical purposes: \emph{cluster estimation} and \emph{density estimation}.
 Both processes, however, require the whole chain to be saved, that is, at each iteration the current values of states and allocations must be stored in some data structure.
 For this purpose, we used the Protocol Buffers library, which needs a short introduction. \\
