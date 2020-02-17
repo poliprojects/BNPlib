@@ -1,6 +1,6 @@
 library(ggplot2)
 
-setwd("C:/Users/EzioGreggio/Desktop/density_prog/neal2")
+setwd("C:/Users/EzioGreggio/Desktop/density_prog/neal2_M0.25")
 
 data= data.frame(as.numeric(read.csv("data.csv", sep=",", header=F))[1:100])
 densityneal2= read.csv("densityneal2.csv", sep=",", header=F) 
