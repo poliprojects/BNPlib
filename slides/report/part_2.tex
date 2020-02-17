@@ -57,6 +57,7 @@ Any class representing any type of hierarchy or parameters can be built as long 
 We will be now first examining the \verb|Neal8| class as an example.
 
 \subsection{\texttt{Neal8} algorithm}
+Relying on the algorithm described in section \ref{neal8}, we proceeded with our implementation.
 Aside from the usual getters and setters, as well as constructors, the \verb|Neal8| class contains the following members:
 \begin{verbatim}
 unsigned int n_aux;
@@ -102,8 +103,8 @@ Aside from \verb|run()|, whose code was shown at the beginning of this section, 
 	The algorithm mandates that \verb|data[i]| be moved to another cluster; thus, if the current cluster is a singleton, its $\phi$ values are transferred to the first auxiliary block.
 	Then, each auxiliary block (except the first one if the above case occurred) generates new $\phi$ values via the hierarchy's \verb|draw()| function.
 	Now, a new cluster, that is a new $\phi$ value, for \verb|data[i]| needs to be drawn.
-	A vector \verb|probas| with \verb|n_unique+n_aux| components is filled with the probabilities of each $\phi$ being extracted.
-	Computations involve, among other things, the \verb|card| vector, the \verb|log_like()| evaluated in \verb|data[i]|, and the total mass parameter, as shown in section \ref{neal8}.
+	A vector \verb|probas| with \verb|n_unique+n_aux| components is filled with the probabilities of each $\phi$ being extracted, in line with \ref{neal8prob}.
+	Computations involve, among other things, the \verb|card| vector, the \verb|log_like()| evaluated in \verb|data[i]|, and the total mass parameter.
 	Then, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|.
 	Finally, four different cases of updating \verb|unique_values| and \verb|card| are handled separately, depending on whether the old cluster was a singleton or not, and whether an auxiliary block or an already existing cluster was chosen as the new cluster for \verb|data[i]|.
 	This is done because depending on the case, clusters are either unchanged, increased by one, decreased by one, or moved around.

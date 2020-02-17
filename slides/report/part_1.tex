@@ -158,7 +158,7 @@ If it is equal to another $c_j$, then all the auxiliary variables are drawn from
 If the corresponding cluster is a singleton, then it is linked to one of the auxiliary variable with the corresponding value of $\phi_c$, while the others are drawn as before from $G_0$.
 Then, $c_i$ is updated according to the following conditional probabilities:
 \begin{equation}
-	\begin{aligned}
+	\begin{aligned} \label{neal8prob}
 		\PP(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto
 		\begin{cases}
 			\dfrac{n_{-i,c}}{n-1+M}f(y_{i}|\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\
