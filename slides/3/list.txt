@@ -1,0 +1,39 @@
+
+
+
+slide 1:
+implementation with explanation aux variables
+
+slide 2:
+neal8
+
+slide 3:
+neal2
+
+slide 4:
+applications: cluster estimation
+
+slide 5:
+applications: density estimation
+
+slide 6:
+results: plots with oscillations
+
+slide 7:
+results: total mass, how it influences n. clusters and smooth density
+
+slide 8:
+varying m
+
+slide 9
+clustering, comp weights
+
+slide 10
+comp densities and full
+
+slide 11
+neal2-neal8
+
+slide 12
+extensions
+
