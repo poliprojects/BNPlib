@@ -153,9 +153,17 @@ In this case the prior for $c_i$ is:
 \end{equation}
 where the probability of selecting a new component is evenly split among the $m$ auxiliary components, which will also be referred to as \emph{auxiliary blocks}.
 Whilst maintaining the same structure as the \verb|Neal2|, the \verb|Neal8| is composed of two steps, where the components of the Markov chain state $(c,\phi)$ are repeatedly sampled.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{etc/neal8.png}
+    \caption{graphical representation of the variables: the allocations are visualized as arrows linking each $\theta$ value with either one of the four old clusters or one of the new components}
+    \label{fig:neal8}
+\end{figure}
+
 The first step scans all the observations and evaluates each $c_i$.
 If it is equal to another $c_j$, then all the auxiliary variables are drawn from $G_0$.
-If the corresponding cluster is a singleton, then it is linked to one of the auxiliary variable with the corresponding value of $\phi_c$, while the others are drawn as before from $G_0$.
+If the corresponding cluster is a singleton, then it is linked to one of the auxiliary variable with the corresponding value of $\phi_c$, as it is shown in figure \ref{fig:neal8}, while the others are drawn as before from $G_0$.
 Then, $c_i$ is updated according to the following conditional probabilities:
 \begin{equation}
 	\begin{aligned} \label{neal8prob}
