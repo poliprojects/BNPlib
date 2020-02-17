@@ -1,4 +1,4 @@
-cards = read.csv("../clust_cardinalities.csv", header=F)
+cards = read.csv("../../clust_cardinalities.csv", header=F)
 
 # Pre-processing
 cards = t( cards[1:(length(cards)-1)] )
