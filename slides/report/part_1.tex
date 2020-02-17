@@ -119,7 +119,7 @@ As the state is being updated at each iteration, a \emph{chain} is formed and th
 Moreover, all methods can be extended with additional steps for hierarchical extensions.
 For example, we can place priors to hyperparamaters of the centering measure $G_0$ or to the total mass $M$.
 
-\subsection{Neal's Algorithm 2} \label{neal2}
+\subsection{Neal's Algorithm 2} \label{neal2} %TODO
 In order to speed up convergence in case of ties, Neal first proposed (see \cite{neal} section 3 as well as \cite{book} chapter 2) a more efficient Gibbs sampling method based on the discrete model (\ref{dpm-disc}), but where the mixing proportions $\textbf{p}$ have been integrated out.
 We will refer to this method as Neal's Algorithm 2, or \verb|Neal2| for short.
 Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$  and the unique values $\phi_c$ for all $c=1,\dots,k$, the Gibbs sampler first draws a new value $c$ for each $c_i$ according to the following probabilities:
