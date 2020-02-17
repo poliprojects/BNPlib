@@ -118,10 +118,10 @@ Aside from \verb|run()|, whose code was shown at the beginning of this section, 
 \subsection{\texttt{Neal2} algorithm} %TODO rivedi bene!!!!!!!!1
 The structure of the \verb|Neal2| class is similar to the one of \verb|Neal8| described above.
 The only relevant differences are the obvious lack of \verb|aux_unique_values| and most of the \verb|sample_allocations()| phase.
-Since this algorithm exploits conjugacy, this function must be specifically implemented for each different hierarchy.
+As discussed in section \ref{neal2}, this algorithm exploits conjugacy, thus this function requires specifically implemented hierarchies, in which the marginal distribution is provided in closed form.
 In our case, a Normal-NIG specialization for the \verb|Neal2| template class was implemented.
 In \verb|sample_allocations()|, a loop is performed over data points $i$ \verb|card| vector is built, just as before.
-The \verb|probas| vector of weights for the new allocation value is computed by also using the marginal density in \verb|data[i]|, which is known to be a Student's $t$ as mentioned in the appropriate section.
+The \verb|probas| vector of weights for the new allocation value is computed, according to the probabilities showed in \ref{probasneal2}, by also using the marginal density in \verb|data[i]|, which is known to be a Student's $t$ as mentioned in section \ref{nnig}.
 After the new \verb|allocations[i]| is drawn according to \verb|probas|, four cases are handled separately as before, depending on whether the old cluster was a singleton and whether \verb|data[i]| is assigned to a new cluster.
 Indeed, in such a case, a new $\phi$ value for it must be generated, and this must be handled differently by the code if an old singleton cluster was just destroyed (as the new cluster must take its former place).
 

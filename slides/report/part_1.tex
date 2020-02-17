@@ -115,7 +115,7 @@ As the state is being updated at each iteration, a \emph{chain} is formed, which
 Moreover, all methods can be extended with additional steps for hierarchical extensions.
 For example, we can place priors to hyperparamaters of the centering measure $G_0$ or to the total mass $M$.
 
-\subsection{Neal's Algorithm 2}
+\subsection{Neal's Algorithm 2} \label{neal2}
 In order to speed up the convergence in case of ties, Neal first proposed (see \cite{neal} section 3 as well as \cite{book} chapter 2) a more efficient Gibbs sampling method based on the discrete model (\ref{dpm-disc}), where the mixing proportions $\textbf{p}$ have been integrated out.
 We will refer to this method as Neal's Algorithm 2, or \verb|Neal2| for short.
 Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$  and the component parameters $\phi_c$ for all $c$, the Gibbs sampler first draws values for each $c_i$ given the following conditional probabilities:
@@ -126,7 +126,7 @@ where $n_{-i,c}$ is the number of $c_j$ equal to $c$ excluding $c_i$.
 Consequently, the sampler draws a new value for each $\phi_c$ given the data belonging to that class.
 The passage to the infinite case is done taking the limit as $K$ goes to infinity in the conditional distribution of $c_i$ which becomes as follows:
 \begin{equation}
-	\begin{aligned}
+	\begin{aligned} \label{probasneal2}
 	\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c} }{n-1+M} f(y_{i}|\phi_{c}) \\
 	\PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1+M} \int_{\Theta} f(y_{i}|\phi) \, G_0(\de\phi) 
 	\end{aligned}
@@ -137,7 +137,7 @@ For each observation $i$, $c_i$ is updated according to its conditional distribu
 It can be set either to one of the other components currently associated with some observation, or to a new mixture component.
 If the new value of $c_i$ is different from all the other $c_j$, a value for $\phi_{c_i}$ is drawn from the posterior distribution $H_i$, based on the prior $G_0$ and the single observation $y_i$.
 Then for all the classes the  sample for $\phi_c$ is done considering the posterior distribution based on the prior and all the observations belonging to the specific class.
-The probability of setting $c_i$ to a new component involves the integral $\int_{\Theta} f(y_{i}|\phi) \, G_0(\de\phi)$, which is difficult in the non-conjugate case, as well as the sample from the posterior $H_i$.
+The probability of setting $c_i$ to a new component involves the integral $\int_{\Theta} f(y_{i}|\phi) \, G_0(\de\phi)$, which is difficult to compute in the non-conjugate case, as well as the sample from the posterior $H_i$. For this reason the algorithm is applied when there is conjugacy and it is possible to compute exactly the integral.
 
 \subsection{Neal's Algorithm 8} \label{neal8}
 To handle non-conjugate priors, Neal proposed (see \cite{neal} section 6 and \cite{book} chapter 2) a second Markov chain sampling procedure where the state is extended by the addition of auxiliary parameters: the \verb|Neal8| algorithm.
