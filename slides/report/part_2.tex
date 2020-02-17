@@ -106,7 +106,7 @@ Aside from \verb|run()|, whose code was shown at the beginning of this section, 
 	Computations involve, among other things, the \verb|card| vector, the \verb|log_like()| evaluated in \verb|data[i]|, and the total mass parameter, as shown in section \ref{neal8}.
 	Then, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|.
 	Finally, four different cases of updating \verb|unique_values| and \verb|card| are handled separately, depending on whether the old cluster was a singleton or not, and whether an auxiliary block or an already existing cluster was chosen as the new cluster for \verb|data[i]|.
-	This is done because depending on the case, clusters are either unchanged, increased by one, decreased by one, or moved around. % TODO is it correct? explain better?
+	This is done because depending on the case, clusters are either unchanged, increased by one, decreased by one, or moved around.
 	\item In \verb|sample_unique_values()|, for each cluster $j$, their $\phi$ values are updated through the \verb|sample_given_data()| function, which takes as argument the vector \verb|curr_data| of data points which belong to cluster $j$.
 	Since we only keep track of clusters via their labels in \verb|allocations|, we do not have a vector of actual data points stored for each cluster.
 	Thus we must fill, before the loop on $j$, a matrix \verb|clust_idxs| whose column $k$ contains the index of data points belonging to cluster $k$.
@@ -255,7 +255,7 @@ More specifically, the more iterations keep datum $i$ and $j$ in the same cluste
 	\end{minipage}
 \end{figure}
 
-\section{Extensions} %TODO rivedi bene
+\section{Extensions}
 The \verb|bnplib| library has several possible extensions:
 \begin{itemize}
 	\item New types of \verb|Hypers| classes can be implemented, for example ones containing hyper-priors for some of the parameters if the model.
@@ -263,9 +263,9 @@ The \verb|bnplib| library has several possible extensions:
 	Changes depend on the type of parameter for which a prior is used; for example, a prior on the total mass parameter involves different steps than a prior on the parameters of the base measure.
 	For a general outline of the necessary changes, see \cite{neal} section 7.
 	\item Hierarchies other than the Normal-NIG can be created.
-	This is enough to run \verb|Neal8| by passing the class name as parameter, but other algorithms such as the conjugacy-dependent \verb|Neal2| may need an hoc implementation of some segments of code. %TODO revise
+	This is enough to run \verb|Neal8| and \verb|Neal2| by passing the class name as parameter, provided that the \verb|Hierarchy| class has the appropriate interface.
 	\item Interfaces with both R and Python can be easily implemented, thanks to the data structures provided by \verb|protobuf| and the already-available libraries \verb|Rcpp| and \verb|pybind| respectively.
-	\item Algorithms can be re-adapted for the use of other mixture models, such as the Pitman-Yor process. %TODO rly?
+	\item Algorithms can be re-adapted for the use of other mixture models, such as the Pitman-Yor process.
 	\item Conjugacy-dependent algorithms such as \verb|Neal2| can be re-adapted to account for non-conjugacy, for example by using an Hamiltonian Monte Carlo sampler.
 	\item Finally, a \emph{full generalization} of the library might be possible.
 	That is, given the distributions of the likelihood, hyperparameters, etc, one might want an algorithm that works for the chosen specific model without needing and explicit implementation for it.
@@ -274,7 +274,7 @@ The \verb|bnplib| library has several possible extensions:
 	This requires to know in advance the number of parameters for all such distributions, which is impossible in the general case.
 	Some advanced C++ techniques may be used to circumvent this hindrance, such as argument unpackers that transform a vector into a list of function arguments, and variadic templates, which are templates that accept any number of arguments.
 	Theoretically, the latter would also allow the use of priors on the parameters of the hyper-prior itself, and so on, adding layers of uncertainty ad libitum.
-	Of course this is a daunting task that is far beyond the scope of this library, although we do think it is possible to achieve with reasonable effort. %TODO too sincere?
+	Of course this is a daunting task that is far beyond the scope of this library, although we do think it is possible to achieve with reasonable effort. %TODO togliamo?
 \end{itemize}
 
 \begin{thebibliography}{9}
