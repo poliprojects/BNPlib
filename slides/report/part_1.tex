@@ -121,7 +121,7 @@ As the state is being updated at each iteration, a \emph{chain} is formed and th
 Moreover, all methods can be extended with additional steps for hierarchical extensions.
 For example, we can place priors to hyperparamaters of the centering measure $G_0$ or to the total mass $M$.
 
-\section{Neal's Algorithm 2} \label{neal2} %TODO
+\section{Neal's Algorithm 2} \label{neal2}
 In order to speed up convergence in case of ties, Neal first proposed (see \cite{neal} section 3 as well as \cite{book} chapter 2) a more efficient Gibbs sampling method based on the discrete model (\ref{dpm-disc}), but where the mixing proportions $\textbf{p}$ have been integrated out.
 We will refer to this method as Neal's Algorithm 2, or \verb|Neal2| for short.
 Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$  and the unique values $\phi_c$ for all $c=1,\dots,k$, the Gibbs sampler first draws a new value $c$ for each $c_i$ according to the following probabilities:
@@ -192,7 +192,6 @@ Then, $c_i$ is updated according to the following conditional probabilities:
 indicating with $k^{-}$ the number of distinct $c_j$ excluding the current $c_i$ and setting $h=k^{-}+m$.
 Again, the probabilities of being placed in an already existing cluster or in a newly created cluster are proportional to the cluster's cardinality (sans observation $i$) and to the total mass, respectively. \\
 Once all the $\phi_c$ that are no longer associated with any observation are discarded, the algorithm proceeds, for each class, with the sampling of $\phi_c$ from the posterior computed with the observations of the specific class.
-%TODO how?
 
 \section{Blocked Gibbs}
 Another Gibbs sampling method that is applicable in the considered DPM model is the one proposed by Ishwaran and James (see \cite{james} section 5), where the prior $P$ is assumed to be a finite dimensional stick-breaking measure, allowing the update of whole blocks of parameters.

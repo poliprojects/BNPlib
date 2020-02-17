@@ -131,7 +131,7 @@ Indeed, in such a case, a new $\boldsymbol\phi$ value for it must be generated, 
 
 \part{Applications}
 
-\chapter{Estimates}
+\chapter{Applications}
 These algorithms can also be used for two useful practical purposes: \emph{cluster estimation} and \emph{density estimation}.
 Both processes, however, require the whole chain to be saved, that is, at each iteration the current values of states and allocations must be stored in some data structure.
 For this purpose, we used the Protocol Buffers library, which needs a short introduction. \\
@@ -244,7 +244,7 @@ Finally, \verb|write_density_to_file()| has values of $x$ in the first column an
 Our clustering analysis was conducted on 100 data points, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(7,1)$, which were saved in the \verb|data.csv| file.
 We chose the prior parameters for the Normal-NIG model (\ref{nnig}) as follows: $\mu_0 = 5, \lambda = 1, \alpha_0 = 2, \beta_0 = 2$.
 The \verb|Neal8| algorithm with $m=3$ auxiliary blocks was run for 20000 iterations, and the first 5000 were discarded as burn-in.
-We will keep these parameters values fixed unless explicitly noted.
+We will keep these parameters values fixed unless explicitly stated.
 
 \section{Oscillations}
 After running the algorithm as described above, we find that the obtained best clusterings (again, in the lest square sense) and local density estimates are highly fluctuating over the iterations of the algorithm:
@@ -268,24 +268,24 @@ Instead, as previously discussed, the convergence is in the \emph{mean}, both fo
 Let us now examine the role of the total mass parameter, $M$.
 We ran the algorithm with several values for $M$ whilst keeping the other parameters unchanged from the ones indicated at the beginning of the section.
 For each $M$, we saved the number of clusters of the best clustering produced by the algorithm, and plotted it against the corresponding $M$:
-\clearpage
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.55]{etc/num_clust_M.pdf}
+	\includegraphics[scale=0.6]{etc/num_clust_M.pdf}
 \end{figure}
 
 Note that the values for $M$ were chosen so as to be evenly spaced in log-scale, thus the abscissa is in log-scale as well.
 We can note that the clusters are increasing with the total mass.
 This is consistent with the fact that the probability of creating a new cluster is proportional to $M$, as seen in (\ref{neal8prob}). \\
 Moreover, the density estimates for some of the values of $M$ (again, compared with the histogram of the data) are as follows:
+\clearpage
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.6]{etc/dens_withMm3.pdf}
+	\includegraphics[scale=0.7]{etc/dens_withMm3.pdf}
 \end{figure}
 
-In our case lower values for the total mass account better for the distribution of the data points, with the modes being near the real expected values of the two normal distributions, 4 and 7.
+In our case, lower values for the total mass account better for the distribution of the data points, with the modes being near the real expected values of the two normal distributions, 4 and 7.
 On the other hand, higher values tend to clump together all 100 data points as though they were extracted from a single distribution.
-As we can notice, it represents a smoothing parameter and, given the strong influence on the number of mixture components, it would be a good idea to add a prior to it.
+As we can see, the total mass $M$ acts as a smoothing parameter and, given its strong influence on the number of mixture components, it is a prime candidate for a prior distribution being put onto it.
 
 \clearpage
 
@@ -296,7 +296,7 @@ Indeed, a direct impact of $m$ is in the estimate (\ref{margneal8}) of the margi
 Therefore, by picking $M=10$, the result was the following:
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.6]{etc/dens_withmM10.pdf}
+	\includegraphics[scale=0.7]{etc/dens_withmM10.pdf}
 \end{figure}
 
 A larger $m$ gives a better estimate of the marginal, because the sample mean is computed over a larger number of terms and the algorithm approximates the behavior of the algorithm \verb|Neal2|.
@@ -312,7 +312,7 @@ The weighted sum of these components gives the ``full'' local estimate of the de
 This plot shows both the \emph{weighted} components and their sum:
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.62]{etc/componentsM025m3_best.pdf}
+	\includegraphics[scale=0.6]{etc/componentsM025m3_best.pdf}
 \end{figure}
 
 In this case the weights turn out to be approximately equal (0.52 and 0.48 respectively).
@@ -325,6 +325,8 @@ Although there are 7 clusters, all weights bar the first two are insignificant, 
 	\includegraphics[scale=0.44]{etc/barplotM1m3.pdf}
 \end{figure}
 
+\clearpage
+
 \section{\texttt{Neal2} vs \texttt{Neal8}}
 Finally, we ran the \verb|Neal2| algorithm with the same parameters as \verb|Neal8| (indicated at the beginning of the section) as well as $M=10$ for both.
 Again, a rather large total mass was chosen in order to better highlight the difference in the marginal estimate.
@@ -333,22 +335,6 @@ In fact, in the \verb|Neal2| case, since the marginal distribution is known in c
 	\centering
 	\includegraphics[scale=0.7]{etc/neal2_M10.pdf}
 \end{figure}
-
-
-%Let us now take a closer look at the structure produced by \verb|cluster_estimate()| by looking at the heat map for the mean dissimilarity matrix $\bar D$ (below, on the left) and for the best clustering (on the right).
-%Darker, reddish colors indicate values closer to 1 (both data are in the same cluster), while light, yellowish colors indicate values closer to 0 (both data are in different clusters).
-%We only show the lower triangular parts, as the matrices are symmetric and the diagonal entries are obviously all equal to 1.
-%In the mean dissimilarity matrix, entries are numbers from 0 to 1, and they can be interpreted as probabilities of data points belonging to the same cluster.
-%More specifically, the more iterations keep datum $i$ and $j$ in the same cluster, the closer to $1$ the corresponding entry $\bar D_{ij}$.
-%\begin{figure}
-%	\centering
-%	\begin{minipage}{0.5\textwidth}
-%		\includegraphics[scale=0.35]{etc/diss_mean.png}
-%	\end{minipage}%
-%	\begin{minipage}{0.5\textwidth}
-%		\includegraphics[scale=0.35]{etc/diss_best.png}
-%	\end{minipage}
-%\end{figure}
 
 \chapter{Extensions}
 The \verb|bnplib| library has several possible extensions:
