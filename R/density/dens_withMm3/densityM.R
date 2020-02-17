@@ -1,6 +1,7 @@
 library(ggplot2)
 library(gridExtra)
 
+setwd("C:/Users/EzioGreggio/Desktop/density_prog/dens_withMm3")
 
 data= data.frame(as.numeric(read.csv("data.csv", sep=",", header=F))[1:100])
 names(data)<-c("data")
@@ -27,6 +28,7 @@ ggplot(data, aes(x=data)) +geom_histogram(aes(y=..density..),binwidth=0.72, fill
   
   ggtitle("Estimated posterior density")  +
   xlab("data") +
+  xlim(c(1,10))+
   ylab("density") +scale_color_manual(name="",values =c('1'="red",'2'="green",'3'= "blue", '4'='orange', '5'='violet'), 
                                       labels = c( "M=0.25","M=0.5", "M=1.0", "M=5.0","M=10.0"))
 
