@@ -1,4 +1,4 @@
-\section{Implementation}
+\chapter{Implementation}
 As far as code implementation goes, the aforementioned algorithms all share the following structure:
 \begin{verbatim}
 void step(){
@@ -33,7 +33,7 @@ Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8;
 \end{verbatim}
 As a final introductory note, probability distributions and random sampling were handled through the \verb|Stan| library, whilst the popular \verb|Eigen| library was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code.
 
-\subsection{Auxiliary classes}
+\section{Auxiliary classes}
 First of all, we must briefly describe the auxiliary classes that are used as parameters for the algorithms:
 \begin{itemize}
 	\item The \verb|Mixture| classes contain all information about the mixing part of the DPM model, namely the total mass parameter and its prior distribution, if any.
@@ -56,7 +56,7 @@ First of all, we must briefly describe the auxiliary classes that are used as pa
 Any class representing any type of hierarchy or parameters can be built as long as it possesses the above interface, which is required for their use in the implemented algorithms. \\
 We will be now first examining the \verb|Neal8| class as an example.
 
-\subsection{\texttt{Neal8} algorithm}
+\section{\texttt{Neal8} algorithm}
 Relying on the algorithm described in section \ref{neal8}, we proceeded with our implementation.
 Aside from the usual getters and setters, as well as constructors, the \verb|Neal8| class contains the following members:
 \begin{verbatim}
@@ -115,7 +115,7 @@ Aside from \verb|run()|, whose code was shown at the beginning of this section, 
 	\item \verb|save_iteration| will be examined in the next section.
 \end{itemize}
 
-\subsection{\texttt{Neal2} algorithm}
+\section{\texttt{Neal2} algorithm}
 The structure of the \verb|Neal2| class is similar to the one of \verb|Neal8| described above.
 The only relevant differences are the obvious lack of \verb|aux_unique_values| and most of the \verb|sample_allocations()| phase.
 As discussed in section \ref{neal2}, this algorithm exploits conjugacy, thus this function requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is provided in closed form.
@@ -125,9 +125,13 @@ The \verb|probas| vector of weights for the new allocation value is computed, ac
 After the new \verb|allocations[i]| is drawn according to \verb|probas|, four cases are handled separately as before, depending on whether the old cluster was a singleton and whether \verb|data[i]| is assigned to a new cluster.
 Indeed, in such a case, a new $\boldsymbol\phi$ value for it must be generated, and this must be handled differently by the code if an old singleton cluster was just destroyed (as the new cluster must take its former place).
 
+
+
+
+
 \part{Applications}
 
-\section{Estimates}
+\chapter{Estimates}
 These algorithms can also be used for two useful practical purposes: \emph{cluster estimation} and \emph{density estimation}.
 Both processes, however, require the whole chain to be saved, that is, at each iteration the current values of states and allocations must be stored in some data structure.
 For this purpose, we used the Protocol Buffers library, which needs a short introduction. \\
@@ -159,7 +163,7 @@ The \verb|density| object shares a similar purpose for the density estimation pa
 It will be filled with a grid of points in which the density will be evaluated, and the evaluations of the density themselves. \\
 We will be explaining in thorough detail these two useful applications in the next lines.
 
-\subsection{Cluster estimation}
+\section{Cluster estimation}
 Suppose we wish to estimate the real clustering of the data, assuming the DPM model holds true.
 A first rough estimate is the \emph{final clustering}, that is, the state values corresponding to the last iteration of the algorithm.
 This estimate does not require an appropriate function to be implemented, since the state values are already available in \verb|allocations| and \verb|unique_values| after the algorithm is \verb|run()|.
@@ -179,7 +183,7 @@ $$
 $$
 By virtue of the involved matrices being symmetric, the latter summation can be computed over all $i<j$ instead of all $i,j$ for efficiency.
 
-\subsection{Density estimation} \label{dens-estim}
+\section{Density estimation} \label{dens-estim}
 One other important application of clustering algorithms is the estimation of the density according to which the data points are distributed.
 This is done differently in both the \verb|Neal2| and \verb|Neal8| algorithms, as the former can exploit the conjugacy of the hierarchical model.
 In either case, the following function was implemented:
@@ -216,7 +220,7 @@ $$
 and saved into the \verb|density| object.
 This estimate approaches the true posterior density of the data thanks to the convergence in mean of the chain.
 
-\subsection{Saving estimates to files}
+\section{Saving estimates to files}
 We also implemented the following functions in each \verb|Algorithm| class, which save data from the class into text files in order to ease exportation to other programs or computers:
 \begin{verbatim}
 const void write_final_clustering_to_file(
@@ -236,13 +240,13 @@ Finally, \verb|write_density_to_file()| has values of $x$ in the first column an
 
 \clearpage
 
-\section{Results}
+\chapter{Results}
 Our clustering analysis was conducted on 100 data points, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(7,1)$, which were saved in the \verb|data.csv| file.
 We chose the prior parameters for the Normal-NIG model (\ref{nnig}) as follows: $\mu_0 = 5, \lambda = 1, \alpha_0 = 2, \beta_0 = 2$.
 The \verb|Neal8| algorithm with $m=3$ auxiliary blocks was run for 20000 iterations, and the first 5000 were discarded as burn-in.
 We will keep these parameters values fixed unless explicitly noted.
 
-\subsection{Oscillations}
+\section{Oscillations}
 After running the algorithm as described above, we find that the obtained best clusterings (again, in the lest square sense) and local density estimates are highly fluctuating over the iterations of the algorithm:
 \begin{figure}[h]
 	\centering
@@ -260,7 +264,7 @@ We can see that the number of clusters at all iterations varies significantly be
 This is further confirmation of the fact that the single iterations themselves do not converge.
 Instead, as previously discussed, the convergence is in the \emph{mean}, both for the density estimate and for the average dissimilarity matrix which we use to find the best clustering.
 
-\subsection{Total mass}
+\section{Total mass}
 Let us now examine the role of the total mass parameter, $M$.
 We ran the algorithm with several values for $M$ whilst keeping the other parameters unchanged from the ones indicated at the beginning of the section.
 For each $M$, we saved the number of clusters of the best clustering produced by the algorithm, and plotted it against the corresponding $M$:
@@ -285,7 +289,7 @@ As we can notice, it represents a smoothing parameter and, given the strong infl
 
 \clearpage
 
-\subsection{Auxiliary blocks}
+\section{Auxiliary blocks}
 We shall now try and change the number of auxiliary blocks, $m$, and check how this impacts the the density estimation.
 For this test, a large total mass $M=10$ was chosen; the reason being that a small $M$ would not allow significant differences as $m$ changes.
 Indeed, a direct impact of $m$ is in the estimate (\ref{margneal8}) of the marginal distribution, that has a weight of $\frac{M}{M+n}$ (as seen in (\ref{localdens})), which is negligible if $M$ is small.
@@ -299,7 +303,7 @@ A larger $m$ gives a better estimate of the marginal, because the sample mean is
 
 \clearpage
 
-\subsection{Density components}
+\section{Density components}
 We now wish to visualize how the local density is computed at a given sample iteration.
 Let us run again the \verb|Neal8| algorithm with both $M=0.25$ and $m=3$ fixed, and then use the \verb|cluster_estimate()| function to extract the best clustering for the data.
 We find that it is at iteration 2490, which gives 2 clusters.
@@ -321,7 +325,7 @@ Although there are 7 clusters, all weights bar the first two are insignificant, 
 	\includegraphics[scale=0.44]{etc/barplotM1m3.pdf}
 \end{figure}
 
-\subsection{\texttt{Neal2} vs \texttt{Neal8}}
+\section{\texttt{Neal2} vs \texttt{Neal8}}
 Finally, we ran the \verb|Neal2| algorithm with the same parameters as \verb|Neal8| (indicated at the beginning of the section) as well as $M=10$ for both.
 Again, a rather large total mass was chosen in order to better highlight the difference in the marginal estimate.
 In fact, in the \verb|Neal2| case, since the marginal distribution is known in closed form, the estimate is more accurate:
@@ -346,7 +350,7 @@ In fact, in the \verb|Neal2| case, since the marginal distribution is known in c
 %	\end{minipage}
 %\end{figure}
 
-\section{Extensions}
+\chapter{Extensions}
 The \verb|bnplib| library has several possible extensions:
 \begin{itemize}
 	\item New types of \verb|Hypers| classes can be implemented, for example ones containing hyper-priors for some of the parameters if the model.
