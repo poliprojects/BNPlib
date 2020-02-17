@@ -12,7 +12,8 @@ A Dirichlet process with parameters $M$ and $G_0$, noted as $DP(M,G_0)$, is a ra
 (MG_0(B_1),\dots,MG_0(B_k)).
 \end{align*}
 The parameter $M$ is called the precision or total mass parameter, $G_0$ is the centering measure, and the product $MG_0$ is the base measure of the DP. \\
-Having observed the independent and identically distributed sample $\{y_1,\dots,y_n\}$, the basic DP model takes the following form:
+Having observed the independent and identically distributed sample $\{y_1,\dots,y_n\}$ \\*
+$\subseteq \RR$, the basic DP model takes the following form:
 \begin{equation}
 	\begin{aligned}
 	y_i | G &\iidsim G, \quad i=1,\dots,n \\
@@ -43,11 +44,11 @@ Oftentimes a Dirichlet process mixture (DPM) model is used, where the DP random 
 
 \subsection{Dirichlet process mixture model}
 Let $\Theta$ be a finite-dimensional parameter space and $G_0$ a probability measure on $\Theta$.
-The Dirichlet process mixture (DPM) model convolves the densities $f(\cdot|\theta)$ from a parametric family $\Fc = \{f(\cdot|\theta), \theta \in \Theta \}$ using the DP as mixture weights.
+The Dirichlet process mixture (DPM) model convolves the densities $f(\cdot|\boldsymbol\theta)$ from a parametric family $\Fc = \{f(\cdot|\boldsymbol\theta), \boldsymbol\theta \in \Theta \}$ using the DP as mixture weights.
 The obtained model has the following form:
 \begin{equation}
 	\begin{aligned}\label{dpm-1}
-	y_i | G &\iidsim f_G(\cdot) = \int_\Theta f(\cdot|\theta) \, G(\de\theta), \quad i=1,\dots,n \\
+	y_i | G &\iidsim f_G(\cdot) = \int_\Theta f(\cdot|\boldsymbol\theta) \, G(\de\boldsymbol\theta), \quad i=1,\dots,n \\
 	G &\sim DP(M G_0)
 	\end{aligned}
 \end{equation}
@@ -65,23 +66,23 @@ In this way the DPM model induces a probability model on clusters of $\theta_i$.
 An object of interest that derives from this model is the partitioning induced by the clustering. \\%, as well as the density estimation. \\
 Considering $n$ data points, each $\theta_i$ will have one of the $k$ unique values $\phi_{j}$.
 An estimation of the number of the unique values is $M\log(n) \ll n$.
-Defining  $c_i$ the \emph{allocation} parameters to the clusters such that $c_i = j$ if $\theta_i = \phi_j$, model (\ref{dpm-2}) can be thought of as the limit as $K \to +\infty$  of a finite mixture model with $K$ components:
+Defining  $c_i$ the \emph{allocation} parameters to the clusters such that $c_i = j$ if $\theta_i = \phi_j$, model (\ref{dpm-2}) can be thought of as the limit as $K \to +\infty$  of a finite mixture model with $K$ components (recall instead that $k$ is the number of unique values):
 \begin{equation}
 	\begin{aligned}\label{dpm-disc}
-		y_{i}|\mathbf{\phi},c_{i} &\indsim f(\cdot|\phi_{c_{i}}), \quad i=1,\dots,n \\
-		c_{i}|\mathit{\mathbf{p}}&\iidsim \sum_{l=1}^K\mathit{p_l} \delta_l(\cdot), \quad i=1,\dots,n \\
+		y_{i}|\boldsymbol{\phi},c_{i} &\indsim f(\cdot|\phi_{c_{i}}), \quad i=1,\dots,n \\
+		c_{i}|\mathit{\mathbf{p}}&\iidsim \sum_{j=1}^K\mathit{p_j} \delta_j(\cdot), \quad i=1,\dots,n \\
 		\phi_{c} & \iidsim G_{0}, \quad c=1,\dots,k \\
 		\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K)
 	\end{aligned}
 \end{equation}
-where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the classes and each $\theta$ is characterized by the latent class $c$ and the corresponding parameters $\phi_c$.
+where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the classes and each $\theta_i$ is characterized by the latent class $c$ and the corresponding parameters $\phi_{c_i}$.
 
 \subsubsection{Normal Normal-InverseGamma model} \label{nnig}
-A very common choice for the DPM model (\ref{dpm-1}) is the gaussian mixture model, also known as Normal Normal-InverseGamma (Normal-NIG) model, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. That is, letting $\theta=(\mu,\sigma)$, we have:
+A very common choice for the DPM model (\ref{dpm-1}) is the gaussian mixture model, also known as Normal Normal-InverseGamma (Normal-NIG) model, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. That is, letting $\boldsymbol\theta=(\mu,\sigma)$, we have:
 \begin{equation}
 	\begin{aligned}
-		f(y|\theta)&=N(y| \mu ,\sigma^2),  \\
-		G_0(\theta|\mu_0,\lambda_0, \alpha_0, 	\beta_0)
+		f(y|\boldsymbol\theta)&=N(y| \mu ,\sigma^2),  \\
+		G_0(\boldsymbol\theta|\mu_0,\lambda_0, \alpha_0, 	\beta_0)
 		&=N\left(\mu | \mu_0 ,\frac{\sigma^2} {\lambda_0}\right) \times \text{Inv-Gamma}(\sigma^2|\alpha_0, \beta_0 ).
 	\end{aligned}
 \end{equation}
@@ -89,7 +90,7 @@ Note that in this model we have a full prior for $\sigma^2$ and instead a prior 
 Thanks to conjugacy, the predictive distribution for a new observation $\widetilde{y}$ can be computed analitically, finding a Student's $t$ (see \cite{integral} section 3.5):
 \begin{align*}
 	p(\widetilde{y}|\mu_0,\lambda_0, \alpha_0, \beta_0) =
-	\int_\Theta f(\widetilde{y}|\theta) \, G_0(\de\theta) =
+	\int_\Theta f(\widetilde{y}|\boldsymbol\theta) \, G_0(\de\boldsymbol\theta) =
 	\text{t}_{\widetilde \nu}\left(\widetilde{y}|\widetilde{\mu},\widetilde{\sigma}\right)
 \end{align*}
 where the following parameters are set:
@@ -100,24 +101,25 @@ $$
 $$
 The posterior distribution is again a Normal-InvGamma (see \cite{integral} section 3.3):
 \begin{align*}
-	p(\theta|y_1,\dots,y_n,\mu_0,\lambda_0, \alpha_0, \beta_0)=N\left(\mu | \mu_n ,\frac{\sigma^2} {\lambda_0 + n}\right) \times \text{Inv-Gamma}(\sigma^2|\alpha_n, \beta_n )
+	p(\boldsymbol\theta|y_1,\dots,y_n,\mu_0,\lambda_0, \alpha_0, \beta_0)=N\left(\mu | \mu_n ,\frac{\sigma^2} {\lambda_0 + n}\right) \times \text{Inv-Gamma}(\sigma^2|\alpha_n, \beta_n )
 \end{align*}
 with:
 $$
 \mu_n=\frac{\lambda_0 \mu_0 \bar{y} + n}{\lambda_0 + n}, \quad \alpha_n= \alpha_0 + \frac{n}{2}, \quad \beta_n= \beta_0 + \frac{1}{2}\sum_{i=1}^{n} (y_i-\bar{y})^2 + \frac{\lambda_0 n(\bar{y}-\mu_0)^2}{2(\lambda_0 + n)}.
 $$
+
 \section{Algorithms}
 For the task of density estimation, we investigated several Markov chain methods to sample from the posterior distribution of a DPM model. \\
 Starting from the hierarchical model (\ref{dpm-1}), a first direct approach is simply drawing values for each $\theta_i$ from its conditional distribution, given the data and the other $\theta_j$.
-However, as previously discussed, we have high probability for ties among them which can lead to slow convergence, since the $\theta$ values are not updated for more than one observation simultaneously. \\
+However, as previously discussed, we have high probability for ties among them which can lead to slow convergence, since the $\theta_i$ are not updated for more than one observation simultaneously. \\
 For this reason, special attention was paid to the three methods we present in this section.
 They are Gibbs samplers with a similar base structure, sharing the two steps for the sampling of the allocations $\mathbf{c}$ and of the unique values $\mathbf{\phi_c}$.
 The set of allocations and unique values at a given iteration constitutes the \emph{state} of that iteration.
-As the state is being updated at each iteration, a \emph{chain} is formed, which eventually reaches convergence in the mean of the state values. %TODO SURE?
+As the state is being updated at each iteration, a \emph{chain} is formed and the mean of the state values eventually reaches convergence, as well as the estimate for the data distribution, as we will see in section \ref{dens-estim}.
 Moreover, all methods can be extended with additional steps for hierarchical extensions.
 For example, we can place priors to hyperparamaters of the centering measure $G_0$ or to the total mass $M$.
 
-\subsection{Neal's Algorithm 2} \label{neal2}
+\subsection{Neal's Algorithm 2} \label{neal2} %TODO
 In order to speed up convergence in case of ties, Neal first proposed (see \cite{neal} section 3 as well as \cite{book} chapter 2) a more efficient Gibbs sampling method based on the discrete model (\ref{dpm-disc}), but where the mixing proportions $\textbf{p}$ have been integrated out.
 We will refer to this method as Neal's Algorithm 2, or \verb|Neal2| for short.
 Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$  and the unique values $\phi_c$ for all $c=1,\dots,k$, the Gibbs sampler first draws a new value $c$ for each $c_i$ according to the following probabilities:
@@ -125,28 +127,32 @@ Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$
 	\hspace{-25pt}
 	\vspace{-12pt}
 	\text{If $c=c_j$ for some $j$: }
-	\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) \propto \frac{n_{-i,c} + M/{K}}{n-1+M} f(y_{i}|\phi_{c}) 
+	\PP(c_{i}=c | \boldsymbol c_{-i}, y_{i},\boldsymbol\phi) \propto \frac{n_{-i,c} + M/{K}}{n-1+M} f(y_{i}|\phi_{c}) 
 \end{align}
+<<<<<<< HEAD
 where $\mathbf c_{-i}$ is $\mathbf c$ minus the $i$-th component, and $n_{-i,c}$ is the number of $c_j$ equal to $c$ excluding $c_i$. \\
 Afterwards, the sampler draws a new value for each unique value $\phi_c$ from the posterior distribution given the prior $G_0$ and the data belonging to that class. \\ %TODO but how?
+=======
+where $\boldsymbol c_{-i}$ is $\boldsymbol c$ minus the $i$-th component, and $n_{-i,c}$ is the number of $c_j$ equal to $c$ excluding $c_i$. \\
+Afterwards, the sampler draws a new value for each unique value $\phi_c$ given the data belonging to that class. 
 In regards to the first step in which allocations are drawn, the transition to the infinite case (\ref{dpm-2}) is done by taking the limit as $K$ goes to infinity in the conditional distribution of $c_i$ which becomes as follows:
 \begin{equation}
 	\begin{aligned} \label{probasneal2}
 	\hspace{-25pt}
 	\vspace{-12pt}
 	\text{If $c=c_j$ for some $j$: }
-	\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c} }{n-1+M} f(y_{i}|\phi_{c}) \\
-	\PP(c_{i}\neq c_{j} \text{ for all } j | \mathbf c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1+M} \int_{\Theta} f(y_{i}|\phi) \, G_0(\de\phi) 
+	\PP(c_{i}=c | \boldsymbol c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c} }{n-1+M} f(y_{i}|\phi_{c}) \\
+	\PP(c_{i}\neq c_{j} \text{ for all } j | \boldsymbol c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1+M} \int_{\Theta} f(y_{i}|\boldsymbol\theta) \, G_0(\de\boldsymbol\theta)
 	\end{aligned}
 \end{equation}
 and considering only the $\phi_c$ associated with some observation, keeping the sampling finite and thus computationally feasible.
 The former expression is proportional to the cardinality of that cluster (excluding the $i$-th observation), while the latter is instead proportional to the total mass $M$ and represents the probability of creating a new cluster. \\
-At this point, the algorithm works iteratively by sampling $c$ and $\phi$.
+At this point, the algorithm works iteratively by sampling $\boldsymbol c$ and $\boldsymbol\phi$.
 For each observation $i$, $c_i$ is updated according to the conditional probabilities (\ref{probasneal2}).
 It can be set either to one of the other components currently associated with some observation, or to a new mixture component.
 If the new value of $c_i$ is different from all the other $c_j$, a value for $\phi_{c_i}$ is drawn from the posterior distribution $H_i$, based on the prior $G_0$ and the single observation $y_i$.
 Then, for all clusters, the sampling of their unique value $\phi_c$ is conducted by considering the posterior distribution based on the prior and on all observations belonging to that class.
-The probability of setting $c_i$ to a new component involves the integral $\int_{\Theta} f(y_{i}|\phi) \, G_0(\de\phi)$, which is difficult to compute in the non-conjugate case, as well as the sampling from the posterior $H_i$.
+The probability of setting $c_i$ to a new component involves the integral $\int_{\Theta} f(y_{i}|\boldsymbol\theta) \, G_0(\de\boldsymbol\theta)$, which is difficult to compute in the non-conjugate case, as well as the sampling from the posterior $H_i$.
 For this reason, the algorithm is applied when there is conjugacy and it is possible to compute exactly the integral.
 
 \subsection{Neal's Algorithm 8} \label{neal8}
@@ -157,17 +163,17 @@ In this case the sampling probabilities for the $c_i$ are:
 	\begin{aligned}
 		\hspace{-25pt}
 		\vspace{-12pt}
-		\text{If $c=c_j$ for some $j$: } \PP(c_i=c | \mathbf c_{-i}) &= \frac{n_{-i,c}}{n-1+M}   \\
+		\text{If $c=c_j$ for some $j$: } \PP(c_i=c | \boldsymbol c_{-i}) &= \frac{n_{-i,c}}{n-1+M}   \\
 		\PP(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1+M}
 	\end{aligned}	
 \end{equation}
 where the probability of selecting a new component is evenly split among the $m$ auxiliary components, which will also be referred to as the \emph{auxiliary blocks}.
-Maintaining the same structure as the \verb|Neal2| algorithm, \verb|Neal8| is composed of two steps, where the components of the Markov chain state $c$ and $\phi$ are repeatedly sampled.
+Maintaining the same structure as the \verb|Neal2| algorithm, \verb|Neal8| is composed of two steps, where the components of the Markov chain state $\boldsymbol c$ and $\boldsymbol\phi$ are repeatedly sampled.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\textwidth]{etc/neal8.png}
     \captionsetup{labelformat=empty}
-    \caption{Graphical representation of the variables: the allocations are visualized as arrows linking each $\theta$ value with either one of the four old clusters or one of the new components (image taken from \cite{neal})}
+    \caption{Graphical representation of the variables: the allocations are visualized as arrows linking each $\theta_i$ with either one of the four old clusters or one of the new components (image taken from \cite{neal})}
     \label{fig:neal8}
 \end{figure}
 
@@ -177,7 +183,7 @@ If the cluster corresponding to $c_i$ is a singleton, then it is linked to one o
 Then, $c_i$ is updated according to the following conditional probabilities:
 \begin{equation}
 	\begin{aligned} \label{neal8prob}
-		\PP(c_{i}=c | \mathbf c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto
+		\PP(c_{i}=c | \boldsymbol c_{-i}, y_{i}, \phi_{1},\dots,\phi_{h}) \propto
 		\begin{cases}
 			\dfrac{n_{-i,c}}{n-1+M}f(y_{i}|\phi_{c}), & \mbox{for } 1 \leq c \leq k^{-} \\
 			\\
@@ -195,9 +201,9 @@ Another Gibbs sampling method that is applicable in the considered DPM model is 
 A key point of the method is that it does not marginalize over the prior; instead, by grouping more variables together, it samples from their joint distribution conditioned on all other variables.
 This sampler needs to draw from the following conditionals:
 \begin{align}
-	\boldsymbol\phi &\sim \Lc(\boldsymbol\phi | \mathbf{c}, \mathbf{y}) \nonumber \\
-	\mathbf{c} &\sim \Lc (\mathbf{c}| \boldsymbol\phi,\mathbf{p}, \mathbf{y}) \nonumber \\
-	\mathbf{p} &\sim \Lc (\mathbf{p}| \mathbf{c}) \nonumber
+	\boldsymbol\phi &\sim \Lc(\boldsymbol\phi | \boldsymbol{c}, \boldsymbol{y}) \nonumber \\
+	\boldsymbol{c} &\sim \Lc (\boldsymbol{c}| \boldsymbol\phi,\boldsymbol{p}, \boldsymbol{y}) \nonumber \\
+	\boldsymbol{p} &\sim \Lc (\boldsymbol{p}| \boldsymbol{c}) \nonumber
 \end{align}
 The drawing of the unique values can also be handled in the non-conjugate case by applying standard Markov chain Monte Carlo methods. \\
 This algorithm is not explored in detail as it has not implemented yet in our library.
