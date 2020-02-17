@@ -128,7 +128,7 @@ Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$
 	\PP(c_{i}=c | \mathbf c_{-i}, y_{i},\boldsymbol\phi) \propto \frac{n_{-i,c} + M/{K}}{n-1+M} f(y_{i}|\phi_{c}) 
 \end{align}
 where $\mathbf c_{-i}$ is $\mathbf c$ minus the $i$-th component, and $n_{-i,c}$ is the number of $c_j$ equal to $c$ excluding $c_i$. \\
-Afterwards, the sampler draws a new value for each unique value $\phi_c$ given the data belonging to that class. \\ %TODO but how?
+Afterwards, the sampler draws a new value for each unique value $\phi_c$ from the posterior distribution given the prior $G_0$ and the data belonging to that class. \\ %TODO but how?
 In regards to the first step in which allocations are drawn, the transition to the infinite case (\ref{dpm-2}) is done by taking the limit as $K$ goes to infinity in the conditional distribution of $c_i$ which becomes as follows:
 \begin{equation}
 	\begin{aligned} \label{probasneal2}
@@ -187,7 +187,7 @@ Then, $c_i$ is updated according to the following conditional probabilities:
 \end{equation}
 indicating with $k^{-}$ the number of distinct $c_j$ excluding the current $c_i$ and setting $h=k^{-}+m$.
 Again, the probabilities of being placed in an already existing cluster or in a newly created cluster are proportional to the cluster's cardinality (sans observation $i$) and to the total mass, respectively. \\
-Once all the $\phi_c$ that are no longer associated with any observation are discarded, the algorithm proceeds with the sampling for $\phi_c$ for all the classes.
+Once all the $\phi_c$ that are no longer associated with any observation are discarded, the algorithm proceeds, for each class, with the sampling of $\phi_c$ from the posterior computed with the observations of the specific class.
 %TODO how?
 
 \subsection{Blocked Gibbs}
