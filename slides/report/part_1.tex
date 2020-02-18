@@ -148,7 +148,7 @@ The former expression is proportional to the cardinality of that cluster (exclud
 Let us now introduce the actual \verb|Neal2| algorithm, which works iteratively in two steps, in which we sample $(\boldsymbol{c}_1,\dots,\boldsymbol{c}_n)$ and $(\boldsymbol{\phi}_1,\dots,\boldsymbol{\phi}_k)$, respectively.
 First, for each observation $i$, $c_i$ is updated according to the conditional probabilities (\ref{probasneal2}).
 It can be set either to one of the other components currently associated with some observation, or to a new mixture component.
-If the new value of $c_i$ is different from all the other $c_j$, a value for $\boldsymbol\phi_{c_i}$ is drawn from the \emph{posterior distribution} $H_i$, based on the prior $G_0$ and the single observation $y_i$; this means that in this case, a new cluster has been created. \\
+If the new value of $c_i$ is different from all the other $c_j$, a value for $\boldsymbol\phi_{c_i}$ is created by drawing it from the \emph{posterior distribution} $H_i$, given the prior $G_0$ and the single observation $y_i$; this means that in this case, a new cluster has been created. \\
 Then, for all clusters, the sampling of their unique value $\boldsymbol\phi_c$ is conducted by considering their \emph{posterior distribution} based on the prior and on all observations belonging to that cluster.
 The probability of setting $c_i$ to a new component involves the integral $\int_{\Theta} f(y_{i}|\boldsymbol\theta) \, G_0(\de\boldsymbol\theta)$, which is difficult to compute in the non-conjugate case, as well as the sampling from the posterior $H_i$.
 For this reason, the algorithm is only used under conjugacy and hence it is possible to exactly compute the integral.
