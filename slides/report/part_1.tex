@@ -77,7 +77,7 @@ Defining  $c_i$ the \emph{allocation} parameters to the clusters such that $c_i 
 		\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K)
 	\end{aligned}
 \end{equation}
-where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the classes and each $\theta_i$ is characterized by the latent class $c$ and the corresponding parameters $\phi_{c_i}$.
+where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the clusters and each $\theta_i$ is characterized by the latent cluster $c$ and the corresponding parameters $\phi_{c_i}$.
 
 \subsection{Normal Normal-InverseGamma model} \label{nnig}
 A very common choice for the DPM model (\ref{dpm-1}) is the gaussian mixture model, also known as Normal Normal-InverseGamma (Normal-NIG) model, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. That is, letting $\boldsymbol\theta=(\mu,\sigma)$, we have:
@@ -124,16 +124,16 @@ For example, we can place priors to hyperparamaters of the centering measure $G_
 \section{Neal's Algorithm 2} \label{neal2}
 In order to speed up convergence in case of ties, Neal first proposed (see \cite{neal} section 3 as well as \cite{book} chapter 2) a more efficient Gibbs sampling method based on the discrete model (\ref{dpm-disc}), but where the mixing proportions $\textbf{p}$ have been integrated out.
 We will refer to this method as Neal's Algorithm 2, or \verb|Neal2| for short.
-Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$  and the unique values $\phi_c$ for all $c=1,\dots,k$, the Gibbs sampler first draws a new value $c$ for each $c_i$ according to the following probabilities:
+Before getting to the algorithm, let us start from the discrete model (\ref{dpm-disc}).
+Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$  and the unique values $\phi_c$ for all $c=1,\dots,k$, the Gibbs sampler should first draw a new value $c$ for each $c_i$ according to the following probabilities:
 \begin{align}
 	\hspace{-25pt}
 	\vspace{-12pt}
 	\text{If $c=c_j$ for some $j$: }
 	\PP(c_{i}=c | \boldsymbol c_{-i}, y_{i},\boldsymbol\phi) \propto \frac{n_{-i,c} + M/{K}}{n-1+M} f(y_{i}|\phi_{c}) 
 \end{align}
-where $\boldsymbol c_{-i}$ is $\boldsymbol c$ minus the $i$-th component, and $n_{-i,c}$ is the number of $c_j$ equal to $c$ excluding $c_i$. \\
-Afterwards, the sampler draws a new value for each unique value $\phi_c$ given the data belonging to that class. 
-In regards to the first step in which allocations are drawn, the transition to the infinite case (\ref{dpm-2}) is done by taking the limit as $K$ goes to infinity in the conditional distribution of $c_i$ which becomes as follows:
+where $\boldsymbol c_{-i}$ is $\boldsymbol c$ minus the $i$-th component, and $n_{-i,c}$ is the number of $c_j$ equal to $c$ excluding $c_i$.
+The transition to the infinite case, that is, the reference DPM model (\ref{dpm-2}), is handled by taking the limit as $K$ goes to infinity in the conditional distribution of $c_i$, which becomes as follows:
 \begin{equation}
 	\begin{aligned} \label{probasneal2}
 	\hspace{-25pt}
@@ -145,18 +145,18 @@ In regards to the first step in which allocations are drawn, the transition to t
 \end{equation}
 and considering only the $\phi_c$ associated with some observation, keeping the sampling finite and thus computationally feasible.
 The former expression is proportional to the cardinality of that cluster (excluding the $i$-th observation), while the latter is instead proportional to the total mass $M$ and represents the probability of creating a new cluster. \\
-At this point, the algorithm works iteratively by sampling $\boldsymbol c$ and $\boldsymbol\phi$.
-For each observation $i$, $c_i$ is updated according to the conditional probabilities (\ref{probasneal2}).
+Let us now introduce the actual \verb|Neal2| algorithm, which works iteratively in two steps, in which we sample $\boldsymbol c$ and $\boldsymbol\phi$, respectively.
+First, for each observation $i$, $c_i$ is updated according to the conditional probabilities (\ref{probasneal2}).
 It can be set either to one of the other components currently associated with some observation, or to a new mixture component.
-If the new value of $c_i$ is different from all the other $c_j$, a value for $\phi_{c_i}$ is drawn from the posterior distribution $H_i$, based on the prior $G_0$ and the single observation $y_i$.
-Then, for all clusters, the sampling of their unique value $\phi_c$ is conducted by considering the posterior distribution based on the prior and on all observations belonging to that class.
+If the new value of $c_i$ is different from all the other $c_j$, a value for $\phi_{c_i}$ is drawn from the \emph{posterior distribution} $H_i$, based on the prior $G_0$ and the single observation $y_i$; this means that in this case, a new cluster has been created. \\
+Then, for all clusters, the sampling of their unique value $\phi_c$ is conducted by considering their \emph{posterior distribution} based on the prior and on all observations belonging to that cluster.
 The probability of setting $c_i$ to a new component involves the integral $\int_{\Theta} f(y_{i}|\boldsymbol\theta) \, G_0(\de\boldsymbol\theta)$, which is difficult to compute in the non-conjugate case, as well as the sampling from the posterior $H_i$.
-For this reason, the algorithm is applied when there is conjugacy and it is possible to compute exactly the integral.
+For this reason, the algorithm is only used under conjugacy and hence it is possible to exactly compute the integral.
 
 \section{Neal's Algorithm 8} \label{neal8}
-To handle non-conjugate priors, Neal proposed (see \cite{neal} section 6 and \cite{book} chapter 2) a second Markov chain sampling procedure, the \verb|Neal8| algorithm, where the state is extended by the addition of auxiliary parameters.
+To handle non-conjugate priors, Neal proposed (see \cite{neal} section 6 and \cite{book} chapter 2) a second Markov chain sampling procedure, the \verb|Neal8| algorithm, where the state is extended by the addition of $m$ auxiliary parameters.
 This technique allows to update the $c_i$ while avoiding the integration with respect to $G_0$. \\
-In this case the sampling probabilities for the $c_i$ are:
+In this case the sampling probabilities for the $c_i$ given all other $c_j$ are:
 \begin{equation}
 	\begin{aligned}
 		\hspace{-25pt}
@@ -165,7 +165,7 @@ In this case the sampling probabilities for the $c_i$ are:
 		\PP(c_{i}\neq c_{j} \text{ for all } j) &=\frac{M }{n-1+M}
 	\end{aligned}	
 \end{equation}
-where the probability of selecting a new component is evenly split among the $m$ auxiliary components, which will also be referred to as the \emph{auxiliary blocks}.
+where the latter probability of creating a new cluster is evenly split among the $m$ auxiliary components, which will also be referred to as the \emph{auxiliary blocks}.
 Maintaining the same structure as the \verb|Neal2| algorithm, \verb|Neal8| is composed of two steps, where the components of the Markov chain state $\boldsymbol c$ and $\boldsymbol\phi$ are repeatedly sampled.
 \begin{figure}[h]
     \centering
@@ -191,7 +191,7 @@ Then, $c_i$ is updated according to the following conditional probabilities:
 \end{equation}
 indicating with $k^{-}$ the number of distinct $c_j$ excluding the current $c_i$ and setting $h=k^{-}+m$.
 Again, the probabilities of being placed in an already existing cluster or in a newly created cluster are proportional to the cluster's cardinality (sans observation $i$) and to the total mass, respectively. \\
-Once all the $\phi_c$ that are no longer associated with any observation are discarded, the algorithm proceeds, for each class, with the sampling of $\phi_c$ from the posterior computed with the observations of the specific class.
+Once all the $\phi_c$ that are no longer associated with any observation are discarded, the algorithm proceeds, for each cluster, with the sampling of $\phi_c$ from the posterior computed with the observations of the specific cluster, like in \verb|Neal2|.
 
 \section{Blocked Gibbs}
 Another Gibbs sampling method that is applicable in the considered DPM model is the one proposed by Ishwaran and James (see \cite{james} section 5), where the prior $P$ is assumed to be a finite dimensional stick-breaking measure, allowing the update of whole blocks of parameters.

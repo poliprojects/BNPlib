@@ -120,7 +120,7 @@ The structure of the \verb|Neal2| class is similar to the one of \verb|Neal8| de
 The only relevant differences are the obvious lack of \verb|aux_unique_values| and most of the \verb|sample_allocations()| phase.
 As discussed in section \ref{neal2}, this algorithm exploits conjugacy, thus this function requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is provided in closed form.
 In our case, a Normal-NIG specialization for the \verb|Neal2| template class was implemented.
-In \verb|sample_allocations()|, a loop is performed over data points $i$ \verb|card| vector is built, just as before.
+In \verb|sample_allocations()|, a loop is performed over data points $i$ and the \verb|card| vector is built, just as before.
 The \verb|probas| vector of weights for the new allocation value is computed, according to the probabilities (\ref{probasneal2}), by also using the marginal density in \verb|data[i]|, which is known to be a Student's $t$ as mentioned in section \ref{nnig}.
 After the new \verb|allocations[i]| is drawn according to \verb|probas|, four cases are handled separately as before, depending on whether the old cluster was a singleton and whether \verb|data[i]| is assigned to a new cluster.
 Indeed, in such a case, a new $\boldsymbol\phi$ value for it must be generated, and this must be handled differently by the code if an old singleton cluster was just destroyed (as the new cluster must take its former place).
@@ -290,16 +290,16 @@ As we can see, the total mass $M$ acts as a smoothing parameter and, given its s
 \clearpage
 
 \section{Auxiliary blocks}
-We shall now try and change the number of auxiliary blocks, $m$, and check how this impacts the the density estimation.
+We shall now try and change the number of auxiliary blocks $m$, and check how this impacts the density estimation.
 For this test, a large total mass $M=10$ was chosen; the reason being that a small $M$ would not allow significant differences as $m$ changes.
-Indeed, a direct impact of $m$ is in the estimate (\ref{margneal8}) of the marginal distribution, that has a weight of $\frac{M}{M+n}$ (as seen in (\ref{localdens})), which is negligible if $M$ is small.
-Therefore, by picking $M=10$, the result was the following:
+Indeed, $m$ directly influences only the estimate (\ref{margneal8}) of the marginal distribution, that has a weight of $\frac{M}{M+n}$ (as seen in (\ref{localdens})), which is negligible if $M$ is small.
+Therefore, $M=10$ was picked, and the result was the following:
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.7]{etc/dens_withmM10.pdf}
 \end{figure}
 
-A larger $m$ gives a better estimate of the marginal, because the sample mean is computed over a larger number of terms and the algorithm approximates the behavior of the algorithm \verb|Neal2|.
+Note that a larger $m$ gives a better estimate of the marginal, because the sample mean is computed over a larger number of terms and the algorithm approximates the behavior of the algorithm \verb|Neal2|.
 
 \clearpage
 
