@@ -102,7 +102,7 @@ Aside from \verb|run()|, whose code was shown at the beginning of this section, 
 	A vector \verb|card| is first filled, with \verb|card[j]| being the cardinality of cluster $j$.
 	The algorithm mandates that \verb|data[i]| be moved to another cluster; thus, if the current cluster is a singleton, its $\boldsymbol\phi$ values are transferred to the first auxiliary block.
 	Then, each auxiliary block (except the first one if the above case occurred) generates new $\boldsymbol\phi$ values via the hierarchy's \verb|draw()| function.
-	Now a new cluster, that is, a new $\boldsymbol\phi$ value, for \verb|data[i]| needs to be drawn.
+	Now a new cluster, that is, new $\boldsymbol\phi$ values, for \verb|data[i]| needs to be drawn.
 	A vector \verb|probas| with \verb|n_unique+n_aux| components is filled with the probabilities of each $\boldsymbol\phi$ being extracted, in line with (\ref{neal8prob}).
 	Computations involve, among other things, the \verb|card| vector, the likelihood \verb|like()| evaluated in \verb|data[i]|, and the total mass parameter.
 	Then, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|.
@@ -200,20 +200,20 @@ The \verb|card| vector is once again computed, where $\texttt{card[j]} = n^{(k)}
 Then, for each point $x$ in \verb|grid|, we compute the local estimate of the density, that is, only taking iteration $k$ into account:
 \begin{equation}\label{localdens}
 	\begin{aligned}
-	\hat f^{(k)}(x) \ = \ \sum_j \frac{n^{(k)}_j}{M+n} f\left(x | \phi^{(k)}_j\right) \ + \ \frac{M}{M+n} m(x)
+	\hat f^{(k)}(x) \ = \ \sum_j \frac{n^{(k)}_j}{M+n} f\left(x | \boldsymbol{\phi}^{(k)}_j\right) \ + \ \frac{M}{M+n} m(x)
 	\end{aligned}
 \end{equation}
-That is, the local estimate is a weighted mean of the likelihood given the unique values $\phi^{(k)}_j$ of cluster $j$ and the marginal distribution $m(x)$, taken from the appropriate function in the \verb|Hierarchy<>| class.
+That is, the local estimate is a weighted mean of the likelihood given the unique values $\boldsymbol{\phi}^{(k)}_j$ of cluster $j$ and the marginal distribution $m(x)$, taken from the appropriate function in the \verb|Hierarchy<>| class.
 The weights of the clusters are proportional to their size $n^{(k)}_j$, while the ``virtual'' cluster of the marginal counts as having size $M$, the total mass parameter ($n$ is the total number of observations, as per usual).
 The marginal distribution is only known under the conjugacy assumption in the \verb|Neal2| algorithm.
 In particular, for a Normal-NIG model $m(x)$ is a Student's $t$ as explained in section \ref{nnig}.
 In the \verb|Neal8| algorithm, $m(x)$ is not available in closed form, and thus it is replaced in the above formula by the following approximation:
 \begin{equation}\label{margneal8}
 	\begin{aligned}
-		\hat m(x) = \frac{1}{m} \sum_{h=0}^{m-1}  f\left(x | \phi_h\right)
+		\hat m(x) = \frac{1}{m} \sum_{h=0}^{m-1}  f\left(x | \boldsymbol{\phi}_h\right)
 	\end{aligned}
 \end{equation}
-where we use $m$ unique values, that is, one for each of the $m = \verb|n_aux|$ auxiliary blocks of the algorithm, drawn from the base measure: $\phi_{h} \overset{\text{iid}}{\sim} G_0, \ h=0:m-1$. \\
+where we use $m$ unique values, that is, one for each of the $m = \verb|n_aux|$ auxiliary blocks of the algorithm, drawn from the base measure: $\boldsymbol{\phi}_{h} \overset{\text{iid}}{\sim} G_0, \ h=0:m-1$. \\
 Finally, the \emph{empirical density} is computed as the mean over all $K$ iterations:
 $$
 \hat f(x) = \frac{1}{K} \sum_k \hat f^{(k)}(x)
