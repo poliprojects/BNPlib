@@ -4,6 +4,29 @@
 	\end{center}
 \end{frame}
 
+\begin{frame}[fragile]{Setup}
+\begin{itemize}
+\item $n=100$ observations:
+	\begin{itemize}
+	\item $50 \iidsim \Nc(4,1)$
+	\item $50 \iidsim \Nc(7,1)$
+	\end{itemize}
+\item Prior parameters for the Normal-NIG model:
+	\begin{itemize}
+	\item $\mu_0 = 5$ 
+	\item $\lambda_0 = 1$
+	\item $\alpha_0 = 2$
+	\item $\beta_0 = 2$
+	\end{itemize}
+
+\item \verb|Neal8|
+	\begin{itemize}
+	\item $m=3$ 
+	\item \verb|iter|$=20000$
+	\item \verb|burn-in|$=5000$
+	\end{itemize}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Cluster estimation}
 
