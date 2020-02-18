@@ -57,7 +57,7 @@ Any class representing any type of hierarchy or parameters can be built as long 
 We will be now first examining the \verb|Neal8| class as an example.
 
 \section{\texttt{Neal8} algorithm}
-Relying on the algorithm described in section \ref{neal8}, we proceeded with our implementation.
+Relying on the algorithm described in section \ref{neal8}, we proceed to describe our implementation of it.
 Aside from the usual getters and setters, as well as constructors, the \verb|Neal8| class contains the following members:
 \begin{verbatim}
 unsigned int n_aux;
@@ -175,13 +175,14 @@ unsigned int cluster_estimate();
 This function exploits the \verb|chain| pseudo-vector, in which states of all iterations of the algorithm were saved via \verb|save_iteration()| (of course, only after the burn-in phase) and the \verb|protobuf| library.
 This function loops over all \verb|IterationOutput| objects in \verb|chain|, finds the iteration at which the best clustering occurred, saves the whole object into the \verb|best_clust| class member, and returns the iteration number of this best clustering.
 As briefly touched upon earlier, the best clustering is found via the minimization of the squared posterior \emph{Binder's loss function}.
-An equivalent approach is computing the so-called \emph{dissimilarity matrix} for each iteration, computing its sample mean over all iterations, and finding the iteration that is the closest to the mean with respect to the \emph{Frobenius norm}. 
+An equivalent approach (see \cite{beep} lecture on BNP clustering) is computing the so-called \emph{dissimilarity matrix} for each iteration, computing its sample mean over all iterations, and finding the iteration that is the closest to the mean with respect to the \emph{Frobenius norm}. 
 More specifically, for each iteration $k$, the dissimilarity matrix $D^{(k)}$ is a symmetric, binary $n$-by-$n$ matrix (where $n$ is the number of available data points) whose entries $D^{(k)}_{ij}$ are $1$ if datum $i$ and $j$ are placed in the same cluster at iteration $k$ and $0$ otherwise.
 After each $D^{(k)}$ and the sample mean $\bar{D} = \frac{1}{K} \sum_k D^{(k)}$ are computed, where $K$ is the number of iterations (not counting the ones in the burn-in phase), the best clustering $\hat{k}$ is found by minimizing the Frobenius norm of the difference with $\bar{D}$:
 $$
 \hat{k} = \argmin_k \left\lVert D^{(k)} - \bar D \right\rVert_F^2 = \argmin_k \sum_{i,j} \left( D^{(k)}_{ij} - \bar{D}_{ij} \right)^2.
 $$
-By virtue of the involved matrices being symmetric, the latter summation can be computed over all $i<j$ instead of all $i,j$ for efficiency.
+By virtue of the involved matrices being symmetric, the latter summation can be computed over all $i<j$ instead of all $i,j$ for efficiency. \\
+The convergence in mean of the algorithm grants the correctness of this least square estimate, at it is the closest approximation to the mean dissimilarity matrix.
 
 \section{Density estimation} \label{dens-estim}
 One other important application of clustering algorithms is the estimation of the density according to which the data points are distributed.
@@ -213,12 +214,12 @@ In the \verb|Neal8| algorithm, $m(x)$ is not available in closed form, and thus 
 	\end{aligned}
 \end{equation}
 where we use $m$ unique values, that is, one for each of the $m = \verb|n_aux|$ auxiliary blocks of the algorithm, drawn from the base measure: $\phi_{h} \overset{\text{iid}}{\sim} G_0, \ h=0:m-1$. \\
-Finally, the \emph{empirical density} is computed as the mean over all iterations:
+Finally, the \emph{empirical density} is computed as the mean over all $K$ iterations:
 $$
 \hat f(x) = \frac{1}{K} \sum_k \hat f^{(k)}(x)
 $$
 and saved into the \verb|density| object.
-This estimate approaches the true posterior density of the data thanks to the convergence in mean of the chain.
+Again, this estimate approaches the true posterior density of the data thanks to the convergence in mean of the chain.
 
 \section{Saving estimates to files}
 We also implemented the following functions in each \verb|Algorithm| class, which save data from the class into text files in order to ease exportation to other programs or computers:
@@ -242,12 +243,14 @@ Finally, \verb|write_density_to_file()| has values of $x$ in the first column an
 
 \chapter{Results}
 Our clustering analysis was conducted on 100 data points, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(7,1)$, which were saved in the \verb|data.csv| file.
-We chose the prior parameters for the Normal-NIG model (\ref{nnig}) as follows: $\mu_0 = 5, \lambda = 1, \alpha_0 = 2, \beta_0 = 2$.
-The \verb|Neal8| algorithm with $m=3$ auxiliary blocks was run for 20000 iterations, and the first 5000 were discarded as burn-in.
-We will keep these parameters values fixed unless explicitly stated.
+We chose the prior parameters for the Normal-NIG model (\ref{nnig}) as follows: $\mu_0 = 5, \lambda_0 = 1, \alpha_0 = 2, \beta_0 = 2$.
+The \verb|Neal8| algorithm with $m=3$ auxiliary blocks was run for 20000 iterations, and the first 5000 were discarded as burn-in, for a total of $K=15000$ valid iterations.
+We will keep these parameters values fixed unless explicitly stated. \\
+The following test data were all saved to \verb|.csv| files and used for the realization of plots with the \verb|ggplot2| R package.
+All scripts and data sheets are available in the GitHub repository of our library.
 
 \section{Oscillations}
-After running the algorithm as described above, we find that the obtained best clusterings (again, in the lest square sense) and local density estimates are highly fluctuating over the iterations of the algorithm:
+After running the algorithm as described above with total mass $M=0.25$, we find that the obtained best clusterings (again, in the lest square sense) and local density estimates are highly fluctuating over the iterations of the algorithm:
 \begin{figure}[h]
 	\centering
 	\begin{minipage}{0.5\textwidth}
