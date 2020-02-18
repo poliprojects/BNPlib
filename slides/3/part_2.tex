@@ -7,6 +7,7 @@
 
 \begin{frame}[fragile]{Cluster estimation}
 
+
 \begin{verbatim}
 unsigned int cluster_estimate();
 \end{verbatim}
@@ -14,13 +15,20 @@ unsigned int cluster_estimate();
 $$ \hat{k} = \argmin_k \left \lVert D^{(k)} - \bar D \right\rVert_F^2= \argmin_k \sum_{i,j} \left( D^{(k)}_{ij} - \bar{D}_{ij}  \right)^2$$
 
 
+\begin{itemize}
+
+\item $D^{(k)}$: dissimilarity matrix  at iteration k \\
+
+\item $\bar D= \frac{1}{K} \sum_k D^{(k)} $: mean over $K$ iterations
+\end{itemize}
+
 \end{frame}
 
 \begin{frame}[fragile]{Density estimation}
 
+
 \begin{verbatim}
 void eval_density(const std::vector<double> grid);
-
 \end{verbatim}
 
 \begin{equation}
@@ -49,14 +57,6 @@ void eval_density(const std::vector<double> grid);
 	\end{center}
 \end{frame}
 
-
-\begin{frame}{Auxiliary parameters}
-
-\begin{center}
-		%\texttt{a}
-		\includegraphics[scale=0.5]{etc/dens_withmM10.pdf}
-	\end{center}
-\end{frame}
 
 
 \begin{frame}{Oscillations}
