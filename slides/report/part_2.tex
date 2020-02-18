@@ -18,7 +18,7 @@ void run(){
     }
 }
 \end{verbatim}
-In particular, the blocked Gibbs algorithm has an additional phase in \verb|step()|, \verb|sample_weights()|.
+In particular, the blocked Gibbs algorithm has an additional phase in \verb|step()|, \verb|sample_weights()|. Moreover, as discussed in chapter \ref{algo}, all the algorithms can be generalized including further Gibbs sampling steps to update the hyperparameters of $G_0$ or the total mass parameter $M$.
 Each implemented algorithm will be discussed in detail in its own section.
 As for the general structure of an algorithm class, a template approach was chosen, to allow the use of several layers of complexity based on the needs of the user:
 \begin{verbatim}

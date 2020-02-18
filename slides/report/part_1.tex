@@ -110,7 +110,7 @@ $$
 \mu_n=\frac{\lambda_0 \mu_0 \bar{y} + n}{\lambda_0 + n}, \quad \alpha_n= \alpha_0 + \frac{n}{2}, \quad \beta_n= \beta_0 + \frac{1}{2}\sum_{i=1}^{n} (y_i-\bar{y})^2 + \frac{\lambda_0 n(\bar{y}-\mu_0)^2}{2(\lambda_0 + n)}.
 $$
 
-\chapter{Algorithms}
+\chapter{Algorithms} \label{algo}
 For the task of density estimation, we investigated several Markov chain methods to sample from the posterior distribution of a DPM model. \\
 Starting from the hierarchical model (\ref{dpm-1}), a first direct approach is simply drawing values for each $\theta_i$ from its conditional distribution, given the data and the other $\theta_j$.
 However, as previously discussed, we have high probability for ties among them which can lead to slow convergence, since the $\theta_i$ are not updated for more than one observation simultaneously. \\
