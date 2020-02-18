@@ -6,6 +6,7 @@
 	\end{center}
 \end{frame}
 
+
 \begin{frame}{DP and DPM models} %#02
 	Having observed the iid sample $\{y_i\}_i$, $i=1,\dots,n$:
 	\begin{itemize}
@@ -22,15 +23,16 @@
 	\end{itemize}
 \end{frame}
 
+
 \begin{frame}{Equivalent formulations (1)} %#03
 	\begin{itemize}
 		\item (DPM) is equivalent to:
 		\begin{align*}
-		y_i | \theta_i &\indsim f(\cdot|\theta_i), \quad i=1,\dots,n \\
-		\theta_i | G &\iidsim G, \quad i=1,\dots,n \\ 
+		y_i | \boldsymbol\theta_i &\indsim f(\cdot|\boldsymbol\theta_i), \quad i=1,\dots,n \\
+		\boldsymbol\theta_i | G &\iidsim G, \quad i=1,\dots,n \\ 
 		G &\sim DP(M G_0)
 		\end{align*}
-		\item State $\forall i$: $\theta_i$ latent variables (discrete)
+		\item State $\forall i$: $\boldsymbol\theta_i$ latent variables (discrete)
 	\end{itemize}
 \end{frame}
 
@@ -38,25 +40,25 @@
 	\begin{itemize}
 		\item (DPM) is also equivalent to:
 		\begin{align*}
-		y_{i}|\boldsymbol{\phi},c_{i} &\indsim f(\cdot|\phi_{c_{i}}), \quad i=1,\dots,n \\
+		y_{i}|c_i,\boldsymbol\phi_1,\dots,\boldsymbol\phi_k &\indsim f(\cdot|\boldsymbol\phi_{c_{i}}), \quad i=1,\dots,n \\
 		c_{i}|\mathit{\mathbf{p}}&\iidsim \sum_{j=1}^K\mathit{p_j} \delta_j(\cdot), \quad i=1,\dots,n \\
-		\phi_{c} & \iidsim G_{0}, \quad c=1,\dots,k \\
+		\boldsymbol\phi_{c} & \iidsim G_{0}, \quad c=1,\dots,k \\
 		\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K) \\
 		K &\to +\infty
 		\end{align*}
 		\item State $\forall i$: $c_i$ \textbf{allocations} to clusters
-		\item State $\forall i$: $\phi_{c_i}$ \textbf{unique values} for each cluster
-		\item Only the finitely many $\phi_{c}$ used are kept track of
+		\item State $\forall i$: $\boldsymbol\phi_{c_i}$ \textbf{unique values} for each cluster
+		\item Only the finitely many $\boldsymbol\phi_{c}$ used are kept track of
 	\end{itemize}
-
 \end{frame}
+
 
 \begin{frame}{Case study} %#05
 	\begin{itemize}
 		\item (DPM) with Normal Normal-InverseGamma (\textbf{NNIG}) prior:
 		\begin{align*}
-		y_i | \theta_i &\indsim f(\cdot|\theta_i), \quad i=1,\dots,n \\
-		\theta_i | G &\iidsim G, \quad i=1,\dots,n \\ 
+		y_i | \boldsymbol\theta_i &\indsim f(\cdot|\boldsymbol\theta_i), \quad i=1,\dots,n \\
+		\boldsymbol\theta_i | G &\iidsim G, \quad i=1,\dots,n \\ 
 		G &\sim DP(M G_0) \\
 		\\
 		f(y|\boldsymbol\theta)&=N(y| \mu ,\sigma^2),  \\
@@ -64,15 +66,17 @@
 		&=N\left(\mu | \mu_0 ,\frac{\sigma^2} {\lambda_0}\right) \times \text{Inv-Gamma}(\sigma^2|\alpha_0, \beta_0 )
 		\end{align*}
 		\item Latent variables: $\boldsymbol\theta = (\mu,\sigma)$
-		\item State: $\boldsymbol\phi, \boldsymbol c$
+		\item State $\forall i$: $c_i$, $\boldsymbol\phi_{c_i}$
 	\end{itemize}
 \end{frame}
+
 
 \begin{frame}[c] %#06
 	\begin{center}
 		\huge \color{blue} Algorithms
 	\end{center}
 \end{frame}
+
 
 \begin{frame}[fragile]{General structure} %#07
 	\small
@@ -99,14 +103,16 @@
 	\end{verbatim}
 \end{frame}
 
+
 \begin{frame}{Auxiliary classes} %#08
 	\begin{itemize}
-		\item Need a specific common interface
+		\item Specific common interface
 		\item \texttt{Mixture} $\ \to \ $ \texttt{SimpleMixture}
 		\item \texttt{Hypers} $\ \to \ $ \texttt{HypersFixedNNIG}
 		\item \texttt{Hierarchy<Hypers>} $\ \to \ $ \texttt{HierarchyNNIG<Hypers>}
 	\end{itemize}
 \end{frame}
+
 
 \begin{frame}[fragile]{\texttt{Neal8}} %#09
 	\begin{itemize}
@@ -133,10 +139,11 @@
 		\item \verb|sample_unique_values()|: for all clusters $c = 1,\dots,k$
 		\begin{itemize}
 			\item build \verb|curr_data| that contains all observations in cluster $c$
-			\item draw $\boldsymbol\phi_c$ from its posterior distribution
+			\item draw $\boldsymbol\phi_c$ from its posterior distribution given \verb|curr_data|
 		\end{itemize}
 	\end{itemize}
 \end{frame}
+
 
 \begin{frame}[fragile]{\texttt{Neal2}} %#10
 	\begin{itemize}
@@ -149,7 +156,7 @@
 			\begin{align*}
 				\hspace{-30pt}
 				\text{If $c=c_j$ for some $j$: }
-				\PP(c_{i}=c | \boldsymbol c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c} }{n-1+M} f(y_{i}|\phi_{c}) \\
+				\PP(c_{i}=c | \boldsymbol c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{n_{-i,c} }{n-1+M} f(y_{i}|\boldsymbol\phi_{c}) \\
 				\PP(c_{i}\neq c_{j} \text{ for all } j | \boldsymbol c_{-i}, y_{i},\boldsymbol\phi) &\propto \frac{M }{n-1+M} \int_{\Theta} f(y_{i}|\boldsymbol\theta) \, G_0(\de\boldsymbol\theta)
 			\end{align*}
 			\item if the latter, draw a new $\boldsymbol\phi_c$ from its posterior given $y_i$
@@ -158,15 +165,7 @@
 		\item \verb|sample_unique_values()|: for all clusters $c = 1,\dots,k$
 		\begin{itemize}
 			\item build \verb|curr_data| that contains all observations in cluster $c$
-			\item draw $\boldsymbol\phi_c$ from its posterior distribution
+			\item draw $\boldsymbol\phi_c$ from its posterior distribution given \verb|curr_data|
 		\end{itemize}
 	\end{itemize}
 \end{frame}
-
-%\begin{frame}{Libraries used} %#11
-%	\begin{itemize}
-%		\item Stan for probability distributions and random sampling
-%		\item Eigen for matrices, vectors, and algebraic operations
-%		\item Protocol Buffers for state storage
-%	\end{itemize}
-%\end{frame}
