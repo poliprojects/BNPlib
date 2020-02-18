@@ -78,28 +78,31 @@
 
 
 \begin{frame}[fragile]{General structure} %#07
-	\small
-	\begin{verbatim}
-    template<template <class> class Hierarchy,
-             class Hypers, class Mixture> class Algorithm
-            
-             void step(){
-                 sample_allocations();
-                 sample_unique_values();
-             }
+\small
+\ttfamily
+\fontseries{l}\selectfont
+template<template <class> class Hierarchy, \\
+\ \ \ \ \ \ \ \ class Hypers, class Mixture> class Algorithm \\[10pt]
+\fontseries{b}\selectfont
+\ \ \ \ \ \ \ \ void step()\{ \\
+\ \ \ \ \ \ \ \ \ \ \ \ sample\_allocations(); \\
+\ \ \ \ \ \ \ \ \ \ \ \ sample\_unique\_values(); \\
+\ \ \ \ \ \ \ \ \} \\[10pt]
+\fontseries{l}\selectfont
+\ \ \ \ \ \ \ \ void run()\{ \\
+\ \ \ \ \ \ \ \ \ \ \ \ initialize(); \\
+\ \ \ \ \ \ \ \ \ \ \ \ unsigned int iter = 0; \\
+\ \ \ \ \ \ \ \ \ \ \ \ while(iter < maxiter)\{ \\
+\fontseries{b}\selectfont
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ step(); \\
+\fontseries{l}\selectfont
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(iter >= burnin)\{ \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ save\_iteration(iter); \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \} \\
+\ \ \ \ \ \ \ \ \ \ \ \ iter++; \\
+\ \ \ \ \ \ \ \ \ \ \ \ \} \\
+\ \ \ \ \ \ \ \ \} \\
 
-             void run(){
-                 initialize();
-                 unsigned int iter = 0;
-                 while(iter < maxiter){
-                     step();
-                     if(iter >= burnin){
-                         save_iteration(iter);
-                     }
-                     iter++;
-                 }
-             }
-	\end{verbatim}
 \end{frame}
 
 
