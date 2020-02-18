@@ -4,12 +4,12 @@
 	\end{center}
 \end{frame}
 
-\begin{frame}[fragile]{Setup}
+\begin{frame}[fragile]{Set-up}
 \begin{itemize}
 \item $n=100$ observations:
 	\begin{itemize}
-	\item $50 \iidsim \Nc(4,1)$
-	\item $50 \iidsim \Nc(7,1)$
+	\item $x_1,\dots, x_{50} \iidsim \Nc(4,1)$
+	\item $x_{50}, \dots, x_{100} \iidsim \Nc(7,1)$
 	\end{itemize}
 \item Prior parameters for the Normal-NIG model:
 	\begin{itemize}
@@ -22,8 +22,9 @@
 \item \verb|Neal8|
 	\begin{itemize}
 	\item $m=3$ 
-	\item \verb|iter|$=20000$
-	\item \verb|burn-in|$=5000$
+	\item \verb|maxiter| $=20000$
+	\item \verb|burnin| $=5000$
+	\item $K=15000$ valid iterations
 	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -146,4 +147,18 @@ void eval_density(const std::vector<double> grid);
 		\includegraphics[scale=0.5]{etc/neal2_M10.pdf}
 	\end{center}
 	
+\end{frame}
+
+
+\begin{frame}[fragile]{Extensions}
+
+	\begin{itemize}
+	\item Adaptation to \verb|Hypers| containing hyper-priors
+	\item Implementation of other \verb|Hierarchy| classes
+	\item Adaptation to other \verb|Mixture| classes
+	\item Interface with R and Python
+	\item Integration of conjugacy-dependent algorithms to handle non-conjugacy
+	\item Full generalization
+	\end{itemize}
+
 \end{frame}
