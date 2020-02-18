@@ -2,22 +2,23 @@
 \section{Applications}
 
 
-\begin{frame}{Protobuf}
+\begin{frame}[fragile]{Cluster estimation}
+
+\begin{verbatim}
+unsigned int cluster_estimate();
+\end{verbatim}
+
+$$ \hat{k} = \argmin_k \left \lVert D^{(k)} - \bar D \right\rVert_F^2= \argmin_k \sum_{i,j} \left( D^{(k)}_{ij} - \bar{D}_{ij}  \right)^2$$
+
 
 \end{frame}
 
-\begin{frame}{Cluster estimation}
+\begin{frame}[fragile]{Density estimation}
 
-%unsigned int cluster_estimate();
+\begin{verbatim}
+void eval_density(const std::vector<double> grid);
 
-%$\hat{k} = \argmin_k \left\lVert D^{(k)} - \bar D \right\rVert_F^2 = \argmin_k \sum_{i,j} \left( D^{(k)}_{ij} - \bar{D}_{ij} \right)^2.
-%$
-
-\end{frame}
-
-\begin{frame}{Density estimation}
-
-%void eval_density(const std::vector<double> grid);
+\end{verbatim}
 
 \begin{equation}
 	\begin{aligned}
