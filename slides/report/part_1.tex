@@ -198,9 +198,9 @@ Another Gibbs sampling method that is applicable in the considered DPM model is 
 A key point of the method is that it does not marginalize over the prior; instead, by grouping more variables together, it samples from their joint distribution conditioned on all other variables.
 This sampler needs to draw from the following conditionals:
 \begin{align}
-	\boldsymbol\phi &\sim \Lc(\boldsymbol\phi | \boldsymbol{c}, \boldsymbol{y}) \nonumber \\
-	\boldsymbol{c} &\sim \Lc (\boldsymbol{c}| \boldsymbol\phi,\boldsymbol{p}, \boldsymbol{y}) \nonumber \\
-	\boldsymbol{p} &\sim \Lc (\boldsymbol{p}| \boldsymbol{c}) \nonumber
+	\boldsymbol\phi_1,\dots,\boldsymbol\phi_k &\sim \Lc(\cdot | \boldsymbol{c}, \boldsymbol{y}) \nonumber \\
+	c_1,\dots,c_n &\sim \Lc (\cdot | \boldsymbol\phi_1,\dots,\boldsymbol\phi_k,\boldsymbol{p}, \boldsymbol{y}) \nonumber \\
+	\boldsymbol{p} &\sim \Lc (\cdot | \boldsymbol{c}) \nonumber
 \end{align}
 The drawing of the unique values can also be handled in the non-conjugate case by applying standard Markov chain Monte Carlo methods. \\
 This algorithm is not explored in detail as it has not implemented yet in our library.
