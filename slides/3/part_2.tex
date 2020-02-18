@@ -21,19 +21,22 @@ void eval_density(const std::vector<double> grid);
 \end{verbatim}
 
 \begin{equation}
-	\begin{aligned}
+	\begin{aligned} \nonumber
 	\hat f^{(k)}(x) \ = \ \sum_j \frac{n^{(k)}_j}{M+n} f\left(x | \phi^{(k)}_j\right) \ + \ \frac{M}{M+n} m(x)
 	\end{aligned}
 \end{equation}
 
 \begin{equation}
-	\begin{aligned}
+	\begin{aligned} \nonumber
 		\hat m(x) = \frac{1}{m} \sum_{h=0}^{m-1}  f\left(x | \phi_h\right)
 	\end{aligned}
 \end{equation}
 
-
-$ \hat f(x) = \frac{1}{K} \sum_k \hat f^{(k)}(x) $
+\begin{equation}
+	\begin{aligned} \nonumber
+ \Longrightarrow \hat f(x) = \frac{1}{K} \sum_k \hat f^{(k)}(x) 
+\end{aligned}
+\end{equation}
 
 \end{frame}
 
