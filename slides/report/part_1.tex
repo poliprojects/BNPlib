@@ -77,10 +77,10 @@ Defining  $c_i$ the \emph{allocation} parameters to the clusters such that $c_i 
 		\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K)
 	\end{aligned}
 \end{equation}
-where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the clusters and each $\theta_i$ is characterized by the latent cluster $c$ and the corresponding parameters $\phi_{c_i}$.
+where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the clusters and each $\theta_i$ is characterized by the latent cluster $c_i$ and the corresponding parameters $\phi_{c_i}$.
 
 \subsection{Normal Normal-InverseGamma model} \label{nnig}
-A very common choice for the DPM model (\ref{dpm-1}) is the gaussian mixture model, also known as Normal Normal-InverseGamma (Normal-NIG) model, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. That is, letting $\boldsymbol\theta=(\mu,\sigma)$, we have:
+A very common choice for the DPM model (\ref{dpm-1}) is the Normal Normal-InverseGamma (Normal-NIG) model, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. That is, letting $\boldsymbol\theta=(\mu,\sigma)$, we have:
 \begin{equation}
 	\begin{aligned}
 		f(y|\boldsymbol\theta)&=N(y| \mu ,\sigma^2),  \\
