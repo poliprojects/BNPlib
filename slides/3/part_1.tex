@@ -1,2 +1,101 @@
-\begin{frame}{Title}
+%TODO bold vectors!!
+
+\begin{frame}[c] %#01
+	\begin{center}
+		\huge \color{blue} Model
+	\end{center}
 \end{frame}
+
+\begin{frame}{DP and DPM models} %#02
+	Having observed the iid sample $\{y_i\}_i$, $i=1,\dots,n$:
+	\begin{itemize}
+		\item Dirichlet process model (discrete):
+		\begin{align*}
+		y_i | G &\iidsim G \\
+		G &\sim DP(MG_0)
+		\end{align*}
+		\item Dirichlet process mixture (\textbf{DPM}) model (continuous):
+		\begin{align*}
+		y_i | G &\iidsim f_G(\cdot) = \int_\Theta f(\cdot|\boldsymbol\theta) \, G(\de\boldsymbol\theta) \\
+		G &\sim DP(M G_0)
+		\end{align*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Equivalent formulations (1)} %#03
+	\begin{itemize}
+		\item (DPM) is equivalent to:
+		\begin{align*}
+		y_i | \theta_i &\indsim f(\cdot|\theta_i), \quad i=1,\dots,n \\
+		\theta_i | G &\iidsim G, \quad i=1,\dots,n \\ 
+		G &\sim DP(M G_0)
+		\end{align*}
+		\item State: $\theta_i$ latent variables (discrete)
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Equivalent formulations (2)} %#04
+	\begin{itemize}
+		\item (DPM) is also equivalent to:
+		\begin{align*}
+		y_{i}|\boldsymbol{\phi},c_{i} &\indsim f(\cdot|\phi_{c_{i}}), \quad i=1,\dots,n \\
+		c_{i}|\mathit{\mathbf{p}}&\iidsim \sum_{j=1}^K\mathit{p_j} \delta_j(\cdot), \quad i=1,\dots,n \\
+		\phi_{c} & \iidsim G_{0}, \quad c=1,\dots,k \\
+		\mathbf{p} &\sim \operatorname{Dir}(M/K,\dots,M/K) \\
+		K &\to +\infty
+		\end{align*}
+		\item State: $c_i$ \textbf{allocations} to clusters
+		\item State: $\phi_{c_i}$ \textbf{unique values} for each cluster
+		\item Only the finitely many $\phi_{c}$ used are kept track of
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Case study} %#05
+	\begin{itemize}
+		\item (DPM) with Normal Normal-InverseGamma (\textbf{NNIG}) prior:
+		\begin{align*}
+		y_i | \theta_i &\indsim f(\cdot|\theta_i), \quad i=1,\dots,n \\
+		\theta_i | G &\iidsim G, \quad i=1,\dots,n \\ 
+		G &\sim DP(M G_0) \\
+		\\
+		f(y|\boldsymbol\theta)&=N(y| \mu ,\sigma^2),  \\
+		G_0(\boldsymbol\theta|\mu_0,\lambda_0, \alpha_0, 	\beta_0)
+		&=N\left(\mu | \mu_0 ,\frac{\sigma^2} {\lambda_0}\right) \times \text{Inv-Gamma}(\sigma^2|\alpha_0, \beta_0 )
+		\end{align*}
+		\item State: $\boldsymbol\theta = (\mu,\sigma)$, 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c] %#06
+	\begin{center}
+		\huge \color{blue} Algorithms
+	\end{center}
+\end{frame}
+
+\begin{frame}[fragile]{General structure} %#07
+	\begin{verbatim}
+            void step(){
+                sample_allocations();
+                sample_unique_values();
+            }
+
+            void run(){
+                initialize();
+                unsigned int iter = 0;
+                while(iter < maxiter){
+                    step();
+                    if(iter >= burnin){
+                        save_iteration(iter);
+                    }
+                    iter++;
+                }
+            }
+	\end{verbatim}
+\end{frame}
+
+\begin{frame}{aaa} %#08
+	aaa
+\end{frame}
+
+
