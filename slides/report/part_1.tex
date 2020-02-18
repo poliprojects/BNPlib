@@ -89,7 +89,7 @@ A very common choice for the DPM model (\ref{dpm-1}) is the gaussian mixture mod
 	\end{aligned}
 \end{equation}
 Note that in this model we have a full prior for $\sigma^2$ and instead a prior for $\mu$ that is conditioned on the value of $\sigma^2$.
-Thanks to conjugacy, the predictive distribution for a new observation $\widetilde{y}$ can be computed analitically, finding a Student's $t$ (see \cite{integral} section 3.5):
+Thanks to conjugacy, the predictive distribution for a new observation $\widetilde{y}$ can be computed analytically, finding a Student's $t$ (see \cite{integral} section 3.5):
 \begin{align*}
 	p(\widetilde{y}|\mu_0,\lambda_0, \alpha_0, \beta_0) =
 	\int_\Theta f(\widetilde{y}|\boldsymbol\theta) \, G_0(\de\boldsymbol\theta) =
@@ -101,7 +101,7 @@ $$
 	\widetilde{\mu}=\mu_0, \quad
 	\widetilde{\sigma}^2= \frac{\beta_0(\lambda_0+1)}{\alpha_0 \lambda_0}
 $$
-The posterior distribution is again a Normal-InvGamma (see \cite{integral} section 3.3):
+The posterior distribution is again a Normal-InverseGamma (see \cite{integral} section 3.3):
 \begin{align*}
 	p(\boldsymbol\theta|y_1,\dots,y_n,\mu_0,\lambda_0, \alpha_0, \beta_0)=N\left(\mu | \mu_n ,\frac{\sigma^2} {\lambda_0 + n}\right) \times \text{Inv-Gamma}(\sigma^2|\alpha_n, \beta_n )
 \end{align*}
@@ -119,7 +119,7 @@ They are Gibbs samplers with a similar base structure, sharing the two steps for
 The set of allocations and unique values at a given iteration constitutes the \emph{state} of that iteration.
 As the state is being updated at each iteration, a \emph{chain} is formed and the mean of the state values eventually reaches convergence, as well as the estimate for the data distribution, as we will see in section \ref{dens-estim}.
 Moreover, all methods can be extended with additional steps for hierarchical extensions.
-For example, we can place priors to hyperparamaters of the centering measure $G_0$ or to the total mass $M$.
+For example, we can place priors to hyperparameters of the centering measure $G_0$ or to the total mass $M$.
 
 \section{Neal's Algorithm 2} \label{neal2}
 In order to speed up convergence in case of ties, Neal first proposed (see \cite{neal} section 3 as well as \cite{book} chapter 2) a more efficient Gibbs sampling method based on the discrete model (\ref{dpm-disc}), but where the mixing proportions $\textbf{p}$ have been integrated out.
@@ -204,4 +204,4 @@ This sampler needs to draw from the following conditionals:
 \end{align}
 The drawing of the unique values can also be handled in the non-conjugate case by applying standard Markov chain Monte Carlo methods. \\
 This algorithm is not explored in detail as it has not implemented yet in our library.
-For a full explaination, see \cite{james}.
+For a full explanation, see \cite{james}.
