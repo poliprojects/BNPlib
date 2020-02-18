@@ -133,7 +133,7 @@ Assuming that the current state of Markov chain is composed of $(c_1,\dots,c_n)$
 	\PP(c_{i}=c | \boldsymbol c_{-i}, y_{i},\boldsymbol{\phi}_1,\dots,\boldsymbol{\phi}_k) \propto \frac{n_{-i,c} + M/{K}}{n-1+M} f(y_{i}|\boldsymbol\phi_{c}) 
 \end{align}
 where $\boldsymbol c_{-i}$ is $\boldsymbol c$ minus the $i$-th component, and $n_{-i,c}$ is the number of $c_j$ equal to $c$ excluding $c_i$.
-The transition to the infinite case, that is, the reference DPM model (\ref{dpm-2}), is handled by taking the limit as $K$ goes to infinity in the conditional distribution of $c_i$, which becomes as follows:
+The transition to the infinite case, that is, to the reference DPM model (\ref{dpm-2}), is handled by taking the limit as $K$ goes to infinity in the conditional distribution of $c_i$, which becomes as follows:
 \begin{equation}
 	\begin{aligned} \label{probasneal2}
 	\hspace{-25pt}
@@ -144,18 +144,19 @@ The transition to the infinite case, that is, the reference DPM model (\ref{dpm-
 	\end{aligned}
 \end{equation}
 and considering only the $\boldsymbol\phi_c$ associated with some observation, keeping the sampling finite and thus computationally feasible.
-The former expression is proportional to the cardinality of that cluster (excluding the $i$-th observation), while the latter is instead proportional to the total mass $M$ and represents the probability of creating a new cluster. \\
+The former expression is proportional to the cardinality of that cluster (excluding the $i$-th observation), while the latter is instead proportional to the total mass $M$ and represents the probability of creating a new cluster.
+Moreover, the integral $m(y_i) = \int_{\Theta} f(y_{i}|\boldsymbol\theta) \, G_0(\de\boldsymbol\theta)$ represents the \emph{marginal distribution} of the data points evaluated in $y_i$. \\
 Let us now introduce the actual \verb|Neal2| algorithm, which works iteratively in two steps, in which we sample $(\boldsymbol{c}_1,\dots,\boldsymbol{c}_n)$ and $(\boldsymbol{\phi}_1,\dots,\boldsymbol{\phi}_k)$, respectively.
 First, for each observation $i$, $c_i$ is updated according to the conditional probabilities (\ref{probasneal2}).
 It can be set either to one of the other components currently associated with some observation, or to a new mixture component.
-If the new value of $c_i$ is different from all the other $c_j$, a value for $\boldsymbol\phi_{c_i}$ is created by drawing it from the \emph{posterior distribution} $H_i$, given the prior $G_0$ and the single observation $y_i$; this means that in this case, a new cluster has been created. \\
-Then, for all clusters, the sampling of their unique value $\boldsymbol\phi_c$ is conducted by considering their \emph{posterior distribution} based on the prior and on all observations belonging to that cluster.
-The probability of setting $c_i$ to a new component involves the integral $\int_{\Theta} f(y_{i}|\boldsymbol\theta) \, G_0(\de\boldsymbol\theta)$, which is difficult to compute in the non-conjugate case, as well as the sampling from the posterior $H_i$.
+If the new value of $c_i$ is different from all the other $c_j$, a value for $\boldsymbol\phi_{c_i}$ is created by drawing it from the posterior distribution $H_i$, given the prior $G_0$ and the single observation $y_i$; this means that in this case, a new cluster has been created. \\
+Then, for all clusters, the sampling of their unique value $\boldsymbol\phi_c$ is conducted by considering their posterior distribution given the prior $G_0$ and all observations belonging to that cluster.
+The probability of setting $c_i$ to a new component involves the computation of the marginal, which is difficult to compute in the non-conjugate case, as well as the sampling from the posterior $H_i$.
 For this reason, the algorithm is only used under conjugacy and hence it is possible to exactly compute the integral.
 
 \section{Neal's Algorithm 8} \label{neal8}
 To handle non-conjugate priors, Neal proposed (see \cite{neal} section 6 and \cite{book} chapter 2) a second Markov chain sampling procedure, the \verb|Neal8| algorithm, where the state is extended by the addition of $m$ auxiliary parameters.
-This technique allows to update the $c_i$ while avoiding the integration with respect to $G_0$. \\
+This technique allows to update the $c_i$ while avoiding the integration with respect to $G_0$ for the computation of the marginal. \\
 In this case the sampling probabilities for the $c_i$ given all other $c_j$ are:
 \begin{equation}
 	\begin{aligned}
@@ -176,8 +177,8 @@ Maintaining the same structure as the \verb|Neal2| algorithm, \verb|Neal8| is co
 \end{figure}
 
 The first step scans all the observations and evaluates each $c_i$.
-If it is equal to another $c_j$, then all auxiliary variables are drawn once each from $G_0$.
-If the cluster corresponding to $c_i$ is a singleton, then it is linked to one of the auxiliary blocks (i.e. the first one, without loss of generality) while keeping its old unique value $\boldsymbol\phi_{c_i}$ (as shown in the above figure), while the other blocks are drawn normally from $G_0$ as before.
+If it is equal to some other $c_j$, i.e. if the current cluster of observation $i$ is not a singleton, then all auxiliary variables are iid drawn from $G_0$.
+If instead the cluster corresponding to $c_i$ is a singleton, then it is linked to one of the auxiliary blocks (i.e. the first one, without loss of generality) while keeping its old unique value $\boldsymbol\phi_{c_i}$ (as shown in the above figure), whereas the other blocks are drawn normally from $G_0$ as before.
 Then, $c_i$ is updated according to the following conditional probabilities:
 \begin{equation}
 	\begin{aligned} \label{neal8prob}
@@ -191,16 +192,16 @@ Then, $c_i$ is updated according to the following conditional probabilities:
 \end{equation}
 indicating with $k^{-}$ the number of distinct $c_j$ excluding the current $c_i$ and setting $h=k^{-}+m$.
 Again, the probabilities of being placed in an already existing cluster or in a newly created cluster are proportional to the cluster's cardinality (sans observation $i$) and to the total mass, respectively. \\
-Once all the $\boldsymbol\phi_c$ that are no longer associated with any observation are discarded, the algorithm proceeds, for each cluster, with the sampling of $\boldsymbol\phi_c$ from the posterior computed with the observations of the specific cluster, like in \verb|Neal2|.
+Once all the $\boldsymbol\phi_c$ that are no longer associated with any observation are discarded, the algorithm proceeds, for each cluster, with the sampling of $\boldsymbol\phi_c$ from the posterior computed with the observations of the specific cluster, similarly to the \verb|Neal2| algorithm.
 
 \section{Blocked Gibbs}
 Another Gibbs sampling method that is applicable in the considered DPM model is the one proposed by Ishwaran and James (see \cite{james} section 5), where the prior $P$ is assumed to be a finite dimensional stick-breaking measure, allowing the update of whole blocks of parameters.
 A key point of the method is that it does not marginalize over the prior; instead, by grouping more variables together, it samples from their joint distribution conditioned on all other variables.
 This sampler needs to draw from the following conditionals:
 \begin{align}
-	\boldsymbol\phi_1,\dots,\boldsymbol\phi_k &\sim \Lc(\cdot | \boldsymbol{c}, \boldsymbol{y}) \nonumber \\
+	\boldsymbol\phi_1,\dots,\boldsymbol\phi_k &\sim \Lc(\cdot | c_1,\dots,c_n, \boldsymbol{y}) \nonumber \\
 	c_1,\dots,c_n &\sim \Lc (\cdot | \boldsymbol\phi_1,\dots,\boldsymbol\phi_k,\boldsymbol{p}, \boldsymbol{y}) \nonumber \\
-	\boldsymbol{p} &\sim \Lc (\cdot | \boldsymbol{c}) \nonumber
+	\boldsymbol{p} &\sim \Lc (\cdot | c_1,\dots,c_n) \nonumber
 \end{align}
 The drawing of the unique values can also be handled in the non-conjugate case by applying standard Markov chain Monte Carlo methods. \\
 This algorithm is not explored in detail as it has not implemented yet in our library.
