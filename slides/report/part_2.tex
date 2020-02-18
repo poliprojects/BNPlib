@@ -239,7 +239,6 @@ The former two create a \verb|.csv| file with the columns being, in order, data 
 \verb|write_chain_to_file()| has the same columns as the previous functions, but adds one more column containing the iteration number (starting from $0$) as the first one.
 Finally, \verb|write_density_to_file()| has values of $x$ in the first column and the corresponding $\hat f(x)$ in the second one.
 
-\clearpage
 
 \chapter{Results}
 Our clustering analysis was conducted on $n=100$ observations, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(7,1)$, which were saved in the \verb|data.csv| file.
@@ -271,6 +270,7 @@ Instead, as previously discussed, the convergence is in the \emph{mean}, both fo
 Let us now examine the role of the total mass parameter, $M$.
 We ran the algorithm with several values for $M$ whilst keeping the other parameters unchanged from the ones indicated at the beginning of the section.
 For each $M$, we saved the number of clusters of the best clustering produced by the algorithm, and plotted it against the corresponding $M$:
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.6]{etc/num_clust_M.pdf}
@@ -280,31 +280,36 @@ Note that the values for $M$ were chosen so as to be evenly spaced in log-scale,
 We can note that the clusters are increasing with the total mass.
 This is consistent with the fact that the probability of creating a new cluster is proportional to $M$, as seen in (\ref{neal8prob}). \\
 Moreover, the density estimates for some of the values of $M$ (again, compared with the histogram of the data) are as follows:
+
 \clearpage
+
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.7]{etc/dens_withMm3.pdf}
+	\includegraphics[scale=0.6]{etc/dens_withMm3.pdf}
 \end{figure}
+
 
 In our case, lower values for the total mass account better for the distribution of the data points, with the modes being near the real expected values of the two normal distributions, 4 and 7.
 On the other hand, higher values tend to clump together all 100 observations as though they were extracted from a single distribution.
 As we can see, the total mass $M$ acts as smoothing parameter and, given its strong influence on the number of mixture components, it is a prime candidate for a prior distribution being put onto it.
 
-\clearpage
+
 
 \section{Auxiliary blocks}
 We shall now try and change the number of auxiliary blocks $m$, and check how this impacts the density estimation.
 For this test, a large total mass $M=10$ was chosen; the reason being that a small $M$ would not allow significant differences as $m$ changes.
 Indeed, $m$ directly influences only the estimate (\ref{margneal8}) of the marginal distribution, that has a weight of $\frac{M}{M+n}$ (as seen in (\ref{localdens})), which is negligible if $M$ is small.
 Therefore, $M=10$ was picked, and the result was the following:
+
+
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.7]{etc/dens_withmM10.pdf}
+	\includegraphics[scale=0.6]{etc/dens_withmM10.pdf}
 \end{figure}
 
 Note that a larger $m$ gives a better estimate of the marginal, because the sample mean is computed over a larger number of terms and the algorithm approximates the behavior of the algorithm \verb|Neal2|.
 
-\clearpage
+
 
 \section{Density components}
 We now wish to visualize how the local density is computed at a given sample iteration.
@@ -315,7 +320,7 @@ The weighted sum of these components gives the ``full'' local estimate of the de
 This plot shows both the \emph{weighted} components and their sum:
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.6]{etc/componentsM025m3_best.pdf}
+	\includegraphics[scale=0.7]{etc/componentsM025m3_best.pdf}
 \end{figure}
 
 In this case the weights turn out to be approximately equal (0.52 and 0.48 respectively).
@@ -323,17 +328,21 @@ Again, the two components are concentrated around the true means (4 and 7) of th
 In other cases, the best clustering may produce more than 2 clusters.
 One such example is given by the best clustering of \verb|Neal8| run with $M=1$ (and $m=3$ as before), found at iteration 6611.
 Although there are 7 clusters, all weights bar the first two are insignificant, making the corresponding components have almost zero impact in the weighted sum of the local estimate:
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.44]{etc/barplotM1m3.pdf}
-\end{figure}
 
 \clearpage
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{etc/barplotM1m3.pdf}
+\end{figure}
+
+
 
 \section{\texttt{Neal2} vs \texttt{Neal8}}
 Finally, we ran the \verb|Neal2| algorithm with the same parameters as \verb|Neal8| (indicated at the beginning of the section) as well as $M=10$ for both.
 Again, a rather large total mass was chosen in order to better highlight the difference in the marginal estimate.
 In fact, in the \verb|Neal2| case, since the marginal distribution is known in closed form, the estimate is more accurate:
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.7]{etc/neal2_M10.pdf}
