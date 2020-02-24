@@ -1,35 +1,22 @@
 TODO LIST
-URGENT
-* Neal2::sample_allocations() does not use eval_marg?
-* print last column data + file names (density2)
 
-REPORT (URGENT)
-* TODOS in the report!!!!!
-* Check references
-* Results:
-** "la prior nconta ncazz" (sic)
-** if the two means are too close, the density estimate mistakens them as only
-   one gaussian (?)
-** varying M (total mass)
-** varying m (auxiliary blocks)
-** Neal8 vs Neal2: similar results (b/c they both converged?)
-** unique values do not matter for allocation (and best allocation)
-
-OTHER
-* constructors (arguments)
-* probas in a separate function?
-* deal with the extra dynamically allocated Hypers
-* a way to erase and add clusters more efficiently
-* rename proto messages
+FEATURES/IMPLEMENTATION
 * blocked Gibbs?
-* all TODOS in the files
-* create generic Algorithm class
 * acceleration steps?
+* probas in a separate function?
+* store card vector somewhere?
+* what to do with DEBUG lines?
+* !!! deal with the extra dynamically allocated Hypers
+* constructors (arguments)
+* Hypers not fixed
+* a way to erase and add clusters more efficiently?
+* create generic Algorithm class
 * check, in write_clust_...(), if clust_estimate() has been called, and similar
   flags
-* Hypers not fixed
 
 MANOVALANZA
-* DEBUG lines
 * print specifics/results of running algorithm
 * documentation with Doxygen
+* complete README
+* print functions: remove last empty column
+* rename proto messages
