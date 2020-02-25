@@ -13,6 +13,9 @@ FEATURES/IMPLEMENTATION
 * create generic Algorithm class
 * check, in write_clust_...(), if clust_estimate() has been called, and similar
   flags
+* aggiungere step sample_weights/sample_hyper return 0 o enable_if/type_dispatch? sample_weights : classe template?
+* stan con quale rng??
+
 
 MANOVALANZA
 * print specifics/results of running algorithm
