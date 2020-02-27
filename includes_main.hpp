@@ -1,10 +1,10 @@
 #ifndef INCLUDES_MAIN_HPP
 #define INCLUDES_MAIN_HPP
 
-#include "HypersFixedNNIG.hpp"
-#include "Neal2_NNIG.hpp"
-#include "Neal8.hpp"
-#include "HierarchyNNIG.hpp"
-#include "SimpleMixture.hpp"
+#include "src/hyperparameters/HypersFixedNNIG.hpp"
+#include "src/algorithms/Neal2_NNIG.hpp"
+#include "src/algorithms/Neal8.hpp"
+#include "src/hierarchies/HierarchyNNIG.hpp"
+#include "src/mixtures/SimpleMixture.hpp"
 
 #endif // INCLUDES_MAIN_HPP
