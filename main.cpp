@@ -1,5 +1,5 @@
 #include <iostream>
-#include  <fstream>
+#include <fstream>
 
 //#include <boost/random/random_number_generator.hpp>
 //#include <boost/random/detail/qrng_base.hpp>
@@ -48,11 +48,6 @@ int main(){
     //sampler2.run();
     sampler8.run();
 
-    
-	
-
-
-
     // Density stuff
     std::vector<double> grid;
     double temp = 0.0;
@@ -73,8 +68,8 @@ int main(){
     //sampler2.write_best_clustering_to_file();
 
     // Clustering stuff
-    unsigned int i_cap = sampler8.cluster_estimate();
-    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+    //unsigned int i_cap = sampler8.cluster_estimate();
+    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
     //sampler8.write_final_clustering_to_file("clust_final0.25.csv");
     //sampler8.write_best_clustering_to_file("clust_best1.csv");
     //sampler8.write_chain_to_file();

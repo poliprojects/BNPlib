@@ -9,10 +9,10 @@
 #include <Eigen/Dense>
 #include <stan/math/prim/mat.hpp>
 
-#include "HypersFixedNNIG.hpp"
-#include "HierarchyNNIG.hpp"
-#include "output.pb.h"
-#include "SimpleMixture.hpp"
+#include "../hyperparameters/HypersFixedNNIG.hpp"
+#include "../hierarchies/HierarchyNNIG.hpp"
+#include "../../output.pb.h"
+#include "../mixtures/SimpleMixture.hpp"
 
 // Normal likelihoood, Normal-InverseGamma hierarchy, that is:
 // f ~ N(mu,sig^2)
