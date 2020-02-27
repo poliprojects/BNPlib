@@ -23,3 +23,4 @@ MANOVALANZA
 * complete README
 * print functions: remove last empty column
 * rename proto messages
+* files reorganization (folder for .csvs, etc)
