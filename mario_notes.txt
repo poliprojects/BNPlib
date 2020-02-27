@@ -1,20 +1,26 @@
-* Vedi paper Favaro Teh
+* Vedi paper Favaro Teh (leggi per hypers (valori lambda), leggi per MixturePitman-Yor)
 * Classe mixture più importante, anche per i processi Pitman Yor
 * probas in funzione probabilities()
 * SimpleMixture -> DirichletMixture, PitmanYorMixture
+* Pitman-YorMixture :cambia la probabilità di appartenere ad un cluster diversa da Dirichlet-> in probas
 * no membri ChainOutput etc
 * classe MemoryCollector (esterna ad Algorithm): classe che sa come salvare delle cose. metodo save_state(puntatore a BaseCollector), ?
+(MEMORY COLLECTOR: es metodo in Algo class chiamato save_state() che salva in memoria una lista di stati MCMC: prende in input un 
+puntatore a base collector e crea un proto o un oggetto con tutti i parametri dello stato
+poi FILE COLLECTOR: salva su file, prende un oggetto proto ?? )
 * polimorfismo: base BaseCollector
-* interfaccia Python (pybind)
+* interfaccia Python (pybind) (una volta che ho catene di proto do in pasto a python, R..)
 * eigen::vector come parametro di eval_density()
-* set RNG seed {20200227}
+* set RNG seed {20200227} or  {std::random_device}
 * riorganizzazione: cartelle algoritmi, mixtures, ...
-* caso multidimensionale: usa le Eigen::Matrix (nell'algoritmo?): dati, hierarchy multivariata
+(metti su cartelle diverse Mixture, Hierarchy, .. pulisci csv, togli da classe chain.out/best_clustering..)
+* caso multidimensionale: usa le Eigen::Matrix per i dati, hierarchy multivariata (NNIW, trasforma std::vector in Eigen::Matrix , guarda Corradin)
 * COPIA DA RICC
-* parametri da linea di comando (argc. boost program options)
+* parametri da linea di comando (argc. or boost program options)
 * acceleration steps
 * prior su total mass (Escobar West '95)
 * nel caso di fissi, return; e basta (oppure {} e basta)
+* best_clustering può prendere un Eigen::Matrix 
 
 SCALETTA
 * pulire codice
@@ -25,3 +31,4 @@ SCALETTA
 * cose fancy che piacciono a Formaggia (file collector e altro collector)
 * argomenti main
 * con Mario, interfaccia Python
+
