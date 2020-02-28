@@ -62,12 +62,13 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         double tot = 0.0;
         for(int k = 0; k < n_unique ; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
-            probas(k) = mixture.prob_old(card[k],n) * unique_values[k].like(data[i]);
+            probas(k) = mixture.prob_existing_cluster(card[k],n) *
+            	unique_values[k].like(data[i]);
             tot += probas(k);
         }
 
         for(int k = 0; k < n_aux; k++){
-            probas(n_unique+k) = mixture.prob_new(n, n_unique) *
+            probas(n_unique+k) = mixture.prob_new_cluster(n, n_unique) *
                 aux_unique_values[k].like(data[i]) / n_aux;
             tot += probas(n_unique+k,0);
         }

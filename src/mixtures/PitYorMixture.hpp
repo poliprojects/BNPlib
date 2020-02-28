@@ -10,23 +10,27 @@ private:
 public:
     ~PitYorMixture() = default;
 
-    PitYorMixture(const double strength,const double discount): strength(strength), discount(discount){
+    PitYorMixture(const double strength, const double discount):
+        strength(strength), discount(discount){
         assert(strength > -discount);
-        assert(discount<1 && discount>=0);
+        assert(0 <= discount && discount<1);
     }
 
-    double const get_strength(){return strength;}
+    // Compute probabilities
+    double const prob_existing_cluster(const int card, const unsigned int n){
+        return (card-discount)/(n-1+strength);
+    }
 
-    void set_strength(const double strength_){strength = strength_;}
-
-    double const get_discount(){return discount;}
-
-    void set_discount(const double discount_){discount = discount_;}
-
-
-    double const prob_old(const int card, const unsigned int n ){return (card-discount)/(n-1+strength);}
+    double const prob_new_cluster(const unsigned int n,
+        const unsigned int n_unique){
+        return (strength+discount*n_unique)/(n-1+strength);
+    }
     
-    double const prob_new(const unsigned int n, const unsigned int n_unique){return (strength+discount*n_unique)/(n-1+strength);}
+    // Getters and setters
+    double const get_strength(){return strength;}
+    double const get_discount(){return discount;}
+    void set_strength(const double strength_){strength = strength_;}
+    void set_discount(const double discount_){discount = discount_;}
 };
 
 #endif // DIRICHLETMIXTURE_HPP
