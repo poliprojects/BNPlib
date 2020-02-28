@@ -2,6 +2,8 @@ TODO LIST
 
 FEATURES/IMPLEMENTATION
 * blocked Gibbs?
+* Mixture base? (Dirichlet, PitYor derivated)
+* one method for prob_existing_cluster /prob_new_cluster ?
 * acceleration steps?
 * probas in a separate function?
 * store card vector somewhere?
