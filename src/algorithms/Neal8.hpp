@@ -12,7 +12,7 @@
 #include "../hyperparameters/HypersFixedNNIG.hpp"
 #include "../hierarchies/HierarchyNNIG.hpp"
 #include "../../output.pb.h"
-#include "../mixtures/SimpleMixture.hpp"
+#include "../mixtures/DirichletMixture.hpp"
 
 // Normal likelihoood, Normal-InverseGamma hierarchy, that is:
 // f ~ N(mu,sig^2)

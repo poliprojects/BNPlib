@@ -58,18 +58,17 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         // Draw a NEW value for ci
         Eigen::VectorXd probas(n_unique+n_aux); //k or n_unique
 
-        auto M = mixture.get_totalmass();
+        //auto M = mixture.get_totalmass();
         double tot = 0.0;
         for(int k = 0; k < n_unique ; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
-            probas(k) = card[k] * unique_values[k].like(data[i]) / (
-                n-1+M);
+            probas(k) = mixture.prob_old(card[k],n) * unique_values[k].like(data[i]);
             tot += probas(k);
         }
 
         for(int k = 0; k < n_aux; k++){
-            probas(n_unique+k) = (M/n_aux) *
-                aux_unique_values[k].like(data[i]) / (n-1+M);
+            probas(n_unique+k) = mixture.prob_new(n, n_unique) *
+                aux_unique_values[k].like(data[i]) / n_aux;
             tot += probas(n_unique+k,0);
         }
         probas = probas / tot;

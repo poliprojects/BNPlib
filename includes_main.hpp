@@ -5,6 +5,6 @@
 #include "src/algorithms/Neal2_NNIG.hpp"
 #include "src/algorithms/Neal8.hpp"
 #include "src/hierarchies/HierarchyNNIG.hpp"
-#include "src/mixtures/SimpleMixture.hpp"
+#include "src/mixtures/DirichletMixture.hpp"
 
 #endif // INCLUDES_MAIN_HPP

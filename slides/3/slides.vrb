@@ -1,0 +1,11 @@
+\frametitle{Extensions}
+
+	\begin{itemize}
+	\item Adaptation to \verb|Hypers| containing hyper-priors
+	\item Implementation of other \verb|Hierarchy| classes
+	\item Adaptation to other \verb|Mixture| classes
+	\item Interface with R and Python
+	\item Integration of conjugacy-dependent algorithms to handle non-conjugacy
+	\item Full generalization
+	\end{itemize}
+

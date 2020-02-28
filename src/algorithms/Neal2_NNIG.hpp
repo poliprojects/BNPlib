@@ -9,7 +9,7 @@
 #include <stan/math/prim/mat.hpp>
 #include <math.h>
 #include "../hierarchies/HierarchyNNIG.hpp"
-#include "../mixtures/SimpleMixture.hpp"
+#include "../mixtures/DirichletMixture.hpp"
 #include "../hyperparameters/HypersFixedNNIG.hpp"
 #include "../../output.pb.h"
 

@@ -38,10 +38,10 @@ int main(){
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
 
    
-    SimpleMixture mix(1); // total mass
-    //Neal2<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler2(
+    DirichletMixture mix(1); // total mass
+    //Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler2(
       //  data, mix, hy);
-    Neal8<HierarchyNNIG, HypersFixedNNIG, SimpleMixture> sampler8(
+    Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler8(
       data, 3, mix, hy);
 	
     // Run samplers
