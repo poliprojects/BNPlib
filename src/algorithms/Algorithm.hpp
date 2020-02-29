@@ -30,6 +30,8 @@ private:
     std::vector<unsigned int> allocations; // the c vector
     std::vector<Hierarchy<Hypers>> unique_values;
 
+    virtual void print_startup_message() = 0;
+
     virtual void initialize() = 0;
 
     void step(){ // TODO is it virtual?
@@ -45,8 +47,6 @@ private:
     void save_iteration(unsigned int iter);
 
     void print_state();
-
-    virtual void print_startup_message() = 0;
 
     void print_ending_message();
 
