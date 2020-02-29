@@ -20,7 +20,6 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal2 : public Algorithm<Hierarchy,Hypers,Mixture> {
 
 private:
-
     void initialize() override;
 
     void sample_allocations() override;
@@ -34,9 +33,7 @@ public:
     Neal2(const std::vector<double> & data, const int num_clusters,
         const Mixture &mix, const Hypers &hy) :
         Algorithm(data, num_clusters, mix, hy) {}
-            
-    }
-    
+
     // If no # initial clusters is given, it will be set equal to the data size:
     Neal2(std::vector<double> &data, const Mixture & mix, const Hypers &hy) :
         Algorithm(data, mix, hy) {}
