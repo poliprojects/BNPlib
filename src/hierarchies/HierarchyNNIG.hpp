@@ -7,6 +7,11 @@
 #include <vector>
 #include <stan/math/prim/mat.hpp>
 
+// Normal likelihoood, Normal-InverseGamma hierarchy, that is:
+// f ~ N(mu,sig^2)
+// (mu,sig^2) ~ G
+// G ~ DP(M, G0)  with G0 = N-IG
+
 template<class Hypers>
 class HierarchyNNIG {
 protected:

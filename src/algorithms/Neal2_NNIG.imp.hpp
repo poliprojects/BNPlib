@@ -396,4 +396,4 @@ const void Neal2<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::cout << "Succesfully wrote to " << filename << std::endl;
 }
 
-#endif // NEAL2NNIG_HPP
+#endif // NEAL2_NNIG_IMP_HPP

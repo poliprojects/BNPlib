@@ -20,7 +20,8 @@ FEATURES/IMPLEMENTATION
 
 
 MANOVALANZA
-* print specifics/results of running algorithm
+* print specifics/results of running algorithm/initial message/ending message
+* move NNIG stuff in Neal2 to the hierarchy
 * documentation with Doxygen
 * complete README
 * print functions: remove last empty column
