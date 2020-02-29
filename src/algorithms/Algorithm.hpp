@@ -110,14 +110,14 @@ public:
     const void write_density_to_file(
         std::string filename = "density.csv");
 
-    // Constructors and destructors:
-    virtual ~Algorithms() = default;
+    // Destructors and constructors:
+    virtual ~Algorithm() = default;
 
     Algorithm(const std::vector<double> &data, const int num_clusters,
         const Mixture &mixture, const Hypers &hy) :
         data(data), num_clusters(num_clusters), mixture(mixture) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
-            for(int h = 0; h < num_clusters; h++) {
+            for(unsigned int i = 0; i < num_clusters; i++) {
                 unique_values.push_back(hierarchy);
             }
             

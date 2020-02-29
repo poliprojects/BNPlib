@@ -2,8 +2,8 @@ TODO LIST
 
 FEATURES/IMPLEMENTATION
 * blocked Gibbs?
-* Mixture base? (Dirichlet, PitYor derivated)
-* one method for prob_existing_cluster /prob_new_cluster ?
+* Mixture base? (Dirichlet, PitYor derived)
+* one method for prob_existing_cluster / prob_new_cluster ?
 * acceleration steps?
 * probas in a separate function?
 * store card vector somewhere?
@@ -12,10 +12,10 @@ FEATURES/IMPLEMENTATION
 * constructors (arguments)
 * Hypers not fixed
 * a way to erase and add clusters more efficiently?
-* create generic Algorithm class
 * check, in write_clust_...(), if clust_estimate() has been called, and similar
   flags
-* aggiungere step sample_weights/sample_hyper return 0 o enable_if/type_dispatch? sample_weights : classe template?
+* aggiungere step sample_weights/sample_hyper return 0 o enable_if /
+   type_dispatch? sample_weights : classe template?
 * stan con quale rng??
 
 
@@ -26,3 +26,8 @@ MANOVALANZA
 * complete README
 * print functions: remove last empty column
 * rename proto messages
+* unsigned int -> size_t in for loops
+
+MAIL MARIO
+* Are sample_unique_values() and initialize() common to ALL algorithms?
+* COLLECTORS
