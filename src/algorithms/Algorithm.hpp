@@ -32,7 +32,7 @@ private:
 
     virtual void initialize() = 0;
 
-    virtual void step(){ // TODO is it virtual?
+    void step(){ // TODO is it virtual?
         sample_allocations();
         sample_unique_values();
         // TODO sample_weights() etc?

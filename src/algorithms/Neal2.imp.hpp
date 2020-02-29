@@ -1,7 +1,7 @@
-#ifndef NEAL2_NNIG_IMP_HPP
-#define NEAL2_NNIG_IMP_HPP
+#ifndef NEAL2_IMP_HPP
+#define NEAL2_IMP_HPP
 
-#include "Neal2_NNIG.hpp"
+#include "Neal2.hpp"
 
 // TODO transfer over all changes from Neal8 to here
 
@@ -396,4 +396,4 @@ const void Neal2<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::cout << "Succesfully wrote to " << filename << std::endl;
 }
 
-#endif // NEAL2_NNIG_IMP_HPP
+#endif // NEAL2_IMP_HPP
