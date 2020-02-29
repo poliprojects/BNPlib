@@ -18,30 +18,30 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     // * using a (multi)map?
     // Initialize some relevant variables
     unsigned int k, n_unique, singleton;
-    unsigned int n = data.size();
+    unsigned int n = this->data.size();
 
     for(int i = 0; i < n; i++){ // for each data unit data[i]
 
         // Initialize cardinalities of unique values
-        std::vector<int> card(unique_values.size(), 0);
+        std::vector<int> card(this->unique_values.size(), 0);
         for(int j = 0; j < n; j++){
-            card[ allocations[j] ] += 1;
+            card[ this->allocations[j] ] += 1;
         }
 
         singleton = 0;
-        n_unique = unique_values.size();
+        n_unique = this->unique_values.size();
 
-        if(card[ allocations[i] ] == 1){ // datum i is a singleton
+        if(card[ this->allocations[i] ] == 1){ // datum i is a singleton
             k = n_unique - 1;
-            aux_unique_values[0].set_state( unique_values[ allocations[i]
-                ].get_state() ); // move phi value in aux
+            aux_unique_values[0].set_state( this->unique_values[
+                this->allocations[i] ].get_state() ); // move phi value in aux
             singleton = 1;
         }
         else{
             k = n_unique;
         }
 
-        card[ allocations[i] ] -= 1;
+        card[ this->allocations[i] ] -= 1;
 
         // Draw the aux from G0
         for(int j = singleton; j < n_aux; j++){
@@ -51,18 +51,18 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         // Draw a NEW value for ci
         Eigen::VectorXd probas(n_unique+n_aux); //k or n_unique
 
-        //auto M = mixture.get_totalmass();
+        //auto M = this->mixture.get_totalmass();
         double tot = 0.0;
         for(int k = 0; k < n_unique ; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
-            probas(k) = mixture.prob_existing_cluster(card[k],n) *
-            	unique_values[k].like(data[i]);
+            probas(k) = this->mixture.prob_existing_cluster(card[k],n) *
+            	this->unique_values[k].like(this->data[i]);
             tot += probas(k);
         }
 
         for(int k = 0; k < n_aux; k++){
-            probas(n_unique+k) = mixture.prob_new_cluster(n, n_unique) *
-                aux_unique_values[k].like(data[i]) / n_aux;
+            probas(n_unique+k) = this->mixture.prob_new_cluster(n, n_unique) *
+                aux_unique_values[k].like(this->data[i]) / n_aux;
             tot += probas(n_unique+k,0);
         }
         probas = probas / tot;
@@ -70,24 +70,24 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         //for(int i = 0; i < probas.size(); i++){
         //    std::cout << "probas_" << probas(i) << std::endl; // DEBUG
         //}
-        unsigned int c_new = stan::math::categorical_rng(probas, rng) - 1;
+        unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
 
         //std::cout<<"c_new: "<<c_new<<std::endl; // DEBUG
 
         if(singleton == 1){
             if(c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
-                unique_values[ allocations[i] ].set_state(
+                this->unique_values[ this->allocations[i] ].set_state(
                     aux_unique_values[c_new-n_unique].get_state());
-                card[ allocations[i] ] += 1;
+                card[ this->allocations[i] ] += 1;
             }
             else{ // case 2 of 4: SINGLETON - OLD VALUE
-                unique_values.erase(
-                    unique_values.begin()+allocations[i] );
-                card.erase( card.begin()+allocations[i] );
+                this->unique_values.erase(
+                    this->unique_values.begin() + this->allocations[i] );
+                card.erase( card.begin()+this->allocations[i] );
                 card[c_new] += 1;
-                int tmp = allocations[i];
-                allocations[i] = c_new;
-                for(auto &c : allocations){ // relabeling
+                int tmp = this->allocations[i];
+                this->allocations[i] = c_new;
+                for(auto &c : this->allocations){ // relabeling
                     if(c > tmp){
                         c -= 1;
                     }
@@ -96,12 +96,13 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         } // end of if(singleton == 1)
         else{ // if singleton == 0
             if(c_new >= n_unique){ // case 3 of 4: NOT SINGLETON - AUX
-                unique_values.push_back(aux_unique_values[c_new-n_unique]);
+                this->unique_values.push_back(
+                    aux_unique_values[c_new-n_unique]);
                 card.push_back(1);
-                allocations[i] = n_unique;
+                this->allocations[i] = n_unique;
             }
             else{ // case 4 of 4: NOT SINGLETON - OLD VALUES
-                allocations[i] = c_new;
+                this->allocations[i] = c_new;
                 card[c_new] += 1;
             }
         } // end of else
@@ -114,22 +115,22 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         const std::vector<double> grid){
-    density.first = grid;
+    this->density.first = grid;
 
     //std::ofstream file;
     //unsigned int step = 1000;
     //file.open("dens_estimate_iterations.csv");
 
     Eigen::VectorXd dens(grid.size());
-    double M = mixture.get_totalmass();
-    int n = data.size();
+    double M = this->mixture.get_totalmass();
+    int n = this->data.size();
     IterationOutput state;
 
-    for(int iter = 0; iter < chain.state_size(); iter++){
+    for(int iter = 0; iter < this->chain.state_size(); iter++){
         // for each iteration of the algorithm
         //std::cout << iter << std::endl; // DEBUG
 
-        state = *chain.mutable_state(iter);
+        state = *(this->chain.mutable_state(iter));
         std::vector<unsigned int> card(state.phi_size(),
             0); // TODO salviamoci ste card da qualche parte
         std::vector<double> params(state.phi(0).params_size());
@@ -138,7 +139,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         for(int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
-        Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
+        Hierarchy<Hypers> temp_hier(this->unique_values[0].get_hypers());
         for(int h = 0; h < state.phi_size(); h++){
             for(int k = 0; k < state.phi(h).params_size(); k++){
                 params[k] = state.phi(h).params(k);
@@ -171,11 +172,11 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     //     std::cout << dens(i) << " ";
     // std::cout << std::endl;
 
-    density.second = dens / chain.state_size();
+    this->density.second = dens / this->chain.state_size();
 
     //DEBUG:
     // for(int i = 0; i < grid.size(); i++)
-    //     std::cout << density.second(i) << " ";
+    //     std::cout << this->density.second(i) << " ";
     // std::cout << std::endl;
 
     //file.close();

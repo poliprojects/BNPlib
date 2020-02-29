@@ -38,14 +38,15 @@ public:
 
     Neal8(const std::vector<double> &data, const int num_clusters,
         const int n_aux, const Mixture &mixture, const Hypers &hy):
-        data(data), num_clusters(num_clusters), n_aux(n_aux), mixture(mixture) {
-            Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
-            for(unsigned int i = 0; i < num_clusters; i++){
-                unique_values.push_back(hierarchy);
-            }
-            for(unsigned int i = 0; i < n_aux; i++){
-                aux_unique_values.push_back(hierarchy);
-            }
+        data(data), num_clusters(num_clusters), n_aux(n_aux),
+        mixture(mixture) {
+        Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
+        for(unsigned int i = 0; i < this->num_clusters; i++){
+            this->unique_values.push_back(hierarchy);
+        }
+        for(unsigned int i = 0; i < n_aux; i++){
+            aux_unique_values.push_back(hierarchy);
+        }
     }
 
     // If no # initial clusters is given, it will be set equal to the data size
