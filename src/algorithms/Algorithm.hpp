@@ -35,7 +35,7 @@ private:
     std::mt19937 rng;
 
     // Algorithm functions
-    virtual void print_startup_message() = 0;
+    virtual const void print_startup_message() = 0;
 
     virtual void initialize() = 0;
 
@@ -51,10 +51,10 @@ private:
 
     void save_iteration(unsigned int iter);
 
-    void print_ending_message();
+    const void print_ending_message();
 
     // Auxiliary tools
-    void print_state();    
+    const void print_state();    
 
 public:
     // Running tool
@@ -72,7 +72,26 @@ public:
         print_ending_message();
     }
 
-    void run_and_save_cards(){} // TODO la blastiamo? (vedi Neal8)
+    //void run_and_save_cards(){ // TODO la blastiamo?
+    //std::ofstream file;
+    //file.open("clust_cardinalities.csv");
+    //    print_startup_message();
+    //    initialize();
+    //    unsigned int iter = 0;
+    //    while(iter < maxiter){
+    //        std::cout << "Iteration # " << iter << " / " <<
+    //            maxiter << std::endl; // DEBUG
+    //        step();
+    //        if(iter >= burnin){
+    //          save_iteration(iter);
+    //          file << unique_values.size() << ",";
+    //        }
+    //        iter++;
+    //    }
+    //    print_ending_message();
+    //    file << std::endl;
+    //    file.close();
+    //}
 
     // Other tools
     unsigned int cluster_estimate();
@@ -93,18 +112,34 @@ public:
 
     // Constructors and destructors:
     virtual ~Algorithms() = default;
-    Algorithm(const std::vector<double> & data, const int num_clusters,
-        const Mixture &mix, const Hypers &hy):
-        data(data), num_clusters(num_clusters), mixture(mix) {
+
+    Algorithm(const std::vector<double> &data, const int num_clusters,
+        const Mixture &mixture, const Hypers &hy) :
+        data(data), num_clusters(num_clusters), mixture(mixture) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
             for(int h = 0; h < num_clusters; h++) {
                 unique_values.push_back(hierarchy);
             }
             
     }
+
     // If no # initial clusters is given, it will be set equal to the data size:
-    Algorithm(std::vector<double> &data, const Mixture & mix, const Hypers &hy):
-        Algorithm(data, data.size(), mix, hy) {}
+    Algorithm(const std::vector<double> &data, const Mixture &mixture,
+        const Hypers &hy) :
+        Algorithm(data, data.size(), mixture, hy) {}
+
+    // Getters
+    const unsigned int get_maxiter(){return maxiter;}
+    const unsigned int get_burnin(){return burnin;}
+    const unsigned int get_num_clusters(){return num_clusters;}
+    const unsigned int get_num_clusters_best(){return best_clust.phi_size();}
+
+    // Setters
+    void set_maxiter(const unsigned int maxiter){maxiter = maxiter;}
+    void set_burnin(const unsigned int burnin){burnin = burnin;}
+    void set_num_clusters(const unsigned int num_clusters){
+        num_clusters = num_clusters;
+    }
 
 };
 

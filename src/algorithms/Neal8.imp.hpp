@@ -4,6 +4,13 @@
 #include "Neal8.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
+const void Neal8<Hierarchy, Hypers, Mixture>::print_startup_message(){
+    std::cout << "Running Neal8 algorithm (with m=" << n_aux <<
+        " auxiliary blocks)..." << std::endl;
+}
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     // TODO Other ideas:
     // * our own for loop for k and bool (ci is a singleton)
@@ -104,58 +111,6 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
 } // end of sample_allocations()
 
 
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy, Hypers, Mixture>::sample_unique_values(){
-
-    num_clusters = unique_values.size();
-    std::vector<std::vector<unsigned int>> clust_idxs(num_clusters);
-    unsigned int n = allocations.size();
-    for(int i = 0; i < n; i++){ // save different cluster in each row
-        clust_idxs[ allocations[i] ].push_back(i);
-    }
-
-    // DEBUG:
-    //for(int j = 0; j < num_clusters; j++){
-    //    std::cout << "Cluster #" << j << ": ";
-    //    for(int i = 0; i < clust_idxs[j].size(); i++){
-    //        std::cout << " " << clust_idxs[j][i];
-    //    }
-    //    std::cout << std::endl;
-    //}
-
-    for(int j = 0; j < num_clusters; j++){
-        std::vector<double> curr_data;
-        for(auto &idx : clust_idxs[j])
-            curr_data.push_back(data[idx]);
-        unique_values[j].sample_given_data(curr_data);
-    }
-
-    // std::cout << std::endl; // DEBUG
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
-    IterationOutput iter_out;
-    *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
-
-    for(int i = 0; i < unique_values.size(); i++){
-        UniqueValues temp;
-        for(auto &par : unique_values[i].get_state()){
-            temp.add_params(par);
-        }
-        iter_out.add_phi();
-        *iter_out.mutable_phi(i) = temp;
-    }
-
-    chain.add_state();
-    *chain.mutable_state(iter-burnin) = iter_out;
-
-    //print_state(); //DEBUG
-}
-
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     // also returns the index of the estimate in the chain object
@@ -208,175 +163,6 @@ unsigned int Neal8<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     std::cout << best_clust.phi_size() <<
         " clusters were found via least square minimization" << std::endl;
     return i;
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
-        const std::vector<double> grid){
-    density.first = grid;
-
-    //std::ofstream file;
-    //unsigned int step = 1000;
-    //file.open("dens_estimate_iterations.csv");
-
-    Eigen::VectorXd dens(grid.size());
-    double M = mixture.get_totalmass();
-    int n = data.size();
-    IterationOutput state;
-
-    for(int iter = 0 ; iter < chain.state_size(); iter++){
-        // for each iteration of the algorithm
-        //std::cout << iter << std::endl; // DEBUG
-
-        state = *chain.mutable_state(iter);
-        std::vector<unsigned int> card(state.phi_size(),
-            0); // TODO salviamoci ste card da qualche parte
-        std::vector<double> params(state.phi(0).params_size());
-        Eigen::VectorXd dens_addendum=Eigen::MatrixXd::Zero(grid.size(),1);
-
-        for(int j = 0; j < n; j++){
-            card[ state.allocations(j) ] += 1;
-        }
-        Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
-        for(int h = 0; h < state.phi_size(); h++){
-            for(int k = 0; k < state.phi(h).params_size(); k++){
-                params[k] = state.phi(h).params(k);
-            }
-            temp_hier.set_state(params);
-
-            dens_addendum += card[h] * temp_hier.like(grid) / (M+n);
-            
-        }
-    
-        // Component from G0
-        for(int h = 0; h < n_aux; h++){
-            temp_hier.draw();
-            dens_addendum += (M/n_aux) * temp_hier.like(grid) / (M+n);
-        }
-
-	dens += dens_addendum;
-
-        //if(iter % step == 0){
-           // for(int i=0; i<dens_addendum.size()-1; i++){
-
-	     //   file << dens_addendum(i)<< ",";
-        //    }
-        //    file <<dens_addendum(dens_addendum.size()-1) << std::endl;
-        //}
-    }
-
-    // DEBUG:
-    // for(int i = 0; i < grid.size(); i++)
-    //     std::cout << dens(i) << " ";
-    // std::cout << std::endl;
-
-    density.second = dens /chain.state_size();
-
-    //DEBUG:
-    // for(int i = 0; i < grid.size(); i++)
-    //     std::cout << density.second(i) << " ";
-    // std::cout << std::endl;
-
-    //file.close();
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy, Hypers, Mixture>::print_state(){
-    for(int h = 0; h < num_clusters; h++){
-        std::cout << "Cluster # " << h << " parameters: ";
-
-        for(auto c : unique_values[h].get_state()){
-            std::cout << c << " ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl << std::endl;
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
-        std::string filename){
-    // number,datum,cluster,params1,params2,...
-    
-    std::ofstream file;
-    file.open(filename);
-
-    for(int i = 0; i < data.size(); i++){
-        auto params = unique_values[ allocations[i] ].get_state();
-        file << i << "," << data[i] << "," << allocations[i];
-        for(int j = 0; j < params.size(); j++){
-            file << "," << params[j];
-        }
-        file << std::endl;
-    }
-    file.close();
-    std::cout << "Succesfully wrote to " << filename << std::endl;
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
-    std::string filename){
-    // number,datum,cluster,params1,params2,...
-
-    std::ofstream file;
-    file.open(filename);
-
-    for(int i = 0; i < data.size(); i++){
-        unsigned int ci = best_clust.allocations(i);
-        file << i << "," << data[i] << "," << ci;
-        for(int j = 0; j < best_clust.phi(ci).params_size(); j++){
-            file << "," << best_clust.phi(ci).params(j);
-        }
-        file << std::endl;
-    }
-    file.close();
-    std::cout << "Succesfully wrote to " << filename << std::endl;
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy, Hypers, Mixture>::write_chain_to_file(
-    std::string filename){
-    // number,datum,cluster,params1,params2,...
-
-    std::ofstream file;
-    file.open(filename);
-
-    // for each iteration of the algorithm
-    for(int iter = 0; iter < chain.state_size(); iter++){
-        // for each data point
-        for(int i = 0; i < data.size(); i++){
-            auto state_iter = chain.state(iter);
-            unsigned int ci = state_iter.allocations(i);
-            file << iter << "," << i << "," << data[i] << "," << ci;
-            for(int j = 0; j < state_iter.phi(ci).params_size(); j++){
-                file << "," << state_iter.phi(ci).params(j);
-            }
-            file << std::endl;
-        }
-    }
-
-    file.close();
-    std::cout << "Succesfully wrote to " << filename << std::endl;
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy, Hypers, Mixture>::write_density_to_file(
-    std::string filename){
-    std::ofstream file;
-    file.open(filename);
-
-    for(int i = 0; i < density.first.size(); i++){
-        file << density.first[i] << "," << density.second(i) << std::endl;
-    }
-    
-    file.close();
-    std::cout << "Succesfully wrote to " << filename << std::endl;
 }
 
 

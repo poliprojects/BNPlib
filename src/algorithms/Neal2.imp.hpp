@@ -4,7 +4,7 @@
 #include "Neal2.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal2<Hierarchy,Hypers,Mixture>::print_startup_message(){
+const void Neal2<Hierarchy, Hypers, Mixture>::print_startup_message(){
     std::cout << "Running Neal2 algorithm..." << std::endl;
 }
 
@@ -25,8 +25,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
-    
+void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
     unsigned int k, n_unique, singleton;
     unsigned int n = data.size();
 
@@ -34,8 +33,9 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
         // Initialize cardinalities of unique values
         std::vector<int> card(unique_values.size(), 0);      
-        for(int j = 0; j < n; j++)
+        for(int j = 0; j < n; j++){
             card[ allocations[j] ] += 1;
+        }
 
         singleton = 0;
         n_unique = unique_values.size();
@@ -154,9 +154,9 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_allocations(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal2<Hierarchy,Hypers,Mixture>::sample_unique_values(){
+void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
 
-    num_clusters=unique_values.size();
+    num_clusters = unique_values.size();
     std::vector<std::vector<unsigned int>> clust_idxs(num_clusters);
     unsigned int n = allocations.size();
     for(int i = 0; i < n; i++){ // save different cluster in each row
@@ -164,21 +164,22 @@ void Neal2<Hierarchy,Hypers,Mixture>::sample_unique_values(){
     }
 
     // DEBUG:
-    //for(int j = 0; j < num_clusters; j++){ 
+    //for(unsigned int j = 0; j < num_clusters; j++){ 
     //    std::cout << "Cluster #" << j << ": ";
-    //    for (unsigned int i = 0; i < clust_idxs[j].size(); i++)
+    //    for(unsigned int i = 0; i < clust_idxs[j].size(); i++){
     //        std::cout << " " << clust_idxs[j][i];
+    //    }
     //    std::cout << std::endl;
     //}
 
-    for (int j = 0; j < num_clusters; j++) {
+    for(int j = 0; j < num_clusters; j++){
         std::vector<double> curr_data;
-        for (auto &idx : clust_idxs[j])
-            curr_data.push_back( data[idx] );
+        for(auto &idx : clust_idxs[j])
+            curr_data.push_back(data[idx]);
         unique_values[j].sample_given_data(curr_data);
     }
 
-    //std::cout << std::endl; // DEBUG
+    // std::cout << std::endl; // DEBUG
 }
 
 #endif // NEAL2_IMP_HPP

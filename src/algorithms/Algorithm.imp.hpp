@@ -5,13 +5,10 @@
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
- 
-
+void Algorithm<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
     //std::cout << "Iteration # " << iter << " / " << maxiter-1 <<
     //    std::endl; // DEBUG
     IterationOutput iter_out;
-
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
     for(int i = 0; i < unique_values.size(); i++){
@@ -26,12 +23,12 @@ void Algorithm<Hierarchy,Hypers,Mixture>::save_iteration(unsigned int iter){
     chain.add_state();
     *chain.mutable_state(iter-burnin) = iter_out;
 
-    //print_state();
+    //print_state(); //DEBUG
 }
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy,Hypers,Mixture>::print_state(){
+void Algorithm<Hierarchy, Hypers, Mixture>::print_state(){
     for (int h = 0; h < num_clusters; h++) {
         std::cout << "Parameters: ";
 
@@ -44,7 +41,7 @@ void Algorithm<Hierarchy,Hypers,Mixture>::print_state(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy,Hypers,Mixture>::print_ending_message(){
+void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
     std::cout << "Done" << std::endl;
 }
 
@@ -109,19 +106,25 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
         const std::vector<double> grid){
     density.first = grid;
 
+    //std::ofstream file;
+    //unsigned int step = 1000;
+    //file.open("dens_estimate_iterations.csv");
+
     Eigen::VectorXd dens(grid.size());
     double M = mixture.get_totalmass();
     int n = data.size();
     IterationOutput state;
 
-
     for(int iter = 0; iter < chain.state_size(); iter++){
         // for each iteration of the algorithm
+        //std::cout << iter << std::endl; // DEBUG
 
         state = *chain.mutable_state(iter);
         std::vector<unsigned int> card(state.phi_size(),
             0); // TODO salviamoci ste card da qualche parte
         std::vector<double> params(state.phi(0).params_size());
+        Eigen::VectorXd dens_addendum = Eigen::MatrixXd::Zero(grid.size(), 1);
+
         for(int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
@@ -132,11 +135,25 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
             }
             temp_hier.set_state(params);
 
-            dens += card[h] * temp_hier.like(grid) / (M+n);
+            dens_addendum += card[h] * temp_hier.like(grid) / (M+n);
+            
+        }
+    
+        // Component from G0
+        for(int h = 0; h < n_aux; h++){
+            temp_hier.draw();
+            dens_addendum += (M/n_aux) * temp_hier.like(grid) / (M+n);
         }
 
-        // Component from G0 (exploit conjugacy: we use the explicit expression)
-         dens += M * temp_hier.eval_marg(grid) / (M+n); 
+    dens += dens_addendum;
+
+        //if(iter % step == 0){
+           // for(int i=0; i<dens_addendum.size()-1; i++){
+
+         //   file << dens_addendum(i)<< ",";
+        //    }
+        //    file <<dens_addendum(dens_addendum.size()-1) << std::endl;
+        //}
     }
 
     // DEBUG:
@@ -150,6 +167,8 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     // for(int i = 0; i < grid.size(); i++)
     //     std::cout << density.second(i) << " ";
     // std::cout << std::endl;
+
+    //file.close();
 }
 
 
