@@ -39,14 +39,14 @@ int main(){
 
    
     DirichletMixture mix(1); // total mass
-    //Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler2(
-      //  data, mix, hy);
-    Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler8(
-      data, 3, mix, hy);
+    Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler2(
+        data, mix, hy);
+    //Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler8(
+      //data, 3, mix, hy);
 	
     // Run samplers
-    //sampler2.run();
-    sampler8.run();
+    sampler2.run();
+    //sampler8.run();
 
     // Density stuff
     std::vector<double> grid;

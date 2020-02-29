@@ -55,32 +55,18 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         double tot = 0.0;
 
         for(int k = 0; k < n_unique; k++){
-            probas(k) = card[k] * this->unique_values[k].like(this->data[i]) / (
-                n-1+M);
+            probas(k) = this->mixture.prob_existing_cluster(card[k],n) *
+            	this->unique_values[k].like(this->data[i]);
+
             if(singleton == 1 && k == i){
-                std::shared_ptr<Hypers> hy=this->unique_values[0].get_hypers();
-                double mu0    = hy->get_mu0();
-                double lambda = hy->get_lambda();
-                double alpha0 = hy->get_alpha0();
-                double beta0  = hy->get_beta0();
-                
-                double sigtilde = sqrt( beta0*(lambda+1)/(alpha0*lambda) );
-                probas(i,0) = M * exp(stan::math::student_t_lpdf(this->data[i],
-                    2*alpha0, mu0, sigtilde)) / (n-1+M);
-            } 
+              probas(i,0) = this->mixture.prob_new_cluster(n, n_unique) *this->unique_values[0].eval_marg(this->data[i]);
+            }
+ 
             tot += probas(k);
         }
 
         if(singleton == 0){
-            std::shared_ptr<Hypers> hy = this->unique_values[0].get_hypers();
-                double mu0    = hy->get_mu0();
-                double lambda = hy->get_lambda();
-                double alpha0 = hy->get_alpha0();
-                double beta0  = hy->get_beta0();
-
-            double sigtilde = sqrt( beta0*(lambda+1)/(alpha0*lambda) );
-            probas(n_unique,0) = M * exp(stan::math::student_t_lpdf(
-                this->data[i], 2*alpha0, mu0, sigtilde)) / (n-1+M);
+            probas(n_unique,0) = this->mixture.prob_new_cluster(n, n_unique) *this->unique_values[0].eval_marg(this->data[i]);
             tot += probas(n_unique,0);
         }
 
@@ -92,23 +78,9 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         if(singleton == 1){
             if(c_new == this->allocations[i]){
                 // case 1 of 4: SINGLETON - SINGLETON
-
-                std::shared_ptr<Hypers> hy=this->unique_values[0].get_hypers();
-                double mu0    = hy->get_mu0();
-                double lambda = hy->get_lambda();
-                double alpha0 = hy->get_alpha0();
-                double beta0  = hy->get_beta0();    
-
-                std::vector<double> par_pair(2);
-                double sigma2_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
-                    beta0+(lambda*pow(this->data[i]-mu0,2))/(2*(lambda+1)),
-                    this->rng);
-                double mu_new = stan::math::normal_rng(
-                    (lambda*mu0+this->data[i])/(lambda+1),
-                    sqrt(sigma2_new/(lambda+1)), this->rng); 
-                par_pair[0] = mu_new;
-                par_pair[1] = sqrt(sigma2_new);
-                this->unique_values[ this->allocations[i] ].set_state(par_pair);
+                std::vector<double> temp;
+                temp.push_back(this->data[i]);
+                this->unique_values[ this->allocations[i] ].sample_given_data(temp);
                 
             }
             else{ // case 2 of 4: SINGLETON - CLUSTER
@@ -127,24 +99,11 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
         else{ // if singleton == 0
             if(c_new == n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
-                std::shared_ptr<Hypers> hy=this->unique_values[0].get_hypers();
-                double mu0    = hy->get_mu0();
-                double lambda = hy->get_lambda();
-                double alpha0 = hy->get_alpha0();
-                double beta0  = hy->get_beta0();
 
-               std::vector<double> par_pair(2);
-
-                double sigma2_new = stan::math::inv_gamma_rng(alpha0 + 1/2,
-                    beta0+(lambda*pow(this->data[i]-mu0,2))/(2*(lambda+1)),
-                    this->rng);
-                double mu_new = stan::math::normal_rng((lambda*mu0+
-                    this->data[i])/(lambda+1), sqrt(sigma2_new/(lambda+1)),
-                    this->rng); 
-                par_pair[0] = mu_new;
-                par_pair[1] = sqrt(sigma2_new);
-                Hierarchy<Hypers> new_unique(hy);
-                new_unique.set_state(par_pair); 
+                Hierarchy<Hypers> new_unique(this->unique_values[0].get_hypers());
+                std::vector<double> temp;
+                temp.push_back(this->data[i]);
+                new_unique.sample_given_data(temp);
                 this->unique_values.push_back(new_unique); 
                 this->allocations[i] = n_unique;
             }
