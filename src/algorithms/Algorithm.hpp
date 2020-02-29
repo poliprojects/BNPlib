@@ -85,7 +85,7 @@ public:
     // Constructors and destructors:
     virtual ~Algorithms() = default;
     Algorithm(const std::vector<double> & data, const int num_clusters,
-        const Mixture &mix,const Hypers &hy):
+        const Mixture &mix, const Hypers &hy):
         data(data), num_clusters(num_clusters), mixture(mix) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
             for(int h = 0; h < num_clusters; h++) {

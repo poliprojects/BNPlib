@@ -31,19 +31,15 @@ private:
 
 public:
     // Constructors and destructors:
-    ~Neal2() = default;
     Neal2(const std::vector<double> & data, const int num_clusters,
-        const Mixture &mix,const Hypers &hy):
-        data(data), num_clusters(num_clusters), mixture(mix) {
-            Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
-            for(int h = 0; h < num_clusters; h++) {
-                unique_values.push_back(hierarchy);
-            }
+        const Mixture &mix, const Hypers &hy) :
+        Algorithm(data, num_clusters, mix, hy) {}
             
     }
+    
     // If no # initial clusters is given, it will be set equal to the data size:
-    Neal2(std::vector<double> &data, const Mixture & mix, const Hypers &hy):
-        Neal2(data, data.size(), mix, hy) {}
+    Neal2(std::vector<double> &data, const Mixture & mix, const Hypers &hy) :
+        Algorithm(data, mix, hy) {}
 
 }; // end of Class Neal2
 
