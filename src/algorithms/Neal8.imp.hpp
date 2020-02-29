@@ -4,20 +4,6 @@
 #include "Neal8.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy, Hypers, Mixture>::initialize(){
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0,num_clusters);
-
-    for(int h = 0; h < num_clusters; h++){
-      allocations.push_back(h);
-    }
-    for(int j = num_clusters; j < data.size(); j++){
-        int num = distribution(generator); //TODO da stan?
-        allocations[j] = num;
-    }
-}
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     // TODO Other ideas:
     // * our own for loop for k and bool (ci is a singleton)

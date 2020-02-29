@@ -17,19 +17,24 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{
 
 private:
-    unsigned int maxiter;
-    unsigned int burnin;
-    std::mt19937 rng;
+    // Mehtods parameters
+    unsigned int maxiter = 20000;
+    unsigned int burnin = 5000;
     int num_clusters;
+
+    // Data and values containers
+    std::vector<double> data;
+    std::vector<unsigned int> allocations;
+    std::vector<Hierarchy<Hypers>> unique_values;
+    std::pair< std::vector<double>, Eigen::VectorXd > density; // TODO w/ Eigen
     Mixture mixture;
-    std::pair< std::vector<double>, Eigen::VectorXd > density;
     ChainOutput chain;
     IterationOutput best_clust;
 
-    std::vector<double> data;
-    std::vector<unsigned int> allocations; // the c vector
-    std::vector<Hierarchy<Hypers>> unique_values;
+    // Random engine
+    std::mt19937 rng;
 
+    // Algorithm functions
     virtual void print_startup_message() = 0;
 
     virtual void initialize() = 0;
@@ -46,9 +51,10 @@ private:
 
     void save_iteration(unsigned int iter);
 
-    void print_state();
-
     void print_ending_message();
+
+    // Auxiliary tools
+    void print_state();    
 
 public:
     // Running tool
@@ -66,15 +72,18 @@ public:
         print_ending_message();
     }
 
+    void run_and_save_cards(){} // TODO la blastiamo? (vedi Neal8)
+
+    // Other tools
     unsigned int cluster_estimate();
 
     void eval_density(const std::vector<double> grid);
 
     const void write_final_clustering_to_file(
-        std::string filename = "final_clust.csv");
+        std::string filename = "clust_final.csv");
 
     const void write_best_clustering_to_file(
-        std::string filename = "best_clust.csv");
+        std::string filename = "clust_best.csv");
 
     const void write_chain_to_file(
         std::string filename = "chain.csv");

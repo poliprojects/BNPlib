@@ -10,14 +10,14 @@ void Neal2<Hierarchy,Hypers,Mixture>::print_startup_message(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal2<Hierarchy,Hypers,Mixture>::initialize(){
+void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution(0,num_clusters);
 
-    for (int h = 0; h < num_clusters; h++) {
+    for(int h = 0; h < num_clusters; h++){
       allocations.push_back(h);
     }
-    for (int j = num_clusters; j < data.size(); j++) {
+    for(int j = num_clusters; j < data.size(); j++){
         int num = distribution(generator); //TODO da stan?
         allocations[j] = num;
     }

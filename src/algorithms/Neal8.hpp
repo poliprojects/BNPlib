@@ -9,37 +9,20 @@
 #include <Eigen/Dense>
 #include <stan/math/prim/mat.hpp>
 
+#include "Neal2.hpp"
 #include "../hyperparameters/HypersFixedNNIG.hpp"
 #include "../hierarchies/HierarchyNNIG.hpp"
 #include "../../output.pb.h"
 #include "../mixtures/DirichletMixture.hpp"
 
-// Normal likelihoood, Normal-InverseGamma hierarchy, that is:
-// f ~ N(mu,sig^2)
-// (mu,sig^2) ~ G
-// G ~ DP(M, G0)  with G0 = N-IG
-
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-class Neal8{
+class Neal8: public Neal2<Hierarchy,Hypers,Mixture>{
 private:
     // Mehtods parameters
     unsigned int n_aux = 3;
-    unsigned int maxiter = 20000;
-    unsigned int burnin = 5000;
-    unsigned int num_clusters;
 
     // Data and values containers
-    std::vector<double> data;
-    std::vector<unsigned int> allocations;
-    std::vector<Hierarchy<Hypers>> unique_values;
     std::vector<Hierarchy<Hypers>> aux_unique_values;
-    std::pair< std::vector<double>, Eigen::VectorXd > density;
-    Mixture mixture;
-    ChainOutput chain;
-    IterationOutput best_clust;
-
-    // Random engine
-    std::mt19937 rng;
 
     // Algorithm functions
     void initialize();
@@ -73,43 +56,26 @@ public:
         std::cout << "Done" << std::endl;
     }
 
-    void run_and_save_cards(){
-    std::ofstream file;
-    file.open("clust_cardinalities.csv");
-        std::cout << "Running Neal8" << std::endl;
-        initialize();
-        unsigned int iter = 0;
-        while(iter < maxiter){
-            std::cout << "Iteration # " << iter << " / " <<
-                maxiter << std::endl; // DEBUG
-            step();
-            if(iter >= burnin){
-              save_iteration(iter);
-              file << unique_values.size() << ",";
-            }
-            iter++;
-        }
-        std::cout << "Done" << std::endl;
-        file << std::endl;
-        file.close();
-    }
-
-    // Other tools
-    unsigned int cluster_estimate();
-
-    void eval_density(const std::vector<double> grid);
-
-    const void write_final_clustering_to_file(
-        std::string filename = "clust_final.csv");
-
-    const void write_best_clustering_to_file(
-        std::string filename = "clust_best.csv");
-
-    const void write_chain_to_file(
-        std::string filename = "chain.csv");
-
-    const void write_density_to_file(
-        std::string filename = "density.csv");
+    //void run_and_save_cards(){
+    //std::ofstream file;
+    //file.open("clust_cardinalities.csv");
+    //    std::cout << "Running Neal8" << std::endl;
+    //    initialize();
+    //    unsigned int iter = 0;
+    //    while(iter < maxiter){
+    //        std::cout << "Iteration # " << iter << " / " <<
+    //            maxiter << std::endl; // DEBUG
+    //        step();
+    //        if(iter >= burnin){
+    //          save_iteration(iter);
+    //          file << unique_values.size() << ",";
+    //        }
+    //        iter++;
+    //    }
+    //    std::cout << "Done" << std::endl;
+    //    file << std::endl;
+    //    file.close();
+    //}
 
     // Constructors and destructors
     ~Neal8() = default;
