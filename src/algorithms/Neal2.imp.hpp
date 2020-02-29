@@ -182,4 +182,53 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
     // std::cout << std::endl; // DEBUG
 }
 
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
+        const std::vector<double> grid){
+    density.first = grid;
+
+    Eigen::VectorXd dens(grid.size());
+    double M = mixture.get_totalmass();
+    int n = data.size();
+    IterationOutput state;
+
+    for(unsigned int iter = 0; iter < chain.state_size(); iter++){
+        // for each iteration of the algorithm
+
+        state = *chain.mutable_state(iter);
+        std::vector<unsigned int> card(state.phi_size(),
+            0); // TODO salviamoci ste card da qualche parte
+        std::vector<double> params(state.phi(0).params_size());
+        for(unsigned int j = 0; j < n; j++){
+            card[ state.allocations(j) ] += 1;
+        }
+        Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
+        for(unsigned int h = 0; h < state.phi_size(); h++){
+            for(int k = 0; k < state.phi(h).params_size(); k++){
+                params[k] = state.phi(h).params(k);
+            }
+            temp_hier.set_state(params);
+
+            dens += card[h] * temp_hier.like(grid) / (M+n);
+        }
+
+        // Component from G0 (exploit conjugacy using the explicit expression)
+         dens += M * temp_hier.eval_marg(grid) / (M+n); 
+    }
+
+    // DEBUG:
+    // for(int i = 0; i < grid.size(); i++)
+    //     std::cout << dens(i) << " ";
+    // std::cout << std::endl;
+
+    density.second = dens / chain.state_size();
+
+    //DEBUG:
+    // for(int i = 0; i < grid.size(); i++)
+    //     std::cout << density.second(i) << " ";
+    // std::cout << std::endl;
+}
+
+
 #endif // NEAL2_IMP_HPP

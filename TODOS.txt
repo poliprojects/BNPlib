@@ -27,6 +27,8 @@ MANOVALANZA
 * print functions: remove last empty column
 * rename proto messages
 * unsigned int -> size_t in for loops
+* data -> Eigen vector/matrix
+
 
 MAIL MARIO
 * Are sample_unique_values() and initialize() common to ALL algorithms?

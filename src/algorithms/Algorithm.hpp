@@ -16,7 +16,7 @@
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{
 
-private:
+protected:
     // Mehtods parameters
     unsigned int maxiter = 20000;
     unsigned int burnin = 5000;
@@ -96,7 +96,7 @@ public:
     // Other tools
     unsigned int cluster_estimate();
 
-    void eval_density(const std::vector<double> grid);
+    virtual void eval_density(const std::vector<double> grid) = 0;
 
     const void write_final_clustering_to_file(
         std::string filename = "clust_final.csv");

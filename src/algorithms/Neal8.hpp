@@ -16,8 +16,8 @@
 #include "../mixtures/DirichletMixture.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-class Neal8: public Neal2<Hierarchy, Hypers, Mixture>{
-private:
+class Neal8 : public Neal2<Hierarchy, Hypers, Mixture>{
+protected:
     // Mehtods parameters
     unsigned int n_aux = 3;
 
@@ -30,6 +30,9 @@ private:
     void sample_allocations() override;
 
 public:
+    // Other tools:
+    void eval_density(const std::vector<double> grid) override;
+
     // Destructors and constructors:
     ~Neal8() = default;
 

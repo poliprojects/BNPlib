@@ -28,7 +28,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>::print_state(){
+const void Algorithm<Hierarchy, Hypers, Mixture>::print_state(){
     for (int h = 0; h < num_clusters; h++) {
         std::cout << "Parameters: ";
 
@@ -41,7 +41,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::print_state(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
+const void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
     std::cout << "Done" << std::endl;
 }
 
@@ -102,78 +102,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
-        const std::vector<double> grid){
-    density.first = grid;
-
-    //std::ofstream file;
-    //unsigned int step = 1000;
-    //file.open("dens_estimate_iterations.csv");
-
-    Eigen::VectorXd dens(grid.size());
-    double M = mixture.get_totalmass();
-    int n = data.size();
-    IterationOutput state;
-
-    for(int iter = 0; iter < chain.state_size(); iter++){
-        // for each iteration of the algorithm
-        //std::cout << iter << std::endl; // DEBUG
-
-        state = *chain.mutable_state(iter);
-        std::vector<unsigned int> card(state.phi_size(),
-            0); // TODO salviamoci ste card da qualche parte
-        std::vector<double> params(state.phi(0).params_size());
-        Eigen::VectorXd dens_addendum = Eigen::MatrixXd::Zero(grid.size(), 1);
-
-        for(int j = 0; j < n; j++){
-            card[ state.allocations(j) ] += 1;
-        }
-        Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
-        for(int h = 0; h < state.phi_size(); h++){
-            for(int k = 0; k < state.phi(h).params_size(); k++){
-                params[k] = state.phi(h).params(k);
-            }
-            temp_hier.set_state(params);
-
-            dens_addendum += card[h] * temp_hier.like(grid) / (M+n);
-            
-        }
-    
-        // Component from G0
-        for(int h = 0; h < n_aux; h++){
-            temp_hier.draw();
-            dens_addendum += (M/n_aux) * temp_hier.like(grid) / (M+n);
-        }
-
-    dens += dens_addendum;
-
-        //if(iter % step == 0){
-           // for(int i=0; i<dens_addendum.size()-1; i++){
-
-         //   file << dens_addendum(i)<< ",";
-        //    }
-        //    file <<dens_addendum(dens_addendum.size()-1) << std::endl;
-        //}
-    }
-
-    // DEBUG:
-    // for(int i = 0; i < grid.size(); i++)
-    //     std::cout << dens(i) << " ";
-    // std::cout << std::endl;
-
-    density.second = dens / chain.state_size();
-
-    //DEBUG:
-    // for(int i = 0; i < grid.size(); i++)
-    //     std::cout << density.second(i) << " ";
-    // std::cout << std::endl;
-
-    //file.close();
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal2<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
+const void Algorithm<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
         std::string filename){
     // number,datum,cluster,params1,params2,...
     
@@ -194,7 +123,7 @@ const void Neal2<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal2<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
+const void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
     std::string filename){
     // number,datum,cluster,params1,params2,...
 
@@ -215,7 +144,7 @@ const void Neal2<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal2<Hierarchy, Hypers, Mixture>::write_chain_to_file(
+const void Algorithm<Hierarchy, Hypers, Mixture>::write_chain_to_file(
     std::string filename){
     // number,datum,cluster,params1,params2,...
 
@@ -242,7 +171,7 @@ const void Neal2<Hierarchy, Hypers, Mixture>::write_chain_to_file(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal2<Hierarchy, Hypers, Mixture>::write_density_to_file(
+const void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::string filename){
     std::ofstream file;
     file.open(filename);
@@ -254,5 +183,6 @@ const void Neal2<Hierarchy, Hypers, Mixture>::write_density_to_file(
     file.close();
     std::cout << "Succesfully wrote to " << filename << std::endl;
 }
+
 
 #endif // ALGORITHM_IMP_HPP
