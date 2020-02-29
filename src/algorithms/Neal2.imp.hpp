@@ -8,6 +8,7 @@ void Neal2<Hierarchy,Hypers,Mixture>::print_startup_message(){
     std::cout << "Running Neal2 algorithm..." << std::endl;
 }
 
+
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy,Hypers,Mixture>::initialize(){
     std::default_random_engine generator;

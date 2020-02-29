@@ -20,13 +20,13 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal2 : public Algorithm<Hierarchy,Hypers,Mixture> {
 
 private:
+    void print_startup_message() override;
+
     void initialize() override;
 
     void sample_allocations() override;
 
     void sample_unique_values() override;
-
-    void print_startup_message() override;
 
 public:
     // Constructors and destructors:
