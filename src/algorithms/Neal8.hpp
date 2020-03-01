@@ -38,8 +38,10 @@ public:
 
     Neal8(const std::vector<double> &data, const int num_clusters,
         const int n_aux, const Mixture &mixture, const Hypers &hy):
-        data(data), num_clusters(num_clusters), n_aux(n_aux),
-        mixture(mixture) {
+        Neal8<Hierarchy, Hypers, Mixture>::data(data),
+        Neal8<Hierarchy, Hypers, Mixture>::num_clusters(num_clusters),
+        n_aux(n_aux),
+        Neal8<Hierarchy, Hypers, Mixture>::mixture(mixture) {
         Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
         for(unsigned int i = 0; i < this->num_clusters; i++){
             this->unique_values.push_back(hierarchy);
