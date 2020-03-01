@@ -1,19 +1,7 @@
 #ifndef NEAL8_HPP
 #define NEAL8_HPP
 
-#include <fstream>
-#include <math.h>
-#include <tuple>
-#include <vector>
-
-#include <Eigen/Dense>
-#include <stan/math/prim/mat.hpp>
-
 #include "Neal2.hpp"
-#include "../hyperparameters/HypersFixedNNIG.hpp"
-#include "../hierarchies/HierarchyNNIG.hpp"
-#include "../../output.pb.h"
-#include "../mixtures/DirichletMixture.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal8 : public Neal2<Hierarchy, Hypers, Mixture>{

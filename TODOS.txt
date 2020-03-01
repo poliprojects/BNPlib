@@ -4,7 +4,6 @@ FEATURES/IMPLEMENTATION
 * blocked Gibbs?
 * Mixture base? (Dirichlet, PitYor derived)
 * one method for prob_existing_cluster / prob_new_cluster ?
-* acceleration steps?
 * probas in a separate function?
 * store card vector somewhere?
 * what to do with DEBUG lines?
@@ -21,7 +20,6 @@ FEATURES/IMPLEMENTATION
 
 MANOVALANZA
 * print specifics/results of running algorithm/initial message/ending message
-* move NNIG stuff in Neal2 to the hierarchy
 * documentation with Doxygen
 * complete README
 * print functions: remove last empty column
@@ -33,3 +31,6 @@ MANOVALANZA
 MAIL MARIO
 * Are sample_unique_values() and initialize() common to ALL algorithms?
 * COLLECTORS
+
+OTHER CHE NON FAREMO
+* acceleration steps

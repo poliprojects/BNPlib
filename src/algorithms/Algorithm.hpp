@@ -2,15 +2,14 @@
 #define ALGORITHM_HPP
 
 #include <fstream>
+#include <math.h>
+#include <random> //for std::mt19937
 #include <tuple>
 #include <vector>
-#include <math.h>
+
 #include <Eigen/Dense> 
 #include <stan/math/prim/mat.hpp>
-#include <math.h>
-#include "../hierarchies/HierarchyNNIG.hpp"
-#include "../mixtures/DirichletMixture.hpp"
-#include "../hyperparameters/HypersFixedNNIG.hpp"
+
 #include "../../output.pb.h"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>

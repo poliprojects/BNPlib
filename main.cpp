@@ -21,7 +21,7 @@ int main(){
     std::normal_distribution<double> N1(mean1,sd1);
     std::normal_distribution<double> N2(mean2,sd2);
 
-    for(int i = 0; i < half; i++){
+    for(unsigned int i = 0; i < half; i++){
         data[i]      = N1(generator);
         data[i+half] = N2(generator);
     }
@@ -33,20 +33,19 @@ int main(){
     //}
     //file << std::endl;
     //file.close();
-
   
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
-
-   
     DirichletMixture mix(1); // total mass
     Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler2(
         data, mix, hy);
     //Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler8(
-      //data, 3, mix, hy);
+    //    data, 3, mix, hy);
 	
-    // Run samplers
+    // Run sampler(s)
     sampler2.run();
     //sampler8.run();
+
+    return 0;
 
     // Density stuff
     std::vector<double> grid;
@@ -74,5 +73,5 @@ int main(){
     //sampler8.write_best_clustering_to_file("clust_best1.csv");
     //sampler8.write_chain_to_file();
 
-    return 0;
+    //return 0;
 }

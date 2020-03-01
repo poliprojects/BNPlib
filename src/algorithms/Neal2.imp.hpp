@@ -59,14 +59,16 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
             	this->unique_values[k].like(this->data[i]);
 
             if(singleton == 1 && k == i){
-              probas(i,0) = this->mixture.prob_new_cluster(n, n_unique) *this->unique_values[0].eval_marg(this->data[i]);
+              probas(i,0) = this->mixture.prob_new_cluster(n, n_unique) *
+                this->unique_values[0].eval_marg(this->data[i]);
             }
  
             tot += probas(k);
         }
 
         if(singleton == 0){
-            probas(n_unique,0) = this->mixture.prob_new_cluster(n, n_unique) *this->unique_values[0].eval_marg(this->data[i]);
+            probas(n_unique,0) = this->mixture.prob_new_cluster(n, n_unique) *
+                this->unique_values[0].eval_marg(this->data[i]);
             tot += probas(n_unique,0);
         }
 
@@ -80,7 +82,8 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 // case 1 of 4: SINGLETON - SINGLETON
                 std::vector<double> temp;
                 temp.push_back(this->data[i]);
-                this->unique_values[ this->allocations[i] ].sample_given_data(temp);
+                this->unique_values[ this->allocations[i]
+                    ].sample_given_data(temp);
                 
             }
             else{ // case 2 of 4: SINGLETON - CLUSTER
@@ -100,7 +103,8 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         else{ // if singleton == 0
             if(c_new == n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
 
-                Hierarchy<Hypers> new_unique(this->unique_values[0].get_hypers());
+                Hierarchy<Hypers> new_unique(
+                    this->unique_values[0].get_hypers());
                 std::vector<double> temp;
                 temp.push_back(this->data[i]);
                 new_unique.sample_given_data(temp);
