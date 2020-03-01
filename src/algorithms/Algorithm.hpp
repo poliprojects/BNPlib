@@ -10,7 +10,7 @@
 #include <Eigen/Dense> 
 #include <stan/math/prim/mat.hpp>
 
-#include "../../output.pb.h"
+#include "../api/output.pb.h"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{

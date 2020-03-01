@@ -15,7 +15,7 @@ LDLIBS = \
 	-lpthread -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
 
 
-SRCS_OUTPUT = output.pb.cc
+SRCS_OUTPUT = src/api/output.pb.cc
 SRCS =
 OBJS = main.o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))
 
