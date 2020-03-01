@@ -43,7 +43,7 @@ int main(){
 	
     // Run sampler(s)
     //sampler2.run();
-    //sampler8.run();
+    sampler8.run();
 
     return 0;
 
