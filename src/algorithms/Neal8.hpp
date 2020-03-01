@@ -25,7 +25,7 @@ public:
     ~Neal8() = default;
 
     Neal8(const std::vector<double> &data, const int num_clusters,
-        const int n_aux, const Mixture &mixture, const Hypers &hy):
+        const int n_aux, const Mixture &mixture, const Hypers &hy) :
         Neal8<Hierarchy, Hypers, Mixture>::data(data),
         Neal8<Hierarchy, Hypers, Mixture>::num_clusters(num_clusters),
         n_aux(n_aux),

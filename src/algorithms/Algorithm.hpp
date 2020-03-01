@@ -116,7 +116,7 @@ public:
         const Mixture &mixture, const Hypers &hy) :
         data(data), num_clusters(num_clusters), mixture(mixture) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
-            for(unsigned int i = 0; i < num_clusters; i++) {
+            for(unsigned int i = 0; i < num_clusters; i++){
                 unique_values.push_back(hierarchy);
             }
             
