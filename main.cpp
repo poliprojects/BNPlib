@@ -7,33 +7,21 @@
 #include "includes_main.hpp"
 #include "math.h"
 
-int main(){
-    unsigned int n = 100;
-    std::vector<double> data(n);
-    unsigned int half = data.size()/2;
+int main(int argc, char *argv[]){
+	// Read data from main arg
+	std::ifstream file;
+	file.open(argv[1]);
+	std::string str, str2;
+	std::getline(file, str);
+	std::istringstream iss(str);
 
-    double mean1 = 4.0;
-    double mean2 = 7.0;
-    double sd1   = 1.0;
-    double sd2   = 1.0;
+	std::vector<double> data;
+	while(std::getline(iss, str2, ',')){
+		double val = ::atof(str2.c_str());
+		data.push_back(val);
+	}
+	file.close();
 
-    std::default_random_engine generator;
-    std::normal_distribution<double> N1(mean1,sd1);
-    std::normal_distribution<double> N2(mean2,sd2);
-
-    for(unsigned int i = 0; i < half; i++){
-        data[i]      = N1(generator);
-        data[i+half] = N2(generator);
-    }
-
-    //std::ofstream file;
-    //file.open("data.csv");
-    //for(auto &d : data){
-    //    file << d << ",";
-    //}
-    //file << std::endl;
-    //file.close();
-  
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
     DirichletMixture mix(1); // total mass
     //Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler2(
