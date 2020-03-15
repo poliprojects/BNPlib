@@ -15,5 +15,7 @@ You will need a terminal to run the following commands.
 ### Documentation
 * TBD
 
-### Usage
-* Run ```./main``` (or just ```main```, depending on your OS)
+### Usage examples
+* ```./main path/to/filename.csv``` and input required values to stdin
+* ```./main csv/data.csv <<< "5.0 0.1 2.0 2.0 1.0 3"``` to automatically fill in
+  all values

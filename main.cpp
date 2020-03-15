@@ -22,16 +22,24 @@ int main(int argc, char *argv[]){
 	}
 	file.close();
 
-    HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
-    DirichletMixture mix(1); // total mass
-    //Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler2(
-    //    data, mix, hy);
-    Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler8(
-        data, 3, mix, hy);
+    double mu0, lambda, alpha0, beta0;
+    std::cout << "Insert mu0, lambda, alpha0, beta0 values:" << std::endl;
+    std::cin >> mu0 >> lambda >> alpha0 >> beta0; // 5.0 0.1 2.0 2.0
+    HypersFixedNNIG hy(mu0, lambda, alpha0, beta0);
+
+    double totalmass;
+    std::cout << "Insert total mass value:" << std::endl; 
+    std::cin >> totalmass; //1.0
+    DirichletMixture mix(totalmass);
+
+    unsigned int n_aux;
+    std::cout << "Insert number of auxiliary blocks:" << std::endl;
+    std::cin >> n_aux;
+
+    Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
+       	data, n_aux, mix, hy);
 	
-    // Run sampler(s)
-    //sampler2.run();
-    sampler8.run();
+    sampler.run();
 
     return 0;
 
