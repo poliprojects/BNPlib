@@ -9,8 +9,8 @@ You will need a terminal to run the following commands.
 * Compile by running ```make```
 * Compile protobuf: run ```./install_protobuf.sh``` (or just
 ```install_protobuf.sh```, depending on your OS)
-* Compile a .proto file with protoc: run
-```lib/protobuf/src/protoc -I=. --cpp_out=. output.proto```
+* Compile a .proto file with protoc: first ```cd src/api``` then run
+```../../lib/protobuf/src/protoc -I=. --cpp_out=. output.proto```
 
 ### Documentation
 * TBD

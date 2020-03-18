@@ -1,14 +1,14 @@
 syntax = "proto3";
 
 message UniqueValues {
-    	repeated double params = 1;
-  	}
+        repeated double params = 1;
+    }
 
 message IterationOutput {
-	repeated int32 allocations = 1;
-	repeated UniqueValues phi = 2;
+    repeated int32 allocations = 1;
+    repeated UniqueValues uniquevalues = 2;
 }
 
 message ChainOutput {
-	repeated IterationOutput state = 1;
+    repeated IterationOutput chain = 1;
 }

@@ -320,7 +320,7 @@ class IterationOutput :
 
   enum : int {
     kAllocationsFieldNumber = 1,
-    kPhiFieldNumber = 2,
+    kUniquevaluesFieldNumber = 2,
   };
   // repeated int32 allocations = 1;
   int allocations_size() const;
@@ -344,23 +344,23 @@ class IterationOutput :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >*
       mutable_allocations();
 
-  // repeated .UniqueValues phi = 2;
-  int phi_size() const;
+  // repeated .UniqueValues uniquevalues = 2;
+  int uniquevalues_size() const;
   private:
-  int _internal_phi_size() const;
+  int _internal_uniquevalues_size() const;
   public:
-  void clear_phi();
-  ::UniqueValues* mutable_phi(int index);
+  void clear_uniquevalues();
+  ::UniqueValues* mutable_uniquevalues(int index);
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >*
-      mutable_phi();
+      mutable_uniquevalues();
   private:
-  const ::UniqueValues& _internal_phi(int index) const;
-  ::UniqueValues* _internal_add_phi();
+  const ::UniqueValues& _internal_uniquevalues(int index) const;
+  ::UniqueValues* _internal_add_uniquevalues();
   public:
-  const ::UniqueValues& phi(int index) const;
-  ::UniqueValues* add_phi();
+  const ::UniqueValues& uniquevalues(int index) const;
+  ::UniqueValues* add_uniquevalues();
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >&
-      phi() const;
+      uniquevalues() const;
 
   // @@protoc_insertion_point(class_scope:IterationOutput)
  private:
@@ -369,7 +369,7 @@ class IterationOutput :
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 > allocations_;
   mutable std::atomic<int> _allocations_cached_byte_size_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues > phi_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues > uniquevalues_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_output_2eproto;
 };
@@ -481,32 +481,32 @@ class ChainOutput :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kStateFieldNumber = 1,
+    kChainFieldNumber = 1,
   };
-  // repeated .IterationOutput state = 1;
-  int state_size() const;
+  // repeated .IterationOutput chain = 1;
+  int chain_size() const;
   private:
-  int _internal_state_size() const;
+  int _internal_chain_size() const;
   public:
-  void clear_state();
-  ::IterationOutput* mutable_state(int index);
+  void clear_chain();
+  ::IterationOutput* mutable_chain(int index);
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >*
-      mutable_state();
+      mutable_chain();
   private:
-  const ::IterationOutput& _internal_state(int index) const;
-  ::IterationOutput* _internal_add_state();
+  const ::IterationOutput& _internal_chain(int index) const;
+  ::IterationOutput* _internal_add_chain();
   public:
-  const ::IterationOutput& state(int index) const;
-  ::IterationOutput* add_state();
+  const ::IterationOutput& chain(int index) const;
+  ::IterationOutput* add_chain();
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >&
-      state() const;
+      chain() const;
 
   // @@protoc_insertion_point(class_scope:ChainOutput)
  private:
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput > state_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput > chain_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_output_2eproto;
 };
@@ -619,86 +619,86 @@ IterationOutput::mutable_allocations() {
   return _internal_mutable_allocations();
 }
 
-// repeated .UniqueValues phi = 2;
-inline int IterationOutput::_internal_phi_size() const {
-  return phi_.size();
+// repeated .UniqueValues uniquevalues = 2;
+inline int IterationOutput::_internal_uniquevalues_size() const {
+  return uniquevalues_.size();
 }
-inline int IterationOutput::phi_size() const {
-  return _internal_phi_size();
+inline int IterationOutput::uniquevalues_size() const {
+  return _internal_uniquevalues_size();
 }
-inline void IterationOutput::clear_phi() {
-  phi_.Clear();
+inline void IterationOutput::clear_uniquevalues() {
+  uniquevalues_.Clear();
 }
-inline ::UniqueValues* IterationOutput::mutable_phi(int index) {
-  // @@protoc_insertion_point(field_mutable:IterationOutput.phi)
-  return phi_.Mutable(index);
+inline ::UniqueValues* IterationOutput::mutable_uniquevalues(int index) {
+  // @@protoc_insertion_point(field_mutable:IterationOutput.uniquevalues)
+  return uniquevalues_.Mutable(index);
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >*
-IterationOutput::mutable_phi() {
-  // @@protoc_insertion_point(field_mutable_list:IterationOutput.phi)
-  return &phi_;
+IterationOutput::mutable_uniquevalues() {
+  // @@protoc_insertion_point(field_mutable_list:IterationOutput.uniquevalues)
+  return &uniquevalues_;
 }
-inline const ::UniqueValues& IterationOutput::_internal_phi(int index) const {
-  return phi_.Get(index);
+inline const ::UniqueValues& IterationOutput::_internal_uniquevalues(int index) const {
+  return uniquevalues_.Get(index);
 }
-inline const ::UniqueValues& IterationOutput::phi(int index) const {
-  // @@protoc_insertion_point(field_get:IterationOutput.phi)
-  return _internal_phi(index);
+inline const ::UniqueValues& IterationOutput::uniquevalues(int index) const {
+  // @@protoc_insertion_point(field_get:IterationOutput.uniquevalues)
+  return _internal_uniquevalues(index);
 }
-inline ::UniqueValues* IterationOutput::_internal_add_phi() {
-  return phi_.Add();
+inline ::UniqueValues* IterationOutput::_internal_add_uniquevalues() {
+  return uniquevalues_.Add();
 }
-inline ::UniqueValues* IterationOutput::add_phi() {
-  // @@protoc_insertion_point(field_add:IterationOutput.phi)
-  return _internal_add_phi();
+inline ::UniqueValues* IterationOutput::add_uniquevalues() {
+  // @@protoc_insertion_point(field_add:IterationOutput.uniquevalues)
+  return _internal_add_uniquevalues();
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >&
-IterationOutput::phi() const {
-  // @@protoc_insertion_point(field_list:IterationOutput.phi)
-  return phi_;
+IterationOutput::uniquevalues() const {
+  // @@protoc_insertion_point(field_list:IterationOutput.uniquevalues)
+  return uniquevalues_;
 }
 
 // -------------------------------------------------------------------
 
 // ChainOutput
 
-// repeated .IterationOutput state = 1;
-inline int ChainOutput::_internal_state_size() const {
-  return state_.size();
+// repeated .IterationOutput chain = 1;
+inline int ChainOutput::_internal_chain_size() const {
+  return chain_.size();
 }
-inline int ChainOutput::state_size() const {
-  return _internal_state_size();
+inline int ChainOutput::chain_size() const {
+  return _internal_chain_size();
 }
-inline void ChainOutput::clear_state() {
-  state_.Clear();
+inline void ChainOutput::clear_chain() {
+  chain_.Clear();
 }
-inline ::IterationOutput* ChainOutput::mutable_state(int index) {
-  // @@protoc_insertion_point(field_mutable:ChainOutput.state)
-  return state_.Mutable(index);
+inline ::IterationOutput* ChainOutput::mutable_chain(int index) {
+  // @@protoc_insertion_point(field_mutable:ChainOutput.chain)
+  return chain_.Mutable(index);
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >*
-ChainOutput::mutable_state() {
-  // @@protoc_insertion_point(field_mutable_list:ChainOutput.state)
-  return &state_;
+ChainOutput::mutable_chain() {
+  // @@protoc_insertion_point(field_mutable_list:ChainOutput.chain)
+  return &chain_;
 }
-inline const ::IterationOutput& ChainOutput::_internal_state(int index) const {
-  return state_.Get(index);
+inline const ::IterationOutput& ChainOutput::_internal_chain(int index) const {
+  return chain_.Get(index);
 }
-inline const ::IterationOutput& ChainOutput::state(int index) const {
-  // @@protoc_insertion_point(field_get:ChainOutput.state)
-  return _internal_state(index);
+inline const ::IterationOutput& ChainOutput::chain(int index) const {
+  // @@protoc_insertion_point(field_get:ChainOutput.chain)
+  return _internal_chain(index);
 }
-inline ::IterationOutput* ChainOutput::_internal_add_state() {
-  return state_.Add();
+inline ::IterationOutput* ChainOutput::_internal_add_chain() {
+  return chain_.Add();
 }
-inline ::IterationOutput* ChainOutput::add_state() {
-  // @@protoc_insertion_point(field_add:ChainOutput.state)
-  return _internal_add_state();
+inline ::IterationOutput* ChainOutput::add_chain() {
+  // @@protoc_insertion_point(field_add:ChainOutput.chain)
+  return _internal_add_chain();
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >&
-ChainOutput::state() const {
-  // @@protoc_insertion_point(field_list:ChainOutput.state)
-  return state_;
+ChainOutput::chain() const {
+  // @@protoc_insertion_point(field_list:ChainOutput.chain)
+  return chain_;
 }
 
 #ifdef __GNUC__

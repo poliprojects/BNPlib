@@ -1,37 +1,26 @@
 TODO LIST
 
 FEATURES/IMPLEMENTATION
-* blocked Gibbs?
 * Mixture base? (Dirichlet, PitYor derived)
 * one method for prob_existing_cluster / prob_new_cluster ?
 * probas in a separate function?
 * store card vector somewhere?
 * what to do with DEBUG lines?
-* !!! deal with the extra dynamically allocated Hypers
+* deal with the extra dynamically allocated Hypers (?)
 * constructors (arguments)
-* Hypers not fixed
 * a way to erase and add clusters more efficiently?
 * check, in write_clust_...(), if clust_estimate() has been called, and similar
   flags
-* aggiungere step sample_weights/sample_hyper return 0 o enable_if /
-   type_dispatch? sample_weights : classe template?
 * stan con quale rng??
 
 
-
 MANOVALANZA
-* print specifics/results of running algorithm/initial message/ending message
 * documentation with Doxygen
 * complete README
 * print functions: remove last empty column
-* rename proto messages
-* unsigned int -> size_t in for loops
-* data -> Eigen vector/matrix
+* data and grid -> Eigen vector/matrix
 
-
-MAIL MARIO
-* Are sample_unique_values() and initialize() common to ALL algorithms?
-* COLLECTORS
 
 OTHER CHE NON FAREMO
+* blocked Gibbs
 * acceleration steps
