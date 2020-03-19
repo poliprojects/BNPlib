@@ -19,12 +19,12 @@ protected:
 
 public:
     // Other tools:
-    void eval_density(const std::vector<double> grid) override;
+    void eval_density(const Eigen::MatrixXd grid) override;
 
     // Destructors and constructors:
     ~Neal8() = default;
 
-    Neal8(const std::vector<double> &data, const int num_clusters,
+    Neal8(const Eigen::MatrixXd &data, const int num_clusters,
         const int n_aux, const Mixture &mixture, const Hypers &hy) :
         Neal2<Hierarchy, Hypers, Mixture>::Neal2(data, num_clusters,
         mixture, hy), n_aux(n_aux) {
@@ -35,9 +35,9 @@ public:
     }
 
     // If no # initial clusters is given, it will be set equal to the data size
-    Neal8(const std::vector<double> &data, const int n_aux,
+    Neal8(const Eigen::MatrixXd &data, const int n_aux,
         const Mixture &mixture, const Hypers &hy) :
-        Neal8(data, data.size(), n_aux, mixture, hy) {}
+        Neal8(data, data.rows(), n_aux, mixture, hy) {}
 
     // Getters and setters
     const unsigned int get_n_aux(){return n_aux;}

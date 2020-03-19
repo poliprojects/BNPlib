@@ -3,17 +3,14 @@
 
 #include "HierarchyNNIG.hpp"
 
-template<class Hypers> 
-double HierarchyNNIG<Hypers>::like(double datum){
-        return exp(stan::math::normal_lpdf(datum, state[0], state[1]));
-}
+
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyNNIG<Hypers>::like(std::vector<double> datum){
+Eigen::VectorXd HierarchyNNIG<Hypers>::like(Eigen::VectorXd datum){
     // TODO stan per vector?? 
     Eigen::VectorXd result(datum.size());
     for(int i = 0; i < datum.size(); i++){
-        result(i) = exp(stan::math::normal_lpdf(datum[i], state[0], state[1]));
+        result(i) = exp(stan::math::normal_lpdf(datum.row(i), state[0], state[1]));
     }
     return result;
 }
@@ -29,17 +26,10 @@ void HierarchyNNIG<Hypers>::draw(){
 }
 
 
-template<class Hypers> 
-double HierarchyNNIG<Hypers>::eval_marg(double datum){ // TODO
-	double sigtilde = sqrt( hypers->get_beta0()*(hypers->get_lambda()+1) /
-        (hypers->get_alpha0()*hypers->get_lambda()) );
-    return exp( stan::math::student_t_lpdf(datum,
-        2*hypers->get_alpha0(), hypers->get_mu0(), sigtilde) ); 
-}
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(std::vector<double> datum){
+Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(Eigen::VectorXd datum){
 	double sigtilde = sqrt( hypers->get_beta0()*(hypers->get_lambda()+1) /
         (hypers->get_alpha0()*hypers->get_lambda()) );
     // TODO stan per vector?? // TODO anche per tutto il resto
@@ -54,7 +44,7 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(std::vector<double> datum){
 
 template<class Hypers> 
 std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
-    std::vector<double> data, double mu0, double alpha0, double beta0,
+    Eigen::VectorXd data, double mu0, double alpha0, double beta0,
     double lambda0){
 
     double mu_post, alpha_post, beta_post, lambda_post;
@@ -65,14 +55,13 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
     }
     
     // Compute sample mean
-    double y_bar = accumulate(data.begin(), data.end(), 0.0) / n;
+    double y_bar = data.mean();
 
     // Compute parameters
     mu_post = (lambda0 * mu0 + n * y_bar) / (lambda0 + n);
     alpha_post = alpha0 + 0.5 * n;
     // double ss = n * arma::var(data, 1); // divides by n, not n-1
-    double ss = std::inner_product( data.begin(), data.end(), data.begin(),
-        0.0 ) - n*y_bar*y_bar;
+    double ss = (data.dot(data)) - n*y_bar*y_bar;
     beta_post = beta0 + 0.5 * ss + 0.5 * lambda0 * n * std::pow((y_bar - mu0), 2) /
         (n + lambda0);
     lambda_post = lambda0 + n;
@@ -82,7 +71,7 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
 
 
 template<class Hypers> 
-void HierarchyNNIG<Hypers>::sample_given_data(std::vector<double> data){
+void HierarchyNNIG<Hypers>::sample_given_data(Eigen::VectorXd data){
     // Get current values of parameters
     double mu0     = hypers->get_mu0();
     double lambda0 = hypers->get_lambda();

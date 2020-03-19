@@ -52,7 +52,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(){
 
     unsigned int niter = maxiter - burnin;
     Eigen::VectorXd errors(niter);
-    int n = data.size();
+    int n = data.rows();
     Eigen::MatrixXd tot_diss(n, n);
     tot_diss = Eigen::MatrixXd::Zero(n, n);
     std::vector<Eigen::MatrixXd> all_diss;
@@ -109,9 +109,9 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file
     std::ofstream file;
     file.open(filename);
 
-    for(int i = 0; i < data.size(); i++){
+    for(int i = 0; i < data.rows(); i++){ // TODO tutti i write da modificare con dati multivar
         auto params = unique_values[ allocations[i] ].get_state();
-        file << i << "," << data[i] << "," << allocations[i];
+        file << i << "," << data.row(i) << "," << allocations[i];
         for(int j = 0; j < params.size(); j++){
             file << "," << params[j];
         }
@@ -130,9 +130,9 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
     std::ofstream file;
     file.open(filename);
 
-    for(int i = 0; i < data.size(); i++){
+    for(int i = 0; i < data.rows(); i++){
         unsigned int ci = best_clust.allocations(i);
-        file << i << "," << data[i] << "," << ci;
+        file << i << "," << data.row(i) << "," << ci;
         for(int j = 0; j < best_clust.uniquevalues(ci).params_size(); j++){
             file << "," << best_clust.uniquevalues(ci).params(j);
         }
@@ -154,10 +154,10 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_chain_to_file(
     // for each iteration of the algorithm
     for(int iter = 0; iter < chain.chain_size(); iter++){
         // for each data point
-        for(int i = 0; i < data.size(); i++){
+        for(int i = 0; i < data.rows(); i++){
             auto state_iter = chain.chain(iter);
             unsigned int ci = state_iter.allocations(i);
-            file << iter << "," << i << "," << data[i] << "," << ci;
+            file << iter << "," << i << "," << data.row(i) << "," << ci;
             for(int j = 0; j < state_iter.uniquevalues(ci).params_size(); j++){
                 file << "," << state_iter.uniquevalues(ci).params(j);
             }

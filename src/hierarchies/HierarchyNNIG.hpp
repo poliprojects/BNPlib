@@ -33,19 +33,17 @@ public:
     void set_state(int pos, double val){state[pos] = val;}
     int get_count(){return hypers.use_count();} // TODO what?
 
-    // Computation tools
-    double eval_marg(double datum);
-    double like(double datum);
+  
 
-    Eigen::VectorXd eval_marg(std::vector<double> datum);
-    Eigen::VectorXd like(std::vector<double> datum);
+    Eigen::VectorXd eval_marg(Eigen::VectorXd datum);
+    Eigen::VectorXd like(Eigen::VectorXd datum);
 
     void draw();
 
-    std::vector<double> normal_gamma_update(std::vector<double> data,
+    std::vector<double> normal_gamma_update(Eigen::VectorXd data,
         double mu0, double alpha0, double beta0, double lambda0);
 
-    void sample_given_data(std::vector<double> data);
+    void sample_given_data(Eigen::VectorXd data);
 
 };
 

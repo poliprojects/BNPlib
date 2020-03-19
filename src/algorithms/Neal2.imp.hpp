@@ -17,7 +17,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
     for(int h = 0; h < this->num_clusters; h++){
       this->allocations.push_back(h);
     }
-    for(int j = this->num_clusters; j < this->data.size(); j++){
+    for(int j = this->num_clusters; j < this->data.rows(); j++){
         int num = distribution(generator); //TODO da stan?
         this->allocations[j] = num;
     }
@@ -27,7 +27,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
     unsigned int k, n_unique, singleton;
-    unsigned int n = this->data.size();
+    unsigned int n = this->data.rows();
 
     for(int i = 0; i < n; i++){ // for each data unit data[i]
 
@@ -56,20 +56,20 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
         for(int k = 0; k < n_unique; k++){
             probas(k) = this->mixture.prob_existing_cluster(card[k],n) *
-            	this->unique_values[k].like(this->data[i]);
+            	this->unique_values[k].like(this->data.row(i))(0);
 
             if(singleton == 1 && k == i){
-              probas(i,0) = this->mixture.prob_new_cluster(n, n_unique) *
-                this->unique_values[0].eval_marg(this->data[i]);
+              probas(i) = this->mixture.prob_new_cluster(n, n_unique) *
+                this->unique_values[0].eval_marg(this->data.row(i))(0);
             }
  
             tot += probas(k);
         }
 
         if(singleton == 0){
-            probas(n_unique,0) = this->mixture.prob_new_cluster(n, n_unique) *
-                this->unique_values[0].eval_marg(this->data[i]);
-            tot += probas(n_unique,0);
+            probas(n_unique) = this->mixture.prob_new_cluster(n, n_unique) *
+                this->unique_values[0].eval_marg(this->data.row(i))(0);
+            tot += probas(n_unique);
         }
 
         // Normalize
@@ -80,8 +80,8 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         if(singleton == 1){
             if(c_new == this->allocations[i]){
                 // case 1 of 4: SINGLETON - SINGLETON
-                std::vector<double> temp;
-                temp.push_back(this->data[i]);
+                Eigen::VectorXd temp;
+                temp=this->data.row(i); // initialize with datum if univariate, with a vector (dim p) if multi
                 this->unique_values[ this->allocations[i]
                     ].sample_given_data(temp);
                 
@@ -105,8 +105,8 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
                 Hierarchy<Hypers> new_unique(
                     this->unique_values[0].get_hypers());
-                std::vector<double> temp;
-                temp.push_back(this->data[i]);
+		Eigen::VectorXd temp;
+                temp=this->data.row(i);
                 new_unique.sample_given_data(temp);
                 this->unique_values.push_back(new_unique); 
                 this->allocations[i] = n_unique;
@@ -142,9 +142,13 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
     //}
 
     for(int j = 0; j < this->num_clusters; j++){
-        std::vector<double> curr_data;
-        for(auto &idx : clust_idxs[j])
-            curr_data.push_back(this->data[idx]);
+	Eigen::MatrixXd curr_data;
+     	int k=0;
+        for(auto &idx : clust_idxs[j]){
+            curr_data.row(k)=this->data.row(idx);	
+            k+=1;
+	}
+
         this->unique_values[j].sample_given_data(curr_data);
     }
 
@@ -154,12 +158,12 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
-        const std::vector<double> grid){
+        const Eigen::MatrixXd grid){
     this->density.first = grid;
 
-    Eigen::VectorXd dens(grid.size());
+    Eigen::VectorXd dens(grid.rows());
     double M = this->mixture.get_totalmass();
-    int n = this->data.size();
+    int n = this->data.rows();
     IterationOutput state;
 
     for(unsigned int iter = 0; iter < this->chain.chain_size(); iter++){

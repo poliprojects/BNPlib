@@ -18,7 +18,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     // * using a (multi)map?
     // Initialize some relevant variables
     unsigned int k, n_unique, singleton;
-    unsigned int n = this->data.size();
+    unsigned int n = this->data.rows();
 
     for(int i = 0; i < n; i++){ // for each data unit data[i]
 
@@ -56,14 +56,14 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         for(int k = 0; k < n_unique ; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
             probas(k) = this->mixture.prob_existing_cluster(card[k],n) *
-            	this->unique_values[k].like(this->data[i]);
+            	this->unique_values[k].like(this->data.row(i))(0);
             tot += probas(k);
         }
 
         for(int k = 0; k < n_aux; k++){
             probas(n_unique+k) = this->mixture.prob_new_cluster(n, n_unique) *
-                aux_unique_values[k].like(this->data[i]) / n_aux;
-            tot += probas(n_unique+k,0);
+                aux_unique_values[k].like(this->data.row(i))(0) / n_aux;
+            tot += probas(n_unique+k);
         }
         probas = probas / tot;
 
@@ -114,16 +114,16 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
-        const std::vector<double> grid){
+        const Eigen::MatrixXd grid){
     this->density.first = grid;
 
     //std::ofstream file;
     //unsigned int step = 1000;
     //file.open("dens_estimate_iterations.csv");
 
-    Eigen::VectorXd dens(grid.size());
+    Eigen::VectorXd dens(grid.rows());
     double M = this->mixture.get_totalmass();
-    int n = this->data.size();
+    int n = this->data.rows();
     IterationOutput state;
 
     for(int iter = 0; iter < this->chain.chain_size(); iter++){
@@ -134,7 +134,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         std::vector<unsigned int> card(state.uniquevalues_size(),
             0); // TODO salviamoci ste card da qualche parte
         std::vector<double> params(state.uniquevalues(0).params_size());
-        Eigen::VectorXd dens_addendum = Eigen::MatrixXd::Zero(grid.size(), 1);
+        Eigen::VectorXd dens_addendum = Eigen::MatrixXd::Zero(grid.rows(), 1);
 
         for(int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;

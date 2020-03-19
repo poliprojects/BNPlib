@@ -22,10 +22,10 @@ protected:
     int num_clusters;
 
     // Data and values containers
-    std::vector<double> data;
+    Eigen::MatrixXd data;
     std::vector<unsigned int> allocations;
     std::vector<Hierarchy<Hypers>> unique_values;
-    std::pair< std::vector<double>, Eigen::VectorXd > density; // TODO w/ Eigen
+    std::pair< Eigen::MatrixXd, Eigen::VectorXd > density; // TODO w/ Eigen
     Mixture mixture;
     ChainOutput chain;
     IterationOutput best_clust;
@@ -95,7 +95,7 @@ public:
     // Other tools
     unsigned int cluster_estimate();
 
-    virtual void eval_density(const std::vector<double> grid) = 0;
+    virtual void eval_density(const Eigen::MatrixXd grid) = 0;
 
     const void write_final_clustering_to_file(
         std::string filename = "clust_final.csv");
@@ -112,7 +112,7 @@ public:
     // Destructors and constructors:
     virtual ~Algorithm() = default;
 
-    Algorithm(const std::vector<double> &data, const int num_clusters,
+    Algorithm(const Eigen::MatrixXd &data, const int num_clusters,
         const Mixture &mixture, const Hypers &hy) :
         data(data), num_clusters(num_clusters), mixture(mixture) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
@@ -123,9 +123,9 @@ public:
     }
 
     // If no # initial clusters is given, it will be set equal to the data size:
-    Algorithm(const std::vector<double> &data, const Mixture &mixture,
+    Algorithm(const Eigen::MatrixXd &data, const Mixture &mixture,
         const Hypers &hy) :
-        Algorithm(data, data.size(), mixture, hy) {}
+        Algorithm(data, data.rows(), mixture, hy) {}
 
     // Getters
     const unsigned int get_maxiter(){return maxiter;}
