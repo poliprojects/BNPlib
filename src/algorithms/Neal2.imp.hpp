@@ -149,7 +149,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
             curr_data.row(k)=this->data.row(idx);	
             k+=1;
 	}
-        curr_data.conservativeResize(k,Eigen::NoChange);
+        curr_data.conservativeResize(k,Eigen::NoChange); // TODO: più efficiente?
         this->unique_values[j].sample_given_data(curr_data);
     }
 

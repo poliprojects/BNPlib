@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
 		
 	}
 	file.close();
-    Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(v.data(), v.size());
+    Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(v.data(), v.size()); // TODO: meglio con conservative resize?
 
 
     double mu0, lambda, alpha0, beta0;
