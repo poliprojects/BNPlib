@@ -28,7 +28,7 @@ public:
         const int n_aux, const Mixture &mixture, const Hypers &hy) :
         Neal2<Hierarchy, Hypers, Mixture>::Neal2(data, num_clusters,
         mixture, hy), n_aux(n_aux) {
-        Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
+
         for(unsigned int i = 0; i < n_aux; i++){
             aux_unique_values.push_back(this->unique_values[0]);
         }

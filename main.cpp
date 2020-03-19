@@ -23,18 +23,18 @@ int main(int argc, char *argv[]){
 	file.close();
 
     double mu0, lambda, alpha0, beta0;
-    std::cout << "Insert mu0, lambda, alpha0, beta0 values:" << std::endl;
-    std::cin >> mu0 >> lambda >> alpha0 >> beta0; // 5.0 0.1 2.0 2.0
+    //std::cout << "Insert mu0, lambda, alpha0, beta0 values:" << std::endl;
+    //std::cin >> mu0 >> lambda >> alpha0 >> beta0; // 5.0 0.1 2.0 2.0
     // HypersFixedNNIG hy(mu0, lambda, alpha0, beta0);
 
     double totalmass;
-    std::cout << "Insert total mass value:" << std::endl; 
-    std::cin >> totalmass; //1.0
+    //std::cout << "Insert total mass value:" << std::endl; 
+    //std::cin >> totalmass; //1.0
     // DirichletMixture mix(totalmass);
 
-    unsigned int n_aux;
-    std::cout << "Insert number of auxiliary blocks:" << std::endl;
-    std::cin >> n_aux;
+    int n_aux(3);
+    //std::cout << "Insert number of auxiliary blocks:" << std::endl;
+    //std::cin >> n_aux;
 
     //std::ofstream file;
     //file.open("data.csv");
@@ -46,13 +46,13 @@ int main(int argc, char *argv[]){
   
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
     DirichletMixture mix(1); // total mass
-    Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler2(
-        data, mix, hy);
-    //Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler8(
-      //  data, 3, mix, hy);
+    //Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler2(
+      //  data, mix, hy);
+    Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler8(
+        data, n_aux, mix, hy);
 	
     // Run sampler(s)
-    sampler2.run();
+    //sampler2.run();
     //sampler8.run();
 
     //Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]){
     //sampler8.eval_density(grid);
     //sampler8.write_density_to_file("density_m50.csv");
 
-    sampler2.eval_density(grid);
+    //sampler2.eval_density(grid);
     //sampler2.write_density_to_file("densityneal2.csv");
 	//unsigned int i_cap = sampler2.cluster_estimate();
     //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
