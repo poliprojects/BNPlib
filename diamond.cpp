@@ -25,8 +25,11 @@ public:
 };
 
 int main(int argc, char const *argv[])
-{
+{	B b;	
+	C c;
 	D d;
+	b.foo();
+	c.foo();
 	d.foo();
 	return 0;
 }

@@ -17,7 +17,7 @@ class Algorithm{
 
 protected:
     // Mehtods parameters
-    unsigned int maxiter = 20000;
+    unsigned int maxiter = 100000;
     unsigned int burnin = 5000;
     int num_clusters;
 
