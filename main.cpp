@@ -46,30 +46,12 @@ int main(int argc, char *argv[]){
   
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
     DirichletMixture mix(1); // total mass
-<<<<<<< HEAD
-    //Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler2(
-      //  data, mix, hy);
-    Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler8(
-        data, n_aux, mix, hy);
-	
-    // Run sampler(s)
-    //sampler2.run();
-    //sampler8.run();
-=======
+
     Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
         data, mix, hy);
-    //Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
-      //  data, 3, mix, hy);
 	
-    // Run sampler(s)
+    // Run sampler
     sampler.run();
->>>>>>> 3a5ab117e3f3e9471e7c90d1f503ec865c5d9b81
-
-    //Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
-      // 	data, n_aux, mix, hy);
-	
-    //sampler.run();
-
 
     return 0;
 
@@ -85,25 +67,13 @@ int main(int argc, char *argv[]){
     //sampler.eval_density(grid);
     //sampler.write_density_to_file("density_m50.csv");
 
-<<<<<<< HEAD
-    //sampler2.eval_density(grid);
-    //sampler2.write_density_to_file("densityneal2.csv");
-	//unsigned int i_cap = sampler2.cluster_estimate();
-=======
+    // Density and clustering stuff
     sampler.eval_density(grid);
-    //sampler.write_density_to_file("densityneal2.csv");
+    //sampler.write_density_to_file();
 	//unsigned int i_cap = sampler.cluster_estimate();
->>>>>>> 3a5ab117e3f3e9471e7c90d1f503ec865c5d9b81
     //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
     //sampler.write_final_clustering_to_file();
     //sampler.write_best_clustering_to_file();
 
-    // Clustering stuff
-    //unsigned int i_cap = sampler.cluster_estimate();
-    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    //sampler.write_final_clustering_to_file("clust_final0.25.csv");
-    //sampler.write_best_clustering_to_file("clust_best1.csv");
-    //sampler.write_chain_to_file();
-
-    //return 0;
+    return 0;
 }
