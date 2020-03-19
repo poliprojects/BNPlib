@@ -58,25 +58,27 @@ int main(int argc, char *argv[]){
     // Run sampler
     sampler.run();
 
-    return 0;
+    
 
     // Density stuff
-    Eigen::VectorXd grid;
+    //Eigen::VectorXd grid;
     double temp = 0.0;
     double step = 0.05;
     double upp_bnd = 10.0;
+    std::vector<double> v_temp;
     while(temp <= upp_bnd){
-        grid<<temp;
+        v_temp.push_back(temp);
         temp += step;
     }
-    //sampler.eval_density(grid);
+    Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(v_temp.data(), v_temp.size()); 
+    sampler.eval_density(grid);
     //sampler.write_density_to_file("density_m50.csv");
 
     // Density and clustering stuff
     //sampler.eval_density(grid);
     //sampler.write_density_to_file();
-	//unsigned int i_cap = sampler.cluster_estimate();
-    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+	unsigned int i_cap = sampler.cluster_estimate();
+    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
     //sampler.write_final_clustering_to_file();
     //sampler.write_best_clustering_to_file();
 
