@@ -89,13 +89,13 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_output_2eproto::offsets[] PROT
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::IterationOutput, allocations_),
-  PROTOBUF_FIELD_OFFSET(::IterationOutput, phi_),
+  PROTOBUF_FIELD_OFFSET(::IterationOutput, uniquevalues_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ChainOutput, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::ChainOutput, state_),
+  PROTOBUF_FIELD_OFFSET(::ChainOutput, chain_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::UniqueValues)},
@@ -111,10 +111,10 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_output_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\014output.proto\"\036\n\014UniqueValues\022\016\n\006params"
-  "\030\001 \003(\001\"B\n\017IterationOutput\022\023\n\013allocations"
-  "\030\001 \003(\005\022\032\n\003phi\030\002 \003(\0132\r.UniqueValues\".\n\013Ch"
-  "ainOutput\022\037\n\005state\030\001 \003(\0132\020.IterationOutp"
-  "utb\006proto3"
+  "\030\001 \003(\001\"K\n\017IterationOutput\022\023\n\013allocations"
+  "\030\001 \003(\005\022#\n\014uniquevalues\030\002 \003(\0132\r.UniqueVal"
+  "ues\".\n\013ChainOutput\022\037\n\005chain\030\001 \003(\0132\020.Iter"
+  "ationOutputb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_output_2eproto_deps[1] = {
 };
@@ -126,7 +126,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_out
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_output_2eproto_once;
 static bool descriptor_table_output_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_output_2eproto = {
-  &descriptor_table_output_2eproto_initialized, descriptor_table_protodef_output_2eproto, "output.proto", 170,
+  &descriptor_table_output_2eproto_initialized, descriptor_table_protodef_output_2eproto, "output.proto", 179,
   &descriptor_table_output_2eproto_once, descriptor_table_output_2eproto_sccs, descriptor_table_output_2eproto_deps, 3, 0,
   schemas, file_default_instances, TableStruct_output_2eproto::offsets,
   file_level_metadata_output_2eproto, 3, file_level_enum_descriptors_output_2eproto, file_level_service_descriptors_output_2eproto,
@@ -345,7 +345,7 @@ IterationOutput::IterationOutput(const IterationOutput& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
       allocations_(from.allocations_),
-      phi_(from.phi_) {
+      uniquevalues_(from.uniquevalues_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:IterationOutput)
 }
@@ -378,7 +378,7 @@ void IterationOutput::Clear() {
   (void) cached_has_bits;
 
   allocations_.Clear();
-  phi_.Clear();
+  uniquevalues_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -399,13 +399,13 @@ const char* IterationOutput::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPAC
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // repeated .UniqueValues phi = 2;
+      // repeated .UniqueValues uniquevalues = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_phi(), ptr);
+            ptr = ctx->ParseMessage(_internal_add_uniquevalues(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
@@ -446,12 +446,12 @@ failure:
     }
   }
 
-  // repeated .UniqueValues phi = 2;
+  // repeated .UniqueValues uniquevalues = 2;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_phi_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->_internal_uniquevalues_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(2, this->_internal_phi(i), target, stream);
+      InternalWriteMessage(2, this->_internal_uniquevalues(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -485,9 +485,9 @@ size_t IterationOutput::ByteSizeLong() const {
     total_size += data_size;
   }
 
-  // repeated .UniqueValues phi = 2;
-  total_size += 1UL * this->_internal_phi_size();
-  for (const auto& msg : this->phi_) {
+  // repeated .UniqueValues uniquevalues = 2;
+  total_size += 1UL * this->_internal_uniquevalues_size();
+  for (const auto& msg : this->uniquevalues_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
@@ -524,7 +524,7 @@ void IterationOutput::MergeFrom(const IterationOutput& from) {
   (void) cached_has_bits;
 
   allocations_.MergeFrom(from.allocations_);
-  phi_.MergeFrom(from.phi_);
+  uniquevalues_.MergeFrom(from.uniquevalues_);
 }
 
 void IterationOutput::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -549,7 +549,7 @@ void IterationOutput::InternalSwap(IterationOutput* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   allocations_.InternalSwap(&other->allocations_);
-  phi_.InternalSwap(&other->phi_);
+  uniquevalues_.InternalSwap(&other->uniquevalues_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata IterationOutput::GetMetadata() const {
@@ -573,7 +573,7 @@ ChainOutput::ChainOutput()
 ChainOutput::ChainOutput(const ChainOutput& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
-      state_(from.state_) {
+      chain_(from.chain_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:ChainOutput)
 }
@@ -605,7 +605,7 @@ void ChainOutput::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  state_.Clear();
+  chain_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -616,13 +616,13 @@ const char* ChainOutput::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // repeated .IterationOutput state = 1;
+      // repeated .IterationOutput chain = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_state(), ptr);
+            ptr = ctx->ParseMessage(_internal_add_chain(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
@@ -654,12 +654,12 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .IterationOutput state = 1;
+  // repeated .IterationOutput chain = 1;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_state_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->_internal_chain_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, this->_internal_state(i), target, stream);
+      InternalWriteMessage(1, this->_internal_chain(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -678,9 +678,9 @@ size_t ChainOutput::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .IterationOutput state = 1;
-  total_size += 1UL * this->_internal_state_size();
-  for (const auto& msg : this->state_) {
+  // repeated .IterationOutput chain = 1;
+  total_size += 1UL * this->_internal_chain_size();
+  for (const auto& msg : this->chain_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
@@ -716,7 +716,7 @@ void ChainOutput::MergeFrom(const ChainOutput& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  state_.MergeFrom(from.state_);
+  chain_.MergeFrom(from.chain_);
 }
 
 void ChainOutput::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -740,7 +740,7 @@ bool ChainOutput::IsInitialized() const {
 void ChainOutput::InternalSwap(ChainOutput* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  state_.InternalSwap(&other->state_);
+  chain_.InternalSwap(&other->chain_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ChainOutput::GetMetadata() const {

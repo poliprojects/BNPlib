@@ -126,23 +126,23 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     int n = this->data.size();
     IterationOutput state;
 
-    for(int iter = 0; iter < this->chain.state_size(); iter++){
+    for(int iter = 0; iter < this->chain.chain_size(); iter++){
         // for each iteration of the algorithm
         //std::cout << iter << std::endl; // DEBUG
 
-        state = *(this->chain.mutable_state(iter));
-        std::vector<unsigned int> card(state.phi_size(),
+        state = *(this->chain.mutable_chain(iter));
+        std::vector<unsigned int> card(state.uniquevalues_size(),
             0); // TODO salviamoci ste card da qualche parte
-        std::vector<double> params(state.phi(0).params_size());
+        std::vector<double> params(state.uniquevalues(0).params_size());
         Eigen::VectorXd dens_addendum = Eigen::MatrixXd::Zero(grid.size(), 1);
 
         for(int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
         Hierarchy<Hypers> temp_hier(this->unique_values[0].get_hypers());
-        for(int h = 0; h < state.phi_size(); h++){
-            for(int k = 0; k < state.phi(h).params_size(); k++){
-                params[k] = state.phi(h).params(k);
+        for(int h = 0; h < state.uniquevalues_size(); h++){
+            for(int k = 0; k < state.uniquevalues(h).params_size(); k++){
+                params[k] = state.uniquevalues(h).params(k);
             }
             temp_hier.set_state(params);
 
@@ -172,7 +172,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     //     std::cout << dens(i) << " ";
     // std::cout << std::endl;
 
-    this->density.second = dens / this->chain.state_size();
+    this->density.second = dens / this->chain.chain_size();
 
     //DEBUG:
     // for(int i = 0; i < grid.size(); i++)

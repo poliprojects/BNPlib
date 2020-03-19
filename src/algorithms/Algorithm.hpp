@@ -131,7 +131,9 @@ public:
     const unsigned int get_maxiter(){return maxiter;}
     const unsigned int get_burnin(){return burnin;}
     const unsigned int get_num_clusters(){return num_clusters;}
-    const unsigned int get_num_clusters_best(){return best_clust.phi_size();}
+    const unsigned int get_num_clusters_best(){
+        return best_clust.uniquevalues_size();
+    }
 
     // Setters
     void set_maxiter(const unsigned int maxiter){maxiter = maxiter;}

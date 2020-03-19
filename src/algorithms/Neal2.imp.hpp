@@ -162,20 +162,20 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
     int n = this->data.size();
     IterationOutput state;
 
-    for(unsigned int iter = 0; iter < this->chain.state_size(); iter++){
+    for(unsigned int iter = 0; iter < this->chain.chain_size(); iter++){
         // for each iteration of the algorithm
 
-        state = *(this->chain.mutable_state(iter)); // TODO does it work?
-        std::vector<unsigned int> card(state.phi_size(),
+        state = *(this->chain.mutable_chain(iter)); // TODO does it work?
+        std::vector<unsigned int> card(state.uniquevalues_size(),
             0); // TODO salviamoci ste card da qualche parte
-        std::vector<double> params(state.phi(0).params_size());
+        std::vector<double> params(state.uniquevalues(0).params_size());
         for(unsigned int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
         Hierarchy<Hypers> temp_hier(this->unique_values[0].get_hypers());
-        for(unsigned int h = 0; h < state.phi_size(); h++){
-            for(int k = 0; k < state.phi(h).params_size(); k++){
-                params[k] = state.phi(h).params(k);
+        for(unsigned int h = 0; h < state.uniquevalues_size(); h++){
+            for(int k = 0; k < state.uniquevalues(h).params_size(); k++){
+                params[k] = state.uniquevalues(h).params(k);
             }
             temp_hier.set_state(params);
 
@@ -191,7 +191,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
     //     std::cout << dens(i) << " ";
     // std::cout << std::endl;
 
-    this->density.second = dens / this->chain.state_size();
+    this->density.second = dens / this->chain.chain_size();
 
     //DEBUG:
     // for(int i = 0; i < grid.size(); i++)

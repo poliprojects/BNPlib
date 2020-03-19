@@ -16,12 +16,12 @@ void Algorithm<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
         for(auto &par : unique_values[i].get_state()){
             temp.add_params(par);
         }
-        iter_out.add_phi();
-        *iter_out.mutable_phi(i) = temp;
+        iter_out.add_uniquevalues();
+        *iter_out.mutable_uniquevalues(i) = temp;
     }
 
-    chain.add_state();
-    *chain.mutable_state(iter-burnin) = iter_out;
+    chain.add_chain();
+    *chain.mutable_chain(iter-burnin) = iter_out;
 
     //print_state(); //DEBUG
 }
@@ -59,7 +59,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     IterationOutput temp;
     
     for(int h = 0; h < niter; h++){
-        temp = *chain.mutable_state(h);
+        temp = *chain.mutable_chain(h);
         Eigen::MatrixXd dissim(n, n);
         dissim = Eigen::MatrixXd::Zero(n, n);
         for(int i = 0; i < n; i++){
@@ -94,8 +94,8 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     //file2 << all_diss[i];
     //file2.close();
 
-    best_clust = chain.state(i);
-    std::cout << best_clust.phi_size() <<
+    best_clust = chain.chain(i);
+    std::cout << best_clust.uniquevalues_size() <<
         " clusters were found via least square minimization" << std::endl;
     return i;
 }
@@ -133,8 +133,8 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
     for(int i = 0; i < data.size(); i++){
         unsigned int ci = best_clust.allocations(i);
         file << i << "," << data[i] << "," << ci;
-        for(int j = 0; j < best_clust.phi(ci).params_size(); j++){
-            file << "," << best_clust.phi(ci).params(j);
+        for(int j = 0; j < best_clust.uniquevalues(ci).params_size(); j++){
+            file << "," << best_clust.uniquevalues(ci).params(j);
         }
         file << std::endl;
     }
@@ -152,14 +152,14 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_chain_to_file(
     file.open(filename);
 
     // for each iteration of the algorithm
-    for(int iter = 0; iter < chain.state_size(); iter++){
+    for(int iter = 0; iter < chain.chain_size(); iter++){
         // for each data point
         for(int i = 0; i < data.size(); i++){
-            auto state_iter = chain.state(iter);
+            auto state_iter = chain.chain(iter);
             unsigned int ci = state_iter.allocations(i);
             file << iter << "," << i << "," << data[i] << "," << ci;
-            for(int j = 0; j < state_iter.phi(ci).params_size(); j++){
-                file << "," << state_iter.phi(ci).params(j);
+            for(int j = 0; j < state_iter.uniquevalues(ci).params_size(); j++){
+                file << "," << state_iter.uniquevalues(ci).params(j);
             }
             file << std::endl;
         }
