@@ -15,12 +15,16 @@ int main(int argc, char *argv[]){
 	std::getline(file, str);
 	std::istringstream iss(str);
 
-	Eigen::VectorXd data;
+	std::vector<double> v;
+	
 	while(std::getline(iss, str2, ',')){
 		double val = ::atof(str2.c_str());
-		data<<val;
+		v.push_back(val);
+		
 	}
 	file.close();
+    Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(v.data(), v.size());
+
 
     double mu0, lambda, alpha0, beta0;
     //std::cout << "Insert mu0, lambda, alpha0, beta0 values:" << std::endl;
@@ -52,7 +56,7 @@ int main(int argc, char *argv[]){
         data, n_aux, mix, hy);
 	
     // Run sampler
-    //sampler.run();
+    sampler.run();
 
     return 0;
 
