@@ -43,15 +43,16 @@ int main(int argc, char *argv[]){
     //}
     //file << std::endl;
     //file.close();
-  
+ 
+
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
     DirichletMixture mix(1); // total mass
 
     Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
-        data, mix, hy);
+        data, n_aux, mix, hy);
 	
     // Run sampler
-    sampler.run();
+    //sampler.run();
 
     return 0;
 
@@ -68,7 +69,7 @@ int main(int argc, char *argv[]){
     //sampler.write_density_to_file("density_m50.csv");
 
     // Density and clustering stuff
-    sampler.eval_density(grid);
+    //sampler.eval_density(grid);
     //sampler.write_density_to_file();
 	//unsigned int i_cap = sampler.cluster_estimate();
     //std::cout << "Best clustering: at iteration " << i_cap << std::endl;

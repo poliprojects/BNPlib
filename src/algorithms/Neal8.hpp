@@ -30,6 +30,7 @@ public:
         mixture, hy), n_aux(n_aux) {
 
         for(unsigned int i = 0; i < n_aux; i++){
+            
             aux_unique_values.push_back(this->unique_values[0]);
         }
     }
