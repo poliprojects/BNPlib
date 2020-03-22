@@ -11,6 +11,7 @@
 #include <stan/math/prim/mat.hpp>
 
 #include "../api/output.pb.h"
+#include "../api/collectors.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{
@@ -49,8 +50,15 @@ protected:
     virtual void sample_unique_values() = 0;
 
     void save_iteration(unsigned int iter);
+    
+    IterationOutput get_state_as_proto(unsigned int iter);
 
     const void print_ending_message();
+
+    void save_state(BaseCollector* collector, unsigned int iter){
+        collector->collect( get_state_as_proto(iter));
+    }
+
 
     // Auxiliary tools
     const void print_state();    

@@ -6,8 +6,17 @@
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
-    //std::cout << "Iteration # " << iter << " / " << maxiter-1 <<
-    //    std::endl; // DEBUG
+
+    chain.add_chain();
+    *chain.mutable_chain(iter-burnin) = get_state_as_proto(iter);
+
+}
+
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+IterationOutput Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(unsigned int iter){
+
     IterationOutput iter_out;
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
@@ -19,11 +28,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
         iter_out.add_uniquevalues();
         *iter_out.mutable_uniquevalues(i) = temp;
     }
-
-    chain.add_chain();
-    *chain.mutable_chain(iter-burnin) = iter_out;
-
-    //print_state(); //DEBUG
+    return iter_out;
 }
 
 
