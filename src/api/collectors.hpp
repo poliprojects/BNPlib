@@ -1,6 +1,5 @@
 #include <fstream>
-
-
+#include <string>
 #include <deque>
 #include <vector>
 #include "output.pb.h"
@@ -27,28 +26,32 @@ std::deque<IterationOutput> chains;
 
 public:
 void collect(IterationOutput iteration_state) {
-    //chains.push_back(iteration_state);
+    chains.push_back(iteration_state);
     }
 };
 
 class FileCollector: public BaseCollector {
 protected:
 int outfd;
-//google::protobuf::io::FileOutputStream fout;
+google::protobuf::io::FileOutputStream *fout;
 
 public:
 FileCollector(std::string filename) {
    int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);
-   //fout=google::protobuf::io::FileOutputStream(outfd); 
+   google::protobuf::io::FileOutputStream *fout = new google::protobuf::io::FileOutputStream(outfd);
 }
 
  ~FileCollector() {
-   //fout.Close();
-   //close(outfd);
+   delete fout;
+   close(outfd);
 }
 
 void collect(IterationOutput iteration_state) {
-    //write_to_file(iteration_state) --> pseudocodice, da implementare
+
+        bool success;
+        success = google::protobuf::util::SerializeDelimitedToZeroCopyStream(iteration_state, fout);
+        if (! success)
+            std::cout << "Writing Failed" << std::endl;
 }
 
 };
