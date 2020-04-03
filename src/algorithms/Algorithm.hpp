@@ -49,7 +49,6 @@ protected:
 
     virtual void sample_unique_values() = 0;
 
-    void save_iteration(unsigned int iter);
     
     IterationOutput get_state_as_proto(unsigned int iter);
 
@@ -65,14 +64,14 @@ protected:
 
 public:
     // Running tool
-    void run(){
+    void run(BaseCollector* collector){      
         print_startup_message();
         initialize();
         unsigned int iter = 0;
         while(iter < maxiter){
             step();    
             if(iter >= burnin){
-              save_iteration(iter);
+              save_state(collector,iter);
             }
             iter++;
         }

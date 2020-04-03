@@ -4,14 +4,6 @@
 #include "Algorithm.hpp"
 
 
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>::save_iteration(unsigned int iter){
-
-    chain.add_chain();
-    *chain.mutable_chain(iter-burnin) = get_state_as_proto(iter);
-
-}
-
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>

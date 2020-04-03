@@ -1,5 +1,19 @@
 TODO LIST
 
+
+Elena:
+* vedi se funzia collector+ diamond (input: scegli quale collector)
+* RNG seed {20200227} or  {std::random_device}
+* clustering and density ( e check) ( print functions: remove last empty column)
+* timer: eigen::vector
+
+Bruno:
+* multivariata dummy
+* pointer to abstract (factory)
+
+
+
+
 FEATURES/IMPLEMENTATION
 * Mixture base? (Dirichlet, PitYor derived)
 * one method for prob_existing_cluster / prob_new_cluster ?
@@ -11,14 +25,13 @@ FEATURES/IMPLEMENTATION
 * a way to erase and add clusters more efficiently?
 * check, in write_clust_...(), if clust_estimate() has been called, and similar
   flags
-* stan con quale rng??
+* interfaccia Python (pybind) (una volta che ho catene di proto do in pasto a python, R..)
 
 
 MANOVALANZA
 * documentation with Doxygen
 * complete README
-* print functions: remove last empty column
-* data and grid -> Eigen vector/matrix
+* Python
 
 
 OTHER CHE NON FAREMO
