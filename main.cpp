@@ -8,79 +8,26 @@
 #include "math.h"
 
 int main(int argc, char *argv[]){
-	// Read data from main arg
-	std::ifstream file;
-	file.open(argv[1]);
-	std::string str, str2;
-	std::getline(file, str);
-	std::istringstream iss(str);
-
-	std::vector<double> v;
 	
-	while(std::getline(iss, str2, ',')){
-		double val = ::atof(str2.c_str());
-		v.push_back(val);
-		
-	}
-	file.close();
-    Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(v.data(), v.size()); // TODO: meglio con conservative resize?
+    // 3D-vectorial data
+    Eigen::MatrixXd data;
+    data << 1.3, 0.9, 8.8, 2.0, -1.3,
+            2.3, 5.1, 4.4, 0.0, -3.2,
+            3.0, 4,0, 3.3, 1.1, +1.5;
 
+    Eigen::VectorXd mu0(3.0, 3.0, 3.0);
+    Eigen::MatrixXd lambda0 = 2 * Matrix<double, 3, 3>::Identity();
+    double totalmass = 1.0;
+    int n_aux = 3;
 
-    double mu0, lambda, alpha0, beta0;
-    //std::cout << "Insert mu0, lambda, alpha0, beta0 values:" << std::endl;
-    //std::cin >> mu0 >> lambda >> alpha0 >> beta0; // 5.0 0.1 2.0 2.0
-    // HypersFixedNNIG hy(mu0, lambda, alpha0, beta0);
+    HypersDummy hy(mu0, lambda0);
+    DirichletMixture mix(totalmass); // total mass
 
-    double totalmass;
-    //std::cout << "Insert total mass value:" << std::endl; 
-    //std::cin >> totalmass; //1.0
-    // DirichletMixture mix(totalmass);
-
-    int n_aux(3);
-    //std::cout << "Insert number of auxiliary blocks:" << std::endl;
-    //std::cin >> n_aux;
-
-    //std::ofstream file;
-    //file.open("data.csv");
-    //for(auto &d : data){
-    //    file << d << ",";
-    //}
-    //file << std::endl;
-    //file.close();
- 
-
-    HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
-    DirichletMixture mix(1); // total mass
-
-    Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
+    Neal8<HierarchyDummy, HypersDummy, DirichletMixture> sampler(
         data, n_aux, mix, hy);
 	
     // Run sampler
     sampler.run();
-
-    
-
-    // Density stuff
-    //Eigen::VectorXd grid;
-    double temp = 0.0;
-    double step = 0.05;
-    double upp_bnd = 10.0;
-    std::vector<double> v_temp;
-    while(temp <= upp_bnd){
-        v_temp.push_back(temp);
-        temp += step;
-    }
-    Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(v_temp.data(), v_temp.size()); 
-    sampler.eval_density(grid);
-    //sampler.write_density_to_file("density_m50.csv");
-
-    // Density and clustering stuff
-    //sampler.eval_density(grid);
-    //sampler.write_density_to_file();
-	unsigned int i_cap = sampler.cluster_estimate();
-    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    //sampler.write_final_clustering_to_file();
-    //sampler.write_best_clustering_to_file();
 
     return 0;
 }
