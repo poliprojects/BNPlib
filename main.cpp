@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
             3.0, 4,0, 3.3, 1.1, +1.5;
 
     Eigen::VectorXd mu0(3.0, 3.0, 3.0);
-    Eigen::MatrixXd lambda0 = 2 * Matrix<double, 3, 3>::Identity();
+    Eigen::MatrixXd lambda0 = 2 * Eigen::Matrix<double, 3, 3>::Identity();
     double totalmass = 1.0;
     int n_aux = 3;
 

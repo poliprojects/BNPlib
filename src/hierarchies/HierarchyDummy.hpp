@@ -33,7 +33,7 @@ public:
     void draw();
 
     std::vector<Eigen::MatrixXd> dummy_update(Eigen::MatrixXd &data,
-        Eigen::VectorXd mu0, Eigen::MatrixXd lambda0);
+        Eigen::VectorXd &mu0, Eigen::MatrixXd &lambda0);
 
     void sample_given_data(Eigen::MatrixXd &data);
 };
