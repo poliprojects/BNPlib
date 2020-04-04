@@ -10,7 +10,8 @@ Elena:
 Bruno:
 * multivariata dummy
 * pointer to abstract (factory)
-
+* stime di tempo su carta
+* (discuss) pass data as vector& instead of vector?
 
 
 
