@@ -34,6 +34,10 @@ class MemoryCollector : public BaseCollector {
     virtual ~MemoryCollector() = default;
 };
 
+
+
+
+
 class FileCollector: public BaseCollector {
 protected:
 int outfd;
@@ -58,24 +62,6 @@ void collect(IterationOutput iteration_state) override {
  virtual ~FileCollector() {
    delete fout;
    close(outfd);
-}
-
-};
-
-
-class AllCollector: public FileCollector, public MemoryCollector {
-
-public:
-AllCollector(std::string filename) : FileCollector(filename) {}
-
-virtual ~AllCollector();
-
-void collect(IterationOutput iteration_state) override {
-        chains.push_back(iteration_state);
-        bool success;
-        success = google::protobuf::util::SerializeDelimitedToZeroCopyStream(iteration_state, fout);
-        if (! success)
-            std::cout << "Writing Failed" << std::endl;
 }
 
 };

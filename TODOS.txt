@@ -2,11 +2,10 @@ TODO LIST
 
 
 Elena:
-* all collector ambiguo
 * rivedi proto multivariato e tutte le funzioni con proto (come gestire get_state_as_proto)
-* RNG seed {20200227} or  {std::random_device}
 * clustering and density ( e check) ( print functions: remove last empty column)
 * timer: eigen::vector
+* RNG seed {20200227} or  {std::random_device}
 
 Bruno:
 * multivariata dummy
