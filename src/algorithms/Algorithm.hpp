@@ -72,6 +72,7 @@ public:
             step();    
             if(iter >= burnin){
               save_state(collector,iter);
+              
             }
             iter++;
         }

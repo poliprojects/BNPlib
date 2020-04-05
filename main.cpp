@@ -56,9 +56,19 @@ int main(int argc, char *argv[]){
         data, n_aux, mix, hy);
 	
     // Run sampler
-    sampler.run();
-
+	BaseCollector *f;
+    std::string collector(argv[2]);
     
+    if(collector=="FileCollector"){
+        std::string filename(argv[3]);
+        f=new FileCollector(filename);}
+    if(collector=="MemoryCollector"){
+        f=new MemoryCollector();}
+   
+    
+	//MemoryCollector f;
+    sampler.run(f);
+
 
     // Density stuff
     //Eigen::VectorXd grid;
@@ -71,14 +81,14 @@ int main(int argc, char *argv[]){
         temp += step;
     }
     Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(v_temp.data(), v_temp.size()); 
-    sampler.eval_density(grid);
+    //sampler.eval_density(grid);
     //sampler.write_density_to_file("density_m50.csv");
 
     // Density and clustering stuff
     //sampler.eval_density(grid);
     //sampler.write_density_to_file();
-	unsigned int i_cap = sampler.cluster_estimate();
-    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+	//unsigned int i_cap = sampler.cluster_estimate();
+    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
     //sampler.write_final_clustering_to_file();
     //sampler.write_best_clustering_to_file();
 

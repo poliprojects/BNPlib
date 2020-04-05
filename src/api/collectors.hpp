@@ -14,20 +14,24 @@
 
 
 class BaseCollector {
-
+  public:
+  BaseCollector(){}
   virtual void collect(IterationOutput iteration_state) = 0;
+  virtual ~BaseCollector() = default;
 };
 
 
 
 class MemoryCollector : public BaseCollector {
-protected:
-std::deque<IterationOutput> chains;
+    protected:
+    std::deque<IterationOutput> chains;
 
-public:
-void collect(IterationOutput iteration_state) {
+    public:
+    MemoryCollector(){}
+    void collect(IterationOutput iteration_state) override {
     chains.push_back(iteration_state);
     }
+    virtual ~MemoryCollector() = default;
 };
 
 class FileCollector: public BaseCollector {
@@ -38,16 +42,36 @@ google::protobuf::io::FileOutputStream *fout;
 public:
 FileCollector(std::string filename) {
    int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);
-   google::protobuf::io::FileOutputStream *fout = new google::protobuf::io::FileOutputStream(outfd);
+   fout=new google::protobuf::io::FileOutputStream(outfd);
+
 }
 
- ~FileCollector() {
+
+
+void collect(IterationOutput iteration_state) override {
+        bool success;
+        success = google::protobuf::util::SerializeDelimitedToZeroCopyStream(iteration_state, fout);
+        if (! success)
+            std::cout << "Writing Failed" << std::endl;
+}
+
+ virtual ~FileCollector() {
    delete fout;
    close(outfd);
 }
 
-void collect(IterationOutput iteration_state) {
+};
 
+
+class AllCollector: public FileCollector, public MemoryCollector {
+
+public:
+AllCollector(std::string filename) : FileCollector(filename) {}
+
+virtual ~AllCollector();
+
+void collect(IterationOutput iteration_state) override {
+        chains.push_back(iteration_state);
         bool success;
         success = google::protobuf::util::SerializeDelimitedToZeroCopyStream(iteration_state, fout);
         if (! success)
