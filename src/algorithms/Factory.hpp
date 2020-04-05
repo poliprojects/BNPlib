@@ -4,11 +4,13 @@
 #include "Neal2.hpp"
 #include "Neal8.hpp"
 
-using AlgoBuilder = std::function< std::unique_ptr<Algorithm>() >;
+using AlgoBuilderType = std::function<
+	std::unique_ptr<Algorithm<Hierarchy, Hypers, Mixture>>() >;
 
+//template<template <class> class Hierarchy, class Hypers, class Mixture> // TODO ?
 class Factory{
 private:
-	std::map<std::string, AlgoBuilder> storage;
+	std::map<std::string, AlgoBuilderType> storage;
 
 	// Constructors
 	Factory() = default;
@@ -16,22 +18,20 @@ private:
 	Factory& operator=(const Factory &f) = delete;
 
 public:
-	static Factory &Instance();
+	static Factory& Instance();
 
-	void add(const std::string &name, const AlgoBuilder &builder) {
-		...
+	void add_builder(const std::string &name, const AlgoBuilderType &builder) {
+		storage[name] = builder;
 	}
 
-	auto create(const std::string &name) const { // get object
+	auto create_algorithm(const std::string &name) const { // get object
 		switch(name){
 			case "neal2":
-				return std::make_unique<Neal2>();
-				break;
+				return std::make_unique<Neal2<Hierarchy, Hypers, Mixture>>();
 			case "neal8":
-				return std::make_unique<Neal8>();
-				break;
+				return std::make_unique<Neal8<Hierarchy, Hypers, Mixture>>();
 			default:
-				return std::unique_ptr<Algorithm>();
+				return std::unique_ptr<Algorithm<Hierarchy, Hypers, Mixture>>();
 		}
 	}
 };
