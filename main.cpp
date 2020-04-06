@@ -67,7 +67,7 @@ int main(int argc, char *argv[]){
    
     
 	//MemoryCollector f;
-    sampler.run(f);
+    //sampler.run(f);
 
 
     // Density stuff

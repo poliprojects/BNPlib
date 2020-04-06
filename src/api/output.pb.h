@@ -47,7 +47,7 @@ struct TableStruct_output_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[3]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[5]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -60,16 +60,303 @@ extern ChainOutputDefaultTypeInternal _ChainOutput_default_instance_;
 class IterationOutput;
 class IterationOutputDefaultTypeInternal;
 extern IterationOutputDefaultTypeInternal _IterationOutput_default_instance_;
+class Par_Row;
+class Par_RowDefaultTypeInternal;
+extern Par_RowDefaultTypeInternal _Par_Row_default_instance_;
+class Param;
+class ParamDefaultTypeInternal;
+extern ParamDefaultTypeInternal _Param_default_instance_;
 class UniqueValues;
 class UniqueValuesDefaultTypeInternal;
 extern UniqueValuesDefaultTypeInternal _UniqueValues_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::ChainOutput* Arena::CreateMaybeMessage<::ChainOutput>(Arena*);
 template<> ::IterationOutput* Arena::CreateMaybeMessage<::IterationOutput>(Arena*);
+template<> ::Par_Row* Arena::CreateMaybeMessage<::Par_Row>(Arena*);
+template<> ::Param* Arena::CreateMaybeMessage<::Param>(Arena*);
 template<> ::UniqueValues* Arena::CreateMaybeMessage<::UniqueValues>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 // ===================================================================
+
+class Par_Row :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Par_Row) */ {
+ public:
+  Par_Row();
+  virtual ~Par_Row();
+
+  Par_Row(const Par_Row& from);
+  Par_Row(Par_Row&& from) noexcept
+    : Par_Row() {
+    *this = ::std::move(from);
+  }
+
+  inline Par_Row& operator=(const Par_Row& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Par_Row& operator=(Par_Row&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Par_Row& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Par_Row* internal_default_instance() {
+    return reinterpret_cast<const Par_Row*>(
+               &_Par_Row_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    0;
+
+  friend void swap(Par_Row& a, Par_Row& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Par_Row* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Par_Row* New() const final {
+    return CreateMaybeMessage<Par_Row>(nullptr);
+  }
+
+  Par_Row* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Par_Row>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Par_Row& from);
+  void MergeFrom(const Par_Row& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Par_Row* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Par_Row";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_output_2eproto);
+    return ::descriptor_table_output_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kElemsFieldNumber = 1,
+  };
+  // repeated double elems = 1;
+  int elems_size() const;
+  private:
+  int _internal_elems_size() const;
+  public:
+  void clear_elems();
+  private:
+  double _internal_elems(int index) const;
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
+      _internal_elems() const;
+  void _internal_add_elems(double value);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
+      _internal_mutable_elems();
+  public:
+  double elems(int index) const;
+  void set_elems(int index, double value);
+  void add_elems(double value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
+      elems() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
+      mutable_elems();
+
+  // @@protoc_insertion_point(class_scope:Par_Row)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< double > elems_;
+  mutable std::atomic<int> _elems_cached_byte_size_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_output_2eproto;
+};
+// -------------------------------------------------------------------
+
+class Param :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Param) */ {
+ public:
+  Param();
+  virtual ~Param();
+
+  Param(const Param& from);
+  Param(Param&& from) noexcept
+    : Param() {
+    *this = ::std::move(from);
+  }
+
+  inline Param& operator=(const Param& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Param& operator=(Param&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Param& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Param* internal_default_instance() {
+    return reinterpret_cast<const Param*>(
+               &_Param_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(Param& a, Param& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Param* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Param* New() const final {
+    return CreateMaybeMessage<Param>(nullptr);
+  }
+
+  Param* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Param>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Param& from);
+  void MergeFrom(const Param& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Param* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Param";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_output_2eproto);
+    return ::descriptor_table_output_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kParRowsFieldNumber = 1,
+  };
+  // repeated .Par_Row par_rows = 1;
+  int par_rows_size() const;
+  private:
+  int _internal_par_rows_size() const;
+  public:
+  void clear_par_rows();
+  ::Par_Row* mutable_par_rows(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Row >*
+      mutable_par_rows();
+  private:
+  const ::Par_Row& _internal_par_rows(int index) const;
+  ::Par_Row* _internal_add_par_rows();
+  public:
+  const ::Par_Row& par_rows(int index) const;
+  ::Par_Row* add_par_rows();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Row >&
+      par_rows() const;
+
+  // @@protoc_insertion_point(class_scope:Param)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Row > par_rows_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_output_2eproto;
+};
+// -------------------------------------------------------------------
 
 class UniqueValues :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:UniqueValues) */ {
@@ -113,7 +400,7 @@ class UniqueValues :
                &_UniqueValues_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    0;
+    2;
 
   friend void swap(UniqueValues& a, UniqueValues& b) {
     a.Swap(&b);
@@ -179,35 +466,30 @@ class UniqueValues :
   enum : int {
     kParamsFieldNumber = 1,
   };
-  // repeated double params = 1;
+  // repeated .Param params = 1;
   int params_size() const;
   private:
   int _internal_params_size() const;
   public:
   void clear_params();
-  private:
-  double _internal_params(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
-      _internal_params() const;
-  void _internal_add_params(double value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
-      _internal_mutable_params();
-  public:
-  double params(int index) const;
-  void set_params(int index, double value);
-  void add_params(double value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
-      params() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
+  ::Param* mutable_params(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Param >*
       mutable_params();
+  private:
+  const ::Param& _internal_params(int index) const;
+  ::Param* _internal_add_params();
+  public:
+  const ::Param& params(int index) const;
+  ::Param* add_params();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Param >&
+      params() const;
 
   // @@protoc_insertion_point(class_scope:UniqueValues)
  private:
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< double > params_;
-  mutable std::atomic<int> _params_cached_byte_size_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Param > params_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_output_2eproto;
 };
@@ -255,7 +537,7 @@ class IterationOutput :
                &_IterationOutput_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    3;
 
   friend void swap(IterationOutput& a, IterationOutput& b) {
     a.Swap(&b);
@@ -417,7 +699,7 @@ class ChainOutput :
                &_ChainOutput_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    4;
 
   friend void swap(ChainOutput& a, ChainOutput& b) {
     a.Swap(&b);
@@ -519,9 +801,103 @@ class ChainOutput :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// Par_Row
+
+// repeated double elems = 1;
+inline int Par_Row::_internal_elems_size() const {
+  return elems_.size();
+}
+inline int Par_Row::elems_size() const {
+  return _internal_elems_size();
+}
+inline void Par_Row::clear_elems() {
+  elems_.Clear();
+}
+inline double Par_Row::_internal_elems(int index) const {
+  return elems_.Get(index);
+}
+inline double Par_Row::elems(int index) const {
+  // @@protoc_insertion_point(field_get:Par_Row.elems)
+  return _internal_elems(index);
+}
+inline void Par_Row::set_elems(int index, double value) {
+  elems_.Set(index, value);
+  // @@protoc_insertion_point(field_set:Par_Row.elems)
+}
+inline void Par_Row::_internal_add_elems(double value) {
+  elems_.Add(value);
+}
+inline void Par_Row::add_elems(double value) {
+  _internal_add_elems(value);
+  // @@protoc_insertion_point(field_add:Par_Row.elems)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
+Par_Row::_internal_elems() const {
+  return elems_;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
+Par_Row::elems() const {
+  // @@protoc_insertion_point(field_list:Par_Row.elems)
+  return _internal_elems();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
+Par_Row::_internal_mutable_elems() {
+  return &elems_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
+Par_Row::mutable_elems() {
+  // @@protoc_insertion_point(field_mutable_list:Par_Row.elems)
+  return _internal_mutable_elems();
+}
+
+// -------------------------------------------------------------------
+
+// Param
+
+// repeated .Par_Row par_rows = 1;
+inline int Param::_internal_par_rows_size() const {
+  return par_rows_.size();
+}
+inline int Param::par_rows_size() const {
+  return _internal_par_rows_size();
+}
+inline void Param::clear_par_rows() {
+  par_rows_.Clear();
+}
+inline ::Par_Row* Param::mutable_par_rows(int index) {
+  // @@protoc_insertion_point(field_mutable:Param.par_rows)
+  return par_rows_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Row >*
+Param::mutable_par_rows() {
+  // @@protoc_insertion_point(field_mutable_list:Param.par_rows)
+  return &par_rows_;
+}
+inline const ::Par_Row& Param::_internal_par_rows(int index) const {
+  return par_rows_.Get(index);
+}
+inline const ::Par_Row& Param::par_rows(int index) const {
+  // @@protoc_insertion_point(field_get:Param.par_rows)
+  return _internal_par_rows(index);
+}
+inline ::Par_Row* Param::_internal_add_par_rows() {
+  return par_rows_.Add();
+}
+inline ::Par_Row* Param::add_par_rows() {
+  // @@protoc_insertion_point(field_add:Param.par_rows)
+  return _internal_add_par_rows();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Row >&
+Param::par_rows() const {
+  // @@protoc_insertion_point(field_list:Param.par_rows)
+  return par_rows_;
+}
+
+// -------------------------------------------------------------------
+
 // UniqueValues
 
-// repeated double params = 1;
+// repeated .Param params = 1;
 inline int UniqueValues::_internal_params_size() const {
   return params_.size();
 }
@@ -531,41 +907,33 @@ inline int UniqueValues::params_size() const {
 inline void UniqueValues::clear_params() {
   params_.Clear();
 }
-inline double UniqueValues::_internal_params(int index) const {
+inline ::Param* UniqueValues::mutable_params(int index) {
+  // @@protoc_insertion_point(field_mutable:UniqueValues.params)
+  return params_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Param >*
+UniqueValues::mutable_params() {
+  // @@protoc_insertion_point(field_mutable_list:UniqueValues.params)
+  return &params_;
+}
+inline const ::Param& UniqueValues::_internal_params(int index) const {
   return params_.Get(index);
 }
-inline double UniqueValues::params(int index) const {
+inline const ::Param& UniqueValues::params(int index) const {
   // @@protoc_insertion_point(field_get:UniqueValues.params)
   return _internal_params(index);
 }
-inline void UniqueValues::set_params(int index, double value) {
-  params_.Set(index, value);
-  // @@protoc_insertion_point(field_set:UniqueValues.params)
+inline ::Param* UniqueValues::_internal_add_params() {
+  return params_.Add();
 }
-inline void UniqueValues::_internal_add_params(double value) {
-  params_.Add(value);
-}
-inline void UniqueValues::add_params(double value) {
-  _internal_add_params(value);
+inline ::Param* UniqueValues::add_params() {
   // @@protoc_insertion_point(field_add:UniqueValues.params)
+  return _internal_add_params();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
-UniqueValues::_internal_params() const {
-  return params_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Param >&
 UniqueValues::params() const {
   // @@protoc_insertion_point(field_list:UniqueValues.params)
-  return _internal_params();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
-UniqueValues::_internal_mutable_params() {
-  return &params_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
-UniqueValues::mutable_params() {
-  // @@protoc_insertion_point(field_mutable_list:UniqueValues.params)
-  return _internal_mutable_params();
+  return params_;
 }
 
 // -------------------------------------------------------------------
@@ -704,6 +1072,10 @@ ChainOutput::chain() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

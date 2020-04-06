@@ -15,7 +15,17 @@
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_IterationOutput_output_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_UniqueValues_output_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Par_Row_output_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Param_output_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_UniqueValues_output_2eproto;
+class Par_RowDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Par_Row> _instance;
+} _Par_Row_default_instance_;
+class ParamDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Param> _instance;
+} _Param_default_instance_;
 class UniqueValuesDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<UniqueValues> _instance;
@@ -58,6 +68,35 @@ static void InitDefaultsscc_info_IterationOutput_output_2eproto() {
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_IterationOutput_output_2eproto}, {
       &scc_info_UniqueValues_output_2eproto.base,}};
 
+static void InitDefaultsscc_info_Par_Row_output_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_Par_Row_default_instance_;
+    new (ptr) ::Par_Row();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::Par_Row::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Par_Row_output_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Par_Row_output_2eproto}, {}};
+
+static void InitDefaultsscc_info_Param_output_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_Param_default_instance_;
+    new (ptr) ::Param();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::Param::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Param_output_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Param_output_2eproto}, {
+      &scc_info_Par_Row_output_2eproto.base,}};
+
 static void InitDefaultsscc_info_UniqueValues_output_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -69,14 +108,27 @@ static void InitDefaultsscc_info_UniqueValues_output_2eproto() {
   ::UniqueValues::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_UniqueValues_output_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_UniqueValues_output_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_UniqueValues_output_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_UniqueValues_output_2eproto}, {
+      &scc_info_Param_output_2eproto.base,}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_output_2eproto[3];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_output_2eproto[5];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_output_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_output_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_output_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Par_Row, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Par_Row, elems_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Param, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Param, par_rows_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::UniqueValues, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -98,42 +150,434 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_output_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::ChainOutput, chain_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::UniqueValues)},
-  { 6, -1, sizeof(::IterationOutput)},
-  { 13, -1, sizeof(::ChainOutput)},
+  { 0, -1, sizeof(::Par_Row)},
+  { 6, -1, sizeof(::Param)},
+  { 12, -1, sizeof(::UniqueValues)},
+  { 18, -1, sizeof(::IterationOutput)},
+  { 25, -1, sizeof(::ChainOutput)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Par_Row_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Param_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_UniqueValues_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_IterationOutput_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_ChainOutput_default_instance_),
 };
 
 const char descriptor_table_protodef_output_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\014output.proto\"\036\n\014UniqueValues\022\016\n\006params"
-  "\030\001 \003(\001\"K\n\017IterationOutput\022\023\n\013allocations"
-  "\030\001 \003(\005\022#\n\014uniquevalues\030\002 \003(\0132\r.UniqueVal"
-  "ues\".\n\013ChainOutput\022\037\n\005chain\030\001 \003(\0132\020.Iter"
-  "ationOutputb\006proto3"
+  "\n\014output.proto\"\030\n\007Par_Row\022\r\n\005elems\030\001 \003(\001"
+  "\"#\n\005Param\022\032\n\010par_rows\030\001 \003(\0132\010.Par_Row\"&\n"
+  "\014UniqueValues\022\026\n\006params\030\001 \003(\0132\006.Param\"K\n"
+  "\017IterationOutput\022\023\n\013allocations\030\001 \003(\005\022#\n"
+  "\014uniquevalues\030\002 \003(\0132\r.UniqueValues\".\n\013Ch"
+  "ainOutput\022\037\n\005chain\030\001 \003(\0132\020.IterationOutp"
+  "utb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_output_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_output_2eproto_sccs[3] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_output_2eproto_sccs[5] = {
   &scc_info_ChainOutput_output_2eproto.base,
   &scc_info_IterationOutput_output_2eproto.base,
+  &scc_info_Par_Row_output_2eproto.base,
+  &scc_info_Param_output_2eproto.base,
   &scc_info_UniqueValues_output_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_output_2eproto_once;
 static bool descriptor_table_output_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_output_2eproto = {
-  &descriptor_table_output_2eproto_initialized, descriptor_table_protodef_output_2eproto, "output.proto", 179,
-  &descriptor_table_output_2eproto_once, descriptor_table_output_2eproto_sccs, descriptor_table_output_2eproto_deps, 3, 0,
+  &descriptor_table_output_2eproto_initialized, descriptor_table_protodef_output_2eproto, "output.proto", 250,
+  &descriptor_table_output_2eproto_once, descriptor_table_output_2eproto_sccs, descriptor_table_output_2eproto_deps, 5, 0,
   schemas, file_default_instances, TableStruct_output_2eproto::offsets,
-  file_level_metadata_output_2eproto, 3, file_level_enum_descriptors_output_2eproto, file_level_service_descriptors_output_2eproto,
+  file_level_metadata_output_2eproto, 5, file_level_enum_descriptors_output_2eproto, file_level_service_descriptors_output_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
 static bool dynamic_init_dummy_output_2eproto = (  ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_output_2eproto), true);
+
+// ===================================================================
+
+void Par_Row::InitAsDefaultInstance() {
+}
+class Par_Row::_Internal {
+ public:
+};
+
+Par_Row::Par_Row()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:Par_Row)
+}
+Par_Row::Par_Row(const Par_Row& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr),
+      elems_(from.elems_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:Par_Row)
+}
+
+void Par_Row::SharedCtor() {
+}
+
+Par_Row::~Par_Row() {
+  // @@protoc_insertion_point(destructor:Par_Row)
+  SharedDtor();
+}
+
+void Par_Row::SharedDtor() {
+}
+
+void Par_Row::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const Par_Row& Par_Row::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Par_Row_output_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void Par_Row::Clear() {
+// @@protoc_insertion_point(message_clear_start:Par_Row)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  elems_.Clear();
+  _internal_metadata_.Clear();
+}
+
+const char* Par_Row::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // repeated double elems = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedDoubleParser(_internal_mutable_elems(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9) {
+          _internal_add_elems(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr));
+          ptr += sizeof(double);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* Par_Row::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Par_Row)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated double elems = 1;
+  if (this->_internal_elems_size() > 0) {
+    target = stream->WriteFixedPacked(1, _internal_elems(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Par_Row)
+  return target;
+}
+
+size_t Par_Row::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Par_Row)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated double elems = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->_internal_elems_size());
+    size_t data_size = 8UL * count;
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<::PROTOBUF_NAMESPACE_ID::int32>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _elems_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void Par_Row::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Par_Row)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Par_Row* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Par_Row>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Par_Row)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Par_Row)
+    MergeFrom(*source);
+  }
+}
+
+void Par_Row::MergeFrom(const Par_Row& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Par_Row)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  elems_.MergeFrom(from.elems_);
+}
+
+void Par_Row::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Par_Row)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Par_Row::CopyFrom(const Par_Row& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Par_Row)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Par_Row::IsInitialized() const {
+  return true;
+}
+
+void Par_Row::InternalSwap(Par_Row* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  elems_.InternalSwap(&other->elems_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata Par_Row::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void Param::InitAsDefaultInstance() {
+}
+class Param::_Internal {
+ public:
+};
+
+Param::Param()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:Param)
+}
+Param::Param(const Param& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr),
+      par_rows_(from.par_rows_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:Param)
+}
+
+void Param::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Param_output_2eproto.base);
+}
+
+Param::~Param() {
+  // @@protoc_insertion_point(destructor:Param)
+  SharedDtor();
+}
+
+void Param::SharedDtor() {
+}
+
+void Param::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const Param& Param::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Param_output_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void Param::Clear() {
+// @@protoc_insertion_point(message_clear_start:Param)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  par_rows_.Clear();
+  _internal_metadata_.Clear();
+}
+
+const char* Param::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // repeated .Par_Row par_rows = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_par_rows(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* Param::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Param)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .Par_Row par_rows = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_par_rows_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, this->_internal_par_rows(i), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Param)
+  return target;
+}
+
+size_t Param::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Param)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .Par_Row par_rows = 1;
+  total_size += 1UL * this->_internal_par_rows_size();
+  for (const auto& msg : this->par_rows_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void Param::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Param)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Param* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Param>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Param)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Param)
+    MergeFrom(*source);
+  }
+}
+
+void Param::MergeFrom(const Param& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Param)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  par_rows_.MergeFrom(from.par_rows_);
+}
+
+void Param::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Param)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Param::CopyFrom(const Param& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Param)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Param::IsInitialized() const {
+  return true;
+}
+
+void Param::InternalSwap(Param* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  par_rows_.InternalSwap(&other->par_rows_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata Param::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
 
 // ===================================================================
 
@@ -157,6 +601,7 @@ UniqueValues::UniqueValues(const UniqueValues& from)
 }
 
 void UniqueValues::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_UniqueValues_output_2eproto.base);
 }
 
 UniqueValues::~UniqueValues() {
@@ -193,14 +638,16 @@ const char* UniqueValues::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // repeated double params = 1;
+      // repeated .Param params = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedDoubleParser(_internal_mutable_params(), ptr, ctx);
-          CHK_(ptr);
-        } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9) {
-          _internal_add_params(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr));
-          ptr += sizeof(double);
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_params(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
         } else goto handle_unusual;
         continue;
       default: {
@@ -229,9 +676,12 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated double params = 1;
-  if (this->_internal_params_size() > 0) {
-    target = stream->WriteFixedPacked(1, _internal_params(), target);
+  // repeated .Param params = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_params_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, this->_internal_params(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -250,19 +700,11 @@ size_t UniqueValues::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated double params = 1;
-  {
-    unsigned int count = static_cast<unsigned int>(this->_internal_params_size());
-    size_t data_size = 8UL * count;
-    if (data_size > 0) {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-            static_cast<::PROTOBUF_NAMESPACE_ID::int32>(data_size));
-    }
-    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
-    _params_cached_byte_size_.store(cached_size,
-                                    std::memory_order_relaxed);
-    total_size += data_size;
+  // repeated .Param params = 1;
+  total_size += 1UL * this->_internal_params_size();
+  for (const auto& msg : this->params_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -750,6 +1192,12 @@ void ChainOutput::InternalSwap(ChainOutput* other) {
 
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
+template<> PROTOBUF_NOINLINE ::Par_Row* Arena::CreateMaybeMessage< ::Par_Row >(Arena* arena) {
+  return Arena::CreateInternal< ::Par_Row >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Param* Arena::CreateMaybeMessage< ::Param >(Arena* arena) {
+  return Arena::CreateInternal< ::Param >(arena);
+}
 template<> PROTOBUF_NOINLINE ::UniqueValues* Arena::CreateMaybeMessage< ::UniqueValues >(Arena* arena) {
   return Arena::CreateInternal< ::UniqueValues >(arena);
 }

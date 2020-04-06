@@ -1,7 +1,13 @@
 syntax = "proto3";
 
+message Par_Row {
+        repeated double elems = 1;
+    }
+message Param {
+        repeated Par_Row par_rows= 1;
+    }
 message UniqueValues {
-        repeated double params = 1;
+        repeated Param params= 1;
     }
 
 message IterationOutput {
