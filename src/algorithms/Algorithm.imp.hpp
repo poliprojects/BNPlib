@@ -13,21 +13,23 @@ IterationOutput Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(unsign
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
     for(int i = 0; i < unique_values.size(); i++){
-        UniqueValues temp;
-        for(auto &par : unique_values[i].get_state()){
+        UniqueValues Uniquevalues_temp;
+        for(int k = 0; k< unique_values[i].get_state().size(); k++){
             Eigen::MatrixXd par_temp=par;
             Param par_temp_proto;
             for(int j=0; j<par_temp.rows; j++){
                 Par_Row row_temp;
-                for(int k=0; k<par_temp.cols; k++){
-                row_temp.add_elems(par_temp(j,k));
+                for(auto &el : par_temp.row(j)){
+                row_temp.add_elems(el);
                 }
-                par_temp_proto.add_par_rows(row_temp);            
+                par_temp_proto.add_par_rows();
+                *par_temp_proto.mutable_par_rows(j)=row_temp;     
             }
-            temp.add_params(par_temp_proto);
+            Uniquevalues_temp.add_params();
+            *Uniquevalues_temp.mutable_params(k)=par_temp_proto;
         }
         iter_out.add_uniquevalues();
-        *iter_out.mutable_uniquevalues(i) = temp;
+        *iter_out.mutable_uniquevalues(i) = Uniquevalues_temp;
     }
     return iter_out;
 }
