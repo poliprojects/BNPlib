@@ -8,19 +8,20 @@
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/extension_set.h>
 #include <google/protobuf/wire_format_lite.h>
+#include <google/protobuf/descriptor.h>
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_IterationOutput_output_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Par_Row_output_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Par_Col_output_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Param_output_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_output_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_UniqueValues_output_2eproto;
-class Par_RowDefaultTypeInternal {
+class Par_ColDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Par_Row> _instance;
-} _Par_Row_default_instance_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Par_Col> _instance;
+} _Par_Col_default_instance_;
 class ParamDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Param> _instance;
@@ -67,19 +68,19 @@ static void InitDefaultsscc_info_IterationOutput_output_2eproto() {
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_IterationOutput_output_2eproto}, {
       &scc_info_UniqueValues_output_2eproto.base,}};
 
-static void InitDefaultsscc_info_Par_Row_output_2eproto() {
+static void InitDefaultsscc_info_Par_Col_output_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::_Par_Row_default_instance_;
-    new (ptr) ::Par_Row();
+    void* ptr = &::_Par_Col_default_instance_;
+    new (ptr) ::Par_Col();
     ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::Par_Row::InitAsDefaultInstance();
+  ::Par_Col::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Par_Row_output_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Par_Row_output_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Par_Col_output_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Par_Col_output_2eproto}, {}};
 
 static void InitDefaultsscc_info_Param_output_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -94,7 +95,7 @@ static void InitDefaultsscc_info_Param_output_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Param_output_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Param_output_2eproto}, {
-      &scc_info_Par_Row_output_2eproto.base,}};
+      &scc_info_Par_Col_output_2eproto.base,}};
 
 static void InitDefaultsscc_info_UniqueValues_output_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -117,17 +118,17 @@ static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_s
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_output_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::Par_Row, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::Par_Col, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Par_Row, elems_),
+  PROTOBUF_FIELD_OFFSET(::Par_Col, elems_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Param, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Param, par_rows_),
+  PROTOBUF_FIELD_OFFSET(::Param, par_cols_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::UniqueValues, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -149,7 +150,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_output_2eproto::offsets[] PROT
   PROTOBUF_FIELD_OFFSET(::ChainOutput, chain_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::Par_Row)},
+  { 0, -1, sizeof(::Par_Col)},
   { 6, -1, sizeof(::Param)},
   { 12, -1, sizeof(::UniqueValues)},
   { 18, -1, sizeof(::IterationOutput)},
@@ -157,7 +158,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Par_Row_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Par_Col_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Param_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_UniqueValues_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_IterationOutput_default_instance_),
@@ -165,8 +166,8 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_output_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\014output.proto\"\030\n\007Par_Row\022\r\n\005elems\030\001 \003(\001"
-  "\"#\n\005Param\022\032\n\010par_rows\030\001 \003(\0132\010.Par_Row\"&\n"
+  "\n\014output.proto\"\030\n\007Par_Col\022\r\n\005elems\030\001 \003(\001"
+  "\"#\n\005Param\022\032\n\010par_cols\030\001 \003(\0132\010.Par_Col\"&\n"
   "\014UniqueValues\022\026\n\006params\030\001 \003(\0132\006.Param\"K\n"
   "\017IterationOutput\022\023\n\013allocations\030\001 \003(\005\022#\n"
   "\014uniquevalues\030\002 \003(\0132\r.UniqueValues\".\n\013Ch"
@@ -178,7 +179,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
 static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_output_2eproto_sccs[5] = {
   &scc_info_ChainOutput_output_2eproto.base,
   &scc_info_IterationOutput_output_2eproto.base,
-  &scc_info_Par_Row_output_2eproto.base,
+  &scc_info_Par_Col_output_2eproto.base,
   &scc_info_Param_output_2eproto.base,
   &scc_info_UniqueValues_output_2eproto.base,
 };
@@ -196,47 +197,47 @@ static bool dynamic_init_dummy_output_2eproto = (  ::PROTOBUF_NAMESPACE_ID::inte
 
 // ===================================================================
 
-void Par_Row::InitAsDefaultInstance() {
+void Par_Col::InitAsDefaultInstance() {
 }
-class Par_Row::_Internal {
+class Par_Col::_Internal {
  public:
 };
 
-Par_Row::Par_Row()
+Par_Col::Par_Col()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:Par_Row)
+  // @@protoc_insertion_point(constructor:Par_Col)
 }
-Par_Row::Par_Row(const Par_Row& from)
+Par_Col::Par_Col(const Par_Col& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
       elems_(from.elems_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:Par_Row)
+  // @@protoc_insertion_point(copy_constructor:Par_Col)
 }
 
-void Par_Row::SharedCtor() {
+void Par_Col::SharedCtor() {
 }
 
-Par_Row::~Par_Row() {
-  // @@protoc_insertion_point(destructor:Par_Row)
+Par_Col::~Par_Col() {
+  // @@protoc_insertion_point(destructor:Par_Col)
   SharedDtor();
 }
 
-void Par_Row::SharedDtor() {
+void Par_Col::SharedDtor() {
 }
 
-void Par_Row::SetCachedSize(int size) const {
+void Par_Col::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const Par_Row& Par_Row::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Par_Row_output_2eproto.base);
+const Par_Col& Par_Col::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Par_Col_output_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void Par_Row::Clear() {
-// @@protoc_insertion_point(message_clear_start:Par_Row)
+void Par_Col::Clear() {
+// @@protoc_insertion_point(message_clear_start:Par_Col)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -245,7 +246,7 @@ void Par_Row::Clear() {
   _internal_metadata_.Clear();
 }
 
-const char* Par_Row::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* Par_Col::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
@@ -282,9 +283,9 @@ failure:
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* Par_Row::_InternalSerialize(
+::PROTOBUF_NAMESPACE_ID::uint8* Par_Col::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Par_Row)
+  // @@protoc_insertion_point(serialize_to_array_start:Par_Col)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -297,12 +298,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:Par_Row)
+  // @@protoc_insertion_point(serialize_to_array_end:Par_Col)
   return target;
 }
 
-size_t Par_Row::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Par_Row)
+size_t Par_Col::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Par_Col)
   size_t total_size = 0;
 
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -333,23 +334,23 @@ size_t Par_Row::ByteSizeLong() const {
   return total_size;
 }
 
-void Par_Row::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:Par_Row)
+void Par_Col::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Par_Col)
   GOOGLE_DCHECK_NE(&from, this);
-  const Par_Row* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Par_Row>(
+  const Par_Col* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Par_Col>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Par_Row)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Par_Col)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:Par_Row)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Par_Col)
     MergeFrom(*source);
   }
 }
 
-void Par_Row::MergeFrom(const Par_Row& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:Par_Row)
+void Par_Col::MergeFrom(const Par_Col& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Par_Col)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -358,31 +359,31 @@ void Par_Row::MergeFrom(const Par_Row& from) {
   elems_.MergeFrom(from.elems_);
 }
 
-void Par_Row::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:Par_Row)
+void Par_Col::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Par_Col)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Par_Row::CopyFrom(const Par_Row& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Par_Row)
+void Par_Col::CopyFrom(const Par_Col& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Par_Col)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Par_Row::IsInitialized() const {
+bool Par_Col::IsInitialized() const {
   return true;
 }
 
-void Par_Row::InternalSwap(Par_Row* other) {
+void Par_Col::InternalSwap(Par_Col* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   elems_.InternalSwap(&other->elems_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata Par_Row::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata Par_Col::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -403,7 +404,7 @@ Param::Param()
 Param::Param(const Param& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
-      par_rows_(from.par_rows_) {
+      par_cols_(from.par_cols_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:Param)
 }
@@ -435,7 +436,7 @@ void Param::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  par_rows_.Clear();
+  par_cols_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -446,13 +447,13 @@ const char* Param::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::inte
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // repeated .Par_Row par_rows = 1;
+      // repeated .Par_Col par_cols = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_par_rows(), ptr);
+            ptr = ctx->ParseMessage(_internal_add_par_cols(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
@@ -484,12 +485,12 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .Par_Row par_rows = 1;
+  // repeated .Par_Col par_cols = 1;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_par_rows_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->_internal_par_cols_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, this->_internal_par_rows(i), target, stream);
+      InternalWriteMessage(1, this->_internal_par_cols(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -508,9 +509,9 @@ size_t Param::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .Par_Row par_rows = 1;
-  total_size += 1UL * this->_internal_par_rows_size();
-  for (const auto& msg : this->par_rows_) {
+  // repeated .Par_Col par_cols = 1;
+  total_size += 1UL * this->_internal_par_cols_size();
+  for (const auto& msg : this->par_cols_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
@@ -546,7 +547,7 @@ void Param::MergeFrom(const Param& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  par_rows_.MergeFrom(from.par_rows_);
+  par_cols_.MergeFrom(from.par_cols_);
 }
 
 void Param::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -570,7 +571,7 @@ bool Param::IsInitialized() const {
 void Param::InternalSwap(Param* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  par_rows_.InternalSwap(&other->par_rows_);
+  par_cols_.InternalSwap(&other->par_cols_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Param::GetMetadata() const {
@@ -1191,8 +1192,8 @@ void ChainOutput::InternalSwap(ChainOutput* other) {
 
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::Par_Row* Arena::CreateMaybeMessage< ::Par_Row >(Arena* arena) {
-  return Arena::CreateInternal< ::Par_Row >(arena);
+template<> PROTOBUF_NOINLINE ::Par_Col* Arena::CreateMaybeMessage< ::Par_Col >(Arena* arena) {
+  return Arena::CreateInternal< ::Par_Col >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Param* Arena::CreateMaybeMessage< ::Param >(Arena* arena) {
   return Arena::CreateInternal< ::Param >(arena);

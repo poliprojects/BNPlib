@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-message Par_Row {
+message Par_Col {
         repeated double elems = 1;
     }
 message Param {
-        repeated Par_Row par_rows= 1;
+        repeated Par_Col par_cols= 1;
     }
 message UniqueValues {
         repeated Param params= 1;

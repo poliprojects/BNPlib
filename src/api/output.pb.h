@@ -60,9 +60,9 @@ extern ChainOutputDefaultTypeInternal _ChainOutput_default_instance_;
 class IterationOutput;
 class IterationOutputDefaultTypeInternal;
 extern IterationOutputDefaultTypeInternal _IterationOutput_default_instance_;
-class Par_Row;
-class Par_RowDefaultTypeInternal;
-extern Par_RowDefaultTypeInternal _Par_Row_default_instance_;
+class Par_Col;
+class Par_ColDefaultTypeInternal;
+extern Par_ColDefaultTypeInternal _Par_Col_default_instance_;
 class Param;
 class ParamDefaultTypeInternal;
 extern ParamDefaultTypeInternal _Param_default_instance_;
@@ -72,30 +72,30 @@ extern UniqueValuesDefaultTypeInternal _UniqueValues_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::ChainOutput* Arena::CreateMaybeMessage<::ChainOutput>(Arena*);
 template<> ::IterationOutput* Arena::CreateMaybeMessage<::IterationOutput>(Arena*);
-template<> ::Par_Row* Arena::CreateMaybeMessage<::Par_Row>(Arena*);
+template<> ::Par_Col* Arena::CreateMaybeMessage<::Par_Col>(Arena*);
 template<> ::Param* Arena::CreateMaybeMessage<::Param>(Arena*);
 template<> ::UniqueValues* Arena::CreateMaybeMessage<::UniqueValues>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 // ===================================================================
 
-class Par_Row :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Par_Row) */ {
+class Par_Col :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Par_Col) */ {
  public:
-  Par_Row();
-  virtual ~Par_Row();
+  Par_Col();
+  virtual ~Par_Col();
 
-  Par_Row(const Par_Row& from);
-  Par_Row(Par_Row&& from) noexcept
-    : Par_Row() {
+  Par_Col(const Par_Col& from);
+  Par_Col(Par_Col&& from) noexcept
+    : Par_Col() {
     *this = ::std::move(from);
   }
 
-  inline Par_Row& operator=(const Par_Row& from) {
+  inline Par_Col& operator=(const Par_Col& from) {
     CopyFrom(from);
     return *this;
   }
-  inline Par_Row& operator=(Par_Row&& from) noexcept {
+  inline Par_Col& operator=(Par_Col&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -113,37 +113,37 @@ class Par_Row :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const Par_Row& default_instance();
+  static const Par_Col& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Par_Row* internal_default_instance() {
-    return reinterpret_cast<const Par_Row*>(
-               &_Par_Row_default_instance_);
+  static inline const Par_Col* internal_default_instance() {
+    return reinterpret_cast<const Par_Col*>(
+               &_Par_Col_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  friend void swap(Par_Row& a, Par_Row& b) {
+  friend void swap(Par_Col& a, Par_Col& b) {
     a.Swap(&b);
   }
-  inline void Swap(Par_Row* other) {
+  inline void Swap(Par_Col* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Par_Row* New() const final {
-    return CreateMaybeMessage<Par_Row>(nullptr);
+  inline Par_Col* New() const final {
+    return CreateMaybeMessage<Par_Col>(nullptr);
   }
 
-  Par_Row* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<Par_Row>(arena);
+  Par_Col* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Par_Col>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const Par_Row& from);
-  void MergeFrom(const Par_Row& from);
+  void CopyFrom(const Par_Col& from);
+  void MergeFrom(const Par_Col& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -157,10 +157,10 @@ class Par_Row :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(Par_Row* other);
+  void InternalSwap(Par_Col* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Par_Row";
+    return "Par_Col";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -209,7 +209,7 @@ class Par_Row :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
       mutable_elems();
 
-  // @@protoc_insertion_point(class_scope:Par_Row)
+  // @@protoc_insertion_point(class_scope:Par_Col)
  private:
   class _Internal;
 
@@ -327,32 +327,32 @@ class Param :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kParRowsFieldNumber = 1,
+    kParColsFieldNumber = 1,
   };
-  // repeated .Par_Row par_rows = 1;
-  int par_rows_size() const;
+  // repeated .Par_Col par_cols = 1;
+  int par_cols_size() const;
   private:
-  int _internal_par_rows_size() const;
+  int _internal_par_cols_size() const;
   public:
-  void clear_par_rows();
-  ::Par_Row* mutable_par_rows(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Row >*
-      mutable_par_rows();
+  void clear_par_cols();
+  ::Par_Col* mutable_par_cols(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Col >*
+      mutable_par_cols();
   private:
-  const ::Par_Row& _internal_par_rows(int index) const;
-  ::Par_Row* _internal_add_par_rows();
+  const ::Par_Col& _internal_par_cols(int index) const;
+  ::Par_Col* _internal_add_par_cols();
   public:
-  const ::Par_Row& par_rows(int index) const;
-  ::Par_Row* add_par_rows();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Row >&
-      par_rows() const;
+  const ::Par_Col& par_cols(int index) const;
+  ::Par_Col* add_par_cols();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Col >&
+      par_cols() const;
 
   // @@protoc_insertion_point(class_scope:Param)
  private:
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Row > par_rows_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Col > par_cols_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_output_2eproto;
 };
@@ -801,52 +801,52 @@ class ChainOutput :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// Par_Row
+// Par_Col
 
 // repeated double elems = 1;
-inline int Par_Row::_internal_elems_size() const {
+inline int Par_Col::_internal_elems_size() const {
   return elems_.size();
 }
-inline int Par_Row::elems_size() const {
+inline int Par_Col::elems_size() const {
   return _internal_elems_size();
 }
-inline void Par_Row::clear_elems() {
+inline void Par_Col::clear_elems() {
   elems_.Clear();
 }
-inline double Par_Row::_internal_elems(int index) const {
+inline double Par_Col::_internal_elems(int index) const {
   return elems_.Get(index);
 }
-inline double Par_Row::elems(int index) const {
-  // @@protoc_insertion_point(field_get:Par_Row.elems)
+inline double Par_Col::elems(int index) const {
+  // @@protoc_insertion_point(field_get:Par_Col.elems)
   return _internal_elems(index);
 }
-inline void Par_Row::set_elems(int index, double value) {
+inline void Par_Col::set_elems(int index, double value) {
   elems_.Set(index, value);
-  // @@protoc_insertion_point(field_set:Par_Row.elems)
+  // @@protoc_insertion_point(field_set:Par_Col.elems)
 }
-inline void Par_Row::_internal_add_elems(double value) {
+inline void Par_Col::_internal_add_elems(double value) {
   elems_.Add(value);
 }
-inline void Par_Row::add_elems(double value) {
+inline void Par_Col::add_elems(double value) {
   _internal_add_elems(value);
-  // @@protoc_insertion_point(field_add:Par_Row.elems)
+  // @@protoc_insertion_point(field_add:Par_Col.elems)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
-Par_Row::_internal_elems() const {
+Par_Col::_internal_elems() const {
   return elems_;
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >&
-Par_Row::elems() const {
-  // @@protoc_insertion_point(field_list:Par_Row.elems)
+Par_Col::elems() const {
+  // @@protoc_insertion_point(field_list:Par_Col.elems)
   return _internal_elems();
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
-Par_Row::_internal_mutable_elems() {
+Par_Col::_internal_mutable_elems() {
   return &elems_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< double >*
-Par_Row::mutable_elems() {
-  // @@protoc_insertion_point(field_mutable_list:Par_Row.elems)
+Par_Col::mutable_elems() {
+  // @@protoc_insertion_point(field_mutable_list:Par_Col.elems)
   return _internal_mutable_elems();
 }
 
@@ -854,43 +854,43 @@ Par_Row::mutable_elems() {
 
 // Param
 
-// repeated .Par_Row par_rows = 1;
-inline int Param::_internal_par_rows_size() const {
-  return par_rows_.size();
+// repeated .Par_Col par_cols = 1;
+inline int Param::_internal_par_cols_size() const {
+  return par_cols_.size();
 }
-inline int Param::par_rows_size() const {
-  return _internal_par_rows_size();
+inline int Param::par_cols_size() const {
+  return _internal_par_cols_size();
 }
-inline void Param::clear_par_rows() {
-  par_rows_.Clear();
+inline void Param::clear_par_cols() {
+  par_cols_.Clear();
 }
-inline ::Par_Row* Param::mutable_par_rows(int index) {
-  // @@protoc_insertion_point(field_mutable:Param.par_rows)
-  return par_rows_.Mutable(index);
+inline ::Par_Col* Param::mutable_par_cols(int index) {
+  // @@protoc_insertion_point(field_mutable:Param.par_cols)
+  return par_cols_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Row >*
-Param::mutable_par_rows() {
-  // @@protoc_insertion_point(field_mutable_list:Param.par_rows)
-  return &par_rows_;
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Col >*
+Param::mutable_par_cols() {
+  // @@protoc_insertion_point(field_mutable_list:Param.par_cols)
+  return &par_cols_;
 }
-inline const ::Par_Row& Param::_internal_par_rows(int index) const {
-  return par_rows_.Get(index);
+inline const ::Par_Col& Param::_internal_par_cols(int index) const {
+  return par_cols_.Get(index);
 }
-inline const ::Par_Row& Param::par_rows(int index) const {
-  // @@protoc_insertion_point(field_get:Param.par_rows)
-  return _internal_par_rows(index);
+inline const ::Par_Col& Param::par_cols(int index) const {
+  // @@protoc_insertion_point(field_get:Param.par_cols)
+  return _internal_par_cols(index);
 }
-inline ::Par_Row* Param::_internal_add_par_rows() {
-  return par_rows_.Add();
+inline ::Par_Col* Param::_internal_add_par_cols() {
+  return par_cols_.Add();
 }
-inline ::Par_Row* Param::add_par_rows() {
-  // @@protoc_insertion_point(field_add:Param.par_rows)
-  return _internal_add_par_rows();
+inline ::Par_Col* Param::add_par_cols() {
+  // @@protoc_insertion_point(field_add:Param.par_cols)
+  return _internal_add_par_cols();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Row >&
-Param::par_rows() const {
-  // @@protoc_insertion_point(field_list:Param.par_rows)
-  return par_rows_;
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Par_Col >&
+Param::par_cols() const {
+  // @@protoc_insertion_point(field_list:Param.par_cols)
+  return par_cols_;
 }
 
 // -------------------------------------------------------------------
