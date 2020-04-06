@@ -15,9 +15,9 @@ IterationOutput Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(unsign
     for(int i = 0; i < unique_values.size(); i++){
         UniqueValues Uniquevalues_temp;
         for(int k = 0; k< unique_values[i].get_state().size(); k++){
-            Eigen::MatrixXd par_temp=par;
+            Eigen::MatrixXd par_temp=unique_values[i].get_state()[k];
             Param par_temp_proto;
-            for(int j=0; j<par_temp.rows; j++){
+            for(int j=0; j<par_temp.rows(); j++){
                 Par_Row row_temp;
                 for(auto &el : par_temp.row(j)){
                 row_temp.add_elems(el);
