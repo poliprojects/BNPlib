@@ -20,7 +20,7 @@ IterationOutput Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(unsign
             for(int j=0; j<par_temp.cols(); j++){
                 Par_Col col_temp;
                 for(int h=0; h<par_temp.rows(); h++){
-                col_temp.add_elems(par_temp(h,j);
+                col_temp.add_elems(par_temp(h,j));
                 }
                 par_temp_proto.add_par_cols();
                 *par_temp_proto.mutable_par_cols(j)=col_temp;     
