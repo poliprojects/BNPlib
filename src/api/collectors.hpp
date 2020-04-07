@@ -14,10 +14,11 @@
 
 
 class BaseCollector {
-  public:
-  BaseCollector(){}
-  virtual void collect(IterationOutput iteration_state) = 0;
-  virtual ~BaseCollector() = default;
+    public:
+    BaseCollector(){}
+    virtual void collect(IterationOutput iteration_state) = 0;
+    virtual ~BaseCollector() = default;
+    virtual std::deque<IterationOutput> get_chains()=0;
 };
 
 
@@ -31,7 +32,7 @@ class MemoryCollector : public BaseCollector {
     void collect(IterationOutput iteration_state) override {
     chains.push_back(iteration_state);
     }
-    std::deque<IterationOutput> get_chains(){return chains;};
+    std::deque<IterationOutput> get_chains()override {return chains;};
     virtual ~MemoryCollector() = default;
 };
 
@@ -51,7 +52,7 @@ FileCollector(std::string filename) {
 
 }
 
-
+std::deque<IterationOutput> get_chains()override {std::cout<<"errore";}; // TODO
 
 void collect(IterationOutput iteration_state) override {
         bool success;

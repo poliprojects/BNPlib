@@ -6,11 +6,11 @@
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyNNIG<Hypers>::like(Eigen::VectorXd datum){
+Eigen::VectorXd HierarchyNNIG<Hypers>::like(Eigen::MatrixXd datum){
     // TODO stan per vector?? 
-    Eigen::VectorXd result(datum.size());
-    for(int i = 0; i < datum.size(); i++){
-        result(i) = exp(stan::math::normal_lpdf(datum(i), state[0](0,0), state[1](0,0)));
+    Eigen::VectorXd result(datum.rows());
+    for(int i = 0; i < datum.rows(); i++){
+        result(i) = exp(stan::math::normal_lpdf(datum(i,0), state[0](0,0), state[1](0,0)));
     }
     return result;
 }
@@ -35,9 +35,9 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(Eigen::MatrixXd datum){
 	double sigtilde = sqrt( hypers->get_beta0()*(hypers->get_lambda()+1) /
         (hypers->get_alpha0()*hypers->get_lambda()) );
     // TODO stan per vector?? // TODO anche per tutto il resto
-    Eigen::VectorXd result(datum.size());
-    for(int i = 0; i < datum.size(); i++){
-        result(i) = exp( stan::math::student_t_lpdf(datum(i),
+    Eigen::VectorXd result(datum.rows());
+    for(int i = 0; i < datum.rows(); i++){
+        result(i) = exp( stan::math::student_t_lpdf(datum(i,0),
             2*hypers->get_alpha0(), hypers->get_mu0(), sigtilde) );
     }
     return result;

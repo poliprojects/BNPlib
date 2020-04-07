@@ -37,7 +37,7 @@ public:
   
 
     Eigen::VectorXd eval_marg(Eigen::MatrixXd datum);
-    Eigen::VectorXd like(Eigen::VectorXd datum);
+    Eigen::VectorXd like(Eigen::MatrixXd datum);
 
     void draw();
 

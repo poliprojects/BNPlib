@@ -52,8 +52,10 @@ int main(int argc, char *argv[]){
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
     DirichletMixture mix(1); // total mass
 
-    Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
-        data, n_aux, mix, hy);
+    //Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
+      //  data, n_aux, mix, hy);
+    Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler2(
+        data, mix, hy);
 	
     // Run sampler
 	BaseCollector *f;
@@ -66,8 +68,8 @@ int main(int argc, char *argv[]){
         f=new MemoryCollector();}
    
     
-
-    sampler.run(f);
+    sampler2.run(f);
+    //sampler.run(f);
 
 
     // Density stuff
@@ -81,16 +83,21 @@ int main(int argc, char *argv[]){
         temp += step;
     }
     Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(v_temp.data(), v_temp.size()); 
-    sampler.eval_density(grid, f);
+    
+    //sampler.eval_density(grid, f);
     //sampler.write_density_to_file("density_m50.csv");
-
-    // Density and clustering stuff
-    //sampler.eval_density(grid,f);
-    //sampler.write_density_to_file();
 	//unsigned int i_cap = sampler.cluster_estimate(f);
     //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
     //sampler.write_final_clustering_to_file();
     //sampler.write_best_clustering_to_file();
+
+
+    //sampler2.eval_density(grid,f);
+    //sampler2.write_density_to_file();
+	//unsigned int i_cap = sampler2.cluster_estimate(f);
+    //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+    //sampler2.write_final_clustering_to_file();
+    //sampler2.write_best_clustering_to_file();
 
     return 0;
 }

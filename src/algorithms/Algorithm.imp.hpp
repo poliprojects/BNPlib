@@ -168,8 +168,8 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::ofstream file;
     file.open(filename);
 
-    for(int i = 0; i < density.first.size(); i++){
-        file << density.first[i] << "," << density.second(i) << std::endl;
+    for(int i = 0; i < density.first.rows(); i++){
+        file << density.first.row(i) << "," << density.second(i) << std::endl;
     }
     
     file.close();

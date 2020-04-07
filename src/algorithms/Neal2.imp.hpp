@@ -160,7 +160,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
         const Eigen::MatrixXd grid,BaseCollector* collector){
-    
+
     this->density.first = grid;
     Eigen::VectorXd dens(grid.rows());
     double M = this->mixture.get_totalmass();
