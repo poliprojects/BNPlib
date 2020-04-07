@@ -31,6 +31,7 @@ class MemoryCollector : public BaseCollector {
     void collect(IterationOutput iteration_state) override {
     chains.push_back(iteration_state);
     }
+    std::deque<IterationOutput> get_chains(){return chains;};
     virtual ~MemoryCollector() = default;
 };
 

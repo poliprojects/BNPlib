@@ -115,6 +115,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         const Eigen::MatrixXd grid,MemoryCollector* collector){
+
     this->density.first = grid;
 
     //std::ofstream file;
@@ -124,17 +125,17 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     Eigen::VectorXd dens(grid.rows());
     double M = this->mixture.get_totalmass();
     int n = this->data.rows();
+    IterationOutput state;    
 
-
-    for(int iter = 0; iter < collector->chains.size(); iter++){
+    for(int iter = 0; iter < collector->get_chains().size(); iter++){
         // for each iteration of the algorithm
         //std::cout << iter << std::endl; // DEBUG
 
-        auto state = collector->chains[iter];
+        state = collector->get_chains()[iter];
         std::vector<unsigned int> card(state.uniquevalues_size(),
             0); // TODO salviamoci ste card da qualche parte
         std::vector<Eigen::MatrixXd> params(state.uniquevalues(0).params_size()); // TODO state.unique o state.mutable
-        Eigen::VectorXd dens_addendum = Eigen::MatrixXd::Zero(grid.rows(), 1);
+        Eigen::VectorXd dens_addendum(grid.rows());
         
         for(int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
@@ -172,7 +173,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     //     std::cout << dens(i) << " ";
     // std::cout << std::endl;
 
-    this->density.second = dens / this->chain.chain_size();
+    this->density.second = dens / collector->get_chains().size();
 
     //DEBUG:
     // for(int i = 0; i < grid.size(); i++)

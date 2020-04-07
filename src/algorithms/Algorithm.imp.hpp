@@ -4,7 +4,7 @@
 #include "Algorithm.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(Param par){
+Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(const Param &par){
     Eigen::MatrixXd Par_matrix= Eigen::MatrixXd::Zero(par.par_cols_size(), par.par_cols(0).elems_size());
     for(int h = 0; h < par.par_cols_size(); h++){
         for(int j = 0; j < par.par_cols(h).elems_size(); j++){
@@ -77,7 +77,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(MemoryColle
     IterationOutput temp;
     
     for(int h = 0; h < niter; h++){
-        temp = collector->chains[h];
+        temp = collector->get_chains()[h];
         Eigen::MatrixXd dissim(n, n);
         dissim = Eigen::MatrixXd::Zero(n, n);
         for(int i = 0; i < n; i++){
@@ -112,7 +112,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(MemoryColle
     //file2 << all_diss[i];
     //file2.close();
 
-    best_clust = collector->chains[i];
+    best_clust = collector->get_chains()[i];
     std::cout << best_clust.uniquevalues_size() <<
         " clusters were found via least square minimization" << std::endl;
     return i;

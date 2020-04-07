@@ -6,36 +6,38 @@
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyNNIG<Hypers>::like(Eigen::VectorXd datum){
+Eigen::VectorXd HierarchyNNIG<Hypers>::like(Eigen::MatrixXd datum){
     // TODO stan per vector?? 
-    Eigen::VectorXd result(datum.size());
-    for(int i = 0; i < datum.size(); i++){
-        result(i) = exp(stan::math::normal_lpdf(datum.row(i), state[0], state[1]));
+    Eigen::VectorXd result(datum.rows());
+    for(int i = 0; i < datum.rows(); i++){
+        result(i) = exp(stan::math::normal_lpdf(datum(i,1), state[0](0,0), state[1](0,0)));
     }
     return result;
 }
 
 template<class Hypers> 
 void HierarchyNNIG<Hypers>::draw(){
-    double sigma2_new = stan::math::inv_gamma_rng(hypers->get_alpha0(),
-        hypers->get_beta0(), rng);
-    double mu_new = stan::math::normal_rng(hypers->get_mu0(),
-        sqrt(sigma2_new/hypers->get_lambda()), rng);
+    Eigen::MatrixXd sigma2_new(1,1);
+    sigma2_new(0,0)= sqrt(stan::math::inv_gamma_rng(hypers->get_alpha0(),
+        hypers->get_beta0(), rng));
+    Eigen::MatrixXd mu_new(1,1);
+    mu_new(0,0)=stan::math::normal_rng(hypers->get_mu0(),
+        sqrt(sigma2_new(0,0)/hypers->get_lambda()), rng);
     state[0] = mu_new;
-    state[1] = sqrt(sigma2_new);
+    state[1] = sigma2_new;
 }
 
 
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(Eigen::VectorXd datum){
+Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(Eigen::MatrixXd datum){
 	double sigtilde = sqrt( hypers->get_beta0()*(hypers->get_lambda()+1) /
         (hypers->get_alpha0()*hypers->get_lambda()) );
     // TODO stan per vector?? // TODO anche per tutto il resto
-    Eigen::VectorXd result(datum.size());
+    Eigen::VectorXd result(datum.rows());
     for(int i = 0; i < datum.size(); i++){
-        result(i) = exp( stan::math::student_t_lpdf(datum[i],
+        result(i) = exp( stan::math::student_t_lpdf(datum(i,1),
             2*hypers->get_alpha0(), hypers->get_mu0(), sigtilde) );
     }
     return result;
@@ -48,7 +50,7 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
     double lambda0){
 
     double mu_post, alpha_post, beta_post, lambda_post;
-    int n = data.size();
+    int n = data.rows();
 
     if(n == 0){
         return std::vector<double>{mu0, alpha0, beta0, lambda0};
@@ -71,14 +73,14 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
 
 
 template<class Hypers> 
-void HierarchyNNIG<Hypers>::sample_given_data(Eigen::VectorXd data){
+void HierarchyNNIG<Hypers>::sample_given_data(Eigen::MatrixXd data){
     // Get current values of parameters
     double mu0     = hypers->get_mu0();
     double lambda0 = hypers->get_lambda();
     double alpha0  = hypers->get_alpha0();
     double beta0   = hypers->get_beta0();
 
-    std::vector<double> temp = normal_gamma_update(data, mu0, alpha0, beta0,
+    std::vector<double> temp = normal_gamma_update(data.col(0), mu0, alpha0, beta0,
         lambda0);
 
     double mu_post     = temp[0];
@@ -87,11 +89,13 @@ void HierarchyNNIG<Hypers>::sample_given_data(Eigen::VectorXd data){
     double lambda_post = temp[3];
 
     // Get a sample
-    double sigma2_new = stan::math::inv_gamma_rng(alpha_post, beta_post, rng);
-    double mu_new = stan::math::normal_rng(mu_post, sqrt(sigma2_new/lambda_post),
+    Eigen::MatrixXd sigma2_new(1,1);
+    sigma2_new(0,0)=sqrt(stan::math::inv_gamma_rng(alpha_post, beta_post, rng));
+    Eigen::MatrixXd mu_new(1,1);
+    mu_new(0,0)=stan::math::normal_rng(mu_post, sqrt(sigma2_new(0,0)/lambda_post),
         rng); 
     state[0] = mu_new;
-    state[1] = sqrt(sigma2_new);
+    state[1] = sigma2_new;
 }
 
 

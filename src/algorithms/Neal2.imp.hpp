@@ -160,27 +160,30 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
         const Eigen::MatrixXd grid,MemoryCollector* collector){
+    
     this->density.first = grid;
-
     Eigen::VectorXd dens(grid.rows());
     double M = this->mixture.get_totalmass();
     int n = this->data.rows();
     IterationOutput state;
 
-    for(unsigned int iter = 0; iter < this->chain.chain_size(); iter++){
+    for(unsigned int iter = 0; iter < collector->get_chains().size(); iter++){
         // for each iteration of the algorithm
-
-        state = *(this->chain.mutable_chain(iter)); // TODO does it work?
+        
         std::vector<unsigned int> card(state.uniquevalues_size(),
-            0); // TODO salviamoci ste card da qualche parte
-        std::vector<double> params(state.uniquevalues(0).params_size());
+            0);
+        state = collector->get_chains()[iter];
+
+        std::vector<Eigen::MatrixXd> params(state.uniquevalues(0).params_size()); // TODO state.unique o state.mutable
+
         for(unsigned int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
         Hierarchy<Hypers> temp_hier(this->unique_values[0].get_hypers());
+
         for(unsigned int h = 0; h < state.uniquevalues_size(); h++){
             for(int k = 0; k < state.uniquevalues(h).params_size(); k++){
-                params[k] = state.uniquevalues(h).params(k);
+                params[k] = this->proto_param_to_matrix(state.uniquevalues(h).params(k));
             }
             temp_hier.set_state(params);
 
@@ -196,7 +199,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
     //     std::cout << dens(i) << " ";
     // std::cout << std::endl;
 
-    this->density.second = dens / this->chain.chain_size();
+    this->density.second = dens / collector->get_chains().size();
 
     //DEBUG:
     // for(int i = 0; i < grid.size(); i++)
