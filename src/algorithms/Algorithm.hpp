@@ -102,18 +102,15 @@ public:
     //}
 
     // Other tools
-    unsigned int cluster_estimate(MemoryCollector* collector);
+    unsigned int cluster_estimate(BaseCollector* collector);
 
-    virtual void eval_density(const Eigen::MatrixXd grid, MemoryCollector* collector) = 0;
+    virtual void eval_density(const Eigen::MatrixXd grid, BaseCollector* collector) = 0;
 
     const void write_final_clustering_to_file(
         std::string filename = "clust_final.csv");
 
     const void write_best_clustering_to_file(
         std::string filename = "clust_best.csv");
-
-    const void write_chain_to_file(
-        std::string filename = "chain.csv");
 
     const void write_density_to_file(
         std::string filename = "density.csv");

@@ -19,7 +19,7 @@ protected:
 
 public:
     // Other tools:
-    void eval_density(const Eigen::MatrixXd grid, MemoryCollector* collector) override;
+    void eval_density(const Eigen::MatrixXd grid, BaseCollector* collector) override;
 
     // Destructors and constructors:
     ~Neal8() = default;

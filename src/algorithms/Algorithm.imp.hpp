@@ -65,7 +65,7 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(MemoryCollector* collector){
+unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(BaseCollector* collector){
     // also returns the index of the estimate in the chain object
 
     unsigned int niter = maxiter - burnin;
@@ -152,7 +152,7 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
         unsigned int ci = best_clust.allocations(i);
         file << i << "," << data.row(i) << "," << ci;
         for(int j = 0; j < best_clust.uniquevalues(ci).params_size(); j++){
-            file << "," << best_clust.uniquevalues(ci).params(j);
+            file << "," << this->proto_param_to_matrix(best_clust.uniquevalues(ci).params(j));
         }
         file << std::endl;
     }
@@ -160,32 +160,6 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
     std::cout << "Succesfully wrote to " << filename << std::endl;
 }
 
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Algorithm<Hierarchy, Hypers, Mixture>::write_chain_to_file(
-    std::string filename){
-    // number,datum,cluster,params1,params2,...
-
-    std::ofstream file;
-    file.open(filename);
-
-    // for each iteration of the algorithm
-    for(int iter = 0; iter < chain.chain_size(); iter++){
-        // for each data point
-        for(int i = 0; i < data.rows(); i++){
-            auto state_iter = chain.chain(iter);
-            unsigned int ci = state_iter.allocations(i);
-            file << iter << "," << i << "," << data.row(i) << "," << ci;
-            for(int j = 0; j < state_iter.uniquevalues(ci).params_size(); j++){
-                file << "," << state_iter.uniquevalues(ci).params(j);
-            }
-            file << std::endl;
-        }
-    }
-
-    file.close();
-    std::cout << "Succesfully wrote to " << filename << std::endl;
-}
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>

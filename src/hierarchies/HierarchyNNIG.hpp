@@ -25,7 +25,7 @@ public:
     // Contructors
     ~HierarchyNNIG() = default;
 
-    HierarchyNNIG(std::shared_ptr<Hypers> hypers): hypers(hypers), state(2){}
+    HierarchyNNIG(std::shared_ptr<Hypers> hypers): hypers(hypers), state(2,Eigen::MatrixXd::Identity(1,1)){}
 
     // Getters and setters
     std::vector<Eigen::MatrixXd> get_state(){return state;}
@@ -37,7 +37,7 @@ public:
   
 
     Eigen::VectorXd eval_marg(Eigen::MatrixXd datum);
-    Eigen::VectorXd like(Eigen::MatrixXd datum);
+    Eigen::VectorXd like(Eigen::VectorXd datum);
 
     void draw();
 
