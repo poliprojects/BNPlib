@@ -3,7 +3,17 @@
 
 #include "Algorithm.hpp"
 
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(Param par){
+    Eigen::MatrixXd Par_matrix= Eigen::MatrixXd::Zero(par.par_cols_size(), par.par_cols(0).elems_size());
+    for(int h = 0; h < par.par_cols_size(); h++){
+        for(int j = 0; j < par.par_cols(h).elems_size(); j++){
+        Par_matrix(j,h)=par.par_cols(h).elems(j);
+        }
+    }
 
+return Par_matrix;
+}
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
@@ -55,7 +65,7 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(){
+unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(MemoryCollector* collector){
     // also returns the index of the estimate in the chain object
 
     unsigned int niter = maxiter - burnin;
@@ -67,7 +77,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     IterationOutput temp;
     
     for(int h = 0; h < niter; h++){
-        temp = *chain.mutable_chain(h);
+        temp = collector->chains[h];
         Eigen::MatrixXd dissim(n, n);
         dissim = Eigen::MatrixXd::Zero(n, n);
         for(int i = 0; i < n; i++){
@@ -102,7 +112,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(){
     //file2 << all_diss[i];
     //file2.close();
 
-    best_clust = chain.chain(i);
+    best_clust = collector->chains[i];
     std::cout << best_clust.uniquevalues_size() <<
         " clusters were found via least square minimization" << std::endl;
     return i;

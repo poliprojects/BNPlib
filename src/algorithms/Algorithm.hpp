@@ -52,6 +52,8 @@ protected:
     
     IterationOutput get_state_as_proto(unsigned int iter);
 
+    Eigen::MatrixXd proto_param_to_matrix(Param);
+
     const void print_ending_message();
 
     void save_state(BaseCollector* collector, unsigned int iter){
@@ -101,9 +103,9 @@ public:
     //}
 
     // Other tools
-    unsigned int cluster_estimate();
+    unsigned int cluster_estimate(MemoryCollector* collector);
 
-    virtual void eval_density(const Eigen::MatrixXd grid) = 0;
+    virtual void eval_density(const Eigen::MatrixXd grid, MemoryCollector* collector) = 0;
 
     const void write_final_clustering_to_file(
         std::string filename = "clust_final.csv");
