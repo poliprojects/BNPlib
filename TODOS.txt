@@ -2,12 +2,8 @@ TODO LIST
 
 
 Elena:
-* rivedi proto multivariato le funzioni con proto:
-IN Neal2 e Neal8: eval_density
-IN Algo su : cluster_estimate/write_final_clustering_to_file/write_best_clustering_to_file/write_chain_to_file/write_density_to_file
-(anche data_grid è multivariato)
-( print functions: remove last empty column)
-
+* (print functions: remove last empty column)
+* error in FileCollector::get_chains()
 * timer: eigen::vector
 * RNG seed {20200227} or  {std::random_device}
 

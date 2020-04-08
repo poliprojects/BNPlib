@@ -83,7 +83,7 @@ int main(int argc, char *argv[]){
         temp += step;
     }
     Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(v_temp.data(), v_temp.size()); 
-    
+ 
     //sampler.eval_density(grid, f);
     //sampler.write_density_to_file("density_m50.csv");
 	//unsigned int i_cap = sampler.cluster_estimate(f);

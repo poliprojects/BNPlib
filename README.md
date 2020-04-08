@@ -16,7 +16,7 @@ You will need a terminal to run the following commands.
 * TBD
 
 ### Usage examples
-* ```./main path/to/filename.csv "Collector"``` and input required values to stdin
+* ```./main path/to/filename.csv Collector``` and input required values to stdin (choose Collector: "FileCollector" or "MemoryCollector")
 * ```./main path/to/filename.csv "FileCollector" "filename"``` in case of FileCollector specify filename
 * ```./main csv/data.csv <<< "5.0 0.1 2.0 2.0 1.0 3"``` to automatically fill in
   all values

@@ -33,7 +33,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         n_unique = this->unique_values.size();
      
         if(card[ this->allocations[i] ] == 1){ // datum i is a singleton
-            k = n_unique - 1;
+            k = n_unique - 1; // TODO ci serve ?
             aux_unique_values[0].set_state( this->unique_values[
                 this->allocations[i] ].get_state() ); // move phi value in aux
             singleton = 1;
