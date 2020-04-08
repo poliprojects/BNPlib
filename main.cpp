@@ -92,7 +92,7 @@ int main(int argc, char *argv[]){
     //sampler.write_best_clustering_to_file();
 
 
-    //sampler2.eval_density(grid,f);
+    sampler2.eval_density(grid,f);
     //sampler2.write_density_to_file();
 	//unsigned int i_cap = sampler2.cluster_estimate(f);
     //std::cout << "Best clustering: at iteration " << i_cap << std::endl;
