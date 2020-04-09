@@ -8,12 +8,13 @@ int main(int argc, char *argv[]){
     // Dummy Test
 
     // 3D-vectorial data
-    Eigen::MatrixXd data;
+    Eigen::MatrixXd data(3,5);
     data << 1.3, 0.9, 8.8, 2.0, -1.3,
             2.3, 5.1, 4.4, 0.0, -3.2,
             3.0, 4,0, 3.3, 1.1, +1.5;
 
-    Eigen::VectorXd mu0(3.0, 3.0, 3.0);
+    Eigen::VectorXd mu0(3);
+    mu0 << 3.0, 3.0, 3.0;
     Eigen::MatrixXd lambda0 = 2 * Eigen::Matrix<double, 3, 3>::Identity();
     double totalmass = 1.0;
     int n_aux = 3;
