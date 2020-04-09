@@ -6,7 +6,7 @@
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyDummy<Hypers>::like(Eigen::MatrixXd datum){
+Eigen::VectorXd HierarchyDummy<Hypers>::like(const Eigen::MatrixXd &datum){
     Eigen::VectorXd result(datum.cols());
     for(int i = 0; i < datum.cols(); i++){
         result(i) = datum(0,i) / 500.0;
@@ -26,7 +26,7 @@ void HierarchyDummy<Hypers>::draw(){
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyDummy<Hypers>::eval_marg(Eigen::MatrixXd datum){
+Eigen::VectorXd HierarchyDummy<Hypers>::eval_marg(const Eigen::MatrixXd &datum){
     Eigen::VectorXd result(datum.cols());
     for(int i = 0; i < datum.cols(); i++){
         result(i) = datum(0,i) / 1000.0;
@@ -37,7 +37,8 @@ Eigen::VectorXd HierarchyDummy<Hypers>::eval_marg(Eigen::MatrixXd datum){
 
 template<class Hypers> 
 std::vector<Eigen::MatrixXd> HierarchyDummy<Hypers>::dummy_update(
-    Eigen::MatrixXd &data, Eigen::VectorXd &mu0, Eigen::MatrixXd &lambda0){
+    const Eigen::MatrixXd &data, const Eigen::VectorXd &mu0, const
+    Eigen::MatrixXd &lambda0){
 
     int n = data.cols();
     Eigen::VectorXd mu_post = mu0 * std::pow(0.99,n);
@@ -48,7 +49,7 @@ std::vector<Eigen::MatrixXd> HierarchyDummy<Hypers>::dummy_update(
 
 
 template<class Hypers> 
-void HierarchyDummy<Hypers>::sample_given_data(Eigen::MatrixXd &data){
+void HierarchyDummy<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     // Get current values of parameters
     Eigen::VectorXd mu0 = hypers->get_mu0();
     Eigen::MatrixXd lambda0 = hypers->get_lambda0();

@@ -20,6 +20,10 @@ protected:
 public:
     // Contructors
     ~HierarchyDummy() = default;
+    HierarchyDummy(std::shared_ptr<Hypers> hypers): hypers(hypers){
+        state.push_back(Eigen::VectorXd(2.9, 2.9, 2.9));
+        state.push_back(Eigen::MatrixXd::Identity(3,3));
+    }
 
     // Getters and setters
     std::vector<Eigen::MatrixXd>get_state(){return state;}
@@ -27,15 +31,15 @@ public:
     void set_state(const std::vector<Eigen::MatrixXd> &s){state = s;}
     int get_count(){return hypers.use_count();} // TODO what?
 
-    Eigen::VectorXd eval_marg(Eigen::MatrixXd datum);
-    Eigen::VectorXd like(Eigen::MatrixXd datum);
+    Eigen::VectorXd eval_marg(const Eigen::MatrixXd &datum);
+    Eigen::VectorXd like(const Eigen::MatrixXd &datum);
 
     void draw();
 
-    std::vector<Eigen::MatrixXd> dummy_update(Eigen::MatrixXd &data,
-        Eigen::VectorXd &mu0, Eigen::MatrixXd &lambda0);
+    std::vector<Eigen::MatrixXd> dummy_update(const Eigen::MatrixXd &data,
+        const Eigen::VectorXd &mu0, const Eigen::MatrixXd &lambda0);
 
-    void sample_given_data(Eigen::MatrixXd &data);
+    void sample_given_data(const Eigen::MatrixXd &data);
 };
 
 #include "HierarchyDummy.imp.hpp"
