@@ -52,7 +52,10 @@ FileCollector(std::string filename) {
 
 }
 
-std::deque<IterationOutput> get_chains()override {std::cout<<"errore";}; // TODO
+std::deque<IterationOutput> get_chains()override {
+    std::cout<<"error";
+    return std::deque<IterationOutput>();
+}; // TODO
 
 void collect(IterationOutput iteration_state) override {
         bool success;
