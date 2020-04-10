@@ -21,8 +21,14 @@ public:
     // Contructors
     ~HierarchyDummy() = default;
     HierarchyDummy(std::shared_ptr<Hypers> hypers): hypers(hypers){
-        state.push_back(Eigen::VectorXd(2.9, 2.9, 2.9));
-        state.push_back(Eigen::MatrixXd::Identity(3,3));
+        Eigen::VectorXd mu(3);
+        mu << 2.9, 2.9, 2.9;
+        state.push_back(mu);
+        Eigen::MatrixXd sig(3,3);
+        sig << 1.0, 0.0, 0.0,
+               0.0, 1.0, 0.0,
+               0.0, 0.0, 1.0;
+        state.push_back(sig);
     }
 
     // Getters and setters

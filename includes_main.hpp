@@ -9,4 +9,22 @@
 #include "src/hierarchies/HierarchyDummy.hpp" // TODO
 #include "src/mixtures/DirichletMixture.hpp"
 
+void fill_eigen_matrix_from_file(Eigen::Ref<Eigen::MatrixXd> mat,
+	const std::string &filename){
+	// TODO needs space-separated values!
+	std::ifstream istr(filename);
+
+	if (istr.is_open())
+	{
+    	for (int i = 0; i < mat.rows(); i++)
+        	for (int j = 0; j < mat.cols(); j++)
+	        {
+    	        double val;
+        	    istr >> val;
+            	mat(i,j) = val;
+       		}
+    	istr.close();
+	}
+}
+
 #endif // INCLUDES_MAIN_HPP
