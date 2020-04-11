@@ -1,17 +1,14 @@
 #include <iostream>
 #include <fstream>
 
+
 #include "includes_main.hpp"
 #include "math.h"
 
 int main(int argc, char *argv[]){
-    // Dummy Test
-
     // 3D-vectorial data
     Eigen::MatrixXd data(3,5);
-    data << 1.3, 0.9, 8.8, 2.0, -1.3,
-            2.3, 5.1, 4.4, 0.0, -3.2,
-            3.0, 4,0, 3.3, 1.1, +1.5;
+    fill_eigen_matrix_from_file(data,"csv/data_vec.csv");
 
     Eigen::VectorXd mu0(3);
     mu0 << 3.0, 3.0, 3.0;
@@ -24,13 +21,41 @@ int main(int argc, char *argv[]){
         data, n_aux, mix, hy);
 
     BaseCollector *f;
-    std::string collector(argv[2]);
-    if(collector=="FileCollector"){
-        std::string filename(argv[3]);
-        f=new FileCollector(filename);}
-    if(collector=="MemoryCollector"){
-        f=new MemoryCollector();}
-   
+    if(argc < 2){
+        std::cerr << "Error: need at least one arg (\"file\" or \"memory\")" <<
+            std::endl;
+        return 1;
+    }
+
+    std::string collector(argv[1]);
+    if(collector == "file"){
+        std::string filename;
+        if(argc < 3){
+            // Use default name
+            filename = "collector.bin";
+        }
+        else {
+            std::string filename = argv[2];
+            if(argc > 3){
+                std::cout << "Warning: unused extra args present" << std::endl;
+            }
+        }
+        f = new FileCollector(filename);
+    }
+
+    else if(collector == "memory"){
+        if(argc > 2){
+            std::cout << "Warning: unused extra args present" << std::endl;
+        }
+        f = new MemoryCollector();
+    }
+
+    else {
+        std::cerr << "Error: first arg must be \"file\" or \"memory\"" <<
+            std::endl;
+        return 1;
+    }
+  
     sampler.run(f);
 
     return 0;
