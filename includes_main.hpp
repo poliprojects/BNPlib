@@ -14,7 +14,7 @@ void fill_eigen_matrix_from_file(Eigen::Ref<Eigen::MatrixXd> mat,
 	// TODO needs space-separated values!
 	std::ifstream istr(filename);
 
-	if (istr.is_open())
+	if(istr.is_open())
 	{
     	for (int i = 0; i < mat.rows(); i++)
         	for (int j = 0; j < mat.cols(); j++)

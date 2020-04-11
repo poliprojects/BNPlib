@@ -52,15 +52,16 @@ FileCollector(std::string filename) {
 
 }
 
-std::deque<IterationOutput> get_chains()override {
-    std::cout<<"error";
+std::deque<IterationOutput> get_chains() override {
+    std::cerr << "error" << std::endl;
     return std::deque<IterationOutput>();
 }; // TODO
 
 void collect(IterationOutput iteration_state) override {
         bool success;
-        success = google::protobuf::util::SerializeDelimitedToZeroCopyStream(iteration_state, fout);
-        if (! success)
+        success = google::protobuf::util::SerializeDelimitedToZeroCopyStream(
+            iteration_state, fout);
+        if (!success)
             std::cout << "Writing Failed" << std::endl;
 }
 

@@ -11,7 +11,16 @@
 int main(int argc, char *argv[]){
     // Read data from main arg
     std::ifstream file;
+    if(argc < 2){
+        std::cerr << "Error: no filename given for data as arg" << std::endl;
+        return 1;
+    }
     file.open(argv[1]);
+    if(!file.is_open()){
+        std::cerr << "Error: " << argv[1] << " file does not exist" <<
+            std::endl;
+        return 1;
+    }
     std::string str, str2;
     std::getline(file, str);
     std::istringstream iss(str);
@@ -57,22 +66,22 @@ int main(int argc, char *argv[]){
   
     // Run sampler
     BaseCollector *f;
-    if(argc < 2){
-        std::cerr << "Error: need at least one arg (\"file\" or \"memory\")" <<
-            std::endl;
+    if(argc < 3){
+        std::cerr << "Error: need file collector type" <<
+            "(\"file\" or \"memory\") as arg" << std::endl;
         return 1;
     }
 
-    std::string collector(argv[1]);
+    std::string collector(argv[2]);
     if(collector == "file"){
         std::string filename;
-        if(argc < 3){
+        if(argc < 4){
             // Use default name
             filename = "collector.bin";
         }
         else {
             std::string filename = argv[2];
-            if(argc > 3){
+            if(argc > 4){
                 std::cout << "Warning: unused extra args present" << std::endl;
             }
         }
@@ -80,15 +89,15 @@ int main(int argc, char *argv[]){
     }
 
     else if(collector == "memory"){
-        if(argc > 2){
+        if(argc > 3){
             std::cout << "Warning: unused extra args present" << std::endl;
         }
         f = new MemoryCollector();
     }
 
     else {
-        std::cerr << "Error: first arg must be \"file\" or \"memory\"" <<
-            std::endl;
+        std::cerr << "Error: collector type arg must be \"file\" or \"memory\""
+            << std::endl;
         return 1;
     }
   
