@@ -10,7 +10,7 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::like(Eigen::MatrixXd datum){
     // TODO stan per vector?? 
     Eigen::VectorXd result(datum.rows());
     for(int i = 0; i < datum.rows(); i++){
-        result(i) = exp(stan::math::normal_lpdf(datum(i,0), state[0](0,0), state[1](0,0)));
+        result(i) = exp(stan::math::normal_lpdf(datum(i,0), state[0](0,0), state[1](0,0))); //TODO
     }
     return result;
 }
@@ -90,7 +90,7 @@ void HierarchyNNIG<Hypers>::sample_given_data(Eigen::MatrixXd data){
 
     // Get a sample
     Eigen::MatrixXd sigma2_new(1,1);
-    sigma2_new(0,0)=sqrt(stan::math::inv_gamma_rng(alpha_post, beta_post, rng));
+    sigma2_new(0,0)=sqrt(stan::math::inv_gamma_rng(alpha_post, beta_post, rng)); //TODO
     Eigen::MatrixXd mu_new(1,1);
     mu_new(0,0)=stan::math::normal_rng(mu_post, sqrt(sigma2_new(0,0)/lambda_post),
         rng); 

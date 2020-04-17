@@ -32,7 +32,7 @@ public:
     std::shared_ptr<Hypers> get_hypers(){return hypers;}
     void set_state(const std::vector<Eigen::MatrixXd> &s){state=s;}
     void set_state(int pos, Eigen::MatrixXd val){state[pos] = val;}
-    int get_count(){return hypers.use_count();} // TODO what?
+    int get_count(){return hypers.use_count();} // TODO what? era per vedere se ne creava altri o puntava allo stesso, possiamo togliere
 
   
 

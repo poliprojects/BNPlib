@@ -56,7 +56,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         
         for(int k = 0; k < n_unique; k++){
             probas(k) = this->mixture.prob_existing_cluster(card[k],n) *
-            	this->unique_values[k].like(this->data.row(i))(0);
+            	this->unique_values[k].like(this->data.row(i))(0); // TODO 
 
             if(singleton == 1 && k == i){
               probas(i) = this->mixture.prob_new_cluster(n, n_unique) *
@@ -174,7 +174,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
             0);
 
 
-        std::vector<Eigen::MatrixXd> params(state.uniquevalues(0).params_size()); // TODO state.unique o state.mutable
+        std::vector<Eigen::MatrixXd> params(state.uniquevalues(0).params_size());
 
         for(unsigned int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
