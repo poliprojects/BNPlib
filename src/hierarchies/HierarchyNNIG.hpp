@@ -25,16 +25,16 @@ public:
     // Contructors
     ~HierarchyNNIG() = default;
 
-    HierarchyNNIG(std::shared_ptr<Hypers> hypers): hypers(hypers), state(2,Eigen::MatrixXd::Identity(1,1)){}
+    HierarchyNNIG(std::shared_ptr<Hypers> hypers): hypers(hypers), state(2,Eigen::MatrixXd(1,1)){
+    	state[0](0,0) = 0;
+    	state[1](0,0) = 1;
+    }
 
     // Getters and setters
     std::vector<Eigen::MatrixXd> get_state(){return state;}
     std::shared_ptr<Hypers> get_hypers(){return hypers;}
     void set_state(const std::vector<Eigen::MatrixXd> &s){state=s;}
     void set_state(int pos, Eigen::MatrixXd val){state[pos] = val;}
-    int get_count(){return hypers.use_count();} // TODO what? era per vedere se ne creava altri o puntava allo stesso, possiamo togliere
-
-  
 
     Eigen::VectorXd eval_marg(Eigen::MatrixXd datum);
     Eigen::VectorXd like(Eigen::MatrixXd datum);

@@ -56,7 +56,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         
         for(int k = 0; k < n_unique; k++){
             probas(k) = this->mixture.prob_existing_cluster(card[k],n) *
-            	this->unique_values[k].like(this->data.row(i))(0); // TODO 
+            	this->unique_values[k].like(this->data.row(i))(0);
 
             if(singleton == 1 && k == i){
               probas(i) = this->mixture.prob_new_cluster(n, n_unique) *

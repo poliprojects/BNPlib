@@ -35,7 +35,6 @@ public:
     std::vector<Eigen::MatrixXd>get_state(){return state;}
     std::shared_ptr<Hypers> get_hypers(){return hypers;}
     void set_state(const std::vector<Eigen::MatrixXd> &s){state = s;}
-    int get_count(){return hypers.use_count();} // TODO what?
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &datum);
     Eigen::VectorXd like(const Eigen::MatrixXd &datum);
