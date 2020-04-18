@@ -4,12 +4,12 @@
 #include "Neal2.hpp"
 #include "Neal8.hpp"
 
-using AlgoBuilderType = std::function<
-	std::unique_ptr<Algorithm<Hierarchy, Hypers, Mixture>>() >;
-
-//template<template <class> class Hierarchy, class Hypers, class Mixture> // TODO ?
+template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Factory{
 private:
+	using AlgoBuilderType = std::function<
+		std::unique_ptr<Algorithm<Hierarchy, Hypers, Mixture>>() >;
+	
 	std::map<std::string, AlgoBuilderType> storage;
 
 	// Constructors

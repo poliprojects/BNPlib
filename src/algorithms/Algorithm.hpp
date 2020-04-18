@@ -82,7 +82,7 @@ public:
 
     //void run_and_save_cards(){ // TODO la blastiamo?
     //std::ofstream file;
-    //file.open("clust_cardinalities.csv");
+    //file.open("csv/clust_cardinalities.csv");
     //    print_startup_message();
     //    initialize();
     //    unsigned int iter = 0;
@@ -107,13 +107,13 @@ public:
     virtual void eval_density(const Eigen::MatrixXd grid, BaseCollector* collector) = 0;
 
     const void write_final_clustering_to_file(
-        std::string filename = "clust_final.csv");
+        std::string filename = "csv/clust_final.csv");
 
     const void write_best_clustering_to_file(
-        std::string filename = "clust_best.csv");
+        std::string filename = "csv/clust_best.csv");
 
     const void write_density_to_file(
-        std::string filename = "density.csv");
+        std::string filename = "csv/density.csv");
 
     // Destructors and constructors:
     virtual ~Algorithm() = default;

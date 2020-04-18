@@ -121,7 +121,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
 
     //std::ofstream file;
     //unsigned int step = 1000;
-    //file.open("dens_estimate_iterations.csv");
+    //file.open("csv/dens_estimate_iterations.csv");
 
     Eigen::VectorXd dens(grid.rows());
     double M = this->mixture.get_totalmass();

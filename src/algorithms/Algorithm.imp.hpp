@@ -103,12 +103,12 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(BaseCollect
     int min_err = errors.minCoeff(&i);
 
     //std::ofstream file;
-    //file.open("dissim_matr_mean.csv");
+    //file.open("csv/dissim_matr_mean.csv");
     //file << tot_diss;
     //file.close();
 
     //std::ofstream file2;
-    //file2.open("dissim_matr_best.csv");
+    //file2.open("csv/dissim_matr_best.csv");
     //file2 << all_diss[i];
     //file2.close();
 
