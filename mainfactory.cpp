@@ -50,11 +50,8 @@ int main(int argc, char *argv[]){
         hy); // n_aux = 3
     
     return 0;
-  
 
 
-
-  
     // Run sampler
     BaseCollector *f;
     if(argc < 3){

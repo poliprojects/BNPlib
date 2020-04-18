@@ -4,9 +4,6 @@
 #include <vector>
 #include <memory>
 #include <functional>
-#include <stdexcept>
-#include <type_traits>
-#include <sstream>
 
 #include "Neal2.hpp"
 #include "Neal8.hpp"
@@ -36,15 +33,19 @@ public:
         static Factory factory;
         return factory;
     }
-  
-    auto create_algorithm_object(const Identifier &name) const {
+
+    template <typename ...Args>
+    auto create_algorithm_object(const Identifier &name, Args&&... args) const {
         switch(name){
             case "neal2":
-                return std::make_unique<Neal2<Hierarchy, Hypers, Mixture>>();
+                return std::make_unique<Neal2<Hierarchy, Hypers, Mixture>>(
+                std::forward<Args>(args)...);
             case "neal8":
-                return std::make_unique<Neal8<Hierarchy, Hypers, Mixture>>();
+                return std::make_unique<Neal8<Hierarchy, Hypers, Mixture>>(
+                std::forward<Args>(args)...);
             default:
-                return std::unique_ptr<Algorithm<Hierarchy, Hypers, Mixture>>();
+                return std::unique_ptr<Algorithm<Hierarchy, Hypers, Mixture>>(
+                std::forward<Args>(args)...);
         }
     }
 

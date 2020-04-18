@@ -29,25 +29,28 @@ void fill_eigen_matrix_from_file(Eigen::Ref<Eigen::MatrixXd> mat,
 }
 
 
-template<template <class> class Hierarchy, class Hypers, class Mixture>
+template< template <class> class Hierarchy, class Hypers, class Mixture,
+	typename ...Args >
 using AlgoBuilder = std::function<
-    std::unique_ptr< Algorithm<Hierarchy, Hypers, Mixture>>() >;
+    std::unique_ptr< Algorithm<Hierarchy, Hypers, Mixture>>(Args&&...) >;
 
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-AlgoBuilder<Hierarchy, Hypers, Mixture> neal2Builder = []{
-	return std::make_unique< Neal2<Hierarchy, Hypers, Mixture>> >();
+
+template< template <class> class Hierarchy, class Hypers, class Mixture,
+    typename ...Args >
+AlgoBuilder<Hierarchy, Hypers, Mixture> neal2Builder(Args&&... args) = []{
+	return std::make_unique< Neal2<Hierarchy, Hypers, Mixture>> >(
+		std::forward<Args>(args)... );
 };
 
-//template<template <class> class Hierarchy, class Hypers, class Mixture>
-//AlgoBuilder<Hierarchy<Hypers>, Hypers, Mixture> neal8Builder = []{
-//    return std::make_unique< Neal8<Hierarchy, Hypers, Mixture>> >();
-//};
+
+// same for neal8
+
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void load_algo_factory(){
 	auto &factory = Factory<Hierarchy, Hypers, Mixture>::Instance();
 	factory.add_builer("neal2", neal2Builder<Hierarchy, Hypers, Mixture>);
-	//factory.add_builer("neal8", neal8Builder);
+	// same for neal8
 }
 
 
