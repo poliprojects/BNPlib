@@ -35,6 +35,7 @@ public:
     std::shared_ptr<Hypers> get_hypers(){return hypers;}
     void set_state(const std::vector<Eigen::MatrixXd> &s){state=s;}
     void set_state(int pos, Eigen::MatrixXd val){state[pos] = val;}
+    bool is_multivariate(){return 0;};
 
     Eigen::VectorXd eval_marg(Eigen::MatrixXd datum);
     Eigen::VectorXd like(Eigen::MatrixXd datum);

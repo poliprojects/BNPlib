@@ -122,6 +122,10 @@ public:
         const Mixture &mixture, const Hypers &hy) :
         data(data), num_clusters(num_clusters), mixture(mixture) {
             Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
+            if(hierarchy.is_multivariate()==0 && data.cols()>1){
+                std::cout<< "Warning: multivariate data supplied to univariate hierarchy. \
+                The algorithm will run correctly, but all data rows other than the first one will be ignored";
+            }
             for(unsigned int i = 0; i < num_clusters; i++){
                 unique_values.push_back(hierarchy);
             }
