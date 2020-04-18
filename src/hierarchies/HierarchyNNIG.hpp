@@ -38,7 +38,7 @@ public:
     bool is_multivariate(){return 0;};
 
     Eigen::VectorXd eval_marg(Eigen::MatrixXd datum);
-    Eigen::VectorXd like(Eigen::MatrixXd datum);
+    Eigen::VectorXd like(Eigen::MatrixXd datum); // TODO const
 
     void draw();
 
