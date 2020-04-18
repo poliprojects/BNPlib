@@ -1,0 +1,87 @@
+\documentclass{beamer}
+\usetheme{Boadilla}
+%\usetheme{polimi}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{subfigure}
+\usepackage[mathscr]{eucal}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+
+\usefonttheme{professionalfonts}
+%\usefonttheme{serif}
+
+\include{etc/commands}
+
+\title[BNPlib]{\textbf{BNPlib for density estimation:}}
+\subtitle{\textbf{A nonparametric C++ library \\ (part 2)}}
+\author[Guindani, Zazzetti]{\textbf{Bruno Guindani \\ Elena Zazzetti}}
+\institute[PoliMi]{}
+\date[2020/01/08]{
+	January 8\textsuperscript{th}, 2020 \\[15pt]
+	\includegraphics[scale=.35]{etc/logo_long.jpg}
+}
+
+\begin{document}
+
+\frame{
+	\titlepage
+	{ \color{blue}
+	\begin{center}
+		\href{https://github.com/poliprojects/BNPlib}
+		{https://github.com/poliprojects/BNPlib}
+	\end{center}
+	}
+}
+
+%\addtobeamertemplate{frametitle}{}{
+%	\begin{textblock*}{100mm}(.85\textwidth,-0.5cm)
+%		\includegraphics[scale=0.1]{etc/logo_only.png}
+%	\end{textblock*}
+%}
+
+\input{part_1}
+\input{part_2}
+
+\begin{frame}
+	\frametitle{Bibliography}
+	
+	\begin{thebibliography}{9}
+	\setbeamertemplate{bibliography item}[book]
+	\bibitem{book} P. Muller, F. A. Quintana, \textit{Bayesian Nonparametric Data Analysis}
+	
+	\bibitem{neal} R. M. Neal (2000), \textit{Markov Chain Sampling Methods for Dirichlet Process Mixture Models}
+	
+	\bibitem{james} H. Ishwaran, L. F. James (2001), \textit{Gibbs Sampling Methods for Stick-Breaking Priors}
+	
+	\bibitem{integral} K. P. Murphy (2007), \textit{Conjugate Bayesian analysis of the Gaussian distribution}
+	
+	\bibitem{stan} Stan documentation: \url{http://mc-stan.org/math}. \\
+	Code found at \url{https://github.com/stan-dev/math} (version 3.0.0 was used) and it also includes other needed libraries: Boost, Eigen, SUNDIALS, Intel TBB
+	
+	\bibitem{eigen} Eigen documentation: \url{https://eigen.tuxfamily.org/dox}. \\
+	Code is included in the Stan package (version 3.3.3 is used there)
+	
+	\bibitem{proto} Protocol Buffers Tutorial for C++: \url{https://developers.google.com/protocol-buffers/docs/cpptutorial}. \\
+	Code found at \url{https://github.com/protocolbuffers/protobuf} (version 3.11.0 was used)
+	
+	\bibitem{tutors} Codes of Mario Beraha and Riccardo Corradin for similar projects, found at \url{https://github.com/mberaha/partial_exchangeability} and \url{https://github.com/rcorradin/BNPmix} respectively
+	
+	\bibitem{beep} Course material for Bayesian Statistics: \url{https://beep.metid.polimi.it/web/2019-20-bayesian-statistics-alessandra-guglielmi-/}
+\end{thebibliography}
+
+
+
+\end{frame}
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	\frametitle{Title}
+	\begin{itemize}
+		\item Text
+	\end{itemize}
+\end{frame}

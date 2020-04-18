@@ -10,25 +10,24 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::like(Eigen::MatrixXd datum){
 	if(datum.cols() > 1){
 		std::cerr << "Error: datum must be a vector of univariate points" <<
 		    std::endl;
-		// TODO
+		// TODO check
 	}
     Eigen::VectorXd result(datum.rows());
     for(int i = 0; i < datum.rows(); i++){
-        result(i) = exp(stan::math::normal_lpdf(datum(i,0), state[0](0,0), state[1](0,0))); //TODO
+        result(i) = exp(stan::math::normal_lpdf(datum(i,0), state[0](0,0), state[1](0,0)));
     }
     return result;
 }
 
 template<class Hypers> 
 void HierarchyNNIG<Hypers>::draw(){
-    double sigma2_new; // TODO
-    sigma2_new(0,0) = sqrt(stan::math::inv_gamma_rng(hypers->get_alpha0(),
+    double sigma2_new,mu_new;
+    sigma2_new = sqrt(stan::math::inv_gamma_rng(hypers->get_alpha0(),
         hypers->get_beta0(), rng));
-    Eigen::MatrixXd mu_new(1,1);
-    mu_new(0,0) = stan::math::normal_rng(hypers->get_mu0(),
-        sqrt(sigma2_new(0,0)/hypers->get_lambda()), rng);
-    state[0] = mu_new;
-    state[1] = sigma2_new;
+    mu_new = stan::math::normal_rng(hypers->get_mu0(),
+        sqrt(sigma2_new/hypers->get_lambda()), rng);
+    state[0](0,0) = mu_new;
+    state[1](0,0) = sigma2_new;
 }
 
 
@@ -39,11 +38,11 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(Eigen::MatrixXd datum){
 	if(datum.cols() > 1){
 		std::cerr << "Error: datum must be a vector of univariate points" <<
 		    std::endl;
-		// TODO
+		// TODO check
 	}
 	double sigtilde = sqrt( hypers->get_beta0()*(hypers->get_lambda()+1) /
         (hypers->get_alpha0()*hypers->get_lambda()) );
-    // TODO stan per vector?? // TODO anche per tutto il resto
+   
     Eigen::VectorXd result(datum.rows());
     for(int i = 0; i < datum.rows(); i++){
         result(i) = exp( stan::math::student_t_lpdf(datum(i,0),
@@ -83,7 +82,8 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
 
 template<class Hypers> 
 void HierarchyNNIG<Hypers>::sample_given_data(Eigen::MatrixXd data){
-	// TODO check colonne, matrix -> double
+	// TODO check colonne
+
     // Get current values of parameters
     double mu0     = hypers->get_mu0();
     double lambda0 = hypers->get_lambda();
@@ -99,13 +99,12 @@ void HierarchyNNIG<Hypers>::sample_given_data(Eigen::MatrixXd data){
     double lambda_post = temp[3];
 
     // Get a sample
-    Eigen::MatrixXd sigma2_new(1,1);
-    sigma2_new(0,0)=sqrt(stan::math::inv_gamma_rng(alpha_post, beta_post, rng));
-    Eigen::MatrixXd mu_new(1,1);
-    mu_new(0,0)=stan::math::normal_rng(mu_post, sqrt(sigma2_new(0,0)/lambda_post),
+    double sigma2_new,mu_new;
+    sigma2_new = sqrt(stan::math::inv_gamma_rng(alpha_post, beta_post, rng));
+    mu_new = stan::math::normal_rng(mu_post, sqrt(sigma2_new/lambda_post),
         rng); 
-    state[0] = mu_new;
-    state[1] = sigma2_new;
+    state[0](0,0) = mu_new;
+    state[1](0,0) = sigma2_new;
 }
 
 
