@@ -31,20 +31,23 @@ void fill_eigen_matrix_from_file(Eigen::Ref<Eigen::MatrixXd> mat,
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 using AlgoBuilder = std::function<
-    std::unique_ptr<Algorithm<Hierarchy, Hypers, Mixture>>() >;
+    std::unique_ptr< Algorithm<Hierarchy, Hypers, Mixture>>() >;
 
-AlgoBuilder<Hierarchy<Hypers>, Hypers, Mixture> neal2Builder = []{
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+AlgoBuilder<Hierarchy, Hypers, Mixture> neal2Builder = []{
 	return std::make_unique< Neal2<Hierarchy, Hypers, Mixture>> >();
 };
 
+//template<template <class> class Hierarchy, class Hypers, class Mixture>
 //AlgoBuilder<Hierarchy<Hypers>, Hypers, Mixture> neal8Builder = []{
-//	return std::make_unique< Neal8<Hierarchy, Hypers, Mixture>> >();
+//    return std::make_unique< Neal8<Hierarchy, Hypers, Mixture>> >();
 //};
 
+template<template <class> class Hierarchy, class Hypers, class Mixture>
 void load_algo_factory(){
-	auto &factory = Factory::Instance();
-	factory.add_builer("neal2",build1);
-	//factory.add_builer("neal8",build1);
+	auto &factory = Factory<Hierarchy, Hypers, Mixture>::Instance();
+	factory.add_builer("neal2", neal2Builder<Hierarchy, Hypers, Mixture>);
+	//factory.add_builer("neal8", neal8Builder);
 }
 
 

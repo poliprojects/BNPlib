@@ -9,17 +9,6 @@
 #include "math.h"
 
 int main(int argc, char *argv[]){
-
-    load_factory();
-    auto &algoFactory = Factory::Instance();
-    auto list = algoFactory.registered();
-    for (auto &el : list){
-        std::cout << el << std::endl;
-    }
-    auto object = algoFactory.create("neal2");
-    return 0;
-    //object.run();
-
     // Read data from main arg
     std::ifstream file;
     if(argc < 2){
@@ -50,8 +39,21 @@ int main(int argc, char *argv[]){
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
     DirichletMixture mix(1); // total mass
 
-    Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
-        data, 3, mix, hy); // n_aux = 3
+    load_algo_factory<HierarchyNNIG, HypersFixedNNIG, DirichletMixture>();
+    auto &algoFactory = Factory<HierarchyNNIG, HypersFixedNNIG,
+        DirichletMixture>::Instance();
+    auto list = algoFactory.list_of_known_builders();
+    for (auto &el : list){
+        std::cout << el << std::endl;
+    }
+    auto sampler = algoFactory.create_algorithm_object("neal2", data, 3, mix,
+        hy); // n_aux = 3
+    
+    return 0;
+  
+
+
+
   
     // Run sampler
     BaseCollector *f;

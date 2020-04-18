@@ -60,7 +60,7 @@ public:
     std::vector<Identifier> list_of_known_builders() const {
         std::vector<Identifier> tmp;
         tmp.reserve(storage.size());
-        for(int i = storage.begin(); i != storage.end(); i++){
+        for(auto i = storage.begin(); i != storage.end(); i++){
             tmp.push_back(i->first);
         }
         return tmp;
