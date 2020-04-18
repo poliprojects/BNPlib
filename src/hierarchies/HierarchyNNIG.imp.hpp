@@ -6,12 +6,8 @@
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyNNIG<Hypers>::like(Eigen::MatrixXd datum){
-	if(datum.cols() > 1){
-		std::cerr << "Error: datum must be a vector of univariate points" <<
-		    std::endl;
-		// TODO check
-	}
+Eigen::VectorXd HierarchyNNIG<Hypers>::like(const Eigen::MatrixXd &datum){
+
     Eigen::VectorXd result(datum.rows());
     for(int i = 0; i < datum.rows(); i++){
         result(i) = exp(stan::math::normal_lpdf(datum(i,0), state[0](0,0), state[1](0,0)));
@@ -34,12 +30,8 @@ void HierarchyNNIG<Hypers>::draw(){
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(Eigen::MatrixXd datum){
-	if(datum.cols() > 1){
-		std::cerr << "Error: datum must be a vector of univariate points" <<
-		    std::endl;
-		// TODO check
-	}
+Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(const Eigen::MatrixXd &datum){
+	
 	double sigtilde = sqrt( hypers->get_beta0()*(hypers->get_lambda()+1) /
         (hypers->get_alpha0()*hypers->get_lambda()) );
    
@@ -54,8 +46,8 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(Eigen::MatrixXd datum){
 
 template<class Hypers> 
 std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
-    Eigen::VectorXd data, double mu0, double alpha0, double beta0,
-    double lambda0){
+    const Eigen::VectorXd &data, const double &mu0, const double &alpha0, const double &beta0,
+    const double &lambda0){
 
     double mu_post, alpha_post, beta_post, lambda_post;
     int n = data.rows();
@@ -81,8 +73,7 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
 
 
 template<class Hypers> 
-void HierarchyNNIG<Hypers>::sample_given_data(Eigen::MatrixXd data){
-	// TODO check colonne
+void HierarchyNNIG<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
 
     // Get current values of parameters
     double mu0     = hypers->get_mu0();

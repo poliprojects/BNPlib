@@ -37,15 +37,15 @@ public:
     void set_state(int pos, Eigen::MatrixXd val){state[pos] = val;}
     bool is_multivariate(){return 0;};
 
-    Eigen::VectorXd eval_marg(Eigen::MatrixXd datum);
-    Eigen::VectorXd like(Eigen::MatrixXd datum); // TODO const
+    Eigen::VectorXd eval_marg(const Eigen::MatrixXd &datum);
+    Eigen::VectorXd like(const Eigen::MatrixXd &datum);
 
     void draw();
 
-    std::vector<double> normal_gamma_update(Eigen::VectorXd data,
-        double mu0, double alpha0, double beta0, double lambda0);
+    std::vector<double> normal_gamma_update(const Eigen::VectorXd &data,
+        const double &mu0, const double &alpha0, const double &beta0, const double &lambda0);
 
-    void sample_given_data(Eigen::MatrixXd data);
+    void sample_given_data(const Eigen::MatrixXd &data);
 
 };
 

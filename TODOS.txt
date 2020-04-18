@@ -3,7 +3,6 @@ TODO LIST
 
 Elena:
 * (print functions: remove last empty column)
-* error in FileCollector::get_chains()
 * timer: eigen::vector
 * RNG seed {20200227} or  {std::random_device}
 
