@@ -6,6 +6,7 @@
 #include "src/algorithms/Neal2.hpp"
 #include "src/algorithms/Neal8.hpp"
 #include "src/algorithms/Factory.hpp"
+#include "src/algorithms/factory_utils.hpp"
 #include "src/hierarchies/HierarchyNNIG.hpp"
 #include "src/hierarchies/HierarchyDummy.hpp"
 #include "src/mixtures/DirichletMixture.hpp"
