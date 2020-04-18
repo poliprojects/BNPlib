@@ -1,8 +1,21 @@
-\begin{frame}{part 2}
+
+
+
+\begin{frame}{Algorithms}
+In Factory.hpp:
+\begin{verbatim}
+class Factory{
+private:
+    std::map<std::string, AlgoBuilderType> storage;
+public:
+    static Factory& Instance();
+    void add_builder(const std::string &name, const AlgoBuilderType &builder) {}
+    auto create_algorithm(const std::string &name) const {}; // get object through switch and unique_ptr
+//[...]
+\end{verbatim}
+
+\end{frame}
 
 factories \\
 collectors \\
 input
-\end{frame}
-
-
