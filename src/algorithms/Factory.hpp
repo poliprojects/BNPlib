@@ -11,12 +11,12 @@
 #include "Neal2.hpp"
 #include "Neal8.hpp"
 
-template <typename AbstractProduct,
-    typename Builder=std::function<std::unique_ptr<AbstractProduct> ()> >
+template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Factory{
 private:
     // Aliases
-    using Builder_type = Builder;
+    using AlgoBuilder = std::function<
+        std::unique_ptr<Algorithm<Hierarchy, Hypers, Mixture>>() >;
     using Identifier = std::string;
 
     // Deleted constructors
@@ -24,7 +24,7 @@ private:
     Factory(const Factory &f) = delete;
     Factory& operator =(const Factory &f) = delete;
 
-    std::map<Identifier,Builder_type> storage;
+    std::map<Identifier, AlgoBuilder> storage;
 
 public:
     // Destructor
@@ -35,28 +35,20 @@ public:
         return factory;
     }
   
-    template<typename... Args>
-    std::unique_ptr<AbstractProduct> create_agorithm_object(const Identifier &name,
-        Args&&... args) const {
-        auto f = storage.find(name);
-        if(f == storage.end()){
-            std::stringstream idAsString;
-            idAsString<<name;
-            std::string out="Identifier " + idAsString.str() +
-            " is not stored in the factory";
-            throw std::invalid_argument(out);
-        }
-        else {
-            // Use of std::forward to forward arguments to the constructor
-            //  return std::make_unique<AbstractProduct>(f->second(
-                //std::forward<Args>(args)...));
-            return f->second(std::forward<Args>(args)...);
+    auto create_algorithm_object(const Identifier &name) const {
+        switch(name){
+            case "neal2":
+                return std::make_unique<Neal2<Hierarchy, Hypers, Mixture>>();
+            case "neal8":
+                return std::make_unique<Neal8<Hierarchy, Hypers, Mixture>>();
+            default:
+                return std::unique_ptr<Algorithm<Hierarchy, Hypers, Mixture>>();
         }
     }
 
   //! Register the given rule.
-    void add(const Identifier &name, const Builder_type &func){
-        auto f = storage.insert(std::make_pair(name, func));
+    void add_builder(const Identifier &name, const AlgoBuilder &builder){
+        auto f = storage.insert(std::make_pair(name, builder));
         if(f.second == false){
             std::stringstream idAsString;
             idAsString <<name;
