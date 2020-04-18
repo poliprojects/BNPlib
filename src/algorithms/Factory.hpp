@@ -11,6 +11,7 @@
 #include "Neal2.hpp"
 #include "Neal8.hpp"
 
+
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Factory{
 private:
@@ -24,6 +25,7 @@ private:
     Factory(const Factory &f) = delete;
     Factory& operator =(const Factory &f) = delete;
 
+    // Storage for algorithm builders
     std::map<Identifier, AlgoBuilder> storage;
 
 public:
@@ -46,24 +48,21 @@ public:
         }
     }
 
-  //! Register the given rule.
     void add_builder(const Identifier &name, const AlgoBuilder &builder){
         auto f = storage.insert(std::make_pair(name, builder));
         if(f.second == false){
-            std::stringstream idAsString;
-            idAsString <<name;
-            std::string message=std::string(
-                "Double registration in Factory of id: ") + idAsString.str() +
-                std::string(" is not allowed");
-          throw std::invalid_argument(message);
+            std::cout <<
+                "Warning: new duplicate builder was not added to storage" <<
+                std::endl;
         }
     }
 
-    std::vector<Identifier> registered()const { // returns a list of reg. rules
+    std::vector<Identifier> list_of_known_builders() const {
         std::vector<Identifier> tmp;
         tmp.reserve(storage.size());
-        for(auto i=storage.begin(); i!=storage.end();++i)
+        for(int i = storage.begin(); i != storage.end(); i++){
             tmp.push_back(i->first);
+        }
         return tmp;
     }
 
