@@ -17,6 +17,7 @@ int main(int argc, char *argv[]){
         std::cout << el << std::endl;
     }
     auto object = algoFactory.create("neal2");
+    return 0;
     //object.run();
 
     // Read data from main arg
