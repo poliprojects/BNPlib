@@ -29,28 +29,17 @@ void fill_eigen_matrix_from_file(Eigen::Ref<Eigen::MatrixXd> mat,
 }
 
 
-template< template <class> class Hierarchy, class Hypers, class Mixture,
-	typename ...Args >
-using AlgoBuilder = std::function<
-    std::unique_ptr< Algorithm<Hierarchy, Hypers, Mixture>>(Args&&...) >;
 
 
-template< template <class> class Hierarchy, class Hypers, class Mixture,
-    typename ...Args >
-AlgoBuilder<Hierarchy, Hypers, Mixture> neal2Builder(Args&&... args) = []{
-	return std::make_unique< Neal2<Hierarchy, Hypers, Mixture>> >(
-		std::forward<Args>(args)... );
-};
+using Builder = std::function<std::unique_ptr<Abstract>()>;
+using MyObjectFactory = GenericFactory::Factory<Abstract,Identifier,Builder>;
 
+Builder build1 = []{return std::make_unique<Derived1>();};
 
-// same for neal8
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-void load_algo_factory(){
-	auto &factory = Factory<Hierarchy, Hypers, Mixture>::Instance();
-	factory.add_builer("neal2", neal2Builder<Hierarchy, Hypers, Mixture>);
-	// same for neal8
+void load_algo_factory()
+{
+  auto &factory = MyObjectFactory::Instance();
+  factory.add(1,build1);
 }
 
 

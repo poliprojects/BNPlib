@@ -30,6 +30,7 @@ public:
     // Destructor
     ~Factory() = default;
     
+    // Method to create the factory
     static Factory& Instance(){
         static Factory factory;
         return factory;
@@ -54,7 +55,7 @@ public:
         auto f = storage.insert(std::make_pair(name, builder));
         if(f.second == false){
             std::cout <<
-                "Warning: new duplicate builder was not added to storage" <<
+                "Warning: new duplicate builder was not added to factory" <<
                 std::endl;
         }
     }

@@ -1,12 +1,9 @@
 #include <iostream>
 #include <fstream>
 
-//#include <boost/random/random_number_generator.hpp>
-//#include <boost/random/detail/qrng_base.hpp>
-#include <chrono>
-
 #include "includes_main.hpp"
-#include "math.h"
+//#include "math.h"
+
 
 int main(int argc, char *argv[]){
     // Read data from main arg
