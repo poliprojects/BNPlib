@@ -3,7 +3,7 @@
 
 # C++ object code files and executables
 *.o
-main
+main*
 *.bin
 
 # Libraries files
