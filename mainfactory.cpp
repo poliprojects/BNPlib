@@ -4,12 +4,12 @@
 #include "includes_main.hpp"
 //#include "math.h"
 
+using HypersType = HypersFixedNNIG;
+using MixtureType = DirichletMixture;
+template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
 int main(int argc, char *argv[]){
     // Model parameters
-    using HierarchyType = HierarchyNNIG;
-    using HypersType = HypersFixedNNIG;
-    using MixtureType = DirichletMixture;
     double mu0 = 5.0;
     double lambda = 0.1;
     double alpha0 = 2.0;
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]){
         v.data(), v.size()); // TODO: meglio con conservative resize?
 
     // Create algorithm
-    auto sampler = algoFactory.create_algorithm_object("neal2", data, mix, hy);
+    auto sampler = algoFactory.create_object("neal2", data, mix, hy);
         // TODO n_aux to bottom of list?
 
     return 0;
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
         return 1;
     }
   
-    sampler.run(f);
+    (*sampler).run(f);
 
     // Density and clustering stuff
     double temp = 0.0;
@@ -117,12 +117,12 @@ int main(int argc, char *argv[]){
     Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         v_temp.data(), v_temp.size()); 
 
-    sampler.eval_density(grid, f);
-    sampler.write_density_to_file("csv/density_ex.csv");
-    unsigned int i_cap = sampler.cluster_estimate(f);
+    (*sampler).eval_density(grid, f);
+    (*sampler).write_density_to_file("csv/density_ex.csv");
+    unsigned int i_cap = (*sampler).cluster_estimate(f);
     std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    sampler.write_final_clustering_to_file();
-    sampler.write_best_clustering_to_file();
+    (*sampler).write_final_clustering_to_file();
+    (*sampler).write_best_clustering_to_file();
 
     return 0;
 }

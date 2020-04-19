@@ -4,7 +4,6 @@
 #include <vector>
 #include <memory>
 #include <functional>
-//#include <stdexcept>, #include <type_traits>, #include <sstream>
 
 
 template<class AbstractProduct>
@@ -41,8 +40,8 @@ public:
             throw std::invalid_argument("Error: factory identifier not found");
         }
         else{
-            return std::make_unique<AbstractProduct>(f->second( // TODO shared?
-                std::forward<Args>(args)...));
+            return std::make_unique<AbstractProduct>( f->second( // TODO shared?
+                std::forward<Args>(args)...) );
             //return f->second(std::forward<Args>(args)...);
         }
     }
