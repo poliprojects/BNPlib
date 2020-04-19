@@ -14,11 +14,10 @@ LDLIBS = \
  	$(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb \
 	-lpthread -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
 
-
+EXE = main
 SRCS_OUTPUT = src/api/output.pb.cc
 SRCS =
-OBJS = main.o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))
-EXE = main
+OBJS = $(EXE).o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))
 
 .PHONY: all clean distclean
 
