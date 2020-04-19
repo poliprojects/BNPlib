@@ -26,7 +26,6 @@ all: $(EXE)
 $(EXE): $(OBJS)
 	$(CXX) $(LDFLAGS) -o $(EXE) $(OBJS) $(LDLIBS)
 
-
 %.h: %.cc
 
 -include $(dep)
