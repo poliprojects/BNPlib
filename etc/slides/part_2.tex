@@ -15,21 +15,21 @@ public:
     //[...]
 }
 \end{verbatim}
-factories, input
 \end{frame}
 
 
-\begin{frame}[fragile] {Multivariate Proto}
+\begin{frame}[fragile] {Protocol Buffers}
+For multivariate data storage
 \begin{small}
 \begin{verbatim}
 message Par_Col {
     repeated double elems = 1;
     }
 message Param {
-    repeated Par_Col par_cols= 1;
+    repeated Par_Col par_cols = 1;
     }
 message UniqueValues {
-    repeated Param params= 1;
+    repeated Param params = 1;
     }
 message IterationOutput {
     repeated int32 allocations = 1;
