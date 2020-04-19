@@ -6,6 +6,32 @@
 
 
 int main(int argc, char *argv[]){
+    // Model parameters
+    using HierarchyType = HierarchyNNIG;
+    using HypersType = HypersFixedNNIG;
+    using MixtureType = DirichletMixture;
+    double mu0 = 5.0;
+    double lambda = 0.1;
+    double alpha0 = 2.0;
+    double beta0 = 2.0;
+    double totalmass = 1.0;
+    unsigned int n_aux = 3;
+    HypersType hy(mu0, lambda, alpha0, beta0);
+    MixtureType mix(totalmass);
+
+    // Load algorithm factory
+    using Builder = std::function< std::unique_ptr< Algorithm<HierarchyType,
+        HypersType, MixtureType> >() >;
+    Builder neal2builder = []{return std::make_unique< Neal2<HierarchyType,
+        HypersType, MixtureType> >();};
+    auto &algoFactory = Factory< Algorithm<HierarchyType,
+        HypersType, MixtureType> >::Instance();
+    algoFactory.add_builder("neal2",neal2builder);
+    auto list = algoFactory.list_of_known_builders();
+    for (auto &el : list){
+        std::cout << el << std::endl;
+    }
+
     // Read data from main arg
     std::ifstream file;
     if(argc < 2){
@@ -21,40 +47,19 @@ int main(int argc, char *argv[]){
     std::string str, str2;
     std::getline(file, str);
     std::istringstream iss(str);
-
     std::vector<double> v;
-  
     while(std::getline(iss, str2, ',')){
         double val = ::atof(str2.c_str());
         v.push_back(val);
     }
-
     file.close();
     Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         v.data(), v.size()); // TODO: meglio con conservative resize?
- 
-    HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
-    DirichletMixture mix(1); // total mass
 
+    // Create algorithm
+    auto sampler = algoFactory.create_algorithm_object("neal2", data, mix, hy);
+        // TODO n_aux to bottom of list?
 
-
-
-
-    using AlgorithmModelType = Algorithm<HierarchyNNIG, HypersFixedNNIG,
-        DirichletMixture>;
-    using Builder = std::function< std::unique_ptr<AlgorithmModelType> () >;
-
-    Builder build1 = []{return std::make_unique<Derived1>();};
-    auto &factory = Factory<AlgorithmModelType>::Instance();
-    factory.add_builder(1,build1);
-
-    auto list = algoFactory.list_of_known_builders();
-    for (auto &el : list){
-        std::cout << el << std::endl;
-    }
-    auto sampler = algoFactory.create_algorithm_object("neal2", data, 3, mix,
-        hy); // n_aux = 3
-    
     return 0;
 
 
