@@ -7,6 +7,8 @@
 using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
+template <typename... Args> using Builder =std::function< std::unique_ptr< Algorithm<HierarchyType,
+        HypersType, MixtureType> >(Args) >;
 
 int main(int argc, char *argv[]){
     // Model parameters
@@ -19,18 +21,7 @@ int main(int argc, char *argv[]){
     HypersType hy(mu0, lambda, alpha0, beta0);
     MixtureType mix(totalmass);
 
-    // Load algorithm factory
-    using Builder = std::function< std::unique_ptr< Algorithm<HierarchyType,
-        HypersType, MixtureType> >() >;
-    Builder neal2builder = []{return std::make_unique< Neal2<HierarchyType,
-        HypersType, MixtureType> >();};
-    auto &algoFactory = Factory< Algorithm<HierarchyType,
-        HypersType, MixtureType> >::Instance();
-    algoFactory.add_builder("neal2",neal2builder);
-    auto list = algoFactory.list_of_known_builders();
-    for (auto &el : list){
-        std::cout << el << std::endl;
-    }
+    
 
     // Read data from main arg
     std::ifstream file;
@@ -55,6 +46,19 @@ int main(int argc, char *argv[]){
     file.close();
     Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         v.data(), v.size()); // TODO: meglio con conservative resize?
+
+    // Load algorithm factory
+    //using Builder = std::function< std::unique_ptr< Algorithm<HierarchyType,
+      //  HypersType, MixtureType> >() >;
+    Builder neal2builder = []{return std::make_unique< Neal2<HierarchyType,
+        HypersType, MixtureType> >();};
+    auto &algoFactory = Factory< Algorithm<HierarchyType,
+        HypersType, MixtureType> >::Instance();
+    algoFactory.add_builder("neal2",neal2builder);
+    auto list = algoFactory.list_of_known_builders();
+    for (auto &el : list){
+        std::cout << el << std::endl;
+    }
 
     // Create algorithm
     auto sampler = algoFactory.create_object("neal2", data, mix, hy);

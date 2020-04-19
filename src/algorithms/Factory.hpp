@@ -6,11 +6,11 @@
 #include <functional>
 
 
-template<class AbstractProduct>
+template<class AbstractProduct, typename... Args>
 class Factory{
 private:
     // Aliases
-    using Builder = std::function< std::unique_ptr<AbstractProduct>() >;
+    using Builder = std::function< std::unique_ptr<AbstractProduct>(Args) >;
 
     using Identifier = std::string;
 
