@@ -13,6 +13,7 @@ private:
 public:
     ~HypersDummy() = default;
 
+    HypersDummy() {};
     HypersDummy(const Eigen::VectorXd &mu0_, const Eigen::MatrixXd &lambda0_):
         mu0(mu0_), lambda0(lambda0_){}
 

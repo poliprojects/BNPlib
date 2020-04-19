@@ -118,6 +118,7 @@ public:
     // Destructors and constructors:
     virtual ~Algorithm() = default;
 
+    Algorithm() {};
     Algorithm(const Eigen::MatrixXd &data, const int num_clusters,
         const Mixture &mixture, const Hypers &hy) :
         data(data), num_clusters(num_clusters), mixture(mixture) {

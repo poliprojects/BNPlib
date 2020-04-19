@@ -10,6 +10,7 @@ private:
 public:
     ~PitYorMixture() = default;
 
+    PitYorMixture() {};
     PitYorMixture(const double &strength, const double &discount):
         strength(strength), discount(discount){
         assert(strength > -discount);

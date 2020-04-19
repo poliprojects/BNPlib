@@ -11,6 +11,7 @@ private:
 public:
     ~HypersFixedNNIG() = default;
 
+    HypersFixedNNIG() {};
     HypersFixedNNIG(const double mu0, const double lambda, const double alpha0,
                 const double beta0):
         mu0(mu0), lambda(lambda), alpha0(alpha0), beta0(beta0) {

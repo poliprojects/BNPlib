@@ -9,6 +9,7 @@ private:
 public:
     ~DirichletMixture() = default;
 
+    DirichletMixture() {};
     DirichletMixture(const double &totalmass): totalmass(totalmass){
         assert(totalmass >= 0);
     }
