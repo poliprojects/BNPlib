@@ -18,13 +18,14 @@ LDLIBS = \
 SRCS_OUTPUT = src/api/output.pb.cc
 SRCS =
 OBJS = main.o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))
+EXE = main
 
 .PHONY: all clean distclean
 
-all: main
+all: $(EXE)
 
-main: $(OBJS)
-	$(CXX) $(LDFLAGS) -o main $(OBJS) $(LDLIBS)
+$(EXE): $(OBJS)
+	$(CXX) $(LDFLAGS) -o $(EXE) $(OBJS) $(LDLIBS)
 
 
 %.h: %.cc
