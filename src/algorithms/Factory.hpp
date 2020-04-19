@@ -34,15 +34,15 @@ public:
 
     template<typename... Args>
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args&&... args) const {
+        Args&&... args) const {  // TODO shared?
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
         }
         else{
-            return std::make_unique<AbstractProduct>( f->second( // TODO shared?
-                std::forward<Args>(args)...) );
-            //return f->second(std::forward<Args>(args)...);
+            //return std::make_unique<AbstractProduct>( f->second(
+            //    std::forward<Args>(args)...) );
+            return f->second(std::forward<Args>(args)...);
         }
     }
 
