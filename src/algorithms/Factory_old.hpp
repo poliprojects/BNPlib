@@ -1,6 +1,5 @@
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
-
 #include <map>
 #include <vector>
 #include <memory>
@@ -21,7 +20,7 @@ private:
     // Deleted constructors
     Factory() = default;
     Factory(const Factory &f) = delete;
-    Factory& operator=(const Factory &f) = delete;
+    Factory& operator =(const Factory &f) = delete;
 
     // Storage for algorithm builders
     std::map<Identifier, AlgoBuilder> storage;
