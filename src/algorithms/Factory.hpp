@@ -40,9 +40,9 @@ public:
             throw std::invalid_argument("Error: factory identifier not found");
         }
         else{
-            //return std::make_unique<AbstractProduct>( f->second(
-            //    std::forward<Args>(args)...) );
-            return f->second(std::forward<Args>(args)...);
+            return std::make_unique<AbstractProduct>( f->second(
+                std::forward<Args>(args)...) );
+            // return f->second(std::forward<Args>(args)...);
         }
     }
 
