@@ -35,9 +35,9 @@ public:
     }
 
     // Getters and setters
-    std::vector<Eigen::MatrixXd> get_state(){return state;}
-    std::shared_ptr<Hypers> get_hypers(){return hypers;}
-    void set_state(const std::vector<Eigen::MatrixXd> &s){state=s;}
+    std::vector<Eigen::MatrixXd> get_state() const {return state;}
+    std::shared_ptr<Hypers> get_hypers() const {return hypers;}
+    void set_state(const std::vector<Eigen::MatrixXd> &s){state = s;}
     void set_state(int pos, Eigen::MatrixXd val){state[pos] = val;}
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &datum);
@@ -46,8 +46,8 @@ public:
     void draw();
 
     std::vector<double> normal_gamma_update(const Eigen::VectorXd &data,
-        const double &mu0, const double &alpha0, const double &beta0,
-        const double &lambda0);
+        const double mu0, const double alpha0, const double beta0,
+        const double lambda0);
 
     void sample_given_data(const Eigen::MatrixXd &data);
 

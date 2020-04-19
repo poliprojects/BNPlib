@@ -11,7 +11,8 @@
 #include <stan/math/prim/mat.hpp>
 
 #include "../api/output.pb.h"
-#include "../api/collectors.hpp"
+#include "../api/FileCollector.hpp"
+#include "../api/MemoryCollector.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{
