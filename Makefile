@@ -34,5 +34,5 @@ clean:
 	$(RM) *.o
 
 distclean: clean
-	$(RM) main
+	$(RM) $(EXE)
 	$(RM) *~
