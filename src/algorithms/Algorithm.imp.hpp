@@ -4,42 +4,44 @@
 #include "Algorithm.hpp"
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(const Param &par){
-    Eigen::MatrixXd Par_matrix= Eigen::MatrixXd::Zero(par.par_cols_size(), par.par_cols(0).elems_size());
+Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
+    const Param &par){
+    Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(par.par_cols_size(),
+        par.par_cols(0).elems_size());
     for(int h = 0; h < par.par_cols_size(); h++){
         for(int j = 0; j < par.par_cols(h).elems_size(); j++){
-        Par_matrix(j,h)=par.par_cols(h).elems(j);
+        par_matrix(j,h) = par.par_cols(h).elems(j);
         }
     }
-
-return Par_matrix;
+return par_matrix;
 }
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-IterationOutput Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(unsigned int iter){
+IterationOutput Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
+    unsigned int iter){
 
     IterationOutput iter_out;
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
     for(int i = 0; i < unique_values.size(); i++){
-        UniqueValues Uniquevalues_temp;
-        for(int k = 0; k< unique_values[i].get_state().size(); k++){
-            Eigen::MatrixXd par_temp=unique_values[i].get_state()[k];
+        UniqueValues uniquevalues_temp;
+        for(int k = 0; k < unique_values[i].get_state().size(); k++){
+            Eigen::MatrixXd par_temp = unique_values[i].get_state()[k];
             Param par_temp_proto;
-            for(int j=0; j<par_temp.cols(); j++){
+            for(int j = 0; j < par_temp.cols(); j++){
                 Par_Col col_temp;
-                for(int h=0; h<par_temp.rows(); h++){
-                col_temp.add_elems(par_temp(h,j));
+                for(int h = 0; h < par_temp.rows(); h++){
+                    col_temp.add_elems(par_temp(h,j));
                 }
                 par_temp_proto.add_par_cols();
-                *par_temp_proto.mutable_par_cols(j)=col_temp;     
+                *par_temp_proto.mutable_par_cols(j) = col_temp;     
             }
-            Uniquevalues_temp.add_params();
-            *Uniquevalues_temp.mutable_params(k)=par_temp_proto;
+            uniquevalues_temp.add_params();
+            *uniquevalues_temp.mutable_params(k) = par_temp_proto;
         }
         iter_out.add_uniquevalues();
-        *iter_out.mutable_uniquevalues(i) = Uniquevalues_temp;
+        *iter_out.mutable_uniquevalues(i) = uniquevalues_temp;
     }
     return iter_out;
 }
@@ -65,7 +67,8 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(BaseCollector* collector){
+unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
+    BaseCollector* collector){
     // also returns the index of the estimate in the chain object
 
     unsigned int niter = maxiter - burnin;
@@ -120,14 +123,15 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(BaseCollect
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Algorithm<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
-        std::string filename){
+void Algorithm<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
+        std::string filename) const {
     // number,datum,cluster,params1,params2,...
     
     std::ofstream file;
     file.open(filename);
 
-    for(int i = 0; i < data.rows(); i++){ // TODO tutti i write da modificare con dati multivar
+    for(int i = 0; i < data.rows(); i++){ // TODO tutti i write da modificare
+                                          // con dati multivar
         auto params = unique_values[ allocations[i] ].get_state();
         file << i << "," << data.row(i) << "," << allocations[i];
         for(int j = 0; j < params.size(); j++){
@@ -141,8 +145,8 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
-    std::string filename){
+void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
+    std::string filename) const {
     // number,datum,cluster,params1,params2,...
 
     std::ofstream file;
@@ -152,7 +156,8 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
         unsigned int ci = best_clust.allocations(i);
         file << i << "," << data.row(i) << "," << ci;
         for(int j = 0; j < best_clust.uniquevalues(ci).params_size(); j++){
-            file << "," << this->proto_param_to_matrix(best_clust.uniquevalues(ci).params(j));
+            file << "," << this->proto_param_to_matrix( 
+                best_clust.uniquevalues(ci).params(j) );
         }
         file << std::endl;
     }
@@ -163,8 +168,8 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
-    std::string filename){
+void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
+    std::string filename) const {
     std::ofstream file;
     file.open(filename);
 

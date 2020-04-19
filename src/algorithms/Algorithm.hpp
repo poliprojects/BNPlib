@@ -26,7 +26,7 @@ protected:
     Eigen::MatrixXd data;
     std::vector<unsigned int> allocations;
     std::vector<Hierarchy<Hypers>> unique_values;
-    std::pair< Eigen::MatrixXd, Eigen::VectorXd > density; // TODO w/ Eigen
+    std::pair< Eigen::MatrixXd, Eigen::VectorXd > density;
     Mixture mixture;
     IterationOutput best_clust;
 
@@ -38,10 +38,9 @@ protected:
 
     virtual void initialize() = 0;
 
-    void step(){ // TODO is it virtual?
+    void step(){
         sample_allocations();
         sample_unique_values();
-        // TODO sample_weights() etc?
     }
 
     virtual void sample_allocations() = 0;
@@ -104,28 +103,31 @@ public:
     // Other tools
     unsigned int cluster_estimate(BaseCollector* collector);
 
-    virtual void eval_density(const Eigen::MatrixXd grid, BaseCollector* collector) = 0;
+    virtual void eval_density(const Eigen::MatrixXd grid,
+    	BaseCollector* collector) = 0;
 
-    const void write_final_clustering_to_file(
-        std::string filename = "csv/clust_final.csv");
+    void write_final_clustering_to_file(
+        std::string filename = "csv/clust_final.csv") const;
 
-    const void write_best_clustering_to_file(
-        std::string filename = "csv/clust_best.csv");
+    void write_best_clustering_to_file(
+        std::string filename = "csv/clust_best.csv") const;
 
-    const void write_density_to_file(
-        std::string filename = "csv/density.csv");
+    void write_density_to_file(
+        std::string filename = "csv/density.csv") const;
 
     // Destructors and constructors:
     virtual ~Algorithm() = default;
 
-    Algorithm() {};
+    Algorithm() {}; // TODO delete
     Algorithm(const Eigen::MatrixXd &data, const int num_clusters,
         const Mixture &mixture, const Hypers &hy) :
         data(data), num_clusters(num_clusters), mixture(mixture) {
-            Hierarchy<Hypers> hierarchy(std::make_shared<Hypers> (hy));
-            if(hierarchy.is_multivariate()==0 && data.cols()>1){
-                std::cout<< "Warning: multivariate data supplied to univariate hierarchy. \
-                The algorithm will run correctly, but all data rows other than the first one will be ignored";
+            Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hy) );
+            if(hierarchy.is_multivariate() == false && data.cols() > 1){
+                std::cout << "Warning: multivariate data supplied to " <<
+                	"univariate hierarchy. The algorithm will run " <<
+                	"correctly, but all data rows other than the first" <<
+                	"one will be ignored" << std::endl;
             }
             for(unsigned int i = 0; i < num_clusters; i++){
                 unique_values.push_back(hierarchy);

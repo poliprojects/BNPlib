@@ -1,56 +1,44 @@
-
-
-
-\begin{frame}[fragile] {Algorithms}
-
+\begin{frame}[fragile]{Factory}
+To choose the \verb|Algorithm| at runtime:
 \begin{verbatim}
+template<class AbstractProduct, typename... Args>
 class Factory{
 private:
-    std::map<std::string, AlgoBuilderType> storage;
+    std::map<Identifier, Builder> storage;
+    //[...]
 public:
     static Factory& Instance();
-    void add_builder(const std::string &name, const AlgoBuilderType &builder) {}
-    auto create_algorithm(const std::string &name) const {}; // get object through switch and unique_ptr
-//[...]
+    std::unique_ptr<AbstractProduct> create_object(
+        const Identifier &name, Args... args) const;
+    void add_builder(const Identifier &name,
+        const Builder &builder);
+    //[...]
+}
 \end{verbatim}
-
-
-factories \\
-input
-
+factories, input
 \end{frame}
 
 
-
-
-
 \begin{frame}[fragile] {Multivariate Proto}
-
 \begin{small}
 \begin{verbatim}
-
-
 message Par_Col {
-        repeated double elems = 1;
+    repeated double elems = 1;
     }
 message Param {
-        repeated Par_Col par_cols= 1;
+    repeated Par_Col par_cols= 1;
     }
 message UniqueValues {
-        repeated Param params= 1;
+    repeated Param params= 1;
     }
-
 message IterationOutput {
     repeated int32 allocations = 1;
     repeated UniqueValues uniquevalues = 2;
 }
-
 message ChainOutput {
     repeated IterationOutput chain = 1;
 }
-
 \end{verbatim}
-
 \end{small}
 \end{frame}
 

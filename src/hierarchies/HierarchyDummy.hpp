@@ -18,6 +18,8 @@ protected:
                                     // mu0 (vector) ,lambda0 (matrix)
 
 public:
+    bool is_multivariate() const {return true;}
+
     // Contructors
     ~HierarchyDummy() = default;
     HierarchyDummy(std::shared_ptr<Hypers> hypers): hypers(hypers){
