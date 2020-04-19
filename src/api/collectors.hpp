@@ -12,13 +12,15 @@
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/util/delimited_message_util.h>
 
+// TODO split into different classes!!!
+
 
 class BaseCollector {
     public:
     BaseCollector(){}
     virtual void collect(IterationOutput iteration_state) = 0;
     virtual ~BaseCollector() = default;
-    virtual std::deque<IterationOutput> get_chains()=0;
+    virtual std::deque<IterationOutput> get_chains() = 0;
 };
 
 
@@ -32,7 +34,7 @@ class MemoryCollector : public BaseCollector {
     void collect(IterationOutput iteration_state) override {
     chains.push_back(iteration_state);
     }
-    std::deque<IterationOutput> get_chains()override {return chains;};
+    std::deque<IterationOutput> get_chains() override {return chains;};
     virtual ~MemoryCollector() = default;
 };
 
@@ -42,38 +44,32 @@ class MemoryCollector : public BaseCollector {
 
 class FileCollector: public BaseCollector {
 protected:
-int outfd;
-google::protobuf::io::FileOutputStream *fout;
+    int outfd;
+    google::protobuf::io::FileOutputStream *fout;
 
 public:
-FileCollector(std::string filename) {
-   int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);
-   fout=new google::protobuf::io::FileOutputStream(outfd);
+    FileCollector(std::string filename) {
+        int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);
+        fout = new google::protobuf::io::FileOutputStream(outfd);
+    }
 
-}
+    std::deque<IterationOutput> get_chains() override { // TODO
+        std::cerr << "error" << std::endl;
+        return std::deque<IterationOutput>();
+    };
 
-std::deque<IterationOutput> get_chains() override {
-    std::cerr << "error" << std::endl;
-    return std::deque<IterationOutput>();
-}; // TODO
-
-void collect(IterationOutput iteration_state) override {
+    void collect(IterationOutput iteration_state) override {
         bool success;
         success = google::protobuf::util::SerializeDelimitedToZeroCopyStream(
             iteration_state, fout);
-        if (!success)
+        if (!success){
             std::cout << "Writing Failed" << std::endl;
-}
+        }
+    }
 
- virtual ~FileCollector() {
-   delete fout;
-   close(outfd);
-}
+    virtual ~FileCollector() {
+        delete fout;
+        close(outfd);
+    }
 
 };
-
-
-
-
-
-
