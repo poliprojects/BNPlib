@@ -16,8 +16,47 @@ public:
 
 
 factories \\
-collectors \\
 input
 
 \end{frame}
 
+
+
+
+
+\begin{frame}[fragile] {Multivariate Proto}
+
+\begin{small}
+\begin{verbatim}
+
+
+message Par_Col {
+        repeated double elems = 1;
+    }
+message Param {
+        repeated Par_Col par_cols= 1;
+    }
+message UniqueValues {
+        repeated Param params= 1;
+    }
+
+message IterationOutput {
+    repeated int32 allocations = 1;
+    repeated UniqueValues uniquevalues = 2;
+}
+
+message ChainOutput {
+    repeated IterationOutput chain = 1;
+}
+
+\end{verbatim}
+
+\end{small}
+\end{frame}
+
+
+\begin{frame}{Collectors}
+	\begin{center}
+		\includegraphics[scale=0.35]{etc/collectors.pdf}
+	\end{center}
+\end{frame}
