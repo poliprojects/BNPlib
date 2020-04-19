@@ -10,7 +10,7 @@ template<class AbstractProduct, typename... Args>
 class Factory{
 private:
     // Aliases
-    using Builder = std::function< std::unique_ptr<AbstractProduct>(Args) >;
+    using Builder = std::function< std::unique_ptr<AbstractProduct>(Args...) >;
 
     using Identifier = std::string;
 
@@ -32,17 +32,17 @@ public:
         return factory;
     }
 
-    template<typename... Args>
+    
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args&&... args) const {  // TODO shared?
+        Args... args) const {  // TODO shared?
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
         }
         else{
-            return std::make_unique<AbstractProduct>( f->second(
-                std::forward<Args>(args)...) );
-            // return f->second(std::forward<Args>(args)...);
+            //return std::make_unique<AbstractProduct>( f->second(
+              //  std::forward<Args>(args)...) );
+             return f->second(std::forward<Args>(args)...);
         }
     }
 
