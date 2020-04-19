@@ -36,9 +36,18 @@ int main(int argc, char *argv[]){
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
     DirichletMixture mix(1); // total mass
 
-    load_algo_factory<HierarchyNNIG, HypersFixedNNIG, DirichletMixture>();
-    auto &algoFactory = Factory<HierarchyNNIG, HypersFixedNNIG,
-        DirichletMixture>::Instance();
+
+
+
+
+    using AlgorithmModelType = Algorithm<HierarchyNNIG, HypersFixedNNIG,
+        DirichletMixture>;
+    using Builder = std::function< std::unique_ptr<AlgorithmModelType> () >;
+
+    Builder build1 = []{return std::make_unique<Derived1>();};
+    auto &factory = Factory<AlgorithmModelType>::Instance();
+    factory.add_builder(1,build1);
+
     auto list = algoFactory.list_of_known_builders();
     for (auto &el : list){
         std::cout << el << std::endl;
@@ -47,6 +56,9 @@ int main(int argc, char *argv[]){
         hy); // n_aux = 3
     
     return 0;
+
+
+
 
 
     // Run sampler
