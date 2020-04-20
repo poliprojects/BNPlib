@@ -23,4 +23,9 @@ FEATURES/IMPLEMENTATION
 
 MANOVALANZA
 * documentation with Doxygen
-* complete README
+* complete README (VM etc)
+
+
+REPORT
+* segnala che i parametri non nel costruttore solitamente sono lasciati in
+  default
