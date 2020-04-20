@@ -1,5 +1,8 @@
 \begin{frame}[fragile]{Factory}
-To choose the \verb|Algorithm| at runtime:
+\begin{itemize}
+	\item To choose the \verb|Algorithm| at runtime
+\end{itemize}
+
 \begin{verbatim}
 template<class AbstractProduct, typename... Args>
 class Factory{
@@ -18,7 +21,7 @@ public:
 \end{frame}
 
 
-\begin{frame}[fragile] {Protocol Buffers API}
+\begin{frame}[fragile] {Protocol Buffers API aka (\texttt{protobuf})}
 \begin{itemize}
 	\item For multivariate data storage
 	\item Model in \texttt{output.proto}:
@@ -47,6 +50,9 @@ public:
 
 
 \begin{frame}{Collectors}
+\begin{itemize}
+	\item To save data with the \texttt{protobuf} structures
+\end{itemize}
 	\begin{center}
 		\includegraphics[scale=0.35]{etc/collectors.pdf}
 	\end{center}
