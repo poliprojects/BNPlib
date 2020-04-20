@@ -15,7 +15,7 @@ public:
         fout = new google::protobuf::io::FileOutputStream(outfd);
     }
 
-    std::deque<IterationOutput> get_chains() override { // TODO
+    std::deque<IterationOutput> get_chains() override { // TODO ?
         std::cerr << "error" << std::endl;
         return std::deque<IterationOutput>();
     };
@@ -29,11 +29,13 @@ public:
         }
     }
 
+    // Destructor
     virtual ~FileCollector() {
         delete fout;
         close(outfd);
     }
 
+    // TODO constructor?
 };
 
 

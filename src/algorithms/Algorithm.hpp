@@ -19,8 +19,13 @@ class Algorithm{
 
 protected:
     // Mehtods parameters
+<<<<<<< HEAD
     unsigned int maxiter=10000;
     unsigned int burnin=1000;
+=======
+    unsigned int maxiter = 10000;
+    unsigned int burnin  =  1000;
+>>>>>>> d87d661d4a6638b35c65dac19b03a19925629281
     unsigned int num_clusters;
 
     // Data and values containers
@@ -72,8 +77,7 @@ public:
         while(iter < maxiter){
             step();    
             if(iter >= burnin){
-              save_state(collector,iter);
-              
+              save_state(collector, iter);    
             }
             iter++;
         }

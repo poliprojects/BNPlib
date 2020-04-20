@@ -18,9 +18,11 @@
 
 class BaseCollector {
 public:
-    BaseCollector(){}
+	// Destructor
+	// TODO constructor?
+	virtual ~BaseCollector() = default;
+
     virtual void collect(IterationOutput iteration_state) = 0;
-    virtual ~BaseCollector() = default;
     virtual std::deque<IterationOutput> get_chains() = 0;
 };
 
