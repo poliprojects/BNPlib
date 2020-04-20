@@ -75,7 +75,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         // Normalize
         probas = probas / tot;
         
-        unsigned int c_new = stan::math::categorical_rng(probas, this->rng)-1;
+        unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
         
         if(singleton == 1){
             if(c_new == this->allocations[i]){

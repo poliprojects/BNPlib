@@ -66,6 +66,8 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 aux_unique_values[k].like(this->data.row(i))(0) / n_aux;
             tot += probas(n_unique+k);
         }
+
+        // Normalize
         probas = probas / tot;
 
         unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
