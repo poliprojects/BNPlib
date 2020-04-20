@@ -8,7 +8,7 @@ using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 template <typename... Args> using Builder = std::function< std::unique_ptr<
-    Algorithm<HierarchyType, HypersType, MixtureType>> (Args...) >;
+  Algorithm<HierarchyType, HypersType, MixtureType>> (Args...) >;
 
 
 int main(int argc, char *argv[]){
@@ -47,17 +47,21 @@ int main(int argc, char *argv[]){
         v.data(), v.size()); // TODO: meglio con conservative resize?
 
     // Load algorithm factory
-    //using Builder = std::function< std::unique_ptr< Algorithm<HierarchyType,
-      //  HypersType, MixtureType> >() >;
-    Builder<Eigen::VectorXd,MixtureType,HypersType > neal2builder = [](
-        Eigen::VectorXd data,MixtureType mix,HypersType hy){
-            return std::make_unique< Neal2<HierarchyType,HypersType,
+
+    Builder<HypersType,MixtureType,Eigen::VectorXd> neal2builder = [](HypersType hy ,MixtureType mix,Eigen::VectorXd data){
+	
+        return std::make_unique< Neal2<HierarchyType,HypersType,
                 MixtureType> >(hy, mix, data);
+        };
+	
+    Builder<HypersType,MixtureType,Eigen::VectorXd,int> neal8builder = [](HypersType hy ,MixtureType mix,Eigen::VectorXd data,int num_clust){
+	
+        return std::make_unique< Neal2<HierarchyType,HypersType,
+                MixtureType> >(hy, mix, data, num_clust);
         };
 
     auto &algoFactory = Factory<
-        Algorithm<HierarchyType, HypersType, MixtureType>,
-        Eigen::VectorXd,MixtureType,HypersType >::Instance();
+        Algorithm<HierarchyType, HypersType, MixtureType> , HypersType,MixtureType,Eigen::VectorXd>::Instance();
 
     algoFactory.add_builder("neal2",neal2builder);
     auto list = algoFactory.list_of_known_builders();
@@ -66,7 +70,7 @@ int main(int argc, char *argv[]){
     }
 
     // Create algorithm
-    auto sampler = algoFactory.create_object("neal2", hy, mix, data);
+    auto sampler = algoFactory.create_object("neal2",hy, mix,data);
 
     return 0;
 
