@@ -5,7 +5,7 @@
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
-    const Param &par){
+    const Param &par) const {
     Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(par.par_cols_size(),
         par.par_cols(0).elems_size());
     for(int h = 0; h < par.par_cols_size(); h++){
@@ -156,7 +156,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
         unsigned int ci = best_clust.allocations(i);
         file << i << "," << data.row(i) << "," << ci;
         for(int j = 0; j < best_clust.uniquevalues(ci).params_size(); j++){
-            file << "," << this->proto_param_to_matrix( 
+            file << "," << proto_param_to_matrix( 
                 best_clust.uniquevalues(ci).params(j) );
         }
         file << std::endl;

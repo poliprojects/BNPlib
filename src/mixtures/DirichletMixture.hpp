@@ -10,23 +10,23 @@ public:
     ~DirichletMixture() = default;
 
     DirichletMixture() {};
-    DirichletMixture(const double &totalmass): totalmass(totalmass){
+    DirichletMixture(const double totalmass): totalmass(totalmass){
         assert(totalmass >= 0);
     }
 
     // Compute probabilities
-    double const prob_existing_cluster(const int &card, const unsigned int &n){
+    double prob_existing_cluster(const int card, const unsigned int n) const {
     	return card/(n-1+totalmass);
     }
     
-    double const prob_new_cluster(const unsigned int &n,
-    	const unsigned int &n_unique){
+    double prob_new_cluster(const unsigned int n,
+    	const unsigned int n_unique) const {
     	return totalmass/(n-1+totalmass);
     }
 
     // Getters and setters
-    double const get_totalmass(){return totalmass;}
-    void set_totalmass(const double &totalmass_){totalmass = totalmass_;}
+    double get_totalmass() const {return totalmass;}
+    void set_totalmass(const double totalmass_){totalmass = totalmass_;}
 };
 
 #endif // DIRICHLETMIXTURE_HPP

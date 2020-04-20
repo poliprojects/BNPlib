@@ -51,7 +51,7 @@ protected:
     
     IterationOutput get_state_as_proto(unsigned int iter);
 
-    Eigen::MatrixXd proto_param_to_matrix(const Param&);
+    Eigen::MatrixXd proto_param_to_matrix(const Param& par) const;
 
     const void print_ending_message();
 
