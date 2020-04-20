@@ -7,7 +7,7 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal8 : public Neal2<Hierarchy, Hypers, Mixture>{
 protected:
     // Mehtods parameters
-    unsigned int n_aux;
+    unsigned int n_aux = 3;
 
     // Data and values containers
     std::vector<Hierarchy<Hypers>> aux_unique_values;
