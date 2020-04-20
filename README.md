@@ -16,12 +16,16 @@ You will need a terminal to run the following commands.
 * TBD
 
 ### Usage examples
-* ```./main path/to/filename.csv Collector``` and input required values to stdin (choose Collector: "file" or "memory")
+* ```./main path/to/filename.csv Collector``` and input required values to
+  stdin (choose Collector: "file" or "memory")
 * ```./main path/to/filename.csv "FileCollector" "filename"``` in case of FileCollector specify filename
-* ```./main csv/data.csv <<< "5.0 0.1 2.0 2.0 1.0 3"``` to automatically fill in
-  all values
+* ```./main csv/data.csv <<< "5.0 0.1 2.0 2.0 1.0 3"``` to automatically fill
+  in all values
 
 ### Code instructions
 * Change number of total iterations (default 10000) and burn-in iterations
   (default 1000) with the appropriate setter methods of the algorithm object:
   ```sampler.set_maxiter(20000); sampler.set_burnin(2000);```
+* In Neal8 algorithm, change number of auxiliary blocks (default 3) with the
+  appropriate setter method of the algorithm object: ```sampler.set_n_aux(4);```
+ 
