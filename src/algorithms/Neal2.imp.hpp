@@ -18,7 +18,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
       this->allocations.push_back(h);
     }
     for(int j = this->num_clusters; j < this->data.rows(); j++){
-        int num = distribution(generator); //TODO da stan?
+        int num = distribution(generator);
         this->allocations[j] = num;
     }
 }
@@ -81,7 +81,8 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
             if(c_new == this->allocations[i]){
                 // case 1 of 4: SINGLETON - SINGLETON
                 Eigen::VectorXd temp;
-                temp=this->data.row(i); // initialize with datum if univariate, with a vector (dim p) if multi
+                temp=this->data.row(i); // initialize with datum if univariate,
+                                        // with a vector (dim p) if multi
                 this->unique_values[ this->allocations[i]
                     ].sample_given_data(temp);
                 
@@ -132,15 +133,6 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
         clust_idxs[ this->allocations[i] ].push_back(i);
     }
 
-    // DEBUG:
-    //for(unsigned int j = 0; j < this->num_clusters; j++){ 
-    //    std::cout << "Cluster #" << j << ": ";
-    //    for(unsigned int i = 0; i < clust_idxs[j].size(); i++){
-    //        std::cout << " " << clust_idxs[j][i];
-    //    }
-    //    std::cout << std::endl;
-    //}
-
     for(int j = 0; j < this->num_clusters; j++){
 	Eigen::MatrixXd curr_data(this->data.rows(), this->data.cols());
      	int k=0;
@@ -149,17 +141,17 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
             curr_data.row(k)=this->data.row(idx);	
             k+=1;
 	}
-        curr_data.conservativeResize(k,Eigen::NoChange); // TODO: più efficiente?
+        curr_data.conservativeResize(k, Eigen::NoChange);
+            // TODO: più efficiente?
         this->unique_values[j].sample_given_data(curr_data);
     }
 
-    // std::cout << std::endl; // DEBUG
 }
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
-        const Eigen::MatrixXd grid,BaseCollector* collector){
+    const Eigen::MatrixXd &grid, BaseCollector* collector){
 
     this->density.first = grid;
     Eigen::VectorXd dens(grid.rows());
@@ -174,7 +166,8 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
             0);
 
 
-        std::vector<Eigen::MatrixXd> params(state.uniquevalues(0).params_size());
+        std::vector<Eigen::MatrixXd> params(
+            state.uniquevalues(0).params_size() );
 
         for(unsigned int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
@@ -183,28 +176,19 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
 
         for(unsigned int h = 0; h < state.uniquevalues_size(); h++){
             for(int k = 0; k < state.uniquevalues(h).params_size(); k++){
-                params[k] = this->proto_param_to_matrix(state.uniquevalues(h).params(k));
+                params[k] = this->proto_param_to_matrix(
+                    state.uniquevalues(h).params(k) );
             }
             temp_hier.set_state(params);
 
             dens += card[h] * temp_hier.like(grid) / (M+n);
         }
 
-        // Component from G0 (exploit conjugacy using the explicit expression)
+        // Component from G0 (exploit conjugacy using explicit expression)
          dens += M * temp_hier.eval_marg(grid) / (M+n); 
     }
 
-    // DEBUG:
-    // for(int i = 0; i < grid.size(); i++)
-    //     std::cout << dens(i) << " ";
-    // std::cout << std::endl;
-
     this->density.second = dens / collector->get_chains().size();
-
-    //DEBUG:
-    // for(int i = 0; i < grid.size(); i++)
-    //     std::cout << this->density.second(i) << " ";
-    // std::cout << std::endl;
 }
 
 

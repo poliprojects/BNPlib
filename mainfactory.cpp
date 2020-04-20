@@ -7,8 +7,9 @@
 using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
-template <typename... Args> using Builder =std::function< std::unique_ptr< Algorithm<HierarchyType,
-        HypersType, MixtureType>> (Args...) >;
+template <typename... Args> using Builder = std::function< std::unique_ptr<
+    Algorithm<HierarchyType, HypersType, MixtureType>> (Args...) >;
+
 
 int main(int argc, char *argv[]){
     // Model parameters
@@ -20,8 +21,6 @@ int main(int argc, char *argv[]){
     unsigned int n_aux = 3;
     HypersType hy(mu0, lambda, alpha0, beta0);
     MixtureType mix(totalmass);
-
-    
 
     // Read data from main arg
     std::ifstream file;
@@ -50,10 +49,15 @@ int main(int argc, char *argv[]){
     // Load algorithm factory
     //using Builder = std::function< std::unique_ptr< Algorithm<HierarchyType,
       //  HypersType, MixtureType> >() >;
-    Builder<Eigen::VectorXd,MixtureType,HypersType > neal2builder = [](Eigen::VectorXd data,MixtureType mix,HypersType hy){return std::make_unique< Neal2<HierarchyType,HypersType, MixtureType> >(data,mix, hy);};
+    Builder<Eigen::VectorXd,MixtureType,HypersType > neal2builder = [](
+        Eigen::VectorXd data,MixtureType mix,HypersType hy){
+            return std::make_unique< Neal2<HierarchyType,HypersType,
+                MixtureType> >(hy, mix, data);
+        };
 
-    auto &algoFactory = Factory< Algorithm<HierarchyType,
-        HypersType, MixtureType> , Eigen::VectorXd,MixtureType,HypersType >::Instance();
+    auto &algoFactory = Factory<
+        Algorithm<HierarchyType, HypersType, MixtureType>,
+        Eigen::VectorXd,MixtureType,HypersType >::Instance();
 
     algoFactory.add_builder("neal2",neal2builder);
     auto list = algoFactory.list_of_known_builders();
@@ -62,8 +66,7 @@ int main(int argc, char *argv[]){
     }
 
     // Create algorithm
-    auto sampler = algoFactory.create_object("neal2", data, mix, hy);
-        // TODO n_aux to bottom of list?
+    auto sampler = algoFactory.create_object("neal2", hy, mix, data);
 
     return 0;
 

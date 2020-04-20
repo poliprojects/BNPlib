@@ -61,9 +61,9 @@ int main(int argc, char *argv[]){
     HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
     DirichletMixture mix(1); // total mass
 
-    Neal8<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(
-        data, n_aux, mix, hy);
-  
+    Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(hy, mix,
+        data);
+      
     // Run sampler
     BaseCollector *f;
     if(argc < 3){

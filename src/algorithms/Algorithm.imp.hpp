@@ -101,19 +101,8 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
         errors(h) = (tot_diss-all_diss[h]).norm();
     }
     
-    //std::cout << errors << std::endl; // DEBUG
     std::ptrdiff_t i;
     int min_err = errors.minCoeff(&i);
-
-    //std::ofstream file;
-    //file.open("csv/dissim_matr_mean.csv");
-    //file << tot_diss;
-    //file.close();
-
-    //std::ofstream file2;
-    //file2.open("csv/dissim_matr_best.csv");
-    //file2 << all_diss[i];
-    //file2.close();
 
     best_clust = collector->get_chains()[i];
     std::cout << best_clust.uniquevalues_size() <<

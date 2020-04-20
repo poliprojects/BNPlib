@@ -17,21 +17,16 @@ protected:
 
 public:
     // Other tools:
-    void eval_density(const Eigen::MatrixXd grid, BaseCollector* collector) override;
+    void eval_density(const Eigen::MatrixXd &grid, BaseCollector* collector)
+        override;
 
     // Destructors and constructors:
     ~Neal2() = default;
 
-    Neal2() {};
-    Neal2(const Eigen::MatrixXd &data, const int num_clusters,
-        const Mixture &mixture, const Hypers &hy) :
-        Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(data, num_clusters,
-            mixture, hy) {}
-
-    // If no # initial clusters is given, it will be set equal to the data size:
-    Neal2(const Eigen::MatrixXd &data, const Mixture &mixture,
-        const Hypers &hy) :
-        Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(data, mixture, hy) {}
+    Neal2(const Hypers &hypers, const Mixture &mixture,
+        const Eigen::MatrixXd &data, const unsigned int num_clusters = 0) :
+        Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(hypers, mixture, data,
+            num_clusters) {}
 
 }; // end of Class Neal2
 

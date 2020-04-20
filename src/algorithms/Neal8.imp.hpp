@@ -68,12 +68,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         }
         probas = probas / tot;
 
-        //for(int i = 0; i < probas.size(); i++){
-        //    std::cout << "probas_" << probas(i) << std::endl; // DEBUG
-        //}
         unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
-
-        //std::cout<<"c_new: "<<c_new<<std::endl; // DEBUG
 
         if(singleton == 1){
             if(c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
@@ -115,13 +110,9 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
-        const Eigen::MatrixXd grid, BaseCollector* collector){
+        const Eigen::MatrixXd &grid, BaseCollector* collector){
 
     this->density.first = grid;
-
-    //std::ofstream file;
-    //unsigned int step = 1000;
-    //file.open("csv/dens_estimate_iterations.csv");
 
     Eigen::VectorXd dens(grid.rows());
     double M = this->mixture.get_totalmass();
@@ -130,12 +121,13 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
 
     for(int iter = 0; iter < collector->get_chains().size(); iter++){
         // for each iteration of the algorithm
-        //std::cout << iter << std::endl; // DEBUG
 
         state = collector->get_chains()[iter];
         std::vector<unsigned int> card(state.uniquevalues_size(),
             0); // TODO salviamoci ste card da qualche parte
-        std::vector<Eigen::MatrixXd> params(state.uniquevalues(0).params_size()); // TODO state.unique o state.mutable
+        std::vector<Eigen::MatrixXd> params(
+            state.uniquevalues(0).params_size());   // TODO state.unique o
+                                                    // state.mutable
         Eigen::VectorXd dens_addendum(grid.rows());
         
         for(int j = 0; j < n; j++){
@@ -144,7 +136,8 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         Hierarchy<Hypers> temp_hier(this->unique_values[0].get_hypers());
         for(int h = 0; h < state.uniquevalues_size(); h++){
             for(int k = 0; k < state.uniquevalues(h).params_size(); k++){
-                params[k] = this->proto_param_to_matrix(state.uniquevalues(h).params(k));
+                params[k] = this->proto_param_to_matrix(
+                    state.uniquevalues(h).params(k));
             }
             
             temp_hier.set_state(params);
@@ -159,29 +152,9 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
         }
 
     dens += dens_addendum;
-
-        //if(iter % step == 0){
-           // for(int i=0; i<dens_addendum.size()-1; i++){
-
-         //   file << dens_addendum(i)<< ",";
-        //    }
-        //    file <<dens_addendum(dens_addendum.size()-1) << std::endl;
-        //}
     }
 
-    // DEBUG:
-    // for(int i = 0; i < grid.size(); i++)
-    //     std::cout << dens(i) << " ";
-    // std::cout << std::endl;
-
     this->density.second = dens / collector->get_chains().size();
-
-    //DEBUG:
-    // for(int i = 0; i < grid.size(); i++)
-    //     std::cout << this->density.second(i) << " ";
-    // std::cout << std::endl;
-
-    //file.close();
 }
 
 

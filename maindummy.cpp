@@ -17,8 +17,8 @@ int main(int argc, char *argv[]){
     int n_aux = 3;
     HypersDummy hy(mu0, lambda0);
     DirichletMixture mix(totalmass); // total mass
-    Neal8<HierarchyDummy, HypersDummy, DirichletMixture> sampler(
-        data, n_aux, mix, hy);
+    Neal8<HierarchyDummy, HypersDummy, DirichletMixture> sampler(hy, mix, data,
+        n_aux);
 
     BaseCollector *f;
     if(argc < 2){

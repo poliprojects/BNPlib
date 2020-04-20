@@ -19,8 +19,8 @@ class Algorithm{
 
 protected:
     // Mehtods parameters
-    unsigned int maxiter = 100;
-    unsigned int burnin = 50;
+    unsigned int maxiter;
+    unsigned int burnin;
     unsigned int num_clusters;
 
     // Data and values containers
@@ -87,8 +87,6 @@ public:
     //    initialize();
     //    unsigned int iter = 0;
     //    while(iter < maxiter){
-    //        std::cout << "Iteration # " << iter << " / " <<
-    //            maxiter << std::endl; // DEBUG
     //        step();
     //        if(iter >= burnin){
     //          save_iteration(iter);
@@ -104,7 +102,7 @@ public:
     // Other tools
     unsigned int cluster_estimate(BaseCollector* collector);
 
-    virtual void eval_density(const Eigen::MatrixXd grid,
+    virtual void eval_density(const Eigen::MatrixXd &grid,
     	BaseCollector* collector) = 0;
 
     void write_final_clustering_to_file(
@@ -119,27 +117,26 @@ public:
     // Destructors and constructors:
     virtual ~Algorithm() = default;
 
-    Algorithm() {}; // TODO delete
-    Algorithm(const Eigen::MatrixXd &data, const int num_clusters,
-        const Mixture &mixture, const Hypers &hy) :
-        data(data), num_clusters(num_clusters), mixture(mixture) {
-            Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hy) );
+    Algorithm(const Hypers &hypers, const Mixture &mixture,
+        const Eigen::MatrixXd &data, const unsigned int num_clust = 0) :
+        mixture(mixture), data(data), num_clusters(num_clust) {
+        Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers) );
             if(hierarchy.is_multivariate() == false && data.cols() > 1){
-                std::cout << "Warning: multivariate data supplied to " <<
-                	"univariate hierarchy. The algorithm will run " <<
-                	"correctly, but all data rows other than the first" <<
-                	"one will be ignored" << std::endl;
+            std::cout << "Warning: multivariate data supplied to " <<
+               	"univariate hierarchy. The algorithm will run " <<
+               	"correctly, but all data rows other than the first" <<
+               	"one will be ignored" << std::endl;
+            }
+            if(num_clust == 0){
+                std::cout << "Warning: starting number of clusters will be " <<
+                "set equal to the data size" << std::endl;
+                num_clusters = data.size();
             }
             for(unsigned int i = 0; i < num_clusters; i++){
                 unique_values.push_back(hierarchy);
             }
             
     }
-
-    // If no # initial clusters is given, it will be set equal to the data size:
-    Algorithm(const Eigen::MatrixXd &data, const Mixture &mixture,
-        const Hypers &hy) :
-        Algorithm(data, data.rows(), mixture, hy) {}
 
     // Getters
     const unsigned int get_maxiter(){return maxiter;}
