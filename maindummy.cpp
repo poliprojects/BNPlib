@@ -14,11 +14,9 @@ int main(int argc, char *argv[]){
     mu0 << 3.0, 3.0, 3.0;
     Eigen::MatrixXd lambda0 = 2 * Eigen::Matrix<double, 3, 3>::Identity();
     double totalmass = 1.0;
-    int n_aux = 3;
     HypersDummy hy(mu0, lambda0);
     DirichletMixture mix(totalmass); // total mass
-    Neal8<HierarchyDummy, HypersDummy, DirichletMixture> sampler(hy, mix, data,
-        n_aux);
+    Neal8<HierarchyDummy, HypersDummy, DirichletMixture> sampler(hy, mix, data);
 
     BaseCollector *f;
     if(argc < 2){
