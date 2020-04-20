@@ -12,7 +12,7 @@ private:
     // Aliases
     using Identifier = std::string;    
     using Builder= std::function< std::unique_ptr<AbstractProduct>(Args ...) >;
-    //using Builder= boost::variant<std::function< std::unique_ptr<AbstractProduct>(Args)>, std::function< std::unique_ptr<AbstractProduct>(int,Args)> >;
+    //using Builder= boost::variant<std::function< std::unique_ptr<AbstractProduct>(Args...)>, std::function< std::unique_ptr<AbstractProduct>(int,Args...)> >;
 
     
 
