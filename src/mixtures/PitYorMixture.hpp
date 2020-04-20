@@ -2,15 +2,14 @@
 #define PITYORMIXTURE_HPP
 
 class PitYorMixture {
-
 private:
     double strength;
     double discount;
 
 public:
+    // Destructor and constructor
     ~PitYorMixture() = default;
 
-    PitYorMixture() {};
     PitYorMixture(const double strength, const double discount):
         strength(strength), discount(discount){
         assert(strength > -discount);
@@ -18,7 +17,8 @@ public:
     }
 
     // Compute probabilities
-    double prob_existing_cluster(const int card, const unsigned int n) const {
+    double prob_existing_cluster(const unsigned int card, const unsigned int n)
+        const {
         return (card-discount)/(n-1+strength);
     }
 
@@ -33,5 +33,6 @@ public:
     void set_strength(const double strength_){strength = strength_;}
     void set_discount(const double discount_){discount = discount_;}
 };
+
 
 #endif // DIRICHLETMIXTURE_HPP

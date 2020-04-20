@@ -8,13 +8,15 @@ class MemoryCollector: public BaseCollector {
 protected:
     std::deque<IterationOutput> chains;
 
-   public:
-    MemoryCollector() {}
+public:
     void collect(IterationOutput iteration_state) override {
-    chains.push_back(iteration_state);
+    	chains.push_back(iteration_state);
     }
     std::deque<IterationOutput> get_chains() override {return chains;};
+
+    // Destructor
     virtual ~MemoryCollector() = default;
+    // TODO constructor?
 };
 
 

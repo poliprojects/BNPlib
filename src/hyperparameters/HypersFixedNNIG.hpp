@@ -4,20 +4,19 @@
 #include <cassert>
 
 class HypersFixedNNIG {
-
 private:
     double mu0, lambda, alpha0, beta0;
 
 public:
+    // Destructtor and constructor
     ~HypersFixedNNIG() = default;
 
-    HypersFixedNNIG() {};
     HypersFixedNNIG(const double mu0, const double lambda, const double alpha0,
-                const double beta0):
+        const double beta0):
         mu0(mu0), lambda(lambda), alpha0(alpha0), beta0(beta0) {
-            assert(lambda > 0);
-            assert(alpha0 > 0);
-            assert(beta0  > 0);
+        assert(lambda > 0);
+        assert(alpha0 > 0);
+        assert(beta0  > 0);
     }
 
     // Getters
@@ -27,10 +26,11 @@ public:
     const double get_lambda(){return lambda;}
 
     // Setters
-    void set_mu0(const double mu0_){mu0 = mu0_;}
-    void set_alpha0(const double alpha0_){alpha0 = alpha0_;}
-    void set_beta0(const double beta0_){beta0 = beta0_;}
-    void set_lambda(const double lambda_){lambda = lambda_;}
+    void set_mu0(const double mu0){mu0 = mu0;}
+    void set_alpha0(const double alpha0){alpha0 = alpha0;}
+    void set_beta0(const double beta0){beta0 = beta0;}
+    void set_lambda(const double lambda){lambda = lambda;}
 };
+
 
 #endif // HYPERSFIXEDNNIG_HPP
