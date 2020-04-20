@@ -18,26 +18,29 @@ public:
 \end{frame}
 
 
-\begin{frame}[fragile] {Protocol Buffers}
-For multivariate data storage
+\begin{frame}[fragile] {Protocol Buffers API}
+\begin{itemize}
+	\item For multivariate data storage
+	\item Model in \texttt{output.proto}:
+\end{itemize}
 \begin{small}
 \begin{verbatim}
-message Par_Col {
-    repeated double elems = 1;
-    }
-message Param {
-    repeated Par_Col par_cols = 1;
-    }
-message UniqueValues {
-    repeated Param params = 1;
-    }
-message IterationOutput {
-    repeated int32 allocations = 1;
-    repeated UniqueValues uniquevalues = 2;
-}
-message ChainOutput {
-    repeated IterationOutput chain = 1;
-}
+        message Par_Col {
+            repeated double elems = 1;
+        }
+        message Param {
+            repeated Par_Col par_cols = 1;
+        }
+        message UniqueValues {
+            repeated Param params = 1;
+        }
+        message IterationOutput {
+            repeated int32 allocations = 1;
+            repeated UniqueValues uniquevalues = 2;
+        }
+        message ChainOutput {
+            repeated IterationOutput chain = 1;
+        }
 \end{verbatim}
 \end{small}
 \end{frame}

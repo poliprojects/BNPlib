@@ -21,7 +21,7 @@ protected:
     // Mehtods parameters
     unsigned int maxiter = 100;
     unsigned int burnin = 50;
-    int num_clusters;
+    unsigned int num_clusters;
 
     // Data and values containers
     Eigen::MatrixXd data;
