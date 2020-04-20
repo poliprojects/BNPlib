@@ -23,10 +23,10 @@ public:
     // Destructors and constructors:
     ~Neal2() = default;
 
-    Neal2(const Hypers &hypers, const Mixture &mixture,
-        const Eigen::MatrixXd &data, const unsigned int num_clusters = 0) :
-        Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(hypers, mixture, data,
-            num_clusters) {}
+    Neal2(const Hypers &hypers_, const Mixture &mixture_,
+        const Eigen::MatrixXd &data_, const unsigned int num_clusters_ = 0) :
+        Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(hypers_, mixture_,
+            data_, num_clusters_) {}
 
 }; // end of Class Neal2
 

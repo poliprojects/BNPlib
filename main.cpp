@@ -100,7 +100,11 @@ int main(int argc, char *argv[]){
             << std::endl;
         return 1;
     }
-  
+
+    // TODO DEBUG: reduce iterations
+    sampler.set_maxiter(500);
+    sampler.set_burnin(100);
+
     sampler.run(f);
 
     // Density and clustering stuff stuff

@@ -22,7 +22,7 @@ public:
 
     // Contructors
     ~HierarchyDummy() = default;
-    HierarchyDummy(std::shared_ptr<Hypers> hypers): hypers(hypers){
+    HierarchyDummy(std::shared_ptr<Hypers> hypers_): hypers(hypers_){
         Eigen::VectorXd mu(3);
         mu << 2.9, 2.9, 2.9;
         state.push_back(mu);
@@ -36,7 +36,7 @@ public:
     // Getters and setters
     std::vector<Eigen::MatrixXd>get_state(){return state;}
     std::shared_ptr<Hypers> get_hypers(){return hypers;}
-    void set_state(const std::vector<Eigen::MatrixXd> &s){state = s;}
+    void set_state(const std::vector<Eigen::MatrixXd> &state_){state = state_;}
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &datum);
     Eigen::VectorXd like(const Eigen::MatrixXd &datum);

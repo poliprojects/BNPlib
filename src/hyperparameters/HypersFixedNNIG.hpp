@@ -11,9 +11,9 @@ public:
     // Destructtor and constructor
     ~HypersFixedNNIG() = default;
 
-    HypersFixedNNIG(const double mu0, const double lambda, const double alpha0,
-        const double beta0):
-        mu0(mu0), lambda(lambda), alpha0(alpha0), beta0(beta0) {
+    HypersFixedNNIG(const double mu0_, const double lambda_,
+        const double alpha0_, const double beta0_):
+        mu0(mu0_), lambda(lambda_), alpha0(alpha0_), beta0(beta0_) {
         assert(lambda > 0);
         assert(alpha0 > 0);
         assert(beta0  > 0);
@@ -26,9 +26,9 @@ public:
     const double get_lambda(){return lambda;}
 
     // Setters
-    void set_mu0(const double mu_0){mu0 = mu_0;}
-    void set_alpha0(const double alpha_0){alpha0 = alpha_0;}
-    void set_beta0(const double beta_0){beta0 = beta_0;}
+    void set_mu0(const double mu_0_){mu0 = mu_0_;}
+    void set_alpha0(const double alpha_0_){alpha0 = alpha_0_;}
+    void set_beta0(const double beta_0_){beta0 = beta_0_;}
     void set_lambda(const double lambda_){lambda = lambda_;}
 };
 

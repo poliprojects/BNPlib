@@ -25,10 +25,10 @@ public:
     // Destructors and constructors:
     ~Neal8() = default;
 
-    Neal8(const Hypers &hypers, const Mixture &mixture,
-        const Eigen::MatrixXd &data, const unsigned int num_clusters) :
-        Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers, mixture, data,
-        num_clusters) {
+    Neal8(const Hypers &hypers_, const Mixture &mixture_,
+        const Eigen::MatrixXd &data_, const unsigned int num_clusters_ = 0) :
+        Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, data_,
+        num_clusters_) {
         for(unsigned int i = 0; i < n_aux; i++){
             aux_unique_values.push_back(this->unique_values[0]);
         }
@@ -36,7 +36,7 @@ public:
 
     // Getters and setters
     const unsigned int get_n_aux(){return n_aux;}
-    void set_n_aux(const unsigned int n_aux){n_aux = n_aux;}
+    void set_n_aux(const unsigned int n_aux_){n_aux = n_aux_;}
 
 }; // end of Class Neal8
 

@@ -27,7 +27,7 @@ public:
     // Contructors
     ~HierarchyNNIG() = default;
 
-    HierarchyNNIG(std::shared_ptr<Hypers> hypers): hypers(hypers),
+    HierarchyNNIG(std::shared_ptr<Hypers> hypers_): hypers(hypers_),
         state(2,Eigen::MatrixXd(1,1)){
 
     	state[0](0,0) = 0;
@@ -37,7 +37,7 @@ public:
     // Getters and setters
     std::vector<Eigen::MatrixXd> get_state() const {return state;}
     std::shared_ptr<Hypers> get_hypers() const {return hypers;}
-    void set_state(const std::vector<Eigen::MatrixXd> &s){state = s;}
+    void set_state(const std::vector<Eigen::MatrixXd> &state_){state = state_;}
     void set_state(int pos, Eigen::MatrixXd val){state[pos] = val;}
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &datum);

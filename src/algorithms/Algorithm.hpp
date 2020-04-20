@@ -72,6 +72,7 @@ public:
         initialize();
         unsigned int iter = 0;
         while(iter < maxiter){
+            std::cout << iter << std::endl; // TODO DEBUG
             step();    
             if(iter >= burnin){
               save_state(collector, iter);    
@@ -118,17 +119,17 @@ public:
     // Destructors and constructors:
     virtual ~Algorithm() = default;
 
-    Algorithm(const Hypers &hypers, const Mixture &mixture,
-        const Eigen::MatrixXd &data, const unsigned int num_clust = 0) :
-        mixture(mixture), data(data), num_clusters(num_clust) {
-        Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers) );
+    Algorithm(const Hypers &hypers_, const Mixture &mixture_,
+        const Eigen::MatrixXd &data_, const unsigned int num_clusters_ = 0) :
+        mixture(mixture_), data(data_), num_clusters(num_clusters_) {
+        Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
             if(hierarchy.is_multivariate() == false && data.cols() > 1){
             std::cout << "Warning: multivariate data supplied to " <<
                	"univariate hierarchy. The algorithm will run " <<
                	"correctly, but all data rows other than the first" <<
                	"one will be ignored" << std::endl;
             }
-            if(num_clust == 0){
+            if(num_clusters == 0){
                 std::cout << "Warning: starting number of clusters will be " <<
                 "set equal to the data size" << std::endl;
                 num_clusters = data.size();
@@ -148,10 +149,10 @@ public:
     }
 
     // Setters
-    void set_maxiter(const unsigned int maxiter){maxiter = maxiter;}
-    void set_burnin(const unsigned int burnin){burnin = burnin;}
-    void set_num_clusters(const unsigned int num_clusters){
-        num_clusters = num_clusters;
+    void set_maxiter(const unsigned int maxiter_){maxiter = maxiter_;}
+    void set_burnin(const unsigned int burnin_){burnin = burnin_;}
+    void set_num_clusters(const unsigned int num_clusters_){
+        num_clusters = num_clusters_;
     }
 
 };
