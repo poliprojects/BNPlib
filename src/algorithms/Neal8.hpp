@@ -28,7 +28,7 @@ public:
     Neal8(const Hypers &hypers, const Mixture &mixture,
         const Eigen::MatrixXd &data, const unsigned int num_clusters) :
         Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers, mixture, data,
-        num_clusters), {
+        num_clusters) {
         for(unsigned int i = 0; i < n_aux; i++){
             aux_unique_values.push_back(this->unique_values[0]);
         }

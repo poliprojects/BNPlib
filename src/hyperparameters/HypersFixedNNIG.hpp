@@ -26,10 +26,10 @@ public:
     const double get_lambda(){return lambda;}
 
     // Setters
-    void set_mu0(const double mu0){mu0 = mu0;}
-    void set_alpha0(const double alpha0){alpha0 = alpha0;}
-    void set_beta0(const double beta0){beta0 = beta0;}
-    void set_lambda(const double lambda){lambda = lambda;}
+    void set_mu0(const double mu_0){mu0 = mu_0;}
+    void set_alpha0(const double alpha_0){alpha0 = alpha_0;}
+    void set_beta0(const double beta_0){beta0 = beta_0;}
+    void set_lambda(const double lambda_){lambda = lambda_;}
 };
 
 

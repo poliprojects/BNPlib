@@ -11,8 +11,8 @@ class Factory{
 private:
     // Aliases
     using Identifier = std::string;    
-    //using Builder = template< typename... Args> std::function< std::unique_ptr<AbstractProduct>(Args) >;
-    using Builder= boost::variant<std::function< std::unique_ptr<AbstractProduct>(Args)>, std::function< std::unique_ptr<AbstractProduct>(Args, int)> >;
+    using Builder= std::function< std::unique_ptr<AbstractProduct>(Args ...) >;
+    //using Builder= boost::variant<std::function< std::unique_ptr<AbstractProduct>(Args)>, std::function< std::unique_ptr<AbstractProduct>(int,Args)> >;
 
     
 
@@ -44,8 +44,8 @@ public:
         else{
             //return std::make_unique<AbstractProduct>( f->second(
               //std::forward<Args>(args)...) );
-             //return f->second(std::forward<Args>(args)...);
-            return boost::get<std::function< std::unique_ptr<AbstractProduct>(Args)>>(f->second)(std::forward<Args>(args)...);
+             return f->second(std::forward<Args>(args)...);
+
         }
     }
 

@@ -21,8 +21,8 @@ public:
     const Eigen::MatrixXd get_lambda0(){return lambda0;}
 
     // Setters
-    void set_mu0(const Eigen::VectorXd &mu0){mu0 = mu0;}
-    void set_lambda0(const Eigen::MatrixXd &lambda0){lambda0 = lambda0;}
+    void set_mu0(const Eigen::VectorXd &mu_0){mu0 = mu_0;}
+    void set_lambda0(const Eigen::MatrixXd &lambda_0){lambda0 = lambda_0;}
 };
 
 

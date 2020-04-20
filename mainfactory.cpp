@@ -7,8 +7,8 @@
 using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
-template <typename... Args> using Builder = std::function< std::unique_ptr<
-  Algorithm<HierarchyType, HypersType, MixtureType>> (Args...) >;
+using Builder = std::function< std::unique_ptr<
+  Algorithm<HierarchyType, HypersType, MixtureType>> (HypersType,MixtureType,Eigen::VectorXd) >;
 
 
 int main(int argc, char *argv[]){
@@ -48,22 +48,23 @@ int main(int argc, char *argv[]){
 
     // Load algorithm factory
 
-    Builder<HypersType,MixtureType,Eigen::VectorXd> neal2builder = [](HypersType hy ,MixtureType mix,Eigen::VectorXd data){
+    Builder neal2builder = [](HypersType hy ,MixtureType mix,Eigen::VectorXd data){
 	
         return std::make_unique< Neal2<HierarchyType,HypersType,
                 MixtureType> >(hy, mix, data);
         };
 	
-    Builder<HypersType,MixtureType,Eigen::VectorXd,int> neal8builder = [](HypersType hy ,MixtureType mix,Eigen::VectorXd data,int num_clust){
+    Builder neal8builder = [](HypersType hy ,MixtureType mix,Eigen::VectorXd data){
 	
         return std::make_unique< Neal2<HierarchyType,HypersType,
-                MixtureType> >(hy, mix, data, num_clust);
+                MixtureType> >(hy, mix, data);
         };
 
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType> , HypersType,MixtureType,Eigen::VectorXd>::Instance();
 
     algoFactory.add_builder("neal2",neal2builder);
+    algoFactory.add_builder("neal8",neal8builder);
     auto list = algoFactory.list_of_known_builders();
     for (auto &el : list){
         std::cout << el << std::endl;
