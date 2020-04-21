@@ -47,33 +47,29 @@ struct TableStruct_output_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[5]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[4]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
   static const ::PROTOBUF_NAMESPACE_ID::uint32 offsets[];
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_output_2eproto;
-class ChainOutput;
-class ChainOutputDefaultTypeInternal;
-extern ChainOutputDefaultTypeInternal _ChainOutput_default_instance_;
-class IterationOutput;
-class IterationOutputDefaultTypeInternal;
-extern IterationOutputDefaultTypeInternal _IterationOutput_default_instance_;
 class Par_Col;
 class Par_ColDefaultTypeInternal;
 extern Par_ColDefaultTypeInternal _Par_Col_default_instance_;
 class Param;
 class ParamDefaultTypeInternal;
 extern ParamDefaultTypeInternal _Param_default_instance_;
+class State;
+class StateDefaultTypeInternal;
+extern StateDefaultTypeInternal _State_default_instance_;
 class UniqueValues;
 class UniqueValuesDefaultTypeInternal;
 extern UniqueValuesDefaultTypeInternal _UniqueValues_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
-template<> ::ChainOutput* Arena::CreateMaybeMessage<::ChainOutput>(Arena*);
-template<> ::IterationOutput* Arena::CreateMaybeMessage<::IterationOutput>(Arena*);
 template<> ::Par_Col* Arena::CreateMaybeMessage<::Par_Col>(Arena*);
 template<> ::Param* Arena::CreateMaybeMessage<::Param>(Arena*);
+template<> ::State* Arena::CreateMaybeMessage<::State>(Arena*);
 template<> ::UniqueValues* Arena::CreateMaybeMessage<::UniqueValues>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
@@ -495,23 +491,23 @@ class UniqueValues :
 };
 // -------------------------------------------------------------------
 
-class IterationOutput :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:IterationOutput) */ {
+class State :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:State) */ {
  public:
-  IterationOutput();
-  virtual ~IterationOutput();
+  State();
+  virtual ~State();
 
-  IterationOutput(const IterationOutput& from);
-  IterationOutput(IterationOutput&& from) noexcept
-    : IterationOutput() {
+  State(const State& from);
+  State(State&& from) noexcept
+    : State() {
     *this = ::std::move(from);
   }
 
-  inline IterationOutput& operator=(const IterationOutput& from) {
+  inline State& operator=(const State& from) {
     CopyFrom(from);
     return *this;
   }
-  inline IterationOutput& operator=(IterationOutput&& from) noexcept {
+  inline State& operator=(State&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -529,37 +525,37 @@ class IterationOutput :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const IterationOutput& default_instance();
+  static const State& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const IterationOutput* internal_default_instance() {
-    return reinterpret_cast<const IterationOutput*>(
-               &_IterationOutput_default_instance_);
+  static inline const State* internal_default_instance() {
+    return reinterpret_cast<const State*>(
+               &_State_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     3;
 
-  friend void swap(IterationOutput& a, IterationOutput& b) {
+  friend void swap(State& a, State& b) {
     a.Swap(&b);
   }
-  inline void Swap(IterationOutput* other) {
+  inline void Swap(State* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline IterationOutput* New() const final {
-    return CreateMaybeMessage<IterationOutput>(nullptr);
+  inline State* New() const final {
+    return CreateMaybeMessage<State>(nullptr);
   }
 
-  IterationOutput* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<IterationOutput>(arena);
+  State* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<State>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const IterationOutput& from);
-  void MergeFrom(const IterationOutput& from);
+  void CopyFrom(const State& from);
+  void MergeFrom(const State& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -573,10 +569,10 @@ class IterationOutput :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(IterationOutput* other);
+  void InternalSwap(State* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "IterationOutput";
+    return "State";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -644,7 +640,7 @@ class IterationOutput :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >&
       uniquevalues() const;
 
-  // @@protoc_insertion_point(class_scope:IterationOutput)
+  // @@protoc_insertion_point(class_scope:State)
  private:
   class _Internal;
 
@@ -652,143 +648,6 @@ class IterationOutput :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 > allocations_;
   mutable std::atomic<int> _allocations_cached_byte_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues > uniquevalues_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_output_2eproto;
-};
-// -------------------------------------------------------------------
-
-class ChainOutput :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ChainOutput) */ {
- public:
-  ChainOutput();
-  virtual ~ChainOutput();
-
-  ChainOutput(const ChainOutput& from);
-  ChainOutput(ChainOutput&& from) noexcept
-    : ChainOutput() {
-    *this = ::std::move(from);
-  }
-
-  inline ChainOutput& operator=(const ChainOutput& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline ChainOutput& operator=(ChainOutput&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return GetMetadataStatic().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return GetMetadataStatic().reflection;
-  }
-  static const ChainOutput& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const ChainOutput* internal_default_instance() {
-    return reinterpret_cast<const ChainOutput*>(
-               &_ChainOutput_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    4;
-
-  friend void swap(ChainOutput& a, ChainOutput& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(ChainOutput* other) {
-    if (other == this) return;
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline ChainOutput* New() const final {
-    return CreateMaybeMessage<ChainOutput>(nullptr);
-  }
-
-  ChainOutput* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<ChainOutput>(arena);
-  }
-  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const ChainOutput& from);
-  void MergeFrom(const ChainOutput& from);
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
-      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  inline void SharedCtor();
-  inline void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(ChainOutput* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "ChainOutput";
-  }
-  private:
-  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
-    return nullptr;
-  }
-  inline void* MaybeArenaPtr() const {
-    return nullptr;
-  }
-  public:
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-  private:
-  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_output_2eproto);
-    return ::descriptor_table_output_2eproto.file_level_metadata[kIndexInFileMessages];
-  }
-
-  public:
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kChainFieldNumber = 1,
-  };
-  // repeated .IterationOutput chain = 1;
-  int chain_size() const;
-  private:
-  int _internal_chain_size() const;
-  public:
-  void clear_chain();
-  ::IterationOutput* mutable_chain(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >*
-      mutable_chain();
-  private:
-  const ::IterationOutput& _internal_chain(int index) const;
-  ::IterationOutput* _internal_add_chain();
-  public:
-  const ::IterationOutput& chain(int index) const;
-  ::IterationOutput* add_chain();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >&
-      chain() const;
-
-  // @@protoc_insertion_point(class_scope:ChainOutput)
- private:
-  class _Internal;
-
-  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput > chain_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_output_2eproto;
 };
@@ -938,142 +797,97 @@ UniqueValues::params() const {
 
 // -------------------------------------------------------------------
 
-// IterationOutput
+// State
 
 // repeated int32 allocations = 1;
-inline int IterationOutput::_internal_allocations_size() const {
+inline int State::_internal_allocations_size() const {
   return allocations_.size();
 }
-inline int IterationOutput::allocations_size() const {
+inline int State::allocations_size() const {
   return _internal_allocations_size();
 }
-inline void IterationOutput::clear_allocations() {
+inline void State::clear_allocations() {
   allocations_.Clear();
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 IterationOutput::_internal_allocations(int index) const {
+inline ::PROTOBUF_NAMESPACE_ID::int32 State::_internal_allocations(int index) const {
   return allocations_.Get(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 IterationOutput::allocations(int index) const {
-  // @@protoc_insertion_point(field_get:IterationOutput.allocations)
+inline ::PROTOBUF_NAMESPACE_ID::int32 State::allocations(int index) const {
+  // @@protoc_insertion_point(field_get:State.allocations)
   return _internal_allocations(index);
 }
-inline void IterationOutput::set_allocations(int index, ::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void State::set_allocations(int index, ::PROTOBUF_NAMESPACE_ID::int32 value) {
   allocations_.Set(index, value);
-  // @@protoc_insertion_point(field_set:IterationOutput.allocations)
+  // @@protoc_insertion_point(field_set:State.allocations)
 }
-inline void IterationOutput::_internal_add_allocations(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void State::_internal_add_allocations(::PROTOBUF_NAMESPACE_ID::int32 value) {
   allocations_.Add(value);
 }
-inline void IterationOutput::add_allocations(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void State::add_allocations(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_add_allocations(value);
-  // @@protoc_insertion_point(field_add:IterationOutput.allocations)
+  // @@protoc_insertion_point(field_add:State.allocations)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >&
-IterationOutput::_internal_allocations() const {
+State::_internal_allocations() const {
   return allocations_;
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >&
-IterationOutput::allocations() const {
-  // @@protoc_insertion_point(field_list:IterationOutput.allocations)
+State::allocations() const {
+  // @@protoc_insertion_point(field_list:State.allocations)
   return _internal_allocations();
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >*
-IterationOutput::_internal_mutable_allocations() {
+State::_internal_mutable_allocations() {
   return &allocations_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >*
-IterationOutput::mutable_allocations() {
-  // @@protoc_insertion_point(field_mutable_list:IterationOutput.allocations)
+State::mutable_allocations() {
+  // @@protoc_insertion_point(field_mutable_list:State.allocations)
   return _internal_mutable_allocations();
 }
 
 // repeated .UniqueValues uniquevalues = 2;
-inline int IterationOutput::_internal_uniquevalues_size() const {
+inline int State::_internal_uniquevalues_size() const {
   return uniquevalues_.size();
 }
-inline int IterationOutput::uniquevalues_size() const {
+inline int State::uniquevalues_size() const {
   return _internal_uniquevalues_size();
 }
-inline void IterationOutput::clear_uniquevalues() {
+inline void State::clear_uniquevalues() {
   uniquevalues_.Clear();
 }
-inline ::UniqueValues* IterationOutput::mutable_uniquevalues(int index) {
-  // @@protoc_insertion_point(field_mutable:IterationOutput.uniquevalues)
+inline ::UniqueValues* State::mutable_uniquevalues(int index) {
+  // @@protoc_insertion_point(field_mutable:State.uniquevalues)
   return uniquevalues_.Mutable(index);
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >*
-IterationOutput::mutable_uniquevalues() {
-  // @@protoc_insertion_point(field_mutable_list:IterationOutput.uniquevalues)
+State::mutable_uniquevalues() {
+  // @@protoc_insertion_point(field_mutable_list:State.uniquevalues)
   return &uniquevalues_;
 }
-inline const ::UniqueValues& IterationOutput::_internal_uniquevalues(int index) const {
+inline const ::UniqueValues& State::_internal_uniquevalues(int index) const {
   return uniquevalues_.Get(index);
 }
-inline const ::UniqueValues& IterationOutput::uniquevalues(int index) const {
-  // @@protoc_insertion_point(field_get:IterationOutput.uniquevalues)
+inline const ::UniqueValues& State::uniquevalues(int index) const {
+  // @@protoc_insertion_point(field_get:State.uniquevalues)
   return _internal_uniquevalues(index);
 }
-inline ::UniqueValues* IterationOutput::_internal_add_uniquevalues() {
+inline ::UniqueValues* State::_internal_add_uniquevalues() {
   return uniquevalues_.Add();
 }
-inline ::UniqueValues* IterationOutput::add_uniquevalues() {
-  // @@protoc_insertion_point(field_add:IterationOutput.uniquevalues)
+inline ::UniqueValues* State::add_uniquevalues() {
+  // @@protoc_insertion_point(field_add:State.uniquevalues)
   return _internal_add_uniquevalues();
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::UniqueValues >&
-IterationOutput::uniquevalues() const {
-  // @@protoc_insertion_point(field_list:IterationOutput.uniquevalues)
+State::uniquevalues() const {
+  // @@protoc_insertion_point(field_list:State.uniquevalues)
   return uniquevalues_;
-}
-
-// -------------------------------------------------------------------
-
-// ChainOutput
-
-// repeated .IterationOutput chain = 1;
-inline int ChainOutput::_internal_chain_size() const {
-  return chain_.size();
-}
-inline int ChainOutput::chain_size() const {
-  return _internal_chain_size();
-}
-inline void ChainOutput::clear_chain() {
-  chain_.Clear();
-}
-inline ::IterationOutput* ChainOutput::mutable_chain(int index) {
-  // @@protoc_insertion_point(field_mutable:ChainOutput.chain)
-  return chain_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >*
-ChainOutput::mutable_chain() {
-  // @@protoc_insertion_point(field_mutable_list:ChainOutput.chain)
-  return &chain_;
-}
-inline const ::IterationOutput& ChainOutput::_internal_chain(int index) const {
-  return chain_.Get(index);
-}
-inline const ::IterationOutput& ChainOutput::chain(int index) const {
-  // @@protoc_insertion_point(field_get:ChainOutput.chain)
-  return _internal_chain(index);
-}
-inline ::IterationOutput* ChainOutput::_internal_add_chain() {
-  return chain_.Add();
-}
-inline ::IterationOutput* ChainOutput::add_chain() {
-  // @@protoc_insertion_point(field_add:ChainOutput.chain)
-  return _internal_add_chain();
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::IterationOutput >&
-ChainOutput::chain() const {
-  // @@protoc_insertion_point(field_list:ChainOutput.chain)
-  return chain_;
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
