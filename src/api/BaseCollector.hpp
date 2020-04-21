@@ -18,10 +18,10 @@
 
 class BaseCollector {
 protected:
-	unsigned int size;
+	unsigned int size = 0;
 	unsigned int curr_iter = 0;
 
-	virtual State get_next_state() = 0;
+	virtual State next_state() = 0;
 
 public:
 	// Destructor
@@ -29,15 +29,19 @@ public:
 	virtual ~BaseCollector() = default;
 
     virtual void collect(State iteration_state) = 0;
-    virtual std::deque<State> get_chains() = 0;
+    virtual std::deque<State> get_chains() = 0; // TODO blasta? però viene...
+                                                // usato in cluster_estimate()
 
-    State next(){
-    	curr_iter += 1;
+    // Getters and setters
+    State get_next_state(){
+    	curr_iter++;
     	if(curr_iter >= size){
     		throw std::out_of_range("Error: curr_iter >= size in collector");
     	}
-    	return get_next_state();
+    	return next_state();
     }
+
+    unsigned int get_size() const {return size;}
 };
 
 #endif // BASECOLLECTOR_HPP

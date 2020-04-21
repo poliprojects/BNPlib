@@ -6,31 +6,25 @@
 
 class FileCollector: public BaseCollector {
 protected:
+    // TODO docs on all of these:
     int infd;
     int outfd;
-    google::protobuf::io::FileInputStream* fin;
+
+    // ...
+    google::protobuf::io::FileInputStream *fin;
     google::protobuf::io::FileOutputStream *fout;
+
+    // ...
     bool is_open_read;
     bool is_open_write;
 
-public:
-    FileCollector(std::string filename) {
-        int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);
-        fout = new google::protobuf::io::FileOutputStream(outfd);
-    }
-
-    void open_for_reading() { // TODO private?
+    void open_for_reading() {
         infd = open(filename.c_str(), O_RDWR); // TODO filename?
         fin = new google::protobuf::io::FileInputStream(infd);
         is_open_read = true;
     }
 
-    std::deque<State> get_chains() override { // TODO ?
-        std::cerr << "error" << std::endl;
-        return std::deque<State>();
-    }
-
-    State get_next_state() override {
+    State next_state() override {
         if (!is_open_read){
             open_for_reading();
         }
@@ -48,17 +42,13 @@ public:
         return out;
     }
 
-
-    void collect(State iteration_state) override {
-        bool success;
-        success = google::protobuf::util::SerializeDelimitedToZeroCopyStream(
-            iteration_state, fout);
-        if (!success){
-            std::cout << "Writing in FileCollector failed" << std::endl;
-        }
+public:
+    // Constructor and destructor
+    FileCollector(std::string filename) {
+        int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);
+        fout = new google::protobuf::io::FileOutputStream(outfd);
     }
 
-    // Destructor
     virtual ~FileCollector() {
         if(is_open_read){
             fin->Close();
@@ -70,7 +60,20 @@ public:
         }
     }
 
-    // TODO constructor?
+    std::deque<State> get_chains() override { // TODO ?
+        std::cerr << "error" << std::endl;
+        return std::deque<State>();
+    }
+
+    void collect(State iteration_state) override {
+        bool success;
+        success = google::protobuf::util::SerializeDelimitedToZeroCopyStream(
+            iteration_state, fout);
+        if (!success){
+            std::cout << "Writing in FileCollector failed" << std::endl;
+        }
+    }
+
 };
 
 

@@ -121,10 +121,10 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     int n = this->data.rows();
     State state;    
 
-    for(int iter = 0; iter < collector->get_chains().size(); iter++){
+    for(int iter = 0; iter < collector->get_size(); iter++){
         // for each iteration of the algorithm
 
-        state = collector->get_chains()[iter];
+        state = collector->get_next_state();
         std::vector<unsigned int> card(state.uniquevalues_size(),
             0); // TODO salviamoci ste card da qualche parte
         std::vector<Eigen::MatrixXd> params(
@@ -156,7 +156,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
     dens += dens_addendum;
     }
 
-    this->density.second = dens / collector->get_chains().size();
+    this->density.second = dens / collector->get_size();
 }
 
 

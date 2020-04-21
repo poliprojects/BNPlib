@@ -80,7 +80,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     State temp;
     
     for(int h = 0; h < niter; h++){
-        temp = collector->get_chains()[h];
+        temp = collector->get_next_state();
         Eigen::MatrixXd dissim(n, n);
         dissim = Eigen::MatrixXd::Zero(n, n);
         for(int i = 0; i < n; i++){

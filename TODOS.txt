@@ -8,10 +8,9 @@ Elena:
 
 Bruno:
 * HierarchyNW
-* BaseCollector: how_many_states(), next() invece che
-  collector.get_chains(iter), current_iter (chiamato da get_chains())
 
 GENERICI DA MARIO
+* matrix proto -> righe+colonne+vector di dati?
 * run_neal2 che restituisce proto serializzati
 * eval_density() static member?
 * Diversi mains: neal2, neal8, stimedidensita (spesso prima sono fatte girare
@@ -32,5 +31,4 @@ MANOVALANZA
 * complete README (Virtual Machine etc)
 
 REPORT
-* segnala che i parametri non nel costruttore solitamente sono lasciati in
-  default
+* parametri non nel costruttore solitamente sono lasciati in default

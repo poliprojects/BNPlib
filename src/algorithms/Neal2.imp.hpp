@@ -159,9 +159,9 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
     int n = this->data.rows();
     State state;
     
-    for(unsigned int iter = 0; iter < collector->get_chains().size(); iter++){
+    for(unsigned int iter = 0; iter < collector->get_size(); iter++){
         // for each iteration of the algorithm
-        state = collector->get_chains()[iter];
+        state = collector->get_next_state();
         std::vector<unsigned int> card(state.uniquevalues_size(),
             0);
 
@@ -188,7 +188,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
          dens += M * temp_hier.eval_marg(grid) / (M+n); 
     }
 
-    this->density.second = dens / collector->get_chains().size();
+    this->density.second = dens / collector->get_size();
 }
 
 
