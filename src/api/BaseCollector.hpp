@@ -22,8 +22,8 @@ public:
 	// TODO constructor?
 	virtual ~BaseCollector() = default;
 
-    virtual void collect(IterationOutput iteration_state) = 0;
-    virtual std::deque<IterationOutput> get_chains() = 0;
+    virtual void collect(State iteration_state) = 0;
+    virtual std::deque<State> get_chains() = 0;
 };
 
 #endif // BASECOLLECTOR_HPP

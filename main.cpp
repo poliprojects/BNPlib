@@ -9,6 +9,7 @@
 #include "math.h"
 
 int main(int argc, char *argv[]){
+    std::cout << "Running main.cpp" << std::endl;
     // Read data from main arg
     std::ifstream file;
     if(argc < 2){

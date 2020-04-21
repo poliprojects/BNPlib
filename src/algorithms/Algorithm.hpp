@@ -31,7 +31,7 @@ protected:
     std::vector<Hierarchy<Hypers>> unique_values;
     std::pair< Eigen::MatrixXd, Eigen::VectorXd > density;
     Mixture mixture;
-    IterationOutput best_clust;
+    State best_clust;
 
     // Random engine
     std::mt19937 rng;
@@ -51,7 +51,7 @@ protected:
     virtual void sample_unique_values() = 0;
 
     
-    IterationOutput get_state_as_proto(unsigned int iter);
+    State get_state_as_proto(unsigned int iter);
 
     Eigen::MatrixXd proto_param_to_matrix(const Param& par) const;
 

@@ -12,6 +12,7 @@ using Builder = std::function< std::unique_ptr<
 
 
 int main(int argc, char *argv[]){
+    std::cout << "Running mainfactory.cpp" << std::endl;
     // Model parameters
     double mu0 = 5.0;
     double lambda = 0.1;

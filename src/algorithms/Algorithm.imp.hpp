@@ -18,10 +18,10 @@ return par_matrix;
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-IterationOutput Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
+State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
     unsigned int iter){
 
-    IterationOutput iter_out;
+    State iter_out;
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
     for(int i = 0; i < unique_values.size(); i++){
@@ -77,7 +77,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     Eigen::MatrixXd tot_diss(n, n);
     tot_diss = Eigen::MatrixXd::Zero(n, n);
     std::vector<Eigen::MatrixXd> all_diss;
-    IterationOutput temp;
+    State temp;
     
     for(int h = 0; h < niter; h++){
         temp = collector->get_chains()[h];

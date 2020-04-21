@@ -157,7 +157,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
     Eigen::VectorXd dens(grid.rows());
     double M = this->mixture.get_totalmass();
     int n = this->data.rows();
-    IterationOutput state;
+    State state;
     
     for(unsigned int iter = 0; iter < collector->get_chains().size(); iter++){
         // for each iteration of the algorithm

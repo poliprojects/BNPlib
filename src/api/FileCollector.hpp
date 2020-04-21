@@ -15,12 +15,12 @@ public:
         fout = new google::protobuf::io::FileOutputStream(outfd);
     }
 
-    std::deque<IterationOutput> get_chains() override { // TODO ?
+    std::deque<State> get_chains() override { // TODO ?
         std::cerr << "error" << std::endl;
-        return std::deque<IterationOutput>();
+        return std::deque<State>();
     };
 
-    void collect(IterationOutput iteration_state) override {
+    void collect(State iteration_state) override {
         bool success;
         success = google::protobuf::util::SerializeDelimitedToZeroCopyStream(
             iteration_state, fout);

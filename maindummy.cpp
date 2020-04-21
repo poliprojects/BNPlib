@@ -6,6 +6,7 @@
 #include "math.h"
 
 int main(int argc, char *argv[]){
+    std::cout << "Running maindummy.cpp" << std::endl;
     // 3D-vectorial data
     Eigen::MatrixXd data(3,5);
     fill_eigen_matrix_from_file(data,"csv/data_vec.csv");
