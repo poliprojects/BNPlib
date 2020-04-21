@@ -161,7 +161,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::eval_density(
     
     for(unsigned int iter = 0; iter < collector->get_chains().size(); iter++){
         // for each iteration of the algorithm
-        state = collector->get_chains()[iter];	        
+        state = collector->get_chains()[iter];
         std::vector<unsigned int> card(state.uniquevalues_size(),
             0);
 

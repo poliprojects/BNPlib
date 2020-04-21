@@ -72,9 +72,9 @@ public:
         initialize();
         unsigned int iter = 0;
         while(iter < maxiter){
-            step();    
+            step();
             if(iter >= burnin){
-              save_state(collector, iter);    
+              save_state(collector, iter);
             }
             iter++;
         }
