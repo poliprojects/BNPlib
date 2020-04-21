@@ -8,6 +8,10 @@ class MemoryCollector: public BaseCollector {
 protected:
     std::deque<State> chains;
 
+    State get_next_state() override {
+	    return chains[curr_iter];
+	}
+
 public:
     void collect(State iteration_state) override {
     	chains.push_back(iteration_state);

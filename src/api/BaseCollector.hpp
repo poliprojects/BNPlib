@@ -17,6 +17,12 @@
 
 
 class BaseCollector {
+protected:
+	unsigned int size;
+	unsigned int curr_iter = 0;
+
+	virtual State get_next_state() = 0;
+
 public:
 	// Destructor
 	// TODO constructor?
@@ -24,6 +30,14 @@ public:
 
     virtual void collect(State iteration_state) = 0;
     virtual std::deque<State> get_chains() = 0;
+
+    State next(){
+    	curr_iter += 1;
+    	if(curr_iter >= size){
+    		throw std::out_of_range("Error: curr_iter >= size in collector");
+    	}
+    	return get_next_state();
+    }
 };
 
 #endif // BASECOLLECTOR_HPP
