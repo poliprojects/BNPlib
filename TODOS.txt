@@ -17,6 +17,7 @@ GENERICI DA MARIO
   le catene, poi separatamente si fa eval_density())
 
 FEATURES/IMPLEMENTATION
+* collectors won't work (boundary problems) -> eval_density also won't work
 * one method for prob_existing_cluster / prob_new_cluster?
 * store card vector somewhere?
 * deal with the extra dynamically allocated Hypers (?)
@@ -33,3 +34,6 @@ MANOVALANZA
 
 REPORT
 * parametri non nel costruttore solitamente sono lasciati in default
+
+CHECKS
+* All algorithm/hierarchy combinations, csv files, etc
