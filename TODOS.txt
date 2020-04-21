@@ -5,18 +5,15 @@ Elena:
 * RNG seed {20200227} or  {std::random_device}
 * eval_density + eval_density_from_states
 * SerializeCollector: si salva gli oggetti serializzati (serializeToString)
+* check factory
 
 Bruno:
 * HierarchyNW
-* sposta Factory in runtime
-* Sistema proto: IterationOutput -> State
-* .bin -> .recordio
 * BaseCollector: how_many_states(), next() invece che
   collector.get_chains(iter), current_iter (chiamato da get_chains())
 
 FEATURES/IMPLEMENTATION
 * one method for prob_existing_cluster / prob_new_cluster?
-* Dummy non funziona perché probas non vanno bene, è normale?
 * store card vector somewhere?
 * deal with the extra dynamically allocated Hypers (?)
 * a way to erase and add clusters more efficiently?
@@ -27,7 +24,7 @@ FEATURES/IMPLEMENTATION
 
 MANOVALANZA
 * documentation with Doxygen
-* complete README (VM etc)
+* complete README (Virtual Machine etc)
 
 REPORT
 * segnala che i parametri non nel costruttore solitamente sono lasciati in

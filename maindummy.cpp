@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
         std::string filename;
         if(argc < 3){
             // Use default name
-            filename = "collector.bin";
+            filename = "collector.recordio";
         }
         else {
             std::string filename = argv[2];

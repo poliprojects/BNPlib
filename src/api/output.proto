@@ -12,11 +12,7 @@ message UniqueValues {
     repeated Param params = 1;
 }
 
-message IterationOutput {
+message State {
     repeated int32 allocations = 1;
     repeated UniqueValues uniquevalues = 2;
-}
-
-message ChainOutput {
-    repeated IterationOutput chain = 1;
 }
