@@ -29,3 +29,17 @@ MANOVALANZA
 REPORT
 * segnala che i parametri non nel costruttore solitamente sono lasciati in
   default
+
+
+TODOS DA MARIO
+* HierarchyNW
+* IterationOutput -> State
+* eval_density + eval_density_from_state
+* BaseCollector: how_many_states(), next() invece che
+  collector.get_chains(iter), current_iter (chiamato da get_chains())
+* run_neal2() che restituisce proto serializzati
+** eval_density() static member?
+* spesso prima sono fatte girare le catene, poi separatamente si fa eval_density()
+* SerializeCollector: si salva gli oggetti serializzati (serializeToString)
+* .bin -> .recordio
+* Diversi mains: neal2, neal8, stimedidensita
