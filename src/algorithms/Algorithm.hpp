@@ -58,7 +58,7 @@ protected:
     const void print_ending_message();
 
     void save_state(BaseCollector* collector, unsigned int iter){
-        collector->collect( get_state_as_proto(iter));
+        collector->collect( get_state_as_proto(iter) );
     }
 
 

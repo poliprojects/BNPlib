@@ -27,6 +27,7 @@ FEATURES/IMPLEMENTATION
   python, R..)
 
 MANOVALANZA
+* for: unsigned vs int vs size_t vs ?
 * documentation with Doxygen
 * complete README (Virtual Machine etc)
 

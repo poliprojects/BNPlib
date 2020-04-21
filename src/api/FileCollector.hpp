@@ -19,7 +19,7 @@ protected:
     bool is_open_write;
 
     void open_for_reading() {
-        infd = open(filename.c_str(), O_RDWR); // TODO filename?
+        infd = open("filename.c_str()", O_RDWR); // TODO temp: filename?
         fin = new google::protobuf::io::FileInputStream(infd);
         is_open_read = true;
     }
