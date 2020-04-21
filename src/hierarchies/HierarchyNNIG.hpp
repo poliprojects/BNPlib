@@ -43,6 +43,7 @@ public:
     std::shared_ptr<Hypers> get_hypers() const {return hypers;}
     void set_state(const std::vector<Eigen::MatrixXd> &state_){state = state_;}
     void set_state(int pos, Eigen::MatrixXd val){state[pos] = val;}
+    void set_rng_seed(const unsigned int seed){rng.seed(seed);}
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &datum);
     Eigen::VectorXd like(const Eigen::MatrixXd &datum);

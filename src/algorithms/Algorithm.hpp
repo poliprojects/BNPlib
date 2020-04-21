@@ -153,6 +153,7 @@ public:
     void set_num_clusters(const unsigned int num_clusters_){
         num_clusters = num_clusters_;
     }
+    void set_rng_seed(const unsigned int seed){rng.seed(seed);}
 
 };
 

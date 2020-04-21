@@ -64,6 +64,8 @@ int main(int argc, char *argv[]){
 
     Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(hy, mix,
         data);
+
+    sampler.set_rng_seed(20200229);
       
     // Run sampler
     BaseCollector *f;
