@@ -21,6 +21,10 @@ protected:
     std::shared_ptr<Hypers> hypers; // current values for G0's parameters:
                                     // mu_0,Lambda0, alpha, beta
 
+    std::vector<double> normal_gamma_update(const Eigen::VectorXd &data,
+        const double mu0, const double alpha0, const double beta0,
+        const double lambda0);
+
 public:
     bool is_multivariate() const {return false;}
     
@@ -44,10 +48,6 @@ public:
     Eigen::VectorXd like(const Eigen::MatrixXd &datum);
 
     void draw();
-
-    std::vector<double> normal_gamma_update(const Eigen::VectorXd &data,
-        const double mu0, const double alpha0, const double beta0,
-        const double lambda0);
 
     void sample_given_data(const Eigen::MatrixXd &data);
 

@@ -2,14 +2,13 @@ TODO LIST
 
 Elena:
 * (print functions: remove last empty column)
-* timer: eigen::vector
 * RNG seed {20200227} or  {std::random_device}
-* eval_density + eval_density_from_state
+* eval_density + eval_density_from_states
 * SerializeCollector: si salva gli oggetti serializzati (serializeToString)
 
 Bruno:
-* stime di tempo su carta
 * HierarchyNW
+* sposta Factory in runtime
 * Sistema proto: IterationOutput -> State
 * .bin -> .recordio
 * BaseCollector: how_many_states(), next() invece che

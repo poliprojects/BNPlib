@@ -17,6 +17,9 @@ protected:
     std::shared_ptr<Hypers> hypers; // current values for G0's parameters:
                                     // mu0 (vector) ,lambda0 (matrix)
 
+    std::vector<Eigen::MatrixXd> dummy_update(const Eigen::MatrixXd &data,
+        const Eigen::VectorXd &mu0, const Eigen::MatrixXd &lambda0);
+
 public:
     bool is_multivariate() const {return true;}
 
@@ -42,9 +45,6 @@ public:
     Eigen::VectorXd like(const Eigen::MatrixXd &datum);
 
     void draw();
-
-    std::vector<Eigen::MatrixXd> dummy_update(const Eigen::MatrixXd &data,
-        const Eigen::VectorXd &mu0, const Eigen::MatrixXd &lambda0);
 
     void sample_given_data(const Eigen::MatrixXd &data);
 };
