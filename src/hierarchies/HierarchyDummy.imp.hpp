@@ -5,10 +5,10 @@
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyDummy<Hypers>::like(const Eigen::MatrixXd &datum){
-    Eigen::VectorXd result(datum.cols());
-    for(int i = 0; i < datum.cols(); i++){
-        result(i) = datum(0,i) / 10.0;
+Eigen::VectorXd HierarchyDummy<Hypers>::like(const Eigen::MatrixXd &data){
+    Eigen::VectorXd result(data.cols());
+    for(int i = 0; i < data.cols(); i++){
+        result(i) = data(0,i) / 10.0;
     }
     return result;
 }
@@ -26,10 +26,10 @@ void HierarchyDummy<Hypers>::draw(){
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyDummy<Hypers>::eval_marg(const Eigen::MatrixXd &datum){
-    Eigen::VectorXd result(datum.cols());
-    for(int i = 0; i < datum.cols(); i++){
-        result(i) = datum(0,i) / 20.0;
+Eigen::VectorXd HierarchyDummy<Hypers>::eval_marg(const Eigen::MatrixXd &data){
+    Eigen::VectorXd result(data.cols());
+    for(int i = 0; i < data.cols(); i++){
+        result(i) = data(0,i) / 20.0;
     }
     return result;
 }

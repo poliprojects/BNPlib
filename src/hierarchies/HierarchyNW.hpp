@@ -5,8 +5,8 @@
 
 // Normal-Wishart multivariate distribution
 //
-// state  = mu, Tau (vector, matrix)
-// hypers = mu0, lambda, Tau0, nu (vector, scalar, matrix, scalar)
+// state  = mu, tau (vector, matrix)
+// hypers = mu0, lambda, tau0, nu (vector, scalar, matrix, scalar)
 
 template<class Hypers>
 class HierarchyNW : public HierarchyBase<Hypers> {
