@@ -9,6 +9,9 @@ protected:
     std::deque<State> chains;
 
     State next_state() override {
+        if(curr_iter==size){
+            curr_iter=0;
+        }
 	    return chains[curr_iter];
 	}
 
@@ -18,6 +21,9 @@ public:
         size++;
     }
 
+    void finish() override {
+
+    }
     std::deque<State> get_chains() override {return chains;}
 
     // Destructor and constructor

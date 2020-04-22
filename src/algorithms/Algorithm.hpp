@@ -78,6 +78,8 @@ public:
             }
             iter++;
         }
+
+        collector->finish();
         print_ending_message();
     }
 
