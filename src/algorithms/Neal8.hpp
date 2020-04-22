@@ -19,8 +19,7 @@ protected:
 
 public:
     // Other tools:
-    void eval_density(const Eigen::MatrixXd &grid, BaseCollector* collector)
-        override;
+    Eigen::VectorXd eval_density_specific(const Eigen::MatrixXd &grid, Hierarchy<Hypers> &temp_hier,double M,unsigned int n) override;
 
     // Destructors and constructors:
     ~Neal8() = default;

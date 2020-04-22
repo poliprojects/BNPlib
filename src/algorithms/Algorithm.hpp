@@ -103,8 +103,10 @@ public:
     // Other tools
     unsigned int cluster_estimate(BaseCollector* collector);
 
-    virtual void eval_density(const Eigen::MatrixXd &grid,
-    	BaseCollector* collector) = 0;
+    void eval_density(const Eigen::MatrixXd &grid,
+    	BaseCollector* collector);
+    virtual Eigen::VectorXd eval_density_specific(const Eigen::MatrixXd &grid,  Hierarchy<Hypers> &temp_hier,double M,unsigned int n)=0;
+    	
 
     void write_final_clustering_to_file(
         std::string filename = "csv/clust_final.csv") const;

@@ -111,52 +111,20 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Neal8<Hierarchy, Hypers, Mixture>::eval_density(
-        const Eigen::MatrixXd &grid, BaseCollector* collector){
+Eigen::VectorXd Neal8<Hierarchy, Hypers, Mixture>::eval_density_specific(const Eigen::MatrixXd &grid, Hierarchy<Hypers> &temp_hier,double M,unsigned int n){
 
-    this->density.first = grid;
-
-    Eigen::VectorXd dens(grid.rows());
-    double M = this->mixture.get_totalmass();
-    int n = this->data.rows();
-    State state;    
-
-    for(int iter = 0; iter < collector->get_size(); iter++){
-        // for each iteration of the algorithm
-
-        state = collector->get_next_state();
-        std::vector<unsigned int> card(state.uniquevalues_size(),
-            0); // TODO salviamoci ste card da qualche parte
-        std::vector<Eigen::MatrixXd> params(
-            state.uniquevalues(0).params_size());   // TODO state.unique o
-                                                    // state.mutable
         Eigen::VectorXd dens_addendum(grid.rows());
         
-        for(int j = 0; j < n; j++){
-            card[ state.allocations(j) ] += 1;
-        }
-        Hierarchy<Hypers> temp_hier(this->unique_values[0].get_hypers());
-        for(int h = 0; h < state.uniquevalues_size(); h++){
-            for(int k = 0; k < state.uniquevalues(h).params_size(); k++){
-                params[k] = this->proto_param_to_matrix(
-                    state.uniquevalues(h).params(k));
-            }
-            
-            temp_hier.set_state(params);
-            dens_addendum += card[h] * temp_hier.like(grid) / (M+n);
-            
-        }
-    
+        
         // Component from G0
         for(int h = 0; h < n_aux; h++){
             temp_hier.draw();
             dens_addendum += (M/n_aux) * temp_hier.like(grid) / (M+n);
         }
 
-    dens += dens_addendum;
-    }
 
-    this->density.second = dens / collector->get_size();
+
+    return dens_addendum;
 }
 
 
