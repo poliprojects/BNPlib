@@ -5,10 +5,11 @@
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyNW<Hypers>::like(const Eigen::MatrixXd &datum){
-    Eigen::VectorXd result(datum.cols());
-    for(int i = 0; i < datum.cols(); i++){
-        result(i) = datum(0,i) / 10.0;
+Eigen::VectorXd HierarchyNW<Hypers>::like(const Eigen::MatrixXd &data){
+    Eigen::VectorXd result(data.rows());
+    for(int i = 0; i < data.rows(); i++){
+        result(i) = exp( stan::math::multi_normal_lpdf(data(i), this->state[0],
+            inverse) );
     }
     return result;
 }
@@ -16,20 +17,20 @@ Eigen::VectorXd HierarchyNW<Hypers>::like(const Eigen::MatrixXd &datum){
 
 template<class Hypers> 
 void HierarchyNW<Hypers>::draw(){
-    for(int i = 0; i < this->state[0].size(); i++){
-        this->state[0](i) = 2;
-    }
-    this->state[1].setIdentity();
+    this->state[0] = stan::math::multi_normal_rng( this->hypers->get_mu0(),
+        inverse*(1/this->hypers->get_lambda()), this->rng );
+    this->state[1] = stan::math::multi_normal_rng( this->hypers->get_nu(),
+    	???, this->rng )
     //double sigma2_new = stan::math::inv_gamma_rng(this->hypers->get_alpha0(),
     //    this->hypers->get_beta0(), this->rng);
 }
 
 
 template<class Hypers> 
-Eigen::VectorXd HierarchyNW<Hypers>::eval_marg(const Eigen::MatrixXd &datum){
-    Eigen::VectorXd result(datum.cols());
-    for(int i = 0; i < datum.cols(); i++){
-        result(i) = datum(0,i) / 20.0;
+Eigen::VectorXd HierarchyNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
+    Eigen::VectorXd result(data.cols());
+    for(int i = 0; i < data.cols(); i++){
+        result(i) = data(0,i) / 20.0;
     }
     return result;
 }

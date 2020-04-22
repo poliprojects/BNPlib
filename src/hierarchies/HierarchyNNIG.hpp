@@ -27,7 +27,7 @@ public:
     HierarchyNNIG(std::shared_ptr<Hypers> hypers_) {
         this->hypers = hypers_;
         this->state = std::vector<Eigen::MatrixXd>(2,Eigen::MatrixXd(1,1));
-    	this->state[0](0,0) = 0;
+    	this->state[0](0,0) = this->hypers->get_mu0();
     	this->state[1](0,0) = 1;
     }
 

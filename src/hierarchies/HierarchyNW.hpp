@@ -12,7 +12,8 @@ template<class Hypers>
 class HierarchyNW : public HierarchyBase<Hypers> {
 protected:
     std::vector<Eigen::MatrixXd> nw_update(const Eigen::MatrixXd &data,
-        const Eigen::VectorXd &mu0, const Eigen::MatrixXd &lambda0);
+        const Eigen::VectorXd &???);
+    Eigen::MatrixXd inverse; // TODO
 
 public:
     bool is_multivariate() const override {return true;}
@@ -22,18 +23,14 @@ public:
 
     HierarchyNW(std::shared_ptr<Hypers> hypers_) {
         this->hypers = hypers_;
-        Eigen::VectorXd mu(3);
-        mu << 2.9, 2.9, 2.9;
-        this->state.push_back(mu);
-        Eigen::MatrixXd sig(3,3);
-        sig << 1.0, 0.0, 0.0,
-               0.0, 1.0, 0.0,
-               0.0, 0.0, 1.0;
-        this->state.push_back(sig);
+        dim = this->hypers.get_mu0().size();
+        this->state.push_back( this->hypers.get_mu0() );
+        this->state.push_back( this->hypers.get_lambda() *
+        	Eigen::Matrix<double, dim, dim>::Identity() );
     }
 
-    Eigen::VectorXd eval_marg(const Eigen::MatrixXd &datum) override;
-    Eigen::VectorXd like(const Eigen::MatrixXd &datum) override;
+    Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;
+    Eigen::VectorXd like(const Eigen::MatrixXd &data) override;
 
     void draw() override;
 

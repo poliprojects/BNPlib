@@ -6,7 +6,6 @@
 
 template<class Hypers> 
 Eigen::VectorXd HierarchyNNIG<Hypers>::like(const Eigen::MatrixXd &data){
-
     Eigen::VectorXd result(data.rows());
     for(int i = 0; i < data.rows(); i++){
         result(i) = exp(stan::math::normal_lpdf(data(i,0), this->state[0](0,0),

@@ -8,7 +8,7 @@ private:
     double mu0, lambda, alpha0, beta0;
 
 public:
-    // Destructtor and constructor
+    // Destructor and constructor
     ~HypersFixedNNIG() = default;
 
     HypersFixedNNIG(const double mu0_, const double lambda_,
