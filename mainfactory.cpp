@@ -57,7 +57,7 @@ int main(int argc, char *argv[]){
 	
     Builder neal8builder = [](HypersType hy ,MixtureType mix,Eigen::VectorXd data){
 	
-        return std::make_unique< Neal2<HierarchyType,HypersType,
+        return std::make_unique< Neal8<HierarchyType,HypersType,
                 MixtureType> >(hy, mix, data);
         };
 
@@ -72,32 +72,29 @@ int main(int argc, char *argv[]){
     }
 
     // Create algorithm
-    auto sampler = algoFactory.create_object("neal2",hy, mix,data);
-
-    return 0;
-
+    auto sampler = algoFactory.create_object(argv[2],hy, mix,data);
 
 
 
 
     // Run sampler
     BaseCollector *f;
-    if(argc < 3){
+    if(argc < 4){
         std::cerr << "Error: need file collector type " <<
             "(\"file\" or \"memory\") as arg" << std::endl;
         return 1;
     }
 
-    std::string collector(argv[2]);
+    std::string collector(argv[3]);
     if(collector == "file"){
         std::string filename;
-        if(argc < 4){
+        if(argc < 5){
             // Use default name
             filename = "collector.recordio";
         }
         else {
-            std::string filename = argv[2];
-            if(argc > 4){
+            std::string filename = argv[4]; 
+            if(argc > 5){
                 std::cout << "Warning: unused extra args present" << std::endl;
             }
         }
@@ -105,7 +102,7 @@ int main(int argc, char *argv[]){
     }
 
     else if(collector == "memory"){
-        if(argc > 3){
+        if(argc > 4){
             std::cout << "Warning: unused extra args present" << std::endl;
         }
         f = new MemoryCollector();
@@ -118,6 +115,9 @@ int main(int argc, char *argv[]){
     }
   
     (*sampler).run(f);
+
+	
+    
 
     // Density and clustering stuff
     double temp = 0.0;

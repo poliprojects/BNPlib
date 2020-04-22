@@ -2,7 +2,7 @@ TODO LIST
 
 Elena:
 * (print functions: remove last empty column)
-* SerializeCollector: si salva gli oggetti serializzati (serializeToString)
+* SerializeCollector: si salva gli oggetti serializzati (serializeToString, interfaccia python)
 * check factory
 
 Bruno:
