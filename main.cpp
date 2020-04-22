@@ -105,7 +105,7 @@ int main(int argc, char *argv[]){
     }
 
     // TODO DEBUG: reduce iterations
-    sampler.set_maxiter(500);
+    sampler.set_maxiter(1000);
     sampler.set_burnin(100);
 
     sampler.run(f);

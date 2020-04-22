@@ -24,7 +24,8 @@ public:
     void finish() override {
 
     }
-    std::deque<State> get_chains() override {return chains;}
+
+    State get_state(unsigned int i) override {return chains[i];}
 
     // Destructor and constructor
     virtual ~MemoryCollector() = default;

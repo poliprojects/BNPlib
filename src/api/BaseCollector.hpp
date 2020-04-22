@@ -29,8 +29,8 @@ public:
 	virtual ~BaseCollector() = default;
 
     virtual void collect(State iteration_state) = 0;
-    virtual std::deque<State> get_chains() = 0; // TODO blasta? però viene...
-                                                // usato in cluster_estimate()
+    virtual State get_state(unsigned int i) = 0; 
+
     virtual void finish() = 0;
     // Getters and setters
     State get_next_state(){

@@ -25,12 +25,7 @@ protected:
     }
 
     State next_state() override {
-        if(curr_iter==size){
-            curr_iter=0;
-            fin->Close();
-            close(infd);
-            is_open_read = false;
-        }
+        
         if (!is_open_read){
             open_for_reading();
         }
@@ -45,7 +40,12 @@ protected:
         if (!keep){
             std::out_of_range("Error: surpassed EOF in FileCollector");
         }
-
+        if(curr_iter==size-1){
+            curr_iter=0;
+            fin->Close();
+            close(infd);
+            is_open_read = false;
+        }
         return out;
     }
 
@@ -70,13 +70,22 @@ public:
         if(is_open_write){
             fout->Close();
             close(outfd);
+            is_open_write=false;
         }
 
     }
 
-    std::deque<State> get_chains() override { // TODO ?
-        std::cerr << "error" << std::endl;
-        return std::deque<State>();
+    State get_state(unsigned int i) override { // TODO ?
+       
+        State state;
+        for(unsigned int k=0; k<i; k++){
+            state=next_state();
+        }
+
+        fin->Close();
+        close(infd);
+        is_open_read=false;
+        return state;
     }
 
     void collect(State iteration_state) override {
