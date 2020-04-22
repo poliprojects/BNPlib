@@ -25,7 +25,12 @@ protected:
     }
 
     State next_state() override {
-      
+        if(curr_iter==size){
+            curr_iter=0;
+            fin->Close();
+            close(infd);
+            is_open_read = false;
+        }
         if (!is_open_read){
             open_for_reading();
         }

@@ -148,8 +148,8 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     
     std::ptrdiff_t i;
     int min_err = errors.minCoeff(&i);
-
-    best_clust = collector->get_chains()[i];
+	for(int k=0; k<i+1; k++){
+    best_clust = collector->get_next_state();}
     std::cout << best_clust.uniquevalues_size() <<
         " clusters were found via least square minimization" << std::endl;
     return i;
