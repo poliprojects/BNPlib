@@ -19,7 +19,7 @@
 class BaseCollector {
 protected:
 	unsigned int size = 0;
-	unsigned int curr_iter = 0;
+	unsigned int curr_iter = -1;
 
 	virtual State next_state() = 0;
 
@@ -31,12 +31,12 @@ public:
     virtual void collect(State iteration_state) = 0;
     virtual std::deque<State> get_chains() = 0; // TODO blasta? però viene...
                                                 // usato in cluster_estimate()
-
+    virtual void finish() = 0;
     // Getters and setters
     State get_next_state(){
         curr_iter++;
-    	if(curr_iter >= size){
-    		throw std::out_of_range("Error: curr_iter >= size in collector");
+    	if(curr_iter > size){
+    		throw std::out_of_range("Error: curr_iter > size in collector");
     	}
     	return next_state();
     }
