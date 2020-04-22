@@ -44,4 +44,5 @@ public:
     unsigned int get_size() const {return size;}
 };
 
+
 #endif // BASECOLLECTOR_HPP
