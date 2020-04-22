@@ -30,8 +30,8 @@ public:
     void set_state(const std::vector<Eigen::MatrixXd> &state_){state = state_;}
     void set_rng_seed(const unsigned int seed){rng.seed(seed);}
 
-    virtual Eigen::VectorXd eval_marg(const Eigen::MatrixXd &datum) = 0;
-    virtual Eigen::VectorXd like(const Eigen::MatrixXd &datum) = 0;
+    virtual Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) = 0;
+    virtual Eigen::VectorXd like(const Eigen::MatrixXd &data) = 0;
 
     virtual void draw() = 0;
 

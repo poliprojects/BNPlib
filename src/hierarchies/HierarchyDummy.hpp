@@ -32,13 +32,14 @@ public:
         this->state.push_back(sig);
     }
 
-    Eigen::VectorXd eval_marg(const Eigen::MatrixXd &datum) override;
-    Eigen::VectorXd like(const Eigen::MatrixXd &datum) override;
+    Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;
+    Eigen::VectorXd like(const Eigen::MatrixXd &data) override;
 
     void draw() override;
 
     void sample_given_data(const Eigen::MatrixXd &data) override;
 };
+
 
 #include "HierarchyDummy.imp.hpp"
 
