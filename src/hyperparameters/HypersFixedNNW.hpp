@@ -46,7 +46,7 @@ public:
         tau0_inv = tau0.inverse();
     }
     void set_nu(const double nu_){nu = nu_;}
-    // TODO checks like in the constructor
+    // TODO add check_validity() function?
 };
 
 

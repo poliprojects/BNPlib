@@ -37,7 +37,7 @@ public:
 
     virtual void sample_given_data(const Eigen::MatrixXd &data) = 0;
 
-    // TODO add virtual check_state_validity()
+    // TODO add virtual check_state_validity() ?
 };
 
 

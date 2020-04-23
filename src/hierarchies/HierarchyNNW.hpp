@@ -42,8 +42,6 @@ public:
     void draw() override;
 
     void sample_given_data(const Eigen::MatrixXd &data) override;
-
-    // TODO add function update_tau_utilities()
 };
 
 #include "HierarchyNNW.imp.hpp"

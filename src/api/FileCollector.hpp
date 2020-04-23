@@ -6,7 +6,7 @@
 
 class FileCollector: public BaseCollector {
 protected:
-    // TODO docs on all of these:
+    // Docs on all of these:
     int infd;
     int outfd;
 
@@ -19,7 +19,7 @@ protected:
     bool is_open_write;
 
     void open_for_reading() {
-        infd = open(filename.c_str(), O_RDONLY); // TODO temp: filename?
+        infd = open(filename.c_str(), O_RDONLY);
         fin = new google::protobuf::io::FileInputStream(infd);
         is_open_read = true;
     }
@@ -31,7 +31,6 @@ protected:
         }
 
         bool keep = true;
-        bool clean_eof = true; // TODO WTF?
         State out;
 
         keep = google::protobuf::util::ParseDelimitedFromZeroCopyStream(
@@ -75,8 +74,7 @@ public:
 
     }
 
-    State get_state(unsigned int i) override { // TODO ?
-       
+    State get_state(unsigned int i) override {
         State state;
         for(unsigned int k=0; k<i; k++){
             state=next_state();
@@ -84,7 +82,7 @@ public:
 
         fin->Close();
         close(infd);
-        is_open_read=false;
+        is_open_read = false;
         return state;
     }
 
