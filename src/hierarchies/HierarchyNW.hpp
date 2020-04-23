@@ -16,6 +16,12 @@ protected:
     const double lambda, const Eigen::MatrixXd &tau0, const double nu);
     Eigen::MatrixXd inverse; // TODO ?
 
+    // Utilities for likelihood evaluation
+    void set_tau_and_utilities(const Eigen::MatrixXd &tau);
+    LLT<Eigen::MatrixXd> tau_chol_factor;
+    Eigen::MatrixXd tau_chol_factor_eval;
+    double tau_log_det;
+
 public:
     bool is_multivariate() const override {return true;}
 
@@ -24,10 +30,11 @@ public:
 
     HierarchyNW(std::shared_ptr<Hypers> hypers_) {
         this->hypers = hypers_;
-        dim = this->hypers.get_mu0().size();
+        unsigned int dim = this->hypers.get_mu0().size();
         this->state.push_back( this->hypers.get_mu0() );
-        this->state.push_back( this->hypers.get_lambda() *
-        	Eigen::Matrix<double, dim, dim>::Identity() );
+
+        set_tau_and_utilities( this->hypers.get_lambda() *
+            Eigen::Matrix<double, dim, dim>::Identity() );
     }
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;
@@ -36,6 +43,8 @@ public:
     void draw() override;
 
     void sample_given_data(const Eigen::MatrixXd &data) override;
+
+    // TODO add function update_tau_utilities()
 };
 
 #include "HierarchyNW.imp.hpp"

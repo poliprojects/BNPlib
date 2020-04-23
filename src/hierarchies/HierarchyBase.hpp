@@ -36,6 +36,8 @@ public:
     virtual void draw() = 0;
 
     virtual void sample_given_data(const Eigen::MatrixXd &data) = 0;
+
+    // TODO add virtual check_state_validity()
 };
 
 
