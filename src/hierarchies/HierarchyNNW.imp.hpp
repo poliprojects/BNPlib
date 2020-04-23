@@ -14,10 +14,10 @@ void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
         this->state[1] = tau;
     }
 
-    chol_factor = LLT<Eigen::MatrixXd>(tau);
-    chol_factor_eval = chol_factor.matrixL();
-    Eigen::VectorXd diag = chol_factor_eval.diagonal();
-    log_det = 2 * log(diag.array()).sum();
+    tau_chol_factor = LLT<Eigen::MatrixXd>(tau);
+    tau_chol_factor_eval = tau_chol_factor.matrixL();
+    Eigen::VectorXd diag = tau_chol_factor_eval.diagonal();
+    tau_log_det = 2 * log(diag.array()).sum();
 }
 
 
@@ -25,26 +25,12 @@ template<class Hypers>
 Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     // instead of using the inefficient stan::math::multi_normal_lpdf()
     int n = data.cols();
-    double out = tau_log_det * n;
-
-    Eigen::MatrixXd chol_sigma = tau_chol_factor_eval;
-
-    std::vector<double> loglikes(n);
-    for(int i = 0; i < n; i++){
-        loglikes[i] = (chol_sigma * (x[i] - mu)).squaredNorm();
+    Eigen::VectorXd result(n);
+    for(unsigned int i = 0; i < n; i++){
+        result(i) = 0.5 * std::exp( n*tau_log_det * (
+            tau_chol_factor_eval*(data(i) - mu) ).squaredNorm() );
     }
-
-    out -= std::accumulate(loglikes.begin(), loglikes.end(), 0.0);
-
-    //return 0.5 * out; // TODO ?????
-    return Eigen::MatrixXd(n);
-
-    //Eigen::VectorXd result(data.rows());
-    //for(int i = 0; i < data.rows(); i++){
-    //    result(i) = exp( stan::math::multi_normal_lpdf(data(i),this->state[0],
-    //        inverse) );
-    //}
-    //return result;
+    return result;
 }
 
 
@@ -64,7 +50,6 @@ void HierarchyNNW<Hypers>::draw(){
 
 template<class Hypers> 
 Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
-    // TODO to do lol
     Eigen::VectorXd result(data.cols());
     unsigned int dim = data.rows();
 
@@ -73,7 +58,7 @@ Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
         ( this->hypers->get_nu()-(dim-1)/2 ) * lambda/(lambda+1);
 
     for(int i = 0; i < data.cols(); i++){
-        // multi_student_t_lpdf(datum, nu, mu, Sigma)
+        // use multi_student_t_lpdf(datum, nu, mu, Sigma)
         result(i) = exp( stan::math::multi_student_t_lpdf(data(i), nu_n,
             this->hypers->get_mu0(), sigma_n) );
     }
