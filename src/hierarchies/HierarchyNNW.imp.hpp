@@ -54,7 +54,7 @@ Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
     unsigned int dim = data.rows();
 
     double nu_n = 2*this->hypers->get_nu() - dim + 1;
-    Eigen::MatrixXd sigma_n = this->hypers->get_tau0_inv() *
+    Eigen::MatrixXd sigma_n = this->hypers->get_tau0().inverse() *
         ( this->hypers->get_nu()-(dim-1)/2 ) * lambda/(lambda+1);
 
     for(int i = 0; i < data.cols(); i++){

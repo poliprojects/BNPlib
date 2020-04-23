@@ -36,17 +36,25 @@ public:
     const double get_lambda(){return lambda;}
     const Eigen::MatrixXd get_tau0(){return tau0;}
     const double get_nu(){return nu;}
-    const Eigen::MatrixXd get_tau0_inv(){return tau0_inv;}
 
     // Setters
-    void set_mu0(const Eigen::VectorXd &mu0_){mu0 = mu0_;}
-    void set_lambda(const double lambda_){lambda = lambda_;}
-    void set_tau0(const Eigen::MatrixXd &tau0_) {
-        tau0 = tau0_;
-        tau0_inv = tau0.inverse();
+    void set_mu0(const Eigen::VectorXd &mu0_){
+    	assert(mu0_.size() == mu0.size());
+    	mu0 = mu0_;
     }
-    void set_nu(const double nu_){nu = nu_;}
-    // TODO add check_validity() function?
+    void set_lambda(const double lambda_){
+    	assert(lambda_ > 0);
+    	lambda = lambda_;
+    }
+    void set_tau0(const Eigen::MatrixXd &tau0_) {
+    	assert(tau0_.rows() == tau0_.cols());
+    	assert(mu0.size() == tau0_.rows());
+    	tau0 = tau0_;
+    }
+    void set_nu(const double nu_){
+    	assert(nu_ > mu0.size()-1);
+    	nu = nu_;
+    }
 };
 
 
