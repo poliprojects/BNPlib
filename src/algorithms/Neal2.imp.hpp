@@ -151,12 +151,12 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-Eigen::VectorXd Neal2<Hierarchy, Hypers, Mixture>::eval_density_specific(const Eigen::MatrixXd &grid, Hierarchy<Hypers> &temp_hier,double M,unsigned int n){
-    
-    Eigen::VectorXd dens_addendum(grid.rows());
+Eigen::VectorXd Neal2<Hierarchy, Hypers, Mixture>::eval_density_specific(Hierarchy<Hypers> &temp_hier,unsigned int n){
+    double M = this->mixture.get_totalmass();
+    Eigen::VectorXd dens_addendum(this->density.first.rows());
 
         // Component from G0 (exploit conjugacy using explicit expression)
-    dens_addendum = M * temp_hier.eval_marg(grid) / (M+n); 
+    dens_addendum = M * temp_hier.eval_marg(this->density.first) / (M+n); 
     
     return dens_addendum;
 }

@@ -105,10 +105,9 @@ public:
     // Other tools
     unsigned int cluster_estimate(BaseCollector* collector);
 
-    void eval_density(const Eigen::MatrixXd &grid,
-    	BaseCollector* collector);
-    virtual Eigen::VectorXd eval_density_specific(const Eigen::MatrixXd &grid,  Hierarchy<Hypers> &temp_hier,double M,unsigned int n)=0;
-    	
+    void eval_density(const Eigen::MatrixXd &grid, BaseCollector* collector);
+    virtual Eigen::VectorXd eval_density_specific(Hierarchy<Hypers> &temp_hier,unsigned int n)=0;
+
 
     void write_final_clustering_to_file(
         std::string filename = "csv/clust_final.csv") const;
@@ -116,8 +115,7 @@ public:
     void write_best_clustering_to_file(
         std::string filename = "csv/clust_best.csv") const;
 
-    void write_density_to_file(
-        std::string filename = "csv/density.csv") const;
+    void write_density_to_file(std::string filename = "csv/density.csv") const;
 
     // Destructors and constructors:
     virtual ~Algorithm() = default;

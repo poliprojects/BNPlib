@@ -122,7 +122,8 @@ int main(int argc, char *argv[]){
     Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         v_temp.data(), v_temp.size()); 
 
-    sampler.eval_density(grid, f);
+	sampler.eval_density(grid, f);
+
     sampler.write_density_to_file("csv/density_ex.csv");
     unsigned int i_cap = sampler.cluster_estimate(f);
     std::cout << "Best clustering: at iteration " << i_cap << std::endl;

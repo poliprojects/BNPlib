@@ -4,14 +4,17 @@
 #include "Algorithm.hpp"
 
 
+
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>:: eval_density(const Eigen::MatrixXd &grid,
+void  Algorithm<Hierarchy, Hypers, Mixture>:: eval_density(const Eigen::MatrixXd &grid,
     	BaseCollector* collector){
+
 
     density.first = grid;
     Eigen::VectorXd dens(grid.rows());
     double M = mixture.get_totalmass();
-    unsigned int n = data.rows();
+
+    unsigned int n;
     State state;
     
     for(unsigned int iter = 0; iter < collector->get_size(); iter++){
@@ -23,10 +26,15 @@ void Algorithm<Hierarchy, Hypers, Mixture>:: eval_density(const Eigen::MatrixXd 
         std::vector<Eigen::MatrixXd> params(
             state.uniquevalues(0).params_size() );
         //std::cout << "ddd" << std::endl; // TODO DEBUG
-
+        if (iter==0){
+            n=state.allocations_size();
+            
+        }
         for(unsigned int j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
+        
+        
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
         for(unsigned int h = 0; h < state.uniquevalues_size(); h++){
             for(int k = 0; k < state.uniquevalues(h).params_size(); k++){
@@ -39,13 +47,12 @@ void Algorithm<Hierarchy, Hypers, Mixture>:: eval_density(const Eigen::MatrixXd 
         }
 
         // Component from G0 (exploit conjugacy using explicit expression)
-         dens += eval_density_specific(grid,temp_hier,M,n);
+         dens += eval_density_specific(temp_hier,n);
 
     }
 
     density.second = dens / collector->get_size();
 
-//eval_density_specific(grid,collector);
 }
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
@@ -204,6 +211,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::string filename) const {
+
     std::ofstream file;
     file.open(filename);
 
