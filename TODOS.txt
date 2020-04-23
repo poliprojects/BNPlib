@@ -7,6 +7,8 @@ Elena:
 
 Bruno:
 * HierarchyNW
+* spezza hpp collectors in imp.hpp
+* aggiungi sample_weights()
 
 GENERICI DA MARIO
 * matrix proto -> righe+colonne+vector di dati?
@@ -14,6 +16,7 @@ GENERICI DA MARIO
 * eval_density() static member? (ha senso ripassare nuovamente mix e hy? data non necessario)
 * Diversi mains: neal2, neal8, stimedidensita (spesso prima sono fatte girare
   le catene, poi separatamente si fa eval_density())
+
 
 FEATURES/IMPLEMENTATION
 * collectors won't work (boundary problems) -> eval_density also won't work
@@ -30,6 +33,7 @@ MANOVALANZA
 * for: unsigned vs int vs size_t vs ?
 * documentation with Doxygen
 * complete README (Virtual Machine etc)
+* controlla private vs protected
 
 REPORT
 * parametri non nel costruttore solitamente sono lasciati in default
