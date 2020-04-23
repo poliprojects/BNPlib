@@ -1,0 +1,8 @@
+* lib/math/stan/math/prim/prob/multi_student_t_lpdf.hpp is parametrized with
+  the variance matrix and not with precision:
+  multi_student_t_lpdf(datum, nu, mu, Sigma)
+* Lambda = Tau = precision
+* m0 = mu0
+* beta0 = lambda
+* a0 = nu
+* B0 = W = Tau0
