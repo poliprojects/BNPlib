@@ -17,11 +17,12 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::like(const Eigen::MatrixXd &data){
 
 template<class Hypers> 
 void HierarchyNNIG<Hypers>::draw(){
-    double sigma2_new,mu_new;
-    sigma2_new = sqrt(stan::math::inv_gamma_rng(this->hypers->get_alpha0(),
-        this->hypers->get_beta0(), this->rng));
-    mu_new = stan::math::normal_rng(this->hypers->get_mu0(),
+    double sigma2_new = sqrt( stan::math::inv_gamma_rng(
+        this->hypers->get_alpha0(), this->hypers->get_beta0(), this->rng) );
+
+    double mu_new = stan::math::normal_rng(this->hypers->get_mu0(),
         sqrt(sigma2_new/this->hypers->get_lambda()), this->rng);
+    
     this->state[0](0,0) = mu_new;
     this->state[1](0,0) = sigma2_new;
 }
