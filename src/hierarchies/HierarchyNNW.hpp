@@ -1,5 +1,5 @@
-#ifndef HIERARCHYNW_HPP
-#define HIERARCHYNW_HPP
+#ifndef HIERARCHYNNW_HPP
+#define HIERARCHYNNW_HPP
 
 #include "HierarchyBase.hpp"
 
@@ -9,12 +9,11 @@
 // hypers = mu0, lambda, tau0, nu (vector, scalar, matrix, scalar)
 
 template<class Hypers>
-class HierarchyNW : public HierarchyBase<Hypers> {
+class HierarchyNNW : public HierarchyBase<Hypers> {
 protected:
     std::vector<Eigen::MatrixXd> normal_wishart_update(
     const Eigen::MatrixXd &data, const Eigen::VectorXd &mu0,
     const double lambda, const Eigen::MatrixXd &tau0, const double nu);
-    Eigen::MatrixXd inverse; // TODO ?
 
     // Utilities for likelihood evaluation
     void set_tau_and_utilities(const Eigen::MatrixXd &tau);
@@ -26,9 +25,9 @@ public:
     bool is_multivariate() const override {return true;}
 
     // Destructor and constructor
-    ~HierarchyNW() = default;
+    ~HierarchyNNW() = default;
 
-    HierarchyNW(std::shared_ptr<Hypers> hypers_) {
+    HierarchyNNW(std::shared_ptr<Hypers> hypers_) {
         this->hypers = hypers_;
         unsigned int dim = this->hypers.get_mu0().size();
         this->state.push_back( this->hypers.get_mu0() );
@@ -47,6 +46,6 @@ public:
     // TODO add function update_tau_utilities()
 };
 
-#include "HierarchyNW.imp.hpp"
+#include "HierarchyNNW.imp.hpp"
 
-#endif // HIERARCHYNW_HPP
+#endif // HIERARCHYNNW_HPP
