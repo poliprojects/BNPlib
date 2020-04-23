@@ -64,8 +64,19 @@ void HierarchyNNW<Hypers>::draw(){
 
 template<class Hypers> 
 Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
-    Eigen::VectorXd result(data.cols());
     // TODO to do lol
+    Eigen::VectorXd result(data.cols());
+    unsigned int dim = data.rows();
+
+    double nu_n = 2*this->hypers->get_nu() - dim + 1;
+    Eigen::MatrixXd sigma_n = this->hypers->get_tau0_inv() *
+        ( this->hypers->get_nu()-(dim-1)/2 ) * lambda/(lambda+1);
+
+    for(int i = 0; i < data.cols(); i++){
+        // multi_student_t_lpdf(datum, nu, mu, Sigma)
+        result(i) = exp( stan::math::multi_student_t_lpdf(data(i), nu_n,
+            this->hypers->get_mu0(), sigma_n) );
+    }
     return result;
 }
 

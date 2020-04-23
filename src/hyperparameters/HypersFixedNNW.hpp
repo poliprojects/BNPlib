@@ -11,7 +11,7 @@ private:
     Eigen::MatrixXd tau0;
     double nu;
 
-    Eigen::MatrixXd tau0_inv;
+    Eigen::MatrixXd tau0_inv; // TODO etc: serve?
 
 public:
     // Destructor and constructor

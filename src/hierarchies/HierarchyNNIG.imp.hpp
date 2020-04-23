@@ -34,7 +34,7 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(const Eigen::MatrixXd &data){
 	double sigtilde = sqrt( this->hypers->get_beta0()*(this->hypers->get_lambda(
         )+1) / (this->hypers->get_alpha0()*this->hypers->get_lambda()) );
    
-    Eigen::VectorXd result(data.rows());
+    Eigen::VectorXd result(data.rows()); // TODO rows? cols? not sure
     for(int i = 0; i < data.rows(); i++){
         result(i) = exp( stan::math::student_t_lpdf(data(i,0),
             2*this->hypers->get_alpha0(), this->hypers->get_mu0(), sigtilde) );
