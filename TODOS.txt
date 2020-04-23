@@ -4,11 +4,13 @@ Elena:
 * (print functions: remove last empty column)
 * SerializeCollector: si salva gli oggetti serializzati (serializeToString, interfaccia python)
 * check factory
+* spezza hpp dei collectors in hpp e imp.hpp
+
 
 Bruno:
 * HierarchyNW
-* spezza hpp collectors in imp.hpp
 * aggiungi sample_weights()
+
 
 GENERICI DA MARIO
 * matrix proto -> righe+colonne+vector di dati?
@@ -19,6 +21,7 @@ GENERICI DA MARIO
 
 
 FEATURES/IMPLEMENTATION
+* In hierarchies: is_uni/multivariate function vs variable?
 * collectors won't work (boundary problems) -> eval_density also won't work
 * one method for prob_existing_cluster / prob_new_cluster?
 * store card vector somewhere?
@@ -29,14 +32,17 @@ FEATURES/IMPLEMENTATION
 * interfaccia Python (pybind) (una volta che ho catene di proto do in pasto a
   python, R..)
 
+
 MANOVALANZA
 * for: unsigned vs int vs size_t vs ?
 * documentation with Doxygen
 * complete README (Virtual Machine etc)
 * controlla private vs protected
 
-REPORT
-* parametri non nel costruttore solitamente sono lasciati in default
 
 CHECKS
 * All algorithm/hierarchy combinations, csv files, etc
+
+
+REPORT
+* parametri non nel costruttore solitamente sono lasciati in default
