@@ -50,6 +50,9 @@ protected:
 
     virtual void sample_unique_values() = 0;
 
+    virtual void sample_weights() = 0;
+
+    virtual void update_hypers() = 0;
     
     State get_state_as_proto(unsigned int iter);
 

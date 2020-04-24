@@ -8,12 +8,11 @@ class Neal2 : public Algorithm<Hierarchy, Hypers, Mixture> {
 
 protected:
     const void print_startup_message() override;
-
     void initialize() override;
-
     void sample_allocations() override;
-
     void sample_unique_values() override;
+    void sample_weights() override {return;}
+    void update_hypers() override {return;}
 
 public:
     // Other tools:

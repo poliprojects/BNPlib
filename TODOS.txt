@@ -9,7 +9,6 @@ Elena:
 
 Bruno:
 * HierarchyNW
-* aggiungi sample_weights()
 
 
 GENERICI DA MARIO
