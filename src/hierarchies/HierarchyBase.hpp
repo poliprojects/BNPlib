@@ -7,16 +7,13 @@
 #include <vector>
 #include <stan/math/prim/mat.hpp>
 
+
 template<class Hypers>
 class HierarchyBase {
 protected:
     std::mt19937 rng;
-    std::vector<Eigen::MatrixXd> state; // mu (vector), sigma (matrix)
-    std::shared_ptr<Hypers> hypers; // current values for G0's parameters:
-                                    // mu0 (vector) ,lambda0 (matrix)
-
-    std::vector<Eigen::MatrixXd> dummy_update(const Eigen::MatrixXd &data,
-        const Eigen::VectorXd &mu0, const Eigen::MatrixXd &lambda0);
+    std::vector<Eigen::MatrixXd> state;
+    std::shared_ptr<Hypers> hypers;
 
 public:
     virtual bool is_multivariate() const = 0; // TODO funzione o variabile?
@@ -28,6 +25,7 @@ public:
     std::vector<Eigen::MatrixXd> get_state() const {return state;}
     std::shared_ptr<Hypers> get_hypers() const {return hypers;}
     void set_state(const std::vector<Eigen::MatrixXd> &state_){state = state_;}
+        // TODO add virtual check_state_validity() to set_state()?
     void set_rng_seed(const unsigned int seed){rng.seed(seed);}
 
     virtual Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) = 0;
@@ -36,8 +34,6 @@ public:
     virtual void draw() = 0;
 
     virtual void sample_given_data(const Eigen::MatrixXd &data) = 0;
-
-    // TODO add virtual check_state_validity() ?
 };
 
 

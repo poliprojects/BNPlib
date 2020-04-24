@@ -3,8 +3,8 @@ TODO LIST
 Elena:
 * (print functions: remove last empty column)
 * SerializeCollector: si salva gli oggetti serializzati (serializeToString, interfaccia python)
-* check factory
-* spezza hpp dei collectors in hpp e imp.hpp
+* run mainmulti
+* spezza hpp dei collectors in hpp e imp.hpp grazie <3
 
 
 Bruno:
@@ -36,7 +36,8 @@ MANOVALANZA
 * for: unsigned vs int vs size_t vs ?
 * documentation with Doxygen
 * complete README (Virtual Machine etc)
-* controlla private vs protected
+* check private vs protected
+* remove student_t folder once done
 
 
 CHECKS

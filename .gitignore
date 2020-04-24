@@ -3,7 +3,8 @@
 
 # C++ object code files and executables
 *.o
-main*
+main
+main*(?<!\.cpp)$
 *.recordio
 
 # Libraries files
