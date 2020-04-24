@@ -34,6 +34,13 @@ public:
         }
     }
 
+    Neal8(const Hypers &hypers_, const Mixture &mixture_,
+        const unsigned int num_clusters_ = 0) :
+        Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_,
+        num_clusters_) {
+        
+    }
+
     // Getters and setters
     const unsigned int get_n_aux(){return n_aux;}
     void set_n_aux(const unsigned int n_aux_){n_aux = n_aux_;}

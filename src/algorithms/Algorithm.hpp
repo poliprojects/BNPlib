@@ -141,6 +141,16 @@ public:
             
     }
 
+    Algorithm(const Hypers &hypers_, const Mixture &mixture_,
+         const unsigned int num_clusters_ = 0) :
+        mixture(mixture_), num_clusters(num_clusters_) {
+        Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
+            
+            for(unsigned int i = 0; i < 1; i++){
+                unique_values.push_back(hierarchy);
+            }
+            
+    }
     // Getters
     const unsigned int get_maxiter(){return maxiter;}
     const unsigned int get_burnin(){return burnin;}

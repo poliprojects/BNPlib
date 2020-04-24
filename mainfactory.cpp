@@ -7,8 +7,9 @@
 using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
-using Builder = std::function< std::unique_ptr<
-  Algorithm<HierarchyType, HypersType, MixtureType>> (HypersType,MixtureType,Eigen::VectorXd) >;
+typedef std::function< std::unique_ptr<Algorithm<HierarchyType, HypersType, MixtureType>>(HypersType,MixtureType)> func0;
+typedef std::function< std::unique_ptr<Algorithm<HierarchyType, HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)> func1;
+using Builder= boost::variant<func0, func1 >;
 
 
 int main(int argc, char *argv[]){
@@ -49,32 +50,47 @@ int main(int argc, char *argv[]){
 
     // Load algorithm factory
 
-    Builder neal2builder = [](HypersType hy ,MixtureType mix,Eigen::VectorXd data){
+    Builder neal2builder = [](HypersType hy ,MixtureType mix, Eigen::VectorXd data){
 	
         return std::make_unique< Neal2<HierarchyType,HypersType,
                 MixtureType> >(hy, mix, data);
         };
-	
-    Builder neal8builder = [](HypersType hy ,MixtureType mix,Eigen::VectorXd data){
+    
+    Builder neal8builder = [](HypersType hy ,MixtureType mix, Eigen::VectorXd data){
 	
         return std::make_unique< Neal8<HierarchyType,HypersType,
                 MixtureType> >(hy, mix, data);
         };
 
+    Builder neal2builder_density = [](HypersType hy ,MixtureType mix){ // che poi andrebbe nel main SOLO per eval density
+	
+        return std::make_unique< Neal2<HierarchyType,HypersType,
+                MixtureType> >(hy, mix);
+        };
+	
+	Builder neal8builder_density = [](HypersType hy ,MixtureType mix){
+	
+        return std::make_unique< Neal8<HierarchyType,HypersType,
+                MixtureType> >(hy, mix);
+        };
     auto &algoFactory = Factory<
-        Algorithm<HierarchyType, HypersType, MixtureType> , HypersType,MixtureType,Eigen::VectorXd>::Instance();
+        Algorithm<HierarchyType, HypersType, MixtureType> , HypersType,MixtureType>::Instance();
 
     algoFactory.add_builder("neal2",neal2builder);
     algoFactory.add_builder("neal8",neal8builder);
+    algoFactory.add_builder("neal2density",neal2builder_density);
+    algoFactory.add_builder("neal8density",neal8builder_density);
+
     auto list = algoFactory.list_of_known_builders();
     for (auto &el : list){
         std::cout << el << std::endl;
     }
 
+
     // Create algorithm
     auto sampler = algoFactory.create_object(argv[2],hy, mix,data);
 
-
+return 0;
 
 
     // Run sampler
@@ -116,8 +132,6 @@ int main(int argc, char *argv[]){
   
     (*sampler).run(f);
 
-	
-    
 
     // Density and clustering stuff
     double temp = 0.0;

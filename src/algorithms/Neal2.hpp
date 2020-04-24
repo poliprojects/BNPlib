@@ -28,6 +28,11 @@ public:
         Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(hypers_, mixture_,
             data_, num_clusters_) {}
 
+    Neal2(const Hypers &hypers_, const Mixture &mixture_,
+        const unsigned int num_clusters_ = 0) :
+        Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(hypers_, mixture_,
+             num_clusters_) {}
+
 }; // end of Class Neal2
 
 #include "Neal2.imp.hpp"
