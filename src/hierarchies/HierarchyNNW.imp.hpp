@@ -14,7 +14,7 @@ void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
         this->state[1] = tau;
     }
 
-    tau_chol_factor = LLT<Eigen::MatrixXd>(tau);
+    tau_chol_factor = Eigen::LLT<Eigen::MatrixXd>(tau);
     tau_chol_factor_eval = tau_chol_factor.matrixL();
     Eigen::VectorXd diag = tau_chol_factor_eval.diagonal();
     tau_log_det = 2 * log(diag.array()).sum();
@@ -27,8 +27,8 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     int n = data.cols();
     Eigen::VectorXd result(n);
     for(unsigned int i = 0; i < n; i++){
-        result(i) = 0.5 * std::exp( n*tau_log_det * (
-            tau_chol_factor_eval*(data(i) - mu) ).squaredNorm() );
+        result(i) = 0.5 * std::exp( n*tau_log_det * (tau_chol_factor_eval*
+            (data.col(i) - this->state[0])).squaredNorm() );
     }
     return result;
 }
@@ -52,15 +52,18 @@ template<class Hypers>
 Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
     Eigen::VectorXd result(data.cols());
     unsigned int dim = data.rows();
+    double nu = this->hypers->get_nu();
+    double lambda = this->hypers->get_lambda();
 
-    double nu_n = 2*this->hypers->get_nu() - dim + 1;
+    Eigen::VectorXd mu_n = this->hypers->get_mu0();
+    double nu_n = 2*nu - dim + 1;
     Eigen::MatrixXd sigma_n = this->hypers->get_tau0().inverse() *
-        ( this->hypers->get_nu()-(dim-1)/2 ) * lambda/(lambda+1);
+        ( nu-(dim-1)/2 ) * lambda/(lambda+1);
 
     for(int i = 0; i < data.cols(); i++){
         // use multi_student_t_lpdf(datum, nu, mu, Sigma)
-        result(i) = exp( stan::math::multi_student_t_lpdf(data(i), nu_n,
-            this->hypers->get_mu0(), sigma_n) );
+        result(i) = exp( stan::math::multi_student_t_lpdf(data.col(i), nu_n,
+            mu_n, sigma_n) );
     }
     return result;
 }
@@ -81,7 +84,7 @@ std::vector<Eigen::MatrixXd> HierarchyNNW<Hypers>::normal_wishart_update(
     // Compute tau_post
     Eigen::MatrixXd tau_temp = tau0.inverse();
     for(unsigned int i = 0; i < n; i++){
-        tau_temp += (data(i)-mubar)*(data(i)-mubar).transpose();
+        tau_temp += (data.col(i)-mubar)*(data.col(i)-mubar).transpose();
     }
     tau_temp += (nu*lambda/(nu+lambda)) * (mubar-mu0)*(mubar-mu0).transpose();
     Eigen::MatrixXd tau_post = tau_temp.inverse();
@@ -102,9 +105,9 @@ void HierarchyNNW<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
         tau0, nu);
 
     Eigen::VectorXd mu_post = temp[0];
-    double lambda_post = temp[1];
+    double lambda_post = temp[1](0,0);
     Eigen::MatrixXd tau_post = temp[2];
-    double nu = temp[3];
+    double nu_post = temp[3](0,0);
 
     // Get a sample
     Eigen::MatrixXd tau_new = stan::math::wishart_rng(nu_post, tau_post,

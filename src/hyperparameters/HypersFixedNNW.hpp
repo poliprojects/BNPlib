@@ -1,10 +1,10 @@
-#ifndef HYPERSFIXEDNW_HPP
-#define HYPERSFIXEDNW_HPP
+#ifndef HYPERSFIXEDNNW_HPP
+#define HYPERSFIXEDNNW_HPP
 
 #include <cassert>
 #include <Eigen/Dense>
 
-class HypersFixedNW {
+class HypersFixedNNW {
 private:
     Eigen::VectorXd mu0;
     double lambda;
@@ -15,9 +15,9 @@ private:
 
 public:
     // Destructor and constructor
-    ~HypersFixedNW() = default;
+    ~HypersFixedNNW() = default;
 
-    HypersFixedNW(const Eigen::VectorXd &mu0_, const double lambda_,
+    HypersFixedNNW(const Eigen::VectorXd &mu0_, const double lambda_,
         const Eigen::MatrixXd &tau0_, const double nu_):
         mu0(mu0_), lambda(lambda_), tau0(tau0_), nu(nu_) {
             // Check validity of parameters
@@ -58,4 +58,4 @@ public:
 };
 
 
-#endif // HYPERSFIXEDNW_HPP
+#endif // HYPERSFIXEDNNW_HPP

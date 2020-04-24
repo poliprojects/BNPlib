@@ -17,7 +17,7 @@ protected:
 
     // Utilities for likelihood evaluation
     void set_tau_and_utilities(const Eigen::MatrixXd &tau);
-    LLT<Eigen::MatrixXd> tau_chol_factor;
+    Eigen::LLT<Eigen::MatrixXd> tau_chol_factor;
     Eigen::MatrixXd tau_chol_factor_eval;
     double tau_log_det;
 
@@ -29,11 +29,11 @@ public:
 
     HierarchyNNW(std::shared_ptr<Hypers> hypers_) {
         this->hypers = hypers_;
-        unsigned int dim = this->hypers.get_mu0().size();
-        this->state.push_back( this->hypers.get_mu0() );
+        unsigned int dim = this->hypers->get_mu0().size();
 
-        set_tau_and_utilities( this->hypers.get_lambda() *
-            Eigen::Matrix<double, dim, dim>::Identity() );
+        this->state.push_back( this->hypers->get_mu0() );
+        set_tau_and_utilities( this->hypers->get_lambda() *
+            Eigen::MatrixXd::Identity(dim, dim) );
     }
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;
