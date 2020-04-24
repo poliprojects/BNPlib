@@ -1,23 +1,32 @@
 #include <iostream>
 #include <fstream>
 
-
 #include "includes_main.hpp"
 #include "math.h"
 
+
+using HypersType = HypersFixedNNW;
+using MixtureType = DirichletMixture;
+template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
+
+
 int main(int argc, char *argv[]){
-    std::cout << "Running maindummy.cpp" << std::endl;
+    std::cout << "Running mainmulti.cpp" << std::endl;
     // 3D-vectorial data
     Eigen::MatrixXd data(3,5);
-    fill_eigen_matrix_from_file(data,"csv/data_vec.csv");
+    fill_eigen_matrix_from_file(data, "csv/data_vec.csv");
 
-    Eigen::VectorXd mu0(3);
-    mu0 << 3.0, 3.0, 3.0;
-    Eigen::MatrixXd lambda0 = 2 * Eigen::Matrix<double, 3, 3>::Identity();
+    Eigen::VectorXd mu0(3);  mu0 << 3.0, 3.0, 3.0;
+    double lambda = 2.0;
+    Eigen::MatrixXd tau0 = Eigen::Matrix<double, 3, 3>::Identity();
+    double nu = 5.0;
+
     double totalmass = 1.0;
-    HypersDummy hy(mu0, lambda0);
-    DirichletMixture mix(totalmass); // total mass
-    Neal8<HierarchyDummy, HypersDummy, DirichletMixture> sampler(hy, mix, data);
+
+    HypersType hy(mu0, lambda, tau0, nu);
+    MixtureType mix(totalmass); // total mass
+    Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
+
 
     BaseCollector *f;
     if(argc < 2){
@@ -55,7 +64,30 @@ int main(int argc, char *argv[]){
         return 1;
     }
   
+    // TODO DEBUG: reduce iterations
+    sampler.set_maxiter(1000);
+    sampler.set_burnin(100);
+
     sampler.run(f);
 
+    // Density and clustering stuff stuff
+    double temp = 0.0;
+    double step = 0.05;
+    double upp_bnd = 10.0;
+    std::vector<double> v_temp;
+    while(temp <= upp_bnd){
+        v_temp.push_back(temp);
+        temp += step;
+    }
+    Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
+        v_temp.data(), v_temp.size()); 
+
+    sampler.eval_density(grid, f);
+
+    sampler.write_density_to_file();
+    unsigned int i_cap = sampler.cluster_estimate(f);
+    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
+    sampler.write_final_clustering_to_file();
+    sampler.write_best_clustering_to_file();
     return 0;
 }
