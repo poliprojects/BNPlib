@@ -107,7 +107,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 Hierarchy<Hypers> new_unique(
                     this->unique_values[0].get_hypers());
 		Eigen::VectorXd temp;
-                temp=this->data.row(i);
+                temp = this->data.row(i);
                 new_unique.sample_given_data(temp);
                 this->unique_values.push_back(new_unique); 
                 this->allocations[i] = n_unique;

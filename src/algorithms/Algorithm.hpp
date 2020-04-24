@@ -109,7 +109,8 @@ public:
     unsigned int cluster_estimate(BaseCollector* collector);
 
     void eval_density(const Eigen::MatrixXd &grid, BaseCollector* collector);
-    virtual Eigen::VectorXd eval_density_specific(Hierarchy<Hypers> &temp_hier,unsigned int n)=0;
+    virtual Eigen::VectorXd eval_density_specific(Hierarchy<Hypers> &temp_hier,
+        unsigned int n) = 0;
 
 
     void write_final_clustering_to_file(
@@ -154,6 +155,7 @@ public:
             }
             
     }
+
     // Getters
     const unsigned int get_maxiter(){return maxiter;}
     const unsigned int get_burnin(){return burnin;}
@@ -169,7 +171,6 @@ public:
         num_clusters = num_clusters_;
     }
     void set_rng_seed(const unsigned int seed){rng.seed(seed);}
-
 };
 
 #include "Algorithm.imp.hpp"

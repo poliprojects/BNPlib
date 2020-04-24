@@ -16,7 +16,8 @@ protected:
 
 public:
     // Other tools:
-    Eigen::VectorXd eval_density_specific(Hierarchy<Hypers> &temp_hier,unsigned int n) override;
+    Eigen::VectorXd eval_density_specific(Hierarchy<Hypers> &temp_hier,
+        unsigned int n) override;
 
 
     // Destructors and constructors:

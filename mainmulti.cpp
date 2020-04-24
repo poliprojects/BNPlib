@@ -70,20 +70,7 @@ int main(int argc, char *argv[]){
 
     sampler.run(f);
 
-    // Density and clustering stuff stuff
-    double temp = 0.0;
-    double step = 0.05;
-    double upp_bnd = 10.0;
-    std::vector<double> v_temp;
-    while(temp <= upp_bnd){
-        v_temp.push_back(temp);
-        temp += step;
-    }
-    Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v_temp.data(), v_temp.size()); 
-
-    sampler.eval_density(grid, f);
-
+    sampler.eval_density(data, f); // TODO ?
     sampler.write_density_to_file();
     unsigned int i_cap = sampler.cluster_estimate(f);
     std::cout << "Best clustering: at iteration " << i_cap << std::endl;
