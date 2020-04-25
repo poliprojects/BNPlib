@@ -9,7 +9,7 @@ CXXFLAGS += \
 -I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include \
 -D_REENTRANT
 
-LDFLAGS += -O3 -D_REENTRANT
+LDFLAGS += -O3 -D_REENTRANT -fopenmp
 LDLIBS = \
  	$(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb \
 	-lpthread -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
