@@ -26,9 +26,15 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     // instead of using the inefficient stan::math::multi_normal_lpdf()
     int n = data.rows();
     Eigen::VectorXd result(n);
+	Eigen::Matrix<double,1,Eigen::Dynamic> dat;
+	Eigen::MatrixXd Sigma=this->state[1].inverse();
+	Eigen::Matrix<double,1,Eigen::Dynamic> mu(this->state[0]);
     for(unsigned int i = 0; i < n; i++){
-        result(i) = 0.5 * std::exp( n*tau_log_det * (tau_chol_factor_eval*
-            (data.row(i) - this->state[0]).transpose()).squaredNorm() );
+      //  result(i) = 0.5 * std::exp( n*tau_log_det * (tau_chol_factor_eval*
+         //   (data.row(i) - this->state[0]).transpose()).squaredNorm() );
+        dat=data.row(i);
+
+        result(i) =std::exp(stan::math::multi_normal_lpdf(dat,mu, Sigma));
     }
     return result;
 }

@@ -52,8 +52,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
     const Param &par) const {
-    Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(par.par_cols_size(),
-        par.par_cols(0).elems_size());
+    Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(par.par_cols(0).elems_size(),par.par_cols_size());
     for(int h = 0; h < par.par_cols_size(); h++){
         for(int j = 0; j < par.par_cols(h).elems_size(); j++){
         par_matrix(j,h) = par.par_cols(h).elems(j);

@@ -76,7 +76,7 @@ public:
 
     State get_state(unsigned int i) override {
         State state;
-        for(unsigned int k=0; k<i; k++){
+        for(unsigned int k=0; k<i+1; k++){
             state=next_state();
         }
 

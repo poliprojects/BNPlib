@@ -60,6 +60,8 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
             	this->unique_values[k].like(this->data.row(i))(0); // TODO
             tot += probas(k);
         }
+        //std::cout<<this->data.row(i);
+        //std::cout<<this->unique_values[k].like(this->data.row(i))(0);
 
         for(int k = 0; k < n_aux; k++){
             probas(n_unique+k) = this->mixture.prob_new_cluster(n, n_unique) *
@@ -70,7 +72,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         // Normalize
         probas = probas / tot;
 
-        std::cout << "tot " << tot << std::endl; // TODO DEBUG
+        //std::cout << "tot " << tot << std::endl; // TODO DEBUG
 
         unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
 

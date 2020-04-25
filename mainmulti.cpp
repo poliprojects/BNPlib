@@ -74,7 +74,7 @@ int main(int argc, char *argv[]){
     sampler.write_density_to_file();
     unsigned int i_cap = sampler.cluster_estimate(f);
     std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    sampler.write_final_clustering_to_file();
-    sampler.write_best_clustering_to_file();
+    //sampler.write_final_clustering_to_file();
+    //sampler.write_best_clustering_to_file();
     return 0;
 }
