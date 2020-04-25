@@ -13,10 +13,10 @@ template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
 int main(int argc, char *argv[]){
     std::cout << "Running mainmulti.cpp" << std::endl;
     // 3D-vectorial data
-    Eigen::MatrixXd data(5,3);
-    fill_eigen_matrix_from_file(data, "csv/data_multi.csv");
+    Eigen::MatrixXd data(10,3);
+    fill_eigen_matrix_from_file(data, "csv/data_multi.ssv");
 
-    Eigen::Matrix<double,1,3> mu0;  mu0 << 3.0, 3.0, 3.0;
+    Eigen::Matrix<double,1,3> mu0;  mu0 << 1.0, 1.0, 1.0;
     double lambda = 2.0;
     Eigen::MatrixXd tau0 = Eigen::Matrix<double, 3, 3>::Identity();
     double nu = 5.0;
@@ -25,8 +25,8 @@ int main(int argc, char *argv[]){
 
     HypersType hy(mu0, lambda, tau0, nu);
     MixtureType mix(totalmass); // total mass
-    Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
-
+    Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data,
+        data.rows());
 
     BaseCollector *f;
     if(argc < 2){

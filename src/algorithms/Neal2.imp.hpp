@@ -56,7 +56,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         
         for(int k = 0; k < n_unique; k++){
             probas(k) = this->mixture.prob_existing_cluster(card[k],n) *
-            	this->unique_values[k].like(this->data.row(i))(0);
+                this->unique_values[k].like(this->data.row(i))(0);
 
             if(singleton == 1 && k == i){
               probas(i) = this->mixture.prob_new_cluster(n, n_unique) *
@@ -81,8 +81,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
             if(c_new == this->allocations[i]){
                 // case 1 of 4: SINGLETON - SINGLETON
                 Eigen::VectorXd temp;
-                temp=this->data.row(i); // initialize with datum if univariate,
-                                        // with a vector (dim p) if multi
+                temp = this->data.row(i);
                 this->unique_values[ this->allocations[i]
                     ].sample_given_data(temp);
                 
@@ -106,7 +105,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
                 Hierarchy<Hypers> new_unique(
                     this->unique_values[0].get_hypers());
-		Eigen::VectorXd temp;
+        Eigen::VectorXd temp;
                 temp = this->data.row(i);
                 new_unique.sample_given_data(temp);
                 this->unique_values.push_back(new_unique); 
@@ -135,19 +134,17 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
     }
 
     for(int j = 0; j < this->num_clusters; j++){
-	Eigen::MatrixXd curr_data(this->data.rows(), this->data.cols());
-     	int k=0;
-
-        for(auto &idx : clust_idxs[j]){
-            curr_data.row(k) = this->data.row(idx);	
-            k+=1;
-	}
+    Eigen::MatrixXd curr_data(this->data.rows(), this->data.cols());
+        int k = 0;
+        for(auto &idx : clust_idxs[j]){ // TODO do a for loop with k
+            curr_data.row(k) = this->data.row(idx); 
+            k += 1;
+        }
         curr_data.conservativeResize(k, Eigen::NoChange);
             // TODO: più efficiente?
         this->unique_values[j].sample_given_data(curr_data);
     }
 
-    std::cout << "uniq end" << std::endl; // TODO DEBUG
 
 }
 

@@ -70,6 +70,8 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         // Normalize
         probas = probas / tot;
 
+        std::cout << "tot " << tot << std::endl; // TODO DEBUG
+
         unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
 
         if(singleton == 1){
