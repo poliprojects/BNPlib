@@ -12,7 +12,7 @@ template<class Hypers>
 class HierarchyNNW : public HierarchyBase<Hypers> {
 protected:
     std::vector<Eigen::MatrixXd> normal_wishart_update(
-    const Eigen::MatrixXd &data, const Eigen::VectorXd &mu0,
+    const Eigen::MatrixXd &data, const Eigen::Matrix<double,1,Eigen::Dynamic> &mu0,
     const double lambda, const Eigen::MatrixXd &tau0, const double nu);
 
     // Utilities for likelihood evaluation

@@ -13,10 +13,10 @@ template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
 int main(int argc, char *argv[]){
     std::cout << "Running mainmulti.cpp" << std::endl;
     // 3D-vectorial data
-    Eigen::MatrixXd data(3,5);
+    Eigen::MatrixXd data(5,3);
     fill_eigen_matrix_from_file(data, "csv/data_multi.csv");
 
-    Eigen::VectorXd mu0(3);  mu0 << 3.0, 3.0, 3.0;
+    Eigen::Matrix<double,1,3> mu0;  mu0 << 3.0, 3.0, 3.0;
     double lambda = 2.0;
     Eigen::MatrixXd tau0 = Eigen::Matrix<double, 3, 3>::Identity();
     double nu = 5.0;

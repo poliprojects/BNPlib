@@ -6,7 +6,7 @@
 
 class HypersFixedNNW {
 private:
-    Eigen::VectorXd mu0;
+    Eigen::Matrix<double,1,Eigen::Dynamic>  mu0;
     double lambda;
     Eigen::MatrixXd tau0;
     double nu;
@@ -17,7 +17,7 @@ public:
     // Destructor and constructor
     ~HypersFixedNNW() = default;
 
-    HypersFixedNNW(const Eigen::VectorXd &mu0_, const double lambda_,
+    HypersFixedNNW(const Eigen::Matrix<double,1,Eigen::Dynamic>  &mu0_, const double lambda_,
         const Eigen::MatrixXd &tau0_, const double nu_):
         mu0(mu0_), lambda(lambda_), tau0(tau0_), nu(nu_) {
             // Check validity of parameters
@@ -32,13 +32,13 @@ public:
         }
 
     // Getters
-    const Eigen::VectorXd get_mu0(){return mu0;}
+    const Eigen::Matrix<double,1,Eigen::Dynamic>  get_mu0(){return mu0;}
     const double get_lambda(){return lambda;}
     const Eigen::MatrixXd get_tau0(){return tau0;}
     const double get_nu(){return nu;}
 
     // Setters
-    void set_mu0(const Eigen::VectorXd &mu0_){
+    void set_mu0(const Eigen::Matrix<double,1,Eigen::Dynamic>  &mu0_){
     	assert(mu0_.size() == mu0.size());
     	mu0 = mu0_;
     }
