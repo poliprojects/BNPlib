@@ -24,8 +24,11 @@ public:
     // Getters and setters
     std::vector<Eigen::MatrixXd> get_state() const {return state;}
     std::shared_ptr<Hypers> get_hypers() const {return hypers;}
-    void set_state(const std::vector<Eigen::MatrixXd> &state_){state = state_;}
-        // TODO add virtual check_state_validity() to set_state()?
+    virtual void set_state(const std::vector<Eigen::MatrixXd> &state_){
+        state = state_;
+        // TODO check_state_validity()?
+    }
+
     void set_rng_seed(const unsigned int seed){rng.seed(seed);}
 
     virtual Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) = 0;

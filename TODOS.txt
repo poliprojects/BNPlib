@@ -21,6 +21,7 @@ GENERICI DA MARIO
 
 FEATURES/IMPLEMENTATION
 * Name of eval_density_specific?
+* std::vector of state in hierarchies -> std::array (fixed size)?
 * In hierarchies: is_uni/multivariate function vs variable?
 * collectors won't work (boundary problems) -> eval_density also won't work
 * one method for prob_existing_cluster / prob_new_cluster?
