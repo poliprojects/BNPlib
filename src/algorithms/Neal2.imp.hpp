@@ -126,6 +126,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
 
+
     this->num_clusters = this->unique_values.size();
     std::vector<std::vector<unsigned int>> clust_idxs(this->num_clusters);
     unsigned int n = this->allocations.size();
@@ -138,13 +139,15 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
      	int k=0;
 
         for(auto &idx : clust_idxs[j]){
-            curr_data.row(k)=this->data.row(idx);	
+            curr_data.row(k) = this->data.row(idx);	
             k+=1;
 	}
         curr_data.conservativeResize(k, Eigen::NoChange);
             // TODO: più efficiente?
         this->unique_values[j].sample_given_data(curr_data);
     }
+
+    std::cout << "uniq end" << std::endl; // TODO DEBUG
 
 }
 

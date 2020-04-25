@@ -43,9 +43,7 @@ protected:
 
     void step(){
         sample_allocations();
-        std::cout << "alloc done" << std::endl; // TODO DEBUG
         sample_unique_values();
-        std::cout << "uniq done -> step done" << std::endl; // TODO DEBUG
     }
 
     virtual void sample_allocations() = 0;
@@ -76,7 +74,6 @@ public:
         print_startup_message();
         initialize();
         unsigned int iter = 0;
-        std::cout << "step " << iter << std::endl; // TODO DEBUG
         while(iter < maxiter){
             step();
             if(iter >= burnin){
