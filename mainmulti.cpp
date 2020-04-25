@@ -14,7 +14,7 @@ int main(int argc, char *argv[]){
     std::cout << "Running mainmulti.cpp" << std::endl;
     // 3D-vectorial data
     Eigen::MatrixXd data(3,5);
-    fill_eigen_matrix_from_file(data, "csv/data_vec.csv");
+    fill_eigen_matrix_from_file(data, "csv/data_multi.csv");
 
     Eigen::VectorXd mu0(3);  mu0 << 3.0, 3.0, 3.0;
     double lambda = 2.0;
