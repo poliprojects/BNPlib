@@ -2,28 +2,34 @@
 #include <fstream>
 
 #include "includes_main.hpp"
-//#include "math.h"
+
 
 using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
-typedef std::function< std::unique_ptr<Algorithm<HierarchyType, HypersType,
-    MixtureType>>(HypersType,MixtureType)> func0;
-typedef std::function< std::unique_ptr<Algorithm<HierarchyType, HypersType,
-    MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)> func1;
-using Builder= boost::variant<func0, func1 >;
+
+// Aliases for factory
+using func0 = std::function< std::unique_ptr<Algorithm<HierarchyType,
+    HypersType, MixtureType>>(HypersType,MixtureType)>; // TODO names?
+using func1 = std::function< std::unique_ptr<Algorithm<HierarchyType,
+    HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+using Builder = boost::variant<func0, func1>;
 
 
 int main(int argc, char *argv[]){
     std::cout << "Running mainfactory.cpp" << std::endl;
-    // Model parameters
-    double mu0 = 5.0;
-    double lambda = 0.1;
-    double alpha0 = 2.0;
-    double beta0 = 2.0;
-    double totalmass = 1.0;
-    unsigned int n_aux = 3;
+
+    // Set model parameters
+    double mu0, lambda, alpha0, beta0;
+    //std::cout << "Insert mu0, lambda, alpha0, beta0 values:" << std::endl;
+    //std::cin >> mu0 >> lambda >> alpha0 >> beta0;
+    mu0 = 5.0; lambda = 0.1; alpha0 = 2.0; beta0 = 2.0;
     HypersType hy(mu0, lambda, alpha0, beta0);
+
+    double totalmass;
+    //std::cout << "Insert total mass value:" << std::endl; 
+    //std::cin >> totalmass; //1.0
+    totalmass = 1.0;
     MixtureType mix(totalmass);
 
     // Read data from main arg
@@ -51,7 +57,6 @@ int main(int argc, char *argv[]){
         v.data(), v.size()); // TODO: meglio con conservative resize?
 
     // Load algorithm factory
-
     Builder neal2builder = [](HypersType hy, MixtureType mix,
         Eigen::VectorXd data){
         return std::make_unique< Neal2<HierarchyType,HypersType,
@@ -89,15 +94,17 @@ int main(int argc, char *argv[]){
         std::cout << el << std::endl;
     }
 
+    // Create algorithm and set algorithm parameters
+    auto sampler = algoFactory.create_object(argv[2], hy, mix, data);
 
-    // Create algorithm
-    auto sampler = algoFactory.create_object(argv[2],hy, mix,data);
+    sampler.set_rng_seed(20200229);
+    sampler.set_maxiter(1000);
+    sampler.set_burnin(100);
 
-return 0;
+    return 0; // TODO DEBUG
 
-
-    // Run sampler
-    BaseCollector *f;
+    // Choose memory collector
+    BaseCollector *coll;
     if(argc < 4){
         std::cerr << "Error: need file collector type " <<
             "(\"file\" or \"memory\") as arg" << std::endl;
@@ -117,14 +124,14 @@ return 0;
                 std::cout << "Warning: unused extra args present" << std::endl;
             }
         }
-        f = new FileCollector(filename);
+        coll = new FileCollector(filename);
     }
 
     else if(collector == "memory"){
         if(argc > 4){
             std::cout << "Warning: unused extra args present" << std::endl;
         }
-        f = new MemoryCollector();
+        coll = new MemoryCollector();
     }
 
     else {
@@ -132,10 +139,11 @@ return 0;
             << std::endl;
         return 1;
     }
-  
-    (*sampler).run(f);
 
-    // Density and clustering stuff
+    // Run algorithm
+    (*sampler).run(coll);
+
+    // Density and clustering
     double temp = 0.0;
     double step = 0.05;
     double upp_bnd = 10.0;
@@ -147,11 +155,10 @@ return 0;
     Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         v_temp.data(), v_temp.size()); 
 
-    (*sampler).eval_density(grid, f);
-    (*sampler).write_density_to_file("csv/density_ex.csv");
-    unsigned int i_cap = (*sampler).cluster_estimate(f);
-    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    (*sampler).write_best_clustering_to_file();
+    (*sampler).eval_density(grid, coll);
+    (*sampler).write_density_to_file("csv/density_fact.csv");
+    unsigned int i_cap = (*sampler).cluster_estimate(coll);
+    (*sampler).write_best_clustering_to_file("csv/clust_fact.csv");
 
     return 0;
 }

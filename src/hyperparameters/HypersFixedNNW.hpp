@@ -6,18 +6,18 @@
 
 class HypersFixedNNW {
 private:
-    Eigen::Matrix<double,1,Eigen::Dynamic>  mu0;
+    using EigenRowVec = Eigen::Matrix<double, 1, Eigen::Dynamic>;
+
+    EigenRowVec mu0;
     double lambda;
     Eigen::MatrixXd tau0;
     double nu;
-
-    Eigen::MatrixXd tau0_inv; // TODO etc: serve?
 
 public:
     // Destructor and constructor
     ~HypersFixedNNW() = default;
 
-    HypersFixedNNW(const Eigen::Matrix<double,1,Eigen::Dynamic>  &mu0_, const double lambda_,
+    HypersFixedNNW(const EigenRowVec &mu0_, const double lambda_,
         const Eigen::MatrixXd &tau0_, const double nu_):
         mu0(mu0_), lambda(lambda_), tau0(tau0_), nu(nu_) {
             // Check validity of parameters
@@ -27,18 +27,16 @@ public:
             assert(tau0.rows() == tau0.cols());
             assert(nu > dim-1);
             // TODO assert tau0 pos def matrix?
-
-            tau0_inv = tau0.inverse();
         }
 
     // Getters
-    const Eigen::Matrix<double,1,Eigen::Dynamic>  get_mu0(){return mu0;}
+    const EigenRowVec get_mu0(){return mu0;}
     const double get_lambda(){return lambda;}
     const Eigen::MatrixXd get_tau0(){return tau0;}
     const double get_nu(){return nu;}
 
     // Setters
-    void set_mu0(const Eigen::Matrix<double,1,Eigen::Dynamic>  &mu0_){
+    void set_mu0(const EigenRowVec &mu0_){
     	assert(mu0_.size() == mu0.size());
     	mu0 = mu0_;
     }

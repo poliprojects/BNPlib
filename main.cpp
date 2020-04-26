@@ -1,17 +1,29 @@
 #include <iostream>
 #include <fstream>
 
-//#include <boost/random/random_number_generator.hpp>
-//#include <boost/random/detail/qrng_base.hpp>
-#include <chrono>
-
 #include "includes_main.hpp"
 #include "math.h"
 
-int main(int argc, char *argv[]){
+using HypersType = HypersFixedNNIG;
+using MixtureType = DirichletMixture;
+template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
- 
+int main(int argc, char *argv[]){
     std::cout << "Running main.cpp" << std::endl;
+
+    // Set model parameters
+    double mu0, lambda, alpha0, beta0;
+    //std::cout << "Insert mu0, lambda, alpha0, beta0 values:" << std::endl;
+    //std::cin >> mu0 >> lambda >> alpha0 >> beta0;
+    mu0 = 5.0; lambda = 0.1; alpha0 = 2.0; beta0 = 2.0;
+    HypersType hy(mu0, lambda, alpha0, beta0);
+
+    double totalmass;
+    //std::cout << "Insert total mass value:" << std::endl; 
+    //std::cin >> totalmass; //1.0
+    totalmass = 1.0;
+    MixtureType mix(totalmass);
+
     // Read data from main arg
     std::ifstream file;
     if(argc < 2){
@@ -24,53 +36,28 @@ int main(int argc, char *argv[]){
             std::endl;
         return 1;
     }
+
     std::string str, str2;
     std::getline(file, str);
-    std::istringstream iss(str);
-
+    std::istringstream stream(str);
     std::vector<double> v;
-  
-    while(std::getline(iss, str2, ',')){
+    while(std::getline(stream, str2, ',')){
         double val = ::atof(str2.c_str());
         v.push_back(val);
     }
-
     file.close();
     Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         v.data(), v.size()); // TODO: meglio con conservative resize?
 
-    double mu0, lambda, alpha0, beta0;
-    //std::cout << "Insert mu0, lambda, alpha0, beta0 values:" << std::endl;
-    //std::cin >> mu0 >> lambda >> alpha0 >> beta0; // 5.0 0.1 2.0 2.0
-    // HypersFixedNNIG hy(mu0, lambda, alpha0, beta0);
-
-    double totalmass;
-    //std::cout << "Insert total mass value:" << std::endl; 
-    //std::cin >> totalmass; //1.0
-    // DirichletMixture mix(totalmass);
-
-    int n_aux = 3;
-    //std::cout << "Insert number of auxiliary blocks:" << std::endl;
-    //std::cin >> n_aux;
-
-    //std::ofstream file;
-    //file.open("csv/data.csv");
-    //for(auto &d : data){
-    //    file << d << ",";
-    //}
-    //file << std::endl;
-    //file.close();
- 
-    HypersFixedNNIG hy(5.0, 1.0, 2.0, 2.0); // mu0, lambda, alpha0, beta0
-    DirichletMixture mix(1); // total mass
-
-    Neal2<HierarchyNNIG, HypersFixedNNIG, DirichletMixture> sampler(hy, mix,
-        data);
+    // Create algorithm and set algorithm parameters
+    Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
 
     sampler.set_rng_seed(20200229);
+    sampler.set_maxiter(1000);
+    sampler.set_burnin(100);
       
-    // Run sampler
-    BaseCollector *f;
+    // Choose memory collector
+    BaseCollector *coll;
     if(argc < 3){
         std::cerr << "Error: need file collector type " <<
             "(\"file\" or \"memory\") as arg" << std::endl;
@@ -90,14 +77,13 @@ int main(int argc, char *argv[]){
                 std::cout << "Warning: unused extra args present" << std::endl;
             }
         }
-        f = new FileCollector(filename);
+        coll = new FileCollector(filename);
     }
-
     else if(collector == "memory"){
         if(argc > 3){
             std::cout << "Warning: unused extra args present" << std::endl;
         }
-        f = new MemoryCollector();
+        coll = new MemoryCollector();
     }
 
     else {
@@ -106,13 +92,10 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    // TODO DEBUG: reduce iterations
-    sampler.set_maxiter(1000);
-    sampler.set_burnin(100);
+    // Run sampler
+    sampler.run(coll);
 
-    sampler.run(f);
-
-    // Density and clustering stuff stuff
+    // Density and clustering
     double temp = 0.0;
     double step = 0.05;
     double upp_bnd = 10.0;
@@ -124,12 +107,10 @@ int main(int argc, char *argv[]){
     Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         v_temp.data(), v_temp.size()); 
 
-	sampler.eval_density(grid, f);
-
-    sampler.write_density_to_file("csv/density_ex.csv");
-    unsigned int i_cap = sampler.cluster_estimate(f);
-    std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    sampler.write_best_clustering_to_file("csv/clust_ex.csv");
+	sampler.eval_density(grid, coll);
+    sampler.write_density_to_file("csv/density_0.csv");
+    unsigned int i_cap = sampler.cluster_estimate(coll);
+    sampler.write_best_clustering_to_file("csv/clust_0.csv");
 
     return 0;
 }

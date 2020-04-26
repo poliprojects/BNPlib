@@ -11,9 +11,11 @@
 template<class Hypers>
 class HierarchyNNW : public HierarchyBase<Hypers> {
 protected:
+    using EigenRowVec = Eigen::Matrix<double, 1, Eigen::Dynamic>;
+    
     std::vector<Eigen::MatrixXd> normal_wishart_update(
-    const Eigen::MatrixXd &data, const Eigen::Matrix<double,1,Eigen::Dynamic> &mu0,
-    const double lambda, const Eigen::MatrixXd &tau0, const double nu);
+    const Eigen::MatrixXd &data, const EigenRowVec &mu0, const double lambda,
+    const Eigen::MatrixXd &tau0, const double nu);
 
     // Utilities for likelihood evaluation
     void set_tau_and_utilities(const Eigen::MatrixXd &tau);

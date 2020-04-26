@@ -52,13 +52,14 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
     const Param &par) const {
-    Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(par.par_cols(0).elems_size(),par.par_cols_size());
+    Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(
+        par.par_cols(0).elems_size(), par.par_cols_size() );
     for(int h = 0; h < par.par_cols_size(); h++){
         for(int j = 0; j < par.par_cols(h).elems_size(); j++){
-        par_matrix(j,h) = par.par_cols(h).elems(j);
+            par_matrix(j,h) = par.par_cols(h).elems(j);
         }
     }
-return par_matrix;
+    return par_matrix;
 }
 
 
@@ -150,8 +151,9 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     int min_err = errors.minCoeff(&i);
 
     best_clust = collector->get_state(i);
-    std::cout << best_clust.uniquevalues_size() <<
-        " clusters were found via least square minimization" << std::endl;
+    std::cout << "Optimal clustering: at iteration " << i << " with " <<
+    	best_clust.uniquevalues_size() << " clusters" << std::endl;
+
     return i;
 }
 
@@ -195,7 +197,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
         file << std::endl;
     }
     file.close();
-    std::cout << "Succesfully wrote to " << filename << std::endl;
+    std::cout << "Succesfully wrote clustering to " << filename << std::endl;
 }
 
 
@@ -211,7 +213,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
     }
     
     file.close();
-    std::cout << "Succesfully wrote to " << filename << std::endl;
+    std::cout << "Succesfully wrote density to " << filename << std::endl;
 }
 
 
