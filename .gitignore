@@ -1,17 +1,19 @@
-# Local files
+# Executables and local files
+main*
 *.local.*
 
-# C++ object code files and executables
-*.o
-main
-main*(?<!\.cpp)$
-*.recordio
+# Exclude source files, bar local ones
+!*.cpp
+*.local.cpp
 
-# Libraries files
-*a
+# C++ object code files and libraries
+*.o
 *.lo
 *.so
 *.so.*
+
+# Protocol Buffers files
+*.recordio
 
 # Output files
 Rplots.pdf
