@@ -7,8 +7,10 @@
 using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
-typedef std::function< std::unique_ptr<Algorithm<HierarchyType, HypersType, MixtureType>>(HypersType,MixtureType)> func0;
-typedef std::function< std::unique_ptr<Algorithm<HierarchyType, HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)> func1;
+typedef std::function< std::unique_ptr<Algorithm<HierarchyType, HypersType,
+    MixtureType>>(HypersType,MixtureType)> func0;
+typedef std::function< std::unique_ptr<Algorithm<HierarchyType, HypersType,
+    MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)> func1;
 using Builder= boost::variant<func0, func1 >;
 
 
@@ -50,20 +52,20 @@ int main(int argc, char *argv[]){
 
     // Load algorithm factory
 
-    Builder neal2builder = [](HypersType hy ,MixtureType mix, Eigen::VectorXd data){
-	
+    Builder neal2builder = [](HypersType hy, MixtureType mix,
+        Eigen::VectorXd data){
         return std::make_unique< Neal2<HierarchyType,HypersType,
                 MixtureType> >(hy, mix, data);
         };
     
-    Builder neal8builder = [](HypersType hy ,MixtureType mix, Eigen::VectorXd data){
-	
+    Builder neal8builder = [](HypersType hy, MixtureType mix,
+        Eigen::VectorXd data){
         return std::make_unique< Neal8<HierarchyType,HypersType,
                 MixtureType> >(hy, mix, data);
         };
 
-    Builder neal2builder_density = [](HypersType hy ,MixtureType mix){ // che poi andrebbe nel main SOLO per eval density
-	
+    Builder neal2builder_density = [](HypersType hy ,MixtureType mix){
+        // che poi andrebbe nel main SOLO per eval density
         return std::make_unique< Neal2<HierarchyType,HypersType,
                 MixtureType> >(hy, mix);
         };
@@ -74,7 +76,8 @@ int main(int argc, char *argv[]){
                 MixtureType> >(hy, mix);
         };
     auto &algoFactory = Factory<
-        Algorithm<HierarchyType, HypersType, MixtureType> , HypersType,MixtureType>::Instance();
+        Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
+        MixtureType>::Instance();
 
     algoFactory.add_builder("neal2",neal2builder);
     algoFactory.add_builder("neal8",neal8builder);
@@ -132,7 +135,6 @@ return 0;
   
     (*sampler).run(f);
 
-
     // Density and clustering stuff
     double temp = 0.0;
     double step = 0.05;
@@ -149,7 +151,6 @@ return 0;
     (*sampler).write_density_to_file("csv/density_ex.csv");
     unsigned int i_cap = (*sampler).cluster_estimate(f);
     std::cout << "Best clustering: at iteration " << i_cap << std::endl;
-    (*sampler).write_final_clustering_to_file();
     (*sampler).write_best_clustering_to_file();
 
     return 0;

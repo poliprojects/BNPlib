@@ -114,7 +114,7 @@ public:
         unsigned int n) = 0;
 
 
-    void write_final_clustering_to_file(
+    void write_final_clustering_to_file( // TODO la blastiamo?
         std::string filename = "csv/clust_final.csv") const;
 
     void write_best_clustering_to_file(
