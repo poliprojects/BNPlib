@@ -16,12 +16,12 @@ class Factory{
 private:
     // Aliases
     using Identifier = std::string;    
-    //using Builder= std::function< std::unique_ptr<AbstractProduct>(Args ...) >;
-    typedef std::function< std::unique_ptr<AbstractProduct>(Args...)> func0;
-    typedef std::function< std::unique_ptr<AbstractProduct>(Args..., Eigen::VectorXd)> func1;
-    using Builder= boost::variant<func0, func1 >;
-
-    
+    //using Builder = std::function< std::unique_ptr<AbstractProduct>(
+    //    Args ...) >;
+    using func0 = std::function< std::unique_ptr<AbstractProduct>(Args...)>;
+    using func1 = std::function< std::unique_ptr<AbstractProduct>(
+        Args..., Eigen::VectorXd)>;
+    using Builder = boost::variant<func0, func1 >;
 
     // Deleted constructors
     Factory() = default;
@@ -41,7 +41,6 @@ public:
         return factory;
     }
 
-    
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
         Args... args, const Eigen::VectorXd &data) const {  // TODO shared?
         auto f = storage.find(name);
@@ -51,28 +50,21 @@ public:
         else{
             //return std::make_unique<AbstractProduct>( f->second(
               //std::forward<Args>(args)... , data) );
-
-             return boost::get<func1>(f->second)(std::forward<Args>(args)... , data);
-
+            return boost::get<func1>(f->second)(std::forward<Args>(args)...,
+                data);
         }
     }
 
-
-std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
+    std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
         Args... args) const {  // TODO shared?
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
         }
         else{
-            
-
-             return boost::get<func0>(f->second)(std::forward<Args>(args)...);
-
+            return boost::get<func0>(f->second)(std::forward<Args>(args)...);
         }
     }
-
-
 
     void add_builder(const Identifier &name, const Builder &builder){
         auto f = storage.insert(std::make_pair(name, builder));

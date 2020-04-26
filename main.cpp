@@ -112,5 +112,6 @@ int main(int argc, char *argv[]){
     unsigned int i_cap = sampler.cluster_estimate(coll);
     sampler.write_best_clustering_to_file("csv/clust_0.csv");
 
+    std::cout << "End of main.cpp" << std::endl;
     return 0;
 }

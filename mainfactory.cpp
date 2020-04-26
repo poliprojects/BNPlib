@@ -32,12 +32,18 @@ int main(int argc, char *argv[]){
     totalmass = 1.0;
     MixtureType mix(totalmass);
 
-    // Read data from main arg
+    // Checks on main args
     std::ifstream file;
     if(argc < 2){
         std::cerr << "Error: no filename given for data as arg" << std::endl;
         return 1;
     }
+    else if(argc < 3){
+    	std::cerr << "Error: no id given for algo as arg" << std::endl;
+        return 1;
+    }
+
+    // Read data from main arg
     file.open(argv[1]);
     if(!file.is_open()){
         std::cerr << "Error: " << argv[1] << " file does not exist" <<
@@ -89,19 +95,19 @@ int main(int argc, char *argv[]){
     algoFactory.add_builder("neal2density",neal2builder_density);
     algoFactory.add_builder("neal8density",neal8builder_density);
 
-    auto list = algoFactory.list_of_known_builders();
+    auto list = algoFactory.list_of_known_builders(); // TODO DEBUG
+    std::cout << "List of known builders: ";
     for (auto &el : list){
-        std::cout << el << std::endl;
+        std::cout << el << " ";
     }
+    std::cout << std::endl;
 
     // Create algorithm and set algorithm parameters
     auto sampler = algoFactory.create_object(argv[2], hy, mix, data);
 
-    sampler.set_rng_seed(20200229);
-    sampler.set_maxiter(1000);
-    sampler.set_burnin(100);
-
-    return 0; // TODO DEBUG
+    (*sampler).set_rng_seed(20200229);
+    (*sampler).set_maxiter(1000);
+    (*sampler).set_burnin(100);
 
     // Choose memory collector
     BaseCollector *coll;
@@ -160,5 +166,6 @@ int main(int argc, char *argv[]){
     unsigned int i_cap = (*sampler).cluster_estimate(coll);
     (*sampler).write_best_clustering_to_file("csv/clust_fact.csv");
 
+    std::cout << "End of mainfactory.cpp" << std::endl;
     return 0;
 }
