@@ -208,8 +208,12 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::ofstream file;
     file.open(filename);
 
-    for(int i = 0; i < density.first.rows(); i++){
-        file << density.first.row(i) << "," << density.second(i) << std::endl;
+    for(unsigned int i = 0; i < density.first.rows(); i++){
+        Eigen::VectorXd point = density.first.row(i);
+        for(unsigned int j = 0; j < point.size(); j++){
+            file << point(j) << ",";
+        }
+        file << density.second(i) << std::endl;
     }
     
     file.close();

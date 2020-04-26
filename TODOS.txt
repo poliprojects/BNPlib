@@ -1,7 +1,6 @@
 TODO LIST
 
 Elena:
-* (print functions: remove last empty column)
 * SerializeCollector: si salva gli oggetti serializzati (serializeToString, interfaccia python)
 * run mainmulti
 
@@ -32,6 +31,7 @@ FEATURES/IMPLEMENTATION
 
 
 MANOVALANZA
+* move complex constructors/destructors to imp.hpp files
 * for: unsigned vs int vs size_t vs ?
 * documentation with Doxygen
 * complete README (Virtual Machine etc)
