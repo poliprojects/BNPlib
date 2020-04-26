@@ -8,29 +8,18 @@ class MemoryCollector: public BaseCollector {
 protected:
     std::deque<State> chains;
 
-    State next_state() override {
-        if(curr_iter==size){
-            curr_iter=0;
-        }
-	    return chains[curr_iter];
-	}
+    State next_state() override;
 
 public:
-    void collect(State iteration_state) override {
-    	chains.push_back(iteration_state);
-        size++;
-    }
-
-    void finish() override {
-
-    }
-
-    State get_state(unsigned int i) override {return chains[i];}
+    void collect(State iteration_state) override;
+    void finish() override;
+    State get_state(unsigned int i) override;
 
     // Destructor and constructor
     virtual ~MemoryCollector() = default;
     // TODO constructor?
 };
 
+#include "MemoryCollector.imp.hpp"
 
 #endif // MEMORYCOLLECTOR_HPP
