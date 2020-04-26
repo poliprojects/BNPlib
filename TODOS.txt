@@ -15,6 +15,7 @@ GENERICI DA MARIO
 
 
 FEATURES/IMPLEMENTATION
+* student_t folder?
 * collectors imp hpp -> cpp?
 * Name of eval_density_specific?
 * std::vector of state in hierarchies -> std::array (fixed size)?
