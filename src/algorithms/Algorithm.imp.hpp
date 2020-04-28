@@ -3,7 +3,7 @@
 
 #include "Algorithm.hpp"
 
-
+// TODO order of functions in this file
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     const Eigen::MatrixXd &grid, BaseCollector* collector){ // TODO const?
@@ -39,13 +39,13 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
             dens += card[h] * temp_hier.like(grid) / (M+n);
         }
 
-        // Component from G0 (exploit conjugacy using explicit expression)
-         dens += eval_density_specific(temp_hier,n);
+        dens += density_marginal_component(temp_hier,n);
 
     }
 
     density.second = dens / collector->get_size();
 
+    density_was_computed = true;
 }
 
 
@@ -154,6 +154,8 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     std::cout << "Optimal clustering: at iteration " << i << " with " <<
     	best_clust.uniquevalues_size() << " clusters" << std::endl;
 
+    clustering_was_computed = true;
+
     return i;
 }
 
@@ -162,6 +164,12 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
     std::string filename) const {
     // number,datum,cluster,params1,params2,...
+
+    if(!clustering_was_computed){
+        std::cerr << "Error: cannot write clustering to file; " <<
+            "cluster_estimate() must be called first" << std::endl;
+        return;
+    }
 
     std::ofstream file;
     file.open(filename);
@@ -183,6 +191,12 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::string filename) const {
+
+    if(!density_was_computed){
+        std::cerr << "Error: cannot write density to file; eval_density() " <<
+            "must be called first" << std::endl;
+        return;
+    }
 
     std::ofstream file;
     file.open(filename);

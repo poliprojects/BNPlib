@@ -14,21 +14,19 @@
 #include "../api/FileCollector.hpp"
 #include "../api/MemoryCollector.hpp"
 
+
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{
-
 protected:
     // Mehtods parameters
-
     unsigned int maxiter = 10000;
     unsigned int burnin  =  1000;
 
-    unsigned int num_clusters;
-
     // Data and values containers
     Eigen::MatrixXd data;
+    unsigned int num_clusters;
     std::vector<unsigned int> allocations;
-    std::vector<Hierarchy<Hypers>> unique_values;
+    std::vector< Hierarchy<Hypers> > unique_values;
     std::pair< Eigen::MatrixXd, Eigen::VectorXd > density;
     Mixture mixture;
     State best_clust;
@@ -36,36 +34,37 @@ protected:
     // Random engine
     std::mt19937 rng;
 
+    // Flags for writing functions
+    bool density_was_computed = false;
+    bool clustering_was_computed = false;
+
     // Algorithm functions
     virtual const void print_startup_message() = 0;
-
     virtual void initialize() = 0;
-
-    void step(){
-        sample_allocations();
-        sample_unique_values();
-    }
-
     virtual void sample_allocations() = 0;
-
     virtual void sample_unique_values() = 0;
-
     virtual void sample_weights() = 0;
-
     virtual void update_hypers() = 0;
-    
-    State get_state_as_proto(unsigned int iter);
-
-    Eigen::MatrixXd proto_param_to_matrix(const Param& par) const;
-
-    const void print_ending_message();
+    virtual const void print_ending_message();
 
     void save_state(BaseCollector* collector, unsigned int iter){
         collector->collect( get_state_as_proto(iter) );
     }
-
+    
     // Auxiliary tools
-    const void print_state();    
+    const void print_state(); // TODO is it needed anymore?
+
+    State get_state_as_proto(unsigned int iter);
+
+    Eigen::MatrixXd proto_param_to_matrix(const Param& par) const;
+
+    // Single step of algorithm
+    void step(){
+        sample_allocations();
+        sample_unique_values();
+        sample_weights();
+        update_hypers();
+    }
 
 public:
     // Running tool
@@ -90,8 +89,8 @@ public:
     virtual void eval_density(const Eigen::MatrixXd &grid,
         BaseCollector* collector);
 
-    virtual Eigen::VectorXd eval_density_specific(Hierarchy<Hypers> &temp_hier,
-        unsigned int n) = 0;
+    virtual Eigen::VectorXd density_marginal_component(
+        Hierarchy<Hypers> &temp_hier, unsigned int n) = 0;
 
     void write_clustering_to_file(
         std::string filename = "csv/clust_best.csv") const;

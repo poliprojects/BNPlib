@@ -5,15 +5,12 @@ Elena:
 * check multi
 * check collectors
 * cluster mains factory
-* check formule student's t
+* check formulas student's t
 
 
 Bruno:
-* nome eval_density_specific
-* prob_new = 1-prob_existing(card=n-1, n)
-* ragiona su: store card vector somewhere? (solo in sample_allocations!)
-* check, in write_clust_...(), if clust_estimate() has been called, and similar
-  flags and also in clustering
+* prob_existing(n-1, n) + prob_new() = 1 ? Vera per PitYor?
+* Ragiona su: store card vector somewhere? (solo in sample_allocations!)
 
 
 MARIO PACS
@@ -37,7 +34,7 @@ MANOVALANZA
 
 
 CHECKS
-* All algorithm/hierarchy combinations, csv files, etc
+* All algorithm/hierarchy/mixture combinations, csv files, etc
 
 
 REPORT
