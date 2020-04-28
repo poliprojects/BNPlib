@@ -9,7 +9,6 @@ Elena:
 
 
 Bruno:
-* blasta cose NNW
 * nome eval_density_specific
 * prob_new = 1-prob_existing(card=n-1, n)
 * ragiona su: store card vector somewhere? (solo in sample_allocations!)
