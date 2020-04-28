@@ -10,7 +10,7 @@ Elena:
 
 Bruno:
 * prob_existing(n-1, n) + prob_new() = 1 ? Vera per PitYor?
-* Ragiona su: store card vector somewhere? (solo in sample_allocations!)
+* check cardinalities
 
 
 MARIO PACS
@@ -20,12 +20,19 @@ MARIO PACS
 * Introduzione bayes
 
 
+VARIE
+* Si può usare "using" o simili per non scrivere this->allocations etc ogni
+  volta?
+
+
 IN FONDO
 * collectors imp hpp -> cpp?
 
 
 MANOVALANZA
+* creating variables every round of a loop: efficient?
 * move complex constructors/destructors to imp.hpp files
+* check all auto's
 * for: unsigned vs int vs size_t vs ?
 * documentation with Doxygen
 * complete README (Virtual Machine etc)
@@ -40,3 +47,4 @@ CHECKS
 REPORT
 * parametri non nel costruttore solitamente sono lasciati in default
 * a way to erase and add clusters more efficiently, e.g. with map
+* storing cardinalities > recomputing them at each iteration
