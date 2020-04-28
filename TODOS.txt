@@ -10,13 +10,9 @@ Elena:
 
 Bruno:
 * blasta cose NNW
-* metti clustering etc in Algo virtual
 * nome eval_density_specific
 * prob_new = 1-prob_existing(card=n-1, n)
 * ragiona su: store card vector somewhere? (solo in sample_allocations!)
-* blasta final_clust
-* algo.hpp riga 152
-* blasta run_and_save_cards()
 * check, in write_clust_...(), if clust_estimate() has been called, and similar
   flags and also in clustering
 

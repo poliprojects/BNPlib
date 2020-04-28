@@ -159,28 +159,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>::write_final_clustering_to_file(
-        std::string filename) const {
-    // number,datum,cluster,params1,params2,...
-    
-    std::ofstream file;
-    file.open(filename);
-
-    for(int i = 0; i < data.rows(); i++){
-        auto params = unique_values[ allocations[i] ].get_state();
-        file << i << "," << data.row(i) << "," << allocations[i];
-        for(int j = 0; j < params.size(); j++){
-            file << "," << params[j];
-        }
-        file << std::endl;
-    }
-    file.close();
-    std::cout << "Succesfully wrote to " << filename << std::endl;
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>::write_best_clustering_to_file(
+void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
     std::string filename) const {
     // number,datum,cluster,params1,params2,...
 

@@ -110,7 +110,7 @@ int main(int argc, char *argv[]){
 	sampler.eval_density(grid, coll);
     sampler.write_density_to_file("csv/density_0.csv");
     unsigned int i_cap = sampler.cluster_estimate(coll);
-    sampler.write_best_clustering_to_file("csv/clust_0.csv");
+    sampler.write_clustering_to_file("csv/clust_0.csv");
 
     std::cout << "End of main.cpp" << std::endl;
     return 0;

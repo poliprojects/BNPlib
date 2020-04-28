@@ -76,7 +76,7 @@ int main(int argc, char *argv[]){
     sampler.eval_density(data, coll); // TODO ?
     sampler.write_density_to_file("csv/dens_multi.csv");
     unsigned int i_cap = sampler.cluster_estimate(coll);
-    sampler.write_best_clustering_to_file("csv/clust_multi.csv");
+    sampler.write_clustering_to_file("csv/clust_multi.csv");
 
     std::cout << "End of mainmulti.cpp" << std::endl;
     return 0;

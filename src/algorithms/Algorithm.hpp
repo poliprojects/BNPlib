@@ -64,7 +64,6 @@ protected:
         collector->collect( get_state_as_proto(iter) );
     }
 
-
     // Auxiliary tools
     const void print_state();    
 
@@ -85,37 +84,16 @@ public:
         print_ending_message();
     }
 
-    //void run_and_save_cards(){ // TODO la blastiamo?
-    //std::ofstream file;
-    //file.open("csv/clust_cardinalities.csv");
-    //    print_startup_message();
-    //    initialize();
-    //    unsigned int iter = 0;
-    //    while(iter < maxiter){
-    //        step();
-    //        if(iter >= burnin){
-    //          save_iteration(iter);
-    //          file << unique_values.size() << ",";
-    //        }
-    //        iter++;
-    //    }
-    //    print_ending_message();
-    //    file << std::endl;
-    //    file.close();
-    //}
-
     // Other tools
-    unsigned int cluster_estimate(BaseCollector* collector);
+    virtual unsigned int cluster_estimate(BaseCollector* collector);
 
-    void eval_density(const Eigen::MatrixXd &grid, BaseCollector* collector);
+    virtual void eval_density(const Eigen::MatrixXd &grid,
+        BaseCollector* collector);
+
     virtual Eigen::VectorXd eval_density_specific(Hierarchy<Hypers> &temp_hier,
         unsigned int n) = 0;
 
-
-    void write_final_clustering_to_file( // TODO la blastiamo?
-        std::string filename = "csv/clust_final.csv") const;
-
-    void write_best_clustering_to_file(
+    void write_clustering_to_file(
         std::string filename = "csv/clust_best.csv") const;
 
     void write_density_to_file(std::string filename = "csv/density.csv") const;
@@ -148,18 +126,14 @@ public:
          const unsigned int num_clusters_ = 0) :
         mixture(mixture_), num_clusters(num_clusters_) {
         Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
-            
-            for(unsigned int i = 0; i < 1; i++){
-                unique_values.push_back(hierarchy);
-            }
-            
+        unique_values.push_back(hierarchy);            
     }
 
     // Getters
     const unsigned int get_maxiter(){return maxiter;}
     const unsigned int get_burnin(){return burnin;}
     const unsigned int get_num_clusters(){return num_clusters;}
-    const unsigned int get_num_clusters_best(){
+    const unsigned int get_num_clusters_best(){ // TODO?
         return best_clust.uniquevalues_size();
     }
 
