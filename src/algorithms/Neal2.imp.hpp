@@ -30,29 +30,32 @@ void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
-    unsigned int k, n_unique, singleton; // TODO move inside?
+    unsigned int k, n_unique, singleton;
     unsigned int n = this->data.rows();
 
     for(int i = 0; i < n; i++){ // for each data unit data[i]
+
+        // Initialize cardinalities of unique values
         singleton = 0;
         n_unique = this->unique_values.size();
 
         if(this->cardinalities[ this->allocations[i] ] == 1){
-            singleton = 1; // datum i's set is a singleton
+        	// datum i is a singleton
+            singleton = 1;
         }
         
-        // Remove point from cluster
         this->cardinalities[ this->allocations[i] ] -= 1;
-
-        // Compute probabilities of extracting each cluster
+        
+        // Draw a NEW value for ci
         Eigen::VectorXd probas(n_unique+(1-singleton)); 
         
-        double M = this->mixture.get_totalmass();
+
+        auto M = this->mixture.get_totalmass();
         double tot = 0.0;
         
         for(int k = 0; k < n_unique; k++){
             probas(k) = this->mixture.prob_existing_cluster(
-                this->cardinalities[k], n) *
+            	this->cardinalities[k],n) *
                 this->unique_values[k].like(this->data.row(i))(0);
 
             if(singleton == 1 && k == i){
@@ -72,37 +75,37 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         // Normalize
         probas = probas / tot;
         
-        // Draw a NEW value for ci
         unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
         
         if(singleton == 1){
             if(c_new == this->allocations[i]){
                 // case 1 of 4: SINGLETON - SINGLETON
-                Eigen::VectorXd temp = this->data.row(i);
+                Eigen::VectorXd temp;
+                temp = this->data.row(i);
                 this->unique_values[ this->allocations[i]
                     ].sample_given_data(temp);
-                this->cardinalities[ this->allocations[i] ] += 1;
+                this->cardinalities[c_new] += 1;
                 
             }
             else{ // case 2 of 4: SINGLETON - CLUSTER
                 this->unique_values.erase(
-                    this->unique_values.begin() + this->allocations[i] );
+                    this->unique_values.begin() + this->allocations[i]);
                 
-                unsigned int c_old = this->allocations[i];
+                int tmp = this->allocations[i];
                 this->allocations[i] = c_new;
                 for(auto &c : this->allocations){ // relabeling
-                    if(c > c_old){
+                    if(c > tmp){
                         c -= 1;
                     }
-
-                this->cardinalities.erase( this->cardinalities.begin()+c_old );
-                this->cardinalities.push_back(1);
                 }
+                this->cardinalities[c_new] += 1;
+                this->cardinalities.erase(this->cardinalities.begin() + tmp);
             } // end of else
         } // end of if(singleton == 1)
 
         else{ // if singleton == 0
             if(c_new == n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
+
                 Hierarchy<Hypers> new_unique(
                     this->unique_values[0].get_hypers());
         Eigen::VectorXd temp;
