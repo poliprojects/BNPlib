@@ -78,15 +78,17 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 this->unique_values.erase(
                     this->unique_values.begin() + this->allocations[i] );
 
+                this->cardinalities.erase(
+                	this->cardinalities.begin()+this->allocations[i] );
+                this->cardinalities[c_new] += 1;
+
                 unsigned int c_old = this->allocations[i];
+
                 this->allocations[i] = c_new;
                 for(auto &c : this->allocations){ // relabeling
                     if(c > c_old){
                         c -= 1;
                     }
-
-                this->cardinalities.erase( this->cardinalities.begin()+c_old );
-                this->cardinalities.push_back(1); // TODO correct???
                 }
             } // end of else
         } // end of if(singleton == 1)
