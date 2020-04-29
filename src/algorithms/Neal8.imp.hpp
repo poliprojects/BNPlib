@@ -22,18 +22,14 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     unsigned int n = this->data.rows();
   
     for(int i = 0; i < n; i++){ // for each data unit data[i]
-
-        // Initialize cardinalities of unique values
-        std::vector<int> card(this->unique_values.size(), 0);
-        for(int j = 0; j < n; j++){
-            card[ this->allocations[j] ] += 1;
-        }
+    	// TODO datum = ...
 
         singleton = 0;
         n_unique = this->unique_values.size();
      
-        if(card[ this->allocations[i] ] == 1){ // datum i is a singleton
-            k = n_unique - 1; // TODO ci serve ?
+        if(this->cardinalities[ this->allocations[i] ] == 1){
+        	// datum i is a singleton
+            k = n_unique - 1; // TODO ci serve (???)
             aux_unique_values[0].set_state( this->unique_values[
                 this->allocations[i] ].get_state() ); // move phi value in aux
             singleton = 1;
@@ -42,7 +38,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
             k = n_unique;
         }
 
-        card[ this->allocations[i] ] -= 1;
+        this->cardinalities[ this->allocations[i] ] -= 1;
         
         // Draw the aux from G0
         for(int j = singleton; j < n_aux; j++){
@@ -53,9 +49,10 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         Eigen::VectorXd probas(n_unique+n_aux); //k or n_unique
         
         double tot = 0.0;
-        for(int k = 0; k < n_unique ; k++){ // if datum i is a singleton, then
+        for(int k = 0; k < n_unique; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
-            probas(k) = this->mixture.prob_existing_cluster(card[k], n) *
+            probas(k) = this->mixture.prob_existing_cluster(
+            	this->cardinalities[k], n) *
                 this->unique_values[k].like(this->data.row(i))(0);
             tot += probas(k);
         }
@@ -69,43 +66,44 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         // Normalize
         probas = probas / tot;
 
+        // Draw a NEW value for ci
         unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
 
         if(singleton == 1){
             if(c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
                 this->unique_values[ this->allocations[i] ].set_state(
                     aux_unique_values[c_new-n_unique].get_state());
-                card[ this->allocations[i] ] += 1;
+                this->cardinalities[ this->allocations[i] ] += 1;
             }
             else{ // case 2 of 4: SINGLETON - OLD VALUE
                 this->unique_values.erase(
                     this->unique_values.begin() + this->allocations[i] );
-                card.erase( card.begin()+this->allocations[i] );
-                card[c_new] += 1;
-                int tmp = this->allocations[i];
+                
+                unsigned int c_old = this->allocations[i];
                 this->allocations[i] = c_new;
                 for(auto &c : this->allocations){ // relabeling
-                    if(c > tmp){
+                    if(c > c_old){
                         c -= 1;
                     }
                 }
+                this->cardinalities[c_new] += 1;
+                this->cardinalities.erase(this->cardinalities.begin() + c_old);
             } // end of else
         } // end of if(singleton == 1)
+        
         else{ // if singleton == 0
             if(c_new >= n_unique){ // case 3 of 4: NOT SINGLETON - AUX
                 this->unique_values.push_back(
                     aux_unique_values[c_new-n_unique]);
-                card.push_back(1);
+                this->cardinalities.push_back(1);
                 this->allocations[i] = n_unique;
             }
             else{ // case 4 of 4: NOT SINGLETON - OLD VALUES
                 this->allocations[i] = c_new;
-                card[c_new] += 1;
+                this->cardinalities[c_new] += 1;
             }
         } // end of else
-
     } // end of for(int i = 0; i < n; i++) loop
-
 } // end of sample_allocations()
 
 
