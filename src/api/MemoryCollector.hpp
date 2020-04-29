@@ -16,8 +16,9 @@ public:
     State get_state(unsigned int i) override;
 
     // Destructor and constructor
-    virtual ~MemoryCollector() = default;
-    // TODO constructor?
+    MemoryCollector()=default;
+    ~MemoryCollector() = default;
+
 };
 
 #include "MemoryCollector.imp.hpp"

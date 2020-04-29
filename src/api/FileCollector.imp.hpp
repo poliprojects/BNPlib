@@ -24,7 +24,7 @@ State FileCollector::next_state() {
         std::out_of_range("Error: surpassed EOF in FileCollector");
     }
     if(curr_iter == size-1){
-        curr_iter = 0;
+        curr_iter = -1;
         fin->Close();
         close(infd);
         is_open_read = false;
@@ -45,12 +45,13 @@ void FileCollector::finish() {
 State FileCollector::get_state(unsigned int i) {
     State state;
     for(unsigned int k = 0; k < i+1; k++){
-        state = next_state();
+        state = get_next_state();
     }
-
-    fin->Close();
-    close(infd);
-    is_open_read = false;
+    if(i<size-1){
+        curr_iter=-1;
+        fin->Close();
+        close(infd);
+        is_open_read = false;}
     return state;
 }
 

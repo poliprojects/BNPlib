@@ -22,9 +22,15 @@ You will need a terminal to run the following commands.
 * ```./main csv/data.csv <<< "5.0 0.1 2.0 2.0 1.0 3"``` to automatically fill
   in all values
 
-#### mainfactory
-./mainfactory csv/data.csv "neal2" "memory"
-./mainfactory csv/data.csv "neal2" "file" ("filename")
+#### main_factory_run
+./main_factory_run csv/data.csv "neal2" "memory"
+./main_factory_run csv/data.csv "neal2" "file" ("filename")
+
+
+#### main_factory_dataless
+./main_factory_dataless "neal2_dataless" "memory"
+./main_factory_dataless "neal2" "file" ("filename")
+
 
 ### Code instructions
 * Change number of total iterations (default 10000) and burn-in iterations

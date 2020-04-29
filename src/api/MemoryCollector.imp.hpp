@@ -5,10 +5,11 @@
 
 
 State MemoryCollector::next_state() {
-    if(curr_iter == size){
-        curr_iter = 0;
+    if(curr_iter == size-1){
+        curr_iter = -1;
+        return chains[size-1];
     }
-    return chains[curr_iter];
+    else return chains[curr_iter];
 }
 
 

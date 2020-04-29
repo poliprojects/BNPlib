@@ -14,7 +14,7 @@ LDLIBS = \
  	$(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb \
 	-lpthread -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
 
-EXE = mainmulti
+EXE = main_factory_run
 SRCS_OUTPUT = src/api/output.pb.cc
 SRCS =
 OBJS = $(EXE).o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))

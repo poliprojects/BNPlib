@@ -21,7 +21,7 @@ private:
     using func0 = std::function< std::unique_ptr<AbstractProduct>(Args...)>;
     using func1 = std::function< std::unique_ptr<AbstractProduct>(
         Args..., Eigen::VectorXd)>;
-    using Builder = boost::variant<func0, func1 >;
+    using Builder = boost::variant<func0, func1 >; // TODO names
 
     // Deleted constructors
     Factory() = default;

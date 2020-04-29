@@ -8,16 +8,14 @@ using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
-// Aliases for factory
-using func0 = std::function< std::unique_ptr<Algorithm<HierarchyType,
-    HypersType, MixtureType>>(HypersType,MixtureType)>; // TODO names?
-using func1 = std::function< std::unique_ptr<Algorithm<HierarchyType,
-    HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
-using Builder = boost::variant<func0, func1>;
+// Alias for factory
+
+using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
+    HypersType, MixtureType>>(HypersType,MixtureType)>; 
 
 
 int main(int argc, char *argv[]){
-    std::cout << "Running mainfactory.cpp" << std::endl;
+    std::cout << "Running main_factory_dataless.cpp" << std::endl;
 
     // Set model parameters
     double mu0, lambda, alpha0, beta0;
@@ -35,53 +33,20 @@ int main(int argc, char *argv[]){
     // Checks on main args
     std::ifstream file;
     if(argc < 2){
-        std::cerr << "Error: no filename given for data as arg" << std::endl;
-        return 1;
-    }
-    else if(argc < 3){
     	std::cerr << "Error: no id given for algo as arg" << std::endl;
         return 1;
-    }
-
-    // Read data from main arg
-    file.open(argv[1]);
-    if(!file.is_open()){
-        std::cerr << "Error: " << argv[1] << " file does not exist" <<
-            std::endl;
-        return 1;
-    }
-    std::string str, str2;
-    std::getline(file, str);
-    std::istringstream iss(str);
-    std::vector<double> v;
-    while(std::getline(iss, str2, ',')){
-        double val = ::atof(str2.c_str());
-        v.push_back(val);
-    }
-    file.close();
-    Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v.data(), v.size()); // TODO: meglio con conservative resize?
+   }
+ 
 
     // Load algorithm factory
-    Builder neal2builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
-        return std::make_unique< Neal2<HierarchyType,HypersType,
-                MixtureType> >(hy, mix, data);
-        };
-    
-    Builder neal8builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
-        return std::make_unique< Neal8<HierarchyType,HypersType,
-                MixtureType> >(hy, mix, data);
-        };
 
-    Builder neal2builder_density = [](HypersType hy ,MixtureType mix){
-        // che poi andrebbe nel main SOLO per eval density
+    Builder neal2builder_dataless = [](HypersType hy ,MixtureType mix){
+
         return std::make_unique< Neal2<HierarchyType,HypersType,
                 MixtureType> >(hy, mix);
         };
 	
-	Builder neal8builder_density = [](HypersType hy ,MixtureType mix){
+	Builder neal8builder_dataless = [](HypersType hy ,MixtureType mix){
 	
         return std::make_unique< Neal8<HierarchyType,HypersType,
                 MixtureType> >(hy, mix);
@@ -90,43 +55,39 @@ int main(int argc, char *argv[]){
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType>::Instance();
 
-    algoFactory.add_builder("neal2",neal2builder);
-    algoFactory.add_builder("neal8",neal8builder);
-    algoFactory.add_builder("neal2density",neal2builder_density);
-    algoFactory.add_builder("neal8density",neal8builder_density);
 
-    auto list = algoFactory.list_of_known_builders(); // TODO DEBUG
+    algoFactory.add_builder("neal2_dataless",neal2builder_dataless);
+    algoFactory.add_builder("neal8_dataless",neal8builder_dataless);
+
+    auto list = algoFactory.list_of_known_builders(); 
     std::cout << "List of known builders: ";
     for (auto &el : list){
         std::cout << el << " ";
     }
     std::cout << std::endl;
 
-    // Create algorithm and set algorithm parameters
-    auto sampler = algoFactory.create_object(argv[2], hy, mix, data);
+    // Create algorithm without data and set algorithm parameters
+    auto sampler = algoFactory.create_object(argv[1], hy, mix);
 
-    (*sampler).set_rng_seed(20200229);
-    (*sampler).set_maxiter(1000);
-    (*sampler).set_burnin(100);
 
     // Choose memory collector
     BaseCollector *coll;
-    if(argc < 4){
+    if(argc < 3){
         std::cerr << "Error: need file collector type " <<
             "(\"file\" or \"memory\") as arg" << std::endl;
         return 1;
     }
 
-    std::string collector(argv[3]);
+    std::string collector(argv[2]);
     if(collector == "file"){
         std::string filename;
-        if(argc < 5){
+        if(argc < 4){
             // Use default name
             filename = "collector.recordio";
         }
         else {
-            std::string filename = argv[4]; 
-            if(argc > 5){
+            std::string filename = argv[3]; 
+            if(argc > 4){
                 std::cout << "Warning: unused extra args present" << std::endl;
             }
         }
@@ -134,7 +95,7 @@ int main(int argc, char *argv[]){
     }
 
     else if(collector == "memory"){
-        if(argc > 4){
+        if(argc > 3){
             std::cout << "Warning: unused extra args present" << std::endl;
         }
         coll = new MemoryCollector();
@@ -146,8 +107,7 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    // Run algorithm
-    (*sampler).run(coll);
+
 
     // Density and clustering
     double temp = 0.0;
@@ -161,11 +121,15 @@ int main(int argc, char *argv[]){
     Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         v_temp.data(), v_temp.size()); 
 
+//////////////////////
+//manca ricostruzione chains da proto da dare in pasto a eval_density TODO
+
+
     (*sampler).eval_density(grid, coll);
     (*sampler).write_density_to_file("csv/density_fact.csv");
     unsigned int i_cap = (*sampler).cluster_estimate(coll);
     (*sampler).write_clustering_to_file("csv/clust_fact.csv");
 
-    std::cout << "End of mainfactory.cpp" << std::endl;
+    std::cout << "End of main_factory_dataless.cpp" << std::endl;
     return 0;
 }

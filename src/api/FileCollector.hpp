@@ -17,7 +17,7 @@ protected:
 
     // ...
     bool is_open_read = false;
-    bool is_open_write; // TODO = false? si rompe qualcosa?
+    bool is_open_write;
 
     void open_for_reading();
 
@@ -25,13 +25,18 @@ protected:
 
 public:
     // Constructor and destructor
+    FileCollector()=default;
     FileCollector(std::string filename) : filename(filename){
         int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);
         fout = new google::protobuf::io::FileOutputStream(outfd);
         is_open_write = true;
     }
 
-    virtual ~FileCollector() {
+     ~FileCollector() {
+        if (is_open_write){
+            fout->Close();
+            close(outfd);
+        }
         if(is_open_read){
             fin->Close();
             close(infd);

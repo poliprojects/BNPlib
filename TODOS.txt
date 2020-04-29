@@ -1,12 +1,11 @@
 TODO LIST
 
 Elena:
-* run mainmulti
-* check multi
-* check collectors
-* cluster mains factory
+* check multi with 2 clusters
+* factory: names
 * check formulas student's t
 
+*hierarchy costruttore default?
 
 Bruno:
 * prob_existing(n-1, n) + prob_new() = 1 ? Vera per PitYor?

@@ -25,7 +25,7 @@ protected:
     // Data and values containers
     Eigen::MatrixXd data;
     unsigned int num_clusters;
-    std::vector<unsigned int> cardialities;
+    std::vector<unsigned int> cardinalities;
     std::vector<unsigned int> allocations;
     std::vector< Hierarchy<Hypers> > unique_values;
     std::pair< Eigen::MatrixXd, Eigen::VectorXd > density;

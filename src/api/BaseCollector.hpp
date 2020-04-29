@@ -25,7 +25,9 @@ protected:
 
 public:
 	// Destructor
-	// TODO constructor?
+
+    BaseCollector()=default;
+
 	virtual ~BaseCollector() = default;
 
     virtual void collect(State iteration_state) = 0;
@@ -36,7 +38,7 @@ public:
     State get_next_state(){
         curr_iter++;
         
-    	if(curr_iter > size){
+    	if(curr_iter >= size){
     		throw std::out_of_range("Error: curr_iter > size in collector");
     	}
     	return next_state();
