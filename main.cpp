@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
         v.data(), v.size()); // TODO: meglio con conservative resize?
 
     // Create algorithm and set algorithm parameters
-    Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
+    Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
 
     sampler.set_rng_seed(20200229);
     sampler.set_maxiter(100);
