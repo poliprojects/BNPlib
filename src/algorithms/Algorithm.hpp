@@ -62,21 +62,27 @@ protected:
     // Single step of algorithm
     void step(){
         sample_allocations();
+        std::cout << "alloc v" << std::endl; // TODO DEBUG
         sample_unique_values();
+        std::cout << "uniq v" << std::endl; // TODO DEBUG
         sample_weights();
         update_hypers();
     }
 
 public:
     // Running tool
-    void run(BaseCollector* collector){      
+    void run(BaseCollector* collector){
         print_startup_message();
         initialize();
+        std::cout << "Initialized" << std::endl; // TODO DEBUG
         unsigned int iter = 0;
         while(iter < maxiter){
+        	std::cout << iter << std::endl; // TODO DEBUG
             step();
+            std::cout << "Step done" << std::endl; // TODO DEBUG
             if(iter >= burnin){
               save_state(collector, iter);
+              std::cout << "Save done" << std::endl; // TODO DEBUG
             }
             iter++;
         }
