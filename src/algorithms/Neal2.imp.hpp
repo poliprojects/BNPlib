@@ -13,8 +13,7 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
     this->cardinalities.reserve(this->data.rows());
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0, this->num_clusters);
-        // TODO shouldn't it be num_clusters-1?
+    std::uniform_int_distribution<int> distribution(0, this->num_clusters-1);
 
     for(int h = 0; h < this->num_clusters; h++){
       this->allocations.push_back(h);
@@ -142,7 +141,6 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
             k += 1;
         }
         curr_data.conservativeResize(k, Eigen::NoChange);
-            // TODO: più efficiente?
         this->unique_values[j].sample_given_data(curr_data);
     }
 

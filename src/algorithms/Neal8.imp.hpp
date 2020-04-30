@@ -12,30 +12,21 @@ const void Neal8<Hierarchy, Hypers, Mixture>::print_startup_message(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
-    
-    // TODO Other ideas:
-    // * our own for loop for k and bool (ci is a singleton)
-    // * function from std count distinct values in vector
-    // * using a (multi)map?
     // Initialize some relevant variables
-    unsigned int k, n_unique, singleton;
+    unsigned int n_unique, singleton;
     unsigned int n = this->data.rows();
   
     for(int i = 0; i < n; i++){ // for each data unit data[i]
-    	// TODO datum = ...
+    	Eigen::Matrix<double, 1, Eigen::Dynamic> datum = this->data.row(i);
 
         singleton = 0;
         n_unique = this->unique_values.size();
      
         if(this->cardinalities[ this->allocations[i] ] == 1){
         	// datum i is a singleton
-            k = n_unique - 1; // TODO ci serve (???)
             aux_unique_values[0].set_state( this->unique_values[
                 this->allocations[i] ].get_state() ); // move phi value in aux
             singleton = 1;
-        }
-        else{
-            k = n_unique;
         }
 
         this->cardinalities[ this->allocations[i] ] -= 1;
@@ -53,13 +44,13 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
             probas(k) = this->mixture.prob_existing_cluster(
             	this->cardinalities[k], n) *
-                this->unique_values[k].like(this->data.row(i))(0);
+                this->unique_values[k].like(datum)(0);
             tot += probas(k);
         }
 
         for(int k = 0; k < n_aux; k++){
             probas(n_unique+k) = this->mixture.prob_new_cluster(n, n_unique) *
-                aux_unique_values[k].like(this->data.row(i))(0) / n_aux;
+                aux_unique_values[k].like(datum)(0) / n_aux;
             tot += probas(n_unique+k);
         }
 

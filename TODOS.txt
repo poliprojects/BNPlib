@@ -6,6 +6,7 @@ Elena:
 * collectors imp hpp -> cpp?
 * order functions in Algorithm imp + costruttori troppo grossi?
 * const puntatore collector
+* Neal2.imp TODO
 
 
 Bruno:
