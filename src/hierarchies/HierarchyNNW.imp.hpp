@@ -5,6 +5,19 @@
 
 
 template<class Hypers> 
+void HierarchyNNIG<Hypers>::check_state_validity(){
+        unsigned int dim = this->state[0].size();
+        assert(dim == this->state[1].rows());
+        assert(dim == this->state[1].cols());
+
+        // Check if tau is symmetric positive semi definite
+        assert( this->state[1].isApprox(this->state[1].transpose()) );
+        Eigen::LLT<Eigen::MatrixXd> llt(this->state[1]);
+        assert( llt.info() != Eigen::NumericalIssue );
+}
+
+
+template<class Hypers> 
 Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);

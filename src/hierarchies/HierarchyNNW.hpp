@@ -17,12 +17,14 @@ protected:
     const Eigen::MatrixXd &data, const EigenRowVec &mu0, const double lambda,
     const Eigen::MatrixXd &tau0, const double nu);
 
+    void check_state_validity() override;
+
 public:
     bool is_multivariate() const override {return true;}
 
     // Destructor and constructor
     ~HierarchyNNW() = default;
-    HierarchyNNW()=default;
+    HierarchyNNW() = default;
     HierarchyNNW(std::shared_ptr<Hypers> hypers_) {
         this->hypers = hypers_;
 

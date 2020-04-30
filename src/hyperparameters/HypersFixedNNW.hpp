@@ -13,19 +13,28 @@ private:
     Eigen::MatrixXd tau0;
     double nu;
 
+    void check_state_validity(){
+        unsigned int dim = mu0.size();
+        assert(lambda > 0);
+        assert(dim == tau0.rows());
+        assert(tau0.rows() == tau0.cols());
+        assert(nu > dim-1);
+
+        // Check if tau0 is symmetric positive semi definite
+        assert( tau0.isApprox(tau0.transpose()) );
+        Eigen::LLT<Eigen::MatrixXd> llt(tau0);
+        assert( llt.info() != Eigen::NumericalIssue );
+    }
+
 public:
     // Destructor and constructor
     ~HypersFixedNNW() = default;
-    HypersFixedNNW()=default;
+    HypersFixedNNW() = default;
     HypersFixedNNW(const EigenRowVec &mu0_, const double lambda_,
         const Eigen::MatrixXd &tau0_, const double nu_):
         mu0(mu0_), lambda(lambda_), tau0(tau0_), nu(nu_) {
-            // Check validity of parameters
-            unsigned int dim = mu0.size();
-            assert(lambda > 0);
-            assert(dim == tau0.rows());
-            assert(tau0.rows() == tau0.cols());
-            assert(nu > dim-1);
+        
+        check_state_validity();
         }
 
     // Getters
@@ -46,6 +55,9 @@ public:
     void set_tau0(const Eigen::MatrixXd &tau0_) {
     	assert(tau0_.rows() == tau0_.cols());
     	assert(mu0.size() == tau0_.rows());
+        assert( tau0.isApprox(tau0.transpose()) );
+        Eigen::LLT<Eigen::MatrixXd> llt(tau0);
+        assert( llt.info() != Eigen::NumericalIssue );
     	tau0 = tau0_;
     }
     void set_nu(const double nu_){

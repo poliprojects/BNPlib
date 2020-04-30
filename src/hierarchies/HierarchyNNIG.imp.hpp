@@ -5,6 +5,12 @@
 
 
 template<class Hypers> 
+void HierarchyNNIG<Hypers>::check_state_validity(){
+    assert(this->state[1](0,0) == 0);
+}
+
+
+template<class Hypers> 
 Eigen::VectorXd HierarchyNNIG<Hypers>::like(const Eigen::MatrixXd &data){
     Eigen::VectorXd result(data.rows());
     for(int i = 0; i < data.rows(); i++){

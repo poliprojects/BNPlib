@@ -15,11 +15,13 @@ protected:
     std::vector<Eigen::MatrixXd> state;
     std::shared_ptr<Hypers> hypers;
 
+    virtual void check_state_validity() = 0;
+
 public:
     virtual bool is_multivariate() const = 0;
 
     // Constructor
-    HierarchyBase()=default;
+    HierarchyBase() = default;
 
     // Destructor
     virtual ~HierarchyBase() = default;
@@ -28,6 +30,7 @@ public:
     std::vector<Eigen::MatrixXd> get_state() const {return state;}
     std::shared_ptr<Hypers> get_hypers() const {return hypers;}
     virtual void set_state(const std::vector<Eigen::MatrixXd> &state_){
+        check_state_validity();
         state = state_;
     }
 

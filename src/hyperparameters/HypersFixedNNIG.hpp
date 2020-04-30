@@ -7,16 +7,21 @@ class HypersFixedNNIG {
 private:
     double mu0, lambda, alpha0, beta0;
 
-public:
-    // Destructor and constructor
-    ~HypersFixedNNIG() = default;
-    HypersFixedNNIG()=default;
-    HypersFixedNNIG(const double mu0_, const double lambda_,
-        const double alpha0_, const double beta0_):
-        mu0(mu0_), lambda(lambda_), alpha0(alpha0_), beta0(beta0_) {
+    void check_state_validity(){
         assert(lambda > 0);
         assert(alpha0 > 0);
         assert(beta0  > 0);
+    }
+
+public:
+    // Destructor and constructor
+    ~HypersFixedNNIG() = default;
+    HypersFixedNNIG() = default;
+    HypersFixedNNIG(const double mu0_, const double lambda_,
+        const double alpha0_, const double beta0_):
+        mu0(mu0_), lambda(lambda_), alpha0(alpha0_), beta0(beta0_) {
+        
+        check_state_validity();
     }
 
     // Getters
