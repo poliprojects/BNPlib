@@ -28,7 +28,7 @@ public:
 
     BaseCollector()=default;
 
-	virtual ~BaseCollector() = default;
+    virtual ~BaseCollector() = default;
 
     virtual void collect(State iteration_state) = 0;
     virtual State get_state(unsigned int i) = 0; 

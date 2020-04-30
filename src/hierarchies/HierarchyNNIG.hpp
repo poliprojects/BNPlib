@@ -23,7 +23,7 @@ public:
     
     // Destructor and constructor
     ~HierarchyNNIG() = default;
-
+    HierarchyNNIG()=default;
     HierarchyNNIG(std::shared_ptr<Hypers> hypers_) {
         this->hypers = hypers_;
         this->state = std::vector<Eigen::MatrixXd>(2,Eigen::MatrixXd(1,1));

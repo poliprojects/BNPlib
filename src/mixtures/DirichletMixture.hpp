@@ -8,7 +8,7 @@ private:
 public:
     // Destructor and constructor
     ~DirichletMixture() = default;
-
+    DirichletMixture()=default;
     DirichletMixture(const double totalmass_): totalmass(totalmass_){
         assert(totalmass >= 0);
     }

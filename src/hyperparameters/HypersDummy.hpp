@@ -12,7 +12,7 @@ private:
 public:
     // Destructor and constructor
     ~HypersDummy() = default;
-
+    HypersDummy()=default;
     HypersDummy(const Eigen::VectorXd &mu0_, const Eigen::MatrixXd &lambda0_):
         mu0(mu0_), lambda0(lambda0_){}
 

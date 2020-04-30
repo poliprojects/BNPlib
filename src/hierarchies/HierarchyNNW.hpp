@@ -22,7 +22,7 @@ public:
 
     // Destructor and constructor
     ~HierarchyNNW() = default;
-
+    HierarchyNNW()=default;
     HierarchyNNW(std::shared_ptr<Hypers> hypers_) {
         this->hypers = hypers_;
 

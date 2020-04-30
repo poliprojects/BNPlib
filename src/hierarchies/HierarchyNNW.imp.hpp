@@ -66,7 +66,7 @@ std::vector<Eigen::MatrixXd> HierarchyNNW<Hypers>::normal_wishart_update(
     EigenRowVec mu_post = (lambda*mu0 + n*mubar) * (1/(lambda+n));
 
     // Compute tau_post
-    Eigen::MatrixXd tau_temp = Eigen::MatrixXd::Zero(n, n);
+    Eigen::MatrixXd tau_temp = Eigen::MatrixXd::Zero(data.cols(), data.cols());
     for(unsigned int i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
         tau_temp += (datum-mubar).transpose()*(datum-mubar); // column-times-row

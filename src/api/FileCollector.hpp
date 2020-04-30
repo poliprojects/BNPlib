@@ -51,6 +51,6 @@ public:
 
 };
 
-#include "FileCollector.imp.hpp"
+
 
 #endif // FILECOLLECTOR_HPP

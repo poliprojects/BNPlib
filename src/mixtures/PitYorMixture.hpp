@@ -9,7 +9,7 @@ private:
 public:
     // Destructor and constructor
     ~PitYorMixture() = default;
-
+    PitYorMixture()=default;
     PitYorMixture(const double strength_, const double discount_):
         strength(strength_), discount(discount_){
         assert(strength > -discount);

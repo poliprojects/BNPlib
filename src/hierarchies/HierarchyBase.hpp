@@ -18,6 +18,9 @@ protected:
 public:
     virtual bool is_multivariate() const = 0;
 
+    // Constructor
+    HierarchyBase()=default;
+
     // Destructor
     virtual ~HierarchyBase() = default;
 

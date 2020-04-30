@@ -14,9 +14,9 @@ LDLIBS = \
  	$(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb \
 	-lpthread -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
 
-EXE = main
+EXE = maintest_uni
 SRCS_OUTPUT = src/api/output.pb.cc
-SRCS =
+SRCS = src/api/FileCollector.cpp src/api/MemoryCollector.cpp
 OBJS = $(EXE).o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))
 
 .PHONY: all clean distclean
@@ -26,7 +26,7 @@ all: $(EXE)
 $(EXE): $(OBJS)
 	$(CXX) $(LDFLAGS) -o $(EXE) $(OBJS) $(LDLIBS)
 
-%.h: %.cc
+%.h: %.cc %.cpp
 
 -include $(dep)
 

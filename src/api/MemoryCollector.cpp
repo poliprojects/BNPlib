@@ -1,5 +1,3 @@
-#ifndef MEMORYCOLLECTOR_IMP_HPP
-#define MEMORYCOLLECTOR_IMP_HPP
 
 #include "MemoryCollector.hpp"
 
@@ -29,4 +27,4 @@ State MemoryCollector::get_state(unsigned int i) {
 }
 
 
-#endif // MEMORYCOLLECTOR_IMP_HPP
+

@@ -1,5 +1,3 @@
-#ifndef FILECOLLECTOR_IMP_HPP
-#define FILECOLLECTOR_IMP_HPP
 
 #include "FileCollector.hpp"
 
@@ -67,4 +65,4 @@ void FileCollector::collect(State iteration_state) {
 }
 
 
-#endif // FILECOLLECTOR_IMP_HPP
+

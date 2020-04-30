@@ -21,6 +21,6 @@ public:
 
 };
 
-#include "MemoryCollector.imp.hpp"
+
 
 #endif // MEMORYCOLLECTOR_HPP

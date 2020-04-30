@@ -86,7 +86,7 @@ public:
     virtual unsigned int cluster_estimate(BaseCollector* collector);
 
     virtual void eval_density(const Eigen::MatrixXd &grid,
-        BaseCollector* collector);
+        BaseCollector* const collector);
 
     virtual Eigen::VectorXd density_marginal_component(
         Hierarchy<Hypers> &temp_hier, unsigned int n) = 0;
@@ -98,7 +98,7 @@ public:
 
     // Destructors and constructors:
     virtual ~Algorithm() = default;
-
+    Algorithm()=default;
     Algorithm(const Hypers &hypers_, const Mixture &mixture_,
         const Eigen::MatrixXd &data_, const unsigned int num_clusters_ = 0) :
         mixture(mixture_), data(data_), num_clusters(num_clusters_) {

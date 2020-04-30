@@ -25,7 +25,7 @@ public:
 
     // Destructors and constructors:
     ~Neal8() = default;
-
+    Neal8()=default;
     Neal8(const Hypers &hypers_, const Mixture &mixture_,
         const Eigen::MatrixXd &data_, const unsigned int num_clusters_ = 0) :
         Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, data_,

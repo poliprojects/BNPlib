@@ -1,12 +1,9 @@
 TODO LIST
 
 Elena:
-* check multi with 2 clusters
-* costruttori
-* collectors imp hpp -> cpp?
+* check multi with 2 clusters: non va con neal2
 * order functions in Algorithm imp + costruttori troppo grossi?
-* const puntatore collector
-* Neal2.imp loop sample_unique_values()
+
 
 
 Bruno:
