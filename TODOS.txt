@@ -6,7 +6,7 @@ Elena:
 
 
 Bruno:
-* Hypers Hierarchy friend -> use private members in Hierarchy
+* Hypers Hierarchy friend -> use private members in Hierarchy (?)
 
 
 MARIO PACS
