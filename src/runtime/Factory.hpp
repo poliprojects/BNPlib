@@ -16,12 +16,10 @@ class Factory{
 private:
     // Aliases
     using Identifier = std::string;    
-    //using Builder = std::function< std::unique_ptr<AbstractProduct>(
-    //    Args ...) >;
-    using func0 = std::function< std::unique_ptr<AbstractProduct>(Args...)>;
-    using func1 = std::function< std::unique_ptr<AbstractProduct>(
+    using EstimatesBuilder = std::function< std::unique_ptr<AbstractProduct>(Args...)>;
+    using RunBuilder = std::function< std::unique_ptr<AbstractProduct>(
         Args..., Eigen::VectorXd)>;
-    using Builder = boost::variant<func0, func1 >; // TODO names
+    using Builder = boost::variant<RunBuilder, EstimatesBuilder >; 
 
     // Deleted constructors
     Factory() = default;
@@ -42,27 +40,25 @@ public:
     }
 
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args, const Eigen::VectorXd &data) const {  // TODO shared?
+        Args... args, const Eigen::VectorXd &data) const { 
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
         }
         else{
-            //return std::make_unique<AbstractProduct>( f->second(
-              //std::forward<Args>(args)... , data) );
-            return boost::get<func1>(f->second)(std::forward<Args>(args)...,
+            return boost::get<RunBuilder>(f->second)(std::forward<Args>(args)...,
                 data);
         }
     }
 
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args) const {  // TODO shared?
+        Args... args) const {  
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
         }
         else{
-            return boost::get<func0>(f->second)(std::forward<Args>(args)...);
+            return boost::get<EstimatesBuilder>(f->second)(std::forward<Args>(args)...);
         }
     }
 
