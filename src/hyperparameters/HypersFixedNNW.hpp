@@ -26,7 +26,6 @@ public:
             assert(dim == tau0.rows());
             assert(tau0.rows() == tau0.cols());
             assert(nu > dim-1);
-            // TODO assert tau0 pos def matrix?
         }
 
     // Getters

@@ -26,7 +26,6 @@ public:
     std::shared_ptr<Hypers> get_hypers() const {return hypers;}
     virtual void set_state(const std::vector<Eigen::MatrixXd> &state_){
         state = state_;
-        // TODO check_state_validity()?
     }
 
     void set_rng_seed(const unsigned int seed){rng.seed(seed);}

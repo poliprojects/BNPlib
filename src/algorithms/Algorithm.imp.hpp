@@ -5,7 +5,7 @@
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
-    const Eigen::MatrixXd &grid, BaseCollector* collector){ // TODO const?
+    const Eigen::MatrixXd &grid, BaseCollector* collector){
 
     density.first = grid;
     Eigen::VectorXd dens(grid.rows());

@@ -6,12 +6,13 @@ Elena:
 * collectors imp hpp -> cpp?
 * order functions in Algorithm imp + costruttori troppo grossi?
 * const puntatore collector
-* Neal2.imp TODO
+* Neal2.imp loop sample_unique_values()
 
 
 Bruno:
 * grid maintest_multi
 * num_clusters -> num_clusters_init + n_unique
+* check_state_validity() in Hierarchy and Hypers
 * check_state_validity()
 * Hypers Hierarchy friend -> use private members in Hierarchy
 
