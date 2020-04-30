@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
     }
     file.close();
     Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v.data(), v.size()); // TODO: meglio con conservative resize?
+        v.data(), v.size());
 
     // Create algorithm and set algorithm parameters
     Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);

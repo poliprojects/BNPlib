@@ -57,7 +57,7 @@ int main(int argc, char *argv[]){
     }
     file.close();
     Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v.data(), v.size()); // TODO: meglio con conservative resize?
+        v.data(), v.size());
 
     // Load algorithm factory
     Builder neal2builder = [](HypersType hy, MixtureType mix,
@@ -79,13 +79,6 @@ int main(int argc, char *argv[]){
 
     algoFactory.add_builder("neal2",neal2builder);
     algoFactory.add_builder("neal8",neal8builder);
-
-    auto list = algoFactory.list_of_known_builders(); // TODO DEBUG
-    std::cout << "List of known builders: ";
-    for (auto &el : list){
-        std::cout << el << " ";
-    }
-    std::cout << std::endl;
 
     // Create algorithm and set algorithm parameters
     auto sampler = algoFactory.create_object(argv[2], hy, mix, data);

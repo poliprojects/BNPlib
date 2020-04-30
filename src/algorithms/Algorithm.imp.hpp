@@ -3,7 +3,6 @@
 
 #include "Algorithm.hpp"
 
-// TODO order of functions in this file
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     const Eigen::MatrixXd &grid, BaseCollector* collector){ // TODO const?
@@ -90,19 +89,6 @@ State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
         *iter_out.mutable_uniquevalues(i) = uniquevalues_temp;
     }
     return iter_out;
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Algorithm<Hierarchy, Hypers, Mixture>::print_state(){
-    for (int h = 0; h < num_clusters; h++) {
-        std::cout << "Parameters: ";
-
-        for (auto c : unique_values[h].get_state()){
-            std::cout << c << " " << std::endl;
-        }
-        std::cout << std::endl;
-    }
 }
 
 

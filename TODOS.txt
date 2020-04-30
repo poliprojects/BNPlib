@@ -2,13 +2,13 @@ TODO LIST
 
 Elena:
 * check multi with 2 clusters
-* factory: names
 * costruttori
+* order functions in Algorithm imp + costruttori troppo grossi?
 
 
 Bruno:
-* prob_existing(n-1, n) + prob_new() = 1 ? Vera per PitYor?
-* check cardinalities
+* grid maintest_multi
+* num_clusters -> num_clusters_init + n_unique
 
 
 MARIO PACS

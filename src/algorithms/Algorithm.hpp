@@ -53,8 +53,6 @@ protected:
     }
     
     // Auxiliary tools
-    const void print_state(); // TODO is it needed anymore?
-
     State get_state_as_proto(unsigned int iter);
 
     Eigen::MatrixXd proto_param_to_matrix(const Param& par) const;
@@ -133,9 +131,6 @@ public:
     const unsigned int get_maxiter(){return maxiter;}
     const unsigned int get_burnin(){return burnin;}
     const unsigned int get_num_clusters(){return num_clusters;}
-    const unsigned int get_num_clusters_best(){ // TODO?
-        return best_clust.uniquevalues_size();
-    }
 
     // Setters
     void set_maxiter(const unsigned int maxiter_){maxiter = maxiter_;}

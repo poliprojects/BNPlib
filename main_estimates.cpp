@@ -59,13 +59,6 @@ int main(int argc, char *argv[]){
     algoFactory.add_builder("neal2_dataless",neal2builder_dataless);
     algoFactory.add_builder("neal8_dataless",neal8builder_dataless);
 
-    auto list = algoFactory.list_of_known_builders(); 
-    std::cout << "List of known builders: ";
-    for (auto &el : list){
-        std::cout << el << " ";
-    }
-    std::cout << std::endl;
-
     // Create algorithm without data and set algorithm parameters
     auto sampler = algoFactory.create_object(argv[1], hy, mix);
 
@@ -121,9 +114,8 @@ int main(int argc, char *argv[]){
     Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         v_temp.data(), v_temp.size()); 
 
-//////////////////////
-//manca ricostruzione chains da proto da dare in pasto a eval_density TODO
-
+    //////////////////////
+    // TODO MARIO manca ricostruzione chains da proto da dare a eval_density
 
     (*sampler).eval_density(grid, coll);
     (*sampler).write_density_to_file("csv/density_fact.csv");
