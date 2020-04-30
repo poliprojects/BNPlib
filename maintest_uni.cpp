@@ -9,7 +9,7 @@ using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
 int main(int argc, char *argv[]){
-    std::cout << "Running main.cpp" << std::endl;
+    std::cout << "Running maintest_uni.cpp" << std::endl;
 
     // Set model parameters
     double mu0, lambda, alpha0, beta0;
@@ -112,6 +112,6 @@ int main(int argc, char *argv[]){
     unsigned int i_cap = sampler.cluster_estimate(coll);
     sampler.write_clustering_to_file("csv/clust_0.csv");
 
-    std::cout << "End of main.cpp" << std::endl;
+    std::cout << "End of maintest_uni.cpp" << std::endl;
     return 0;
 }

@@ -42,7 +42,7 @@ public:
     }
 
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args, const Eigen::VectorXd &data) const {  // TODO shared?
+        Args... args, const Eigen::VectorXd &data) const {
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
@@ -56,7 +56,7 @@ public:
     }
 
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args) const {  // TODO shared?
+        Args... args) const {
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");

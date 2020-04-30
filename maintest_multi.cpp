@@ -10,7 +10,7 @@ template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
 
 
 int main(int argc, char *argv[]){
-    std::cout << "Running mainmulti.cpp" << std::endl;
+    std::cout << "Running maintest_multi.cpp" << std::endl;
 
     // 3D-vectorial data
     Eigen::MatrixXd data(10,3);
@@ -78,6 +78,6 @@ int main(int argc, char *argv[]){
     unsigned int i_cap = sampler.cluster_estimate(coll);
     sampler.write_clustering_to_file("csv/clust_multi.csv");
 
-    std::cout << "End of mainmulti.cpp" << std::endl;
+    std::cout << "End of maintest_multi.cpp" << std::endl;
     return 0;
 }
