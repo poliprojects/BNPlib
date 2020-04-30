@@ -27,20 +27,17 @@ public:
     ~Neal8() = default;
     Neal8()=default;
     Neal8(const Hypers &hypers_, const Mixture &mixture_,
-        const Eigen::MatrixXd &data_, const unsigned int num_clusters_ = 0) :
+        const Eigen::MatrixXd &data_, const unsigned int init = 0) :
         Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, data_,
-        num_clusters_) {
+        init) {
         for(unsigned int i = 0; i < n_aux; i++){
             aux_unique_values.push_back(this->unique_values[0]);
         }
     }
 
     Neal8(const Hypers &hypers_, const Mixture &mixture_,
-        const unsigned int num_clusters_ = 0) :
-        Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_,
-        num_clusters_) {
-        
-    }
+        const unsigned int init = 0) :
+        Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, init) {}
 
     // Getters and setters
     const unsigned int get_n_aux(){return n_aux;}

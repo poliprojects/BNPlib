@@ -13,13 +13,14 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
     this->cardinalities.reserve(this->data.rows());
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0, this->num_clusters-1);
+    std::uniform_int_distribution<int> distribution(0,
+        this->init_num_clusters-1);
 
-    for(int h = 0; h < this->num_clusters; h++){
+    for(int h = 0; h < this->init_num_clusters; h++){
       this->allocations.push_back(h);
       this->cardinalities.push_back(1);
     }
-    for(int j = this->num_clusters; j < this->data.rows(); j++){
+    for(int j = this->init_num_clusters; j < this->data.rows(); j++){
         unsigned int clust = distribution(generator);
         this->allocations[j] = clust;
         this->cardinalities[clust] += 1;
@@ -29,7 +30,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
-    unsigned int k, n_unique, singleton;
+    unsigned int n_unique, singleton;
     unsigned int n = this->data.rows();
     double M = this->mixture.get_totalmass();
 
@@ -126,14 +127,14 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
-    this->num_clusters = this->unique_values.size();
-    std::vector<std::vector<unsigned int>> clust_idxs(this->num_clusters);
+    unsigned int n_unique = this->unique_values.size();
+    std::vector<std::vector<unsigned int>> clust_idxs(n_unique);
     unsigned int n = this->allocations.size();
     for(int i = 0; i < n; i++){ // save different cluster in each row
         clust_idxs[ this->allocations[i] ].push_back(i);
     }
 
-    for(int j = 0; j < this->num_clusters; j++){
+    for(int j = 0; j < n_unique; j++){
     Eigen::MatrixXd curr_data(this->data.rows(), this->data.cols());
     int curr_size=clust_idxs[j].size();
         for(int k=0; k<curr_size; k++){

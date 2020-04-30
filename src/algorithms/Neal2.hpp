@@ -24,14 +24,14 @@ public:
     ~Neal2() = default;
     Neal2()=default;
     Neal2(const Hypers &hypers_, const Mixture &mixture_,
-        const Eigen::MatrixXd &data_, const unsigned int num_clusters_ = 0) :
+        const Eigen::MatrixXd &data_, const unsigned int init = 0) :
         Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(hypers_, mixture_,
-            data_, num_clusters_) {}
+            data_, init) {}
 
     Neal2(const Hypers &hypers_, const Mixture &mixture_,
-        const unsigned int num_clusters_ = 0) :
+        const unsigned int init = 0) :
         Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(hypers_, mixture_,
-             num_clusters_) {}
+             init) {}
 
 }; // end of Class Neal2
 

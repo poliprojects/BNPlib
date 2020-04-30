@@ -24,7 +24,7 @@ protected:
 
     // Data and values containers
     Eigen::MatrixXd data;
-    unsigned int num_clusters;
+    unsigned int init_num_clusters;
     std::vector<unsigned int> cardinalities;
     std::vector<unsigned int> allocations;
     std::vector< Hierarchy<Hypers> > unique_values;
@@ -100,8 +100,8 @@ public:
     virtual ~Algorithm() = default;
     Algorithm()=default;
     Algorithm(const Hypers &hypers_, const Mixture &mixture_,
-        const Eigen::MatrixXd &data_, const unsigned int num_clusters_ = 0) :
-        mixture(mixture_), data(data_), num_clusters(num_clusters_) {
+        const Eigen::MatrixXd &data_, const unsigned int init = 0) :
+        mixture(mixture_), data(data_), init_num_clusters(init) {
         Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
             if(hierarchy.is_multivariate() == false && data.cols() > 1){
             std::cout << "Warning: multivariate data supplied to " <<
@@ -109,20 +109,20 @@ public:
                	"correctly, but all data rows other than the first" <<
                	"one will be ignored" << std::endl;
             }
-            if(num_clusters == 0){
+            if(init_num_clusters == 0){
                 std::cout << "Warning: starting number of clusters will be " <<
                 "set equal to the data size" << std::endl;
-                num_clusters = data.size();
+                init_num_clusters = data.size();
             }
-            for(unsigned int i = 0; i < num_clusters; i++){
+            for(unsigned int i = 0; i < init_num_clusters; i++){
                 unique_values.push_back(hierarchy);
             }
             
     }
 
     Algorithm(const Hypers &hypers_, const Mixture &mixture_,
-         const unsigned int num_clusters_ = 0) :
-        mixture(mixture_), num_clusters(num_clusters_) {
+         const unsigned int init = 0) :
+        mixture(mixture_), init_num_clusters(init) {
         Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
         unique_values.push_back(hierarchy);            
     }
@@ -130,13 +130,13 @@ public:
     // Getters
     const unsigned int get_maxiter(){return maxiter;}
     const unsigned int get_burnin(){return burnin;}
-    const unsigned int get_num_clusters(){return num_clusters;}
+    const unsigned int get_init_num_clusters(){return init_num_clusters;}
 
     // Setters
     void set_maxiter(const unsigned int maxiter_){maxiter = maxiter_;}
     void set_burnin(const unsigned int burnin_){burnin = burnin_;}
-    void set_num_clusters(const unsigned int num_clusters_){
-        num_clusters = num_clusters_;
+    void set_init_num_clusters(const unsigned int init){
+        init_num_clusters = init;
     }
     void set_rng_seed(const unsigned int seed){rng.seed(seed);}
 };
