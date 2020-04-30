@@ -16,7 +16,7 @@ protected:
     std::shared_ptr<Hypers> hypers;
 
 public:
-    virtual bool is_multivariate() const = 0; // TODO funzione o variabile?
+    virtual bool is_multivariate() const = 0;
 
     // Destructor
     virtual ~HierarchyBase() = default;

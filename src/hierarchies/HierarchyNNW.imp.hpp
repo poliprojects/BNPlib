@@ -46,7 +46,7 @@ Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
     EigenRowVec row;
     for(int i = 0; i < n; i++){
         // use multi_student_t_lpdf(datum, nu, mu, Sigma)
-	row=data.row(i);
+        row = data.row(i);
         result(i) = exp( stan::math::multi_student_t_lpdf(row, nu_n,
             mu_n, sigma_n) );
     }
