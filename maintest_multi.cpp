@@ -73,8 +73,12 @@ int main(int argc, char *argv[]){
     // Run sampler
     sampler.run(coll);
 
+    // Take 3D grid from file 
+    Eigen::MatrixXd grid(9*9*9,3);
+    fill_eigen_matrix_from_file(grid, "csv/grid_multi.ssv"); // (1,1,1):(9,9,9)
+
     // Density and clustering
-    sampler.eval_density(data, coll);
+    sampler.eval_density(grid, coll);
     sampler.write_density_to_file("csv/dens_multi.csv");
     unsigned int i_cap = sampler.cluster_estimate(coll);
     sampler.write_clustering_to_file("csv/clust_multi.csv");
