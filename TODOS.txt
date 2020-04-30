@@ -3,7 +3,9 @@ TODO LIST
 Elena:
 * check multi with 2 clusters
 * costruttori
+* collectors imp hpp -> cpp?
 * order functions in Algorithm imp + costruttori troppo grossi?
+* const puntatore collector
 
 
 Bruno:
@@ -21,10 +23,6 @@ MARIO PACS
 VARIE
 * Si può usare "using" o simili per non scrivere this->allocations etc ogni
   volta?
-
-
-IN FONDO
-* collectors imp hpp -> cpp?
 
 
 MANOVALANZA
