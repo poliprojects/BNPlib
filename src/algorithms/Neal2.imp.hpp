@@ -3,6 +3,8 @@
 
 #include "Neal2.hpp"
 
+// Algorithm functions
+
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 const void Neal2<Hierarchy, Hypers, Mixture>::print_startup_message(){
     std::cout << "Running Neal2 algorithm..." << std::endl;
@@ -148,6 +150,8 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
 }
 
 
+
+// Other tools
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::VectorXd Neal2<Hierarchy, Hypers, Mixture>::density_marginal_component(

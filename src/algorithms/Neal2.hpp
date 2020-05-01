@@ -7,6 +7,7 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal2 : public Algorithm<Hierarchy, Hypers, Mixture> {
 
 protected:
+    // Algorithm functions
     const void print_startup_message() override;
     void initialize() override;
     void sample_allocations() override;
@@ -15,12 +16,12 @@ protected:
     void update_hypers() override {return;}
 
 public:
-    // Other tools:
+    // Other tools
     Eigen::VectorXd density_marginal_component(Hierarchy<Hypers> &temp_hier,
         unsigned int n) override;
 
 
-    // Destructors and constructors:
+    // Destructors and constructors
     ~Neal2() = default;
     Neal2()=default;
     Neal2(const Hypers &hypers_, const Mixture &mixture_,

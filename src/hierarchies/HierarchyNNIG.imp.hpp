@@ -6,7 +6,7 @@
 
 template<class Hypers> 
 void HierarchyNNIG<Hypers>::check_state_validity(){
-    assert(this->state[1](0,0) == 0);
+    assert(this->state[1](0,0) >= 0);
 }
 
 

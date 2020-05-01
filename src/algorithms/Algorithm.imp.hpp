@@ -3,6 +3,67 @@
 
 #include "Algorithm.hpp"
 
+
+
+// Algorithm functions
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+const void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
+    std::cout << "Done" << std::endl;
+}
+
+
+
+// Auxiliary tools
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
+    unsigned int iter){
+
+    State iter_out;
+    *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
+
+    for(int i = 0; i < unique_values.size(); i++){
+        UniqueValues uniquevalues_temp;
+        for(int k = 0; k < unique_values[i].get_state().size(); k++){
+            Eigen::MatrixXd par_temp = unique_values[i].get_state()[k];
+            Param par_temp_proto;
+            for(int j = 0; j < par_temp.cols(); j++){
+                Par_Col col_temp;
+                for(int h = 0; h < par_temp.rows(); h++){
+                    col_temp.add_elems(par_temp(h,j));
+                }
+                par_temp_proto.add_par_cols();
+                *par_temp_proto.mutable_par_cols(j) = col_temp;     
+            }
+            uniquevalues_temp.add_params();
+            *uniquevalues_temp.mutable_params(k) = par_temp_proto;
+        }
+        iter_out.add_uniquevalues();
+        *iter_out.mutable_uniquevalues(i) = uniquevalues_temp;
+    }
+    return iter_out;
+}
+
+
+
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
+    const Param &par) const {
+    Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(
+        par.par_cols(0).elems_size(), par.par_cols_size() );
+    for(int h = 0; h < par.par_cols_size(); h++){
+        for(int j = 0; j < par.par_cols(h).elems_size(); j++){
+            par_matrix(j,h) = par.par_cols(h).elems(j);
+        }
+    }
+    return par_matrix;
+}
+
+
+// Other tools
+
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     const Eigen::MatrixXd &grid, BaseCollector* collector){
@@ -48,54 +109,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
 }
 
 
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
-    const Param &par) const {
-    Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(
-        par.par_cols(0).elems_size(), par.par_cols_size() );
-    for(int h = 0; h < par.par_cols_size(); h++){
-        for(int j = 0; j < par.par_cols(h).elems_size(); j++){
-            par_matrix(j,h) = par.par_cols(h).elems(j);
-        }
-    }
-    return par_matrix;
-}
 
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
-    unsigned int iter){
-
-    State iter_out;
-    *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
-
-    for(int i = 0; i < unique_values.size(); i++){
-        UniqueValues uniquevalues_temp;
-        for(int k = 0; k < unique_values[i].get_state().size(); k++){
-            Eigen::MatrixXd par_temp = unique_values[i].get_state()[k];
-            Param par_temp_proto;
-            for(int j = 0; j < par_temp.cols(); j++){
-                Par_Col col_temp;
-                for(int h = 0; h < par_temp.rows(); h++){
-                    col_temp.add_elems(par_temp(h,j));
-                }
-                par_temp_proto.add_par_cols();
-                *par_temp_proto.mutable_par_cols(j) = col_temp;     
-            }
-            uniquevalues_temp.add_params();
-            *uniquevalues_temp.mutable_params(k) = par_temp_proto;
-        }
-        iter_out.add_uniquevalues();
-        *iter_out.mutable_uniquevalues(i) = uniquevalues_temp;
-    }
-    return iter_out;
-}
-
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
-    std::cout << "Done" << std::endl;
-}
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
@@ -198,6 +212,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
     file.close();
     std::cout << "Succesfully wrote density to " << filename << std::endl;
 }
+
 
 
 #endif // ALGORITHM_IMP_HPP

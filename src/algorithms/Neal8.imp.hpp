@@ -3,6 +3,9 @@
 
 #include "Neal8.hpp"
 
+
+// Algorithm functions
+
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 const void Neal8<Hierarchy, Hypers, Mixture>::print_startup_message(){
     std::cout << "Running Neal8 algorithm (with m=" << n_aux <<
@@ -97,6 +100,10 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     } // end of for(int i = 0; i < n; i++) loop
 } // end of sample_allocations()
 
+
+
+
+// Other tools
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::VectorXd Neal8<Hierarchy, Hypers, Mixture>::density_marginal_component(

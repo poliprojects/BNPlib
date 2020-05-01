@@ -18,12 +18,12 @@ protected:
     void sample_allocations() override;
 
 public:
-    // Other tools:
+    // Other tools
 
     Eigen::VectorXd density_marginal_component(Hierarchy<Hypers> &temp_hier,
         unsigned int n) override;
 
-    // Destructors and constructors:
+    // Destructors and constructors
     ~Neal8() = default;
     Neal8()=default;
     Neal8(const Hypers &hypers_, const Mixture &mixture_,

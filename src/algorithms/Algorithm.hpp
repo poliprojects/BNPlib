@@ -83,10 +83,12 @@ public:
     }
 
     // Other tools
-    virtual unsigned int cluster_estimate(BaseCollector* collector);
 
     virtual void eval_density(const Eigen::MatrixXd &grid,
         BaseCollector* const collector);
+
+    virtual unsigned int cluster_estimate(BaseCollector* collector);
+
 
     virtual Eigen::VectorXd density_marginal_component(
         Hierarchy<Hypers> &temp_hier, unsigned int n) = 0;
