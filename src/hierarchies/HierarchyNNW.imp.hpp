@@ -5,7 +5,7 @@
 
 
 template<class Hypers> 
-void HierarchyNNIG<Hypers>::check_state_validity(){
+void HierarchyNNW<Hypers>::check_state_validity(){
         unsigned int dim = this->state[0].size();
         assert(dim == this->state[1].rows());
         assert(dim == this->state[1].cols());
