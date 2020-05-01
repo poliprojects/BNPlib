@@ -184,7 +184,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
         file << std::endl;
     }
     file.close();
-    std::cout << "Succesfully wrote clustering to " << filename << std::endl;
+    std::cout << "Successfully wrote clustering to " << filename << std::endl;
 }
 
 
@@ -210,7 +210,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
     }
     
     file.close();
-    std::cout << "Succesfully wrote density to " << filename << std::endl;
+    std::cout << "Successfully wrote density to " << filename << std::endl;
 }
 
 

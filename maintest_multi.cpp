@@ -72,8 +72,8 @@ int main(int argc, char *argv[]){
     sampler.run(coll);
 
     // Take 3D grid from file 
-    Eigen::MatrixXd grid(9*9*9,3);
-    fill_eigen_matrix_from_file(grid, "csv/grid_multi.ssv"); // TODO no (1,1,1):(9,9,9)
+    Eigen::MatrixXd grid(3*3*3*2+1,3);
+    fill_eigen_matrix_from_file(grid, "csv/grid_multi.ssv");
 
     // Density and clustering
     sampler.eval_density(grid, coll);
