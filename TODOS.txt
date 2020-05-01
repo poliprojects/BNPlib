@@ -14,6 +14,7 @@ MARIO PACS
   python, R..)
 * Debug/ottimizzatione
 * Introduzione bayes
+* Report inglese o italiano?
 
 
 VARIE
@@ -27,3 +28,4 @@ REPORT
 * parametri non nel costruttore solitamente sono lasciati in default
 * a way to erase and add clusters more efficiently, e.g. with map
 * storing cardinalities > recomputing them at each iteration
+* set_state flag efficienza
