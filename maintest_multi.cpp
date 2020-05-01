@@ -13,7 +13,7 @@ int main(int argc, char *argv[]){
     std::cout << "Running maintest_multi.cpp" << std::endl;
 
     // 3D-vectorial data
-    Eigen::MatrixXd data(30,3); // TODO why 30 and not 40???
+    Eigen::MatrixXd data(40,3);
     fill_eigen_matrix_from_file(data, "csv/data_multi.ssv");
 
     // Set model parameters
@@ -27,9 +27,7 @@ int main(int argc, char *argv[]){
     MixtureType mix(totalmass);
 
     // Create algorithm and set algorithm parameters
-   // Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data,
-     //   data.rows());
-  Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
+  Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
     sampler.set_rng_seed(20200229);
     sampler.set_maxiter(1000);
     sampler.set_burnin(100);
@@ -75,7 +73,7 @@ int main(int argc, char *argv[]){
 
     // Take 3D grid from file 
     Eigen::MatrixXd grid(9*9*9,3);
-    fill_eigen_matrix_from_file(grid, "csv/grid_multi.ssv"); // (1,1,1):(9,9,9)
+    fill_eigen_matrix_from_file(grid, "csv/grid_multi.ssv"); // TODO no (1,1,1):(9,9,9)
 
     // Density and clustering
     sampler.eval_density(grid, coll);

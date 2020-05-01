@@ -114,7 +114,7 @@ public:
             if(init_num_clusters == 0){
                 std::cout << "Warning: starting number of clusters will be " <<
                 "set equal to the data size" << std::endl;
-                init_num_clusters = data.size();
+                init_num_clusters = data.rows();
             }
             for(unsigned int i = 0; i < init_num_clusters; i++){
                 unique_values.push_back(hierarchy);

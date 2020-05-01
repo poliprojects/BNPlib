@@ -135,17 +135,14 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
         clust_idxs[ this->allocations[i] ].push_back(i);
     }
 
-    for(int j = 0; j < n_unique; j++){
-    int curr_size=clust_idxs[j].size();
-    Eigen::MatrixXd curr_data(curr_size, this->data.cols());
-
-        for(int k=0; k<curr_size; k++){
-            curr_data.row(k) = this->data.row(clust_idxs[j][k]); 
+    for(int i = 0; i < n_unique; i++){
+        int curr_size = clust_idxs[i].size();
+        Eigen::MatrixXd curr_data(curr_size, this->data.cols());
+        for(int j = 0; j < curr_size; j++){
+            curr_data.row(j) = this->data.row(clust_idxs[i][j]);
         }
-        this->unique_values[j].sample_given_data(curr_data);
+        this->unique_values[i].sample_given_data(curr_data);
     }
-
-
 }
 
 
