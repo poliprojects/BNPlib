@@ -119,7 +119,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
 
     unsigned int niter = maxiter - burnin;
     Eigen::VectorXd errors(niter);
-    int n = data.rows();
+    unsigned int n = data.rows();
     Eigen::MatrixXd tot_diss(n, n);
     tot_diss = Eigen::MatrixXd::Zero(n, n);
     std::vector<Eigen::MatrixXd> all_diss;
@@ -148,7 +148,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     }
     
     std::ptrdiff_t i;
-    int min_err = errors.minCoeff(&i);
+    unsigned int min_err = errors.minCoeff(&i);
 
     best_clust = collector->get_state(i);
     std::cout << "Optimal clustering: at iteration " << i << " with " <<

@@ -55,7 +55,7 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
     const double beta0, const double lambda0){
 
     double mu_post, alpha_post, beta_post, lambda_post;
-    int n = data.rows();
+    unsigned int n = data.rows();
 
     if(n == 0){
         return std::vector<double>{mu0, alpha0, beta0, lambda0};
