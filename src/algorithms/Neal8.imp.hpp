@@ -5,7 +5,6 @@
 
 
 // Algorithm functions
-
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 const void Neal8<Hierarchy, Hypers, Mixture>::print_startup_message(){
     std::cout << "Running Neal8 algorithm (with m=" << n_aux <<
@@ -17,22 +16,22 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     // Initialize some relevant variables
     unsigned int n_unique, singleton;
-    unsigned int n = this->data.rows();
+    unsigned int n = data.rows();
 
     for(size_t i = 0; i < n; i++){ // for each data unit data[i]
-    	Eigen::Matrix<double, 1, Eigen::Dynamic> datum = this->data.row(i);
+    	Eigen::Matrix<double, 1, Eigen::Dynamic> datum = data.row(i);
 
         singleton = 0;
-        n_unique = this->unique_values.size();
+        n_unique = unique_values.size();
      
-        if(this->cardinalities[ this->allocations[i] ] == 1){
+        if(cardinalities[ allocations[i] ] == 1){
         	// datum i is a singleton
-            aux_unique_values[0].set_state( this->unique_values[
-                this->allocations[i] ].get_state() ); // move phi value in aux
+            aux_unique_values[0].set_state( unique_values[
+                allocations[i] ].get_state() ); // move phi value in aux
             singleton = 1;
         }
 
-        this->cardinalities[ this->allocations[i] ] -= 1;
+        cardinalities[ allocations[i] ] -= 1;
         
         // Draw the aux from G0
         for(size_t j = singleton; j < n_aux; j++){
@@ -46,8 +45,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         for(size_t k = 0; k < n_unique; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
             probas(k) = this->mixture.prob_existing_cluster(
-            	this->cardinalities[k], n) *
-                this->unique_values[k].like(datum)(0);
+            	cardinalities[k], n) * unique_values[k].like(datum)(0);
             tot += probas(k);
         }
 
@@ -65,46 +63,41 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
         if(singleton == 1){
             if(c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
-                this->unique_values[ this->allocations[i] ].set_state(
+                unique_values[ allocations[i] ].set_state(
                     aux_unique_values[c_new-n_unique].get_state());
-                this->cardinalities[ this->allocations[i] ] += 1;
+                cardinalities[ allocations[i] ] += 1;
             }
             else{ // case 2 of 4: SINGLETON - OLD VALUE
-                this->unique_values.erase(
-                    this->unique_values.begin() + this->allocations[i] );
+                unique_values.erase( unique_values.begin() + allocations[i] );
                 
-                unsigned int c_old = this->allocations[i];
-                this->allocations[i] = c_new;
-                for(auto &c : this->allocations){ // relabeling
+                unsigned int c_old = allocations[i];
+                allocations[i] = c_new;
+                for(auto &c : allocations){ // relabeling
                     if(c > c_old){
                         c -= 1;
                     }
                 }
-                this->cardinalities[c_new] += 1;
-                this->cardinalities.erase(this->cardinalities.begin() + c_old);
+                cardinalities[c_new] += 1;
+                cardinalities.erase(cardinalities.begin() + c_old);
             } // end of else
         } // end of if(singleton == 1)
         
         else{ // if singleton == 0
             if(c_new >= n_unique){ // case 3 of 4: NOT SINGLETON - AUX
-                this->unique_values.push_back(
-                    aux_unique_values[c_new-n_unique]);
-                this->cardinalities.push_back(1);
-                this->allocations[i] = n_unique;
+                unique_values.push_back( aux_unique_values[c_new-n_unique] );
+                cardinalities.push_back(1);
+                allocations[i] = n_unique;
             }
             else{ // case 4 of 4: NOT SINGLETON - OLD VALUES
-                this->allocations[i] = c_new;
-                this->cardinalities[c_new] += 1;
+                allocations[i] = c_new;
+                cardinalities[c_new] += 1;
             }
         } // end of else
     } // end of datum[i] loop
 } // end of sample_allocations()
 
 
-
-
 // Other tools
-
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::VectorXd Neal8<Hierarchy, Hypers, Mixture>::density_marginal_component(
     Hierarchy<Hypers> &temp_hier, unsigned int n){

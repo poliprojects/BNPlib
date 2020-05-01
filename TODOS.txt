@@ -12,13 +12,8 @@ MARIO PACS
 * Introduzione bayes
 
 
-MANOVALANZA
-* Si può usare "using" o simili per non scrivere this->allocations etc ogni
-  volta?
-* Spazi/a capo/etc
-
-
 VARIE
+* Spazi, a capo, etc
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
 * README (Virtual Machine etc)
 * Doxygen docs
