@@ -23,7 +23,7 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     Eigen::VectorXd result(n);
 	Eigen::MatrixXd sigma = this->state[1].inverse();
 	EigenRowVec mu(this->state[0]);
-    for(unsigned int i = 0; i < n; i++){
+    for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
         result(i) = std::exp(stan::math::multi_normal_lpdf(datum, mu, sigma));
     }
@@ -57,7 +57,7 @@ Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
     Eigen::MatrixXd sigma_n = this->hypers->get_tau0().inverse() *
         ( nu-(dim-1)*0.5 ) * lambda/(lambda+1);
 
-    for(int i = 0; i < n; i++){
+    for(size_t i = 0; i < n; i++){
         // use multi_student_t_lpdf(datum, nu, mu, Sigma)
         EigenRowVec datum = data.row(i);
         result(i) = exp( stan::math::multi_student_t_lpdf(datum, nu_n,
@@ -80,7 +80,7 @@ std::vector<Eigen::MatrixXd> HierarchyNNW<Hypers>::normal_wishart_update(
 
     // Compute tau_post
     Eigen::MatrixXd tau_temp = Eigen::MatrixXd::Zero(data.cols(), data.cols());
-    for(unsigned int i = 0; i < n; i++){
+    for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
         tau_temp += (datum-mubar).transpose()*(datum-mubar); // column-times-row
     }

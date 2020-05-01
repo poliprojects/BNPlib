@@ -118,7 +118,7 @@ public:
                 	std::endl;
                 init_num_clusters = data.rows();
             }
-            for(unsigned int i = 0; i < init_num_clusters; i++){
+            for(size_t i = 0; i < init_num_clusters; i++){
                 unique_values.push_back(hierarchy);
             }
             

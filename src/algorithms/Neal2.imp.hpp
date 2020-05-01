@@ -18,11 +18,11 @@ void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
     std::uniform_int_distribution<int> distribution(0,
         this->init_num_clusters-1);
 
-    for(int h = 0; h < this->init_num_clusters; h++){
+    for(size_t h = 0; h < this->init_num_clusters; h++){
       this->allocations.push_back(h);
       this->cardinalities.push_back(1);
     }
-    for(int j = this->init_num_clusters; j < this->data.rows(); j++){
+    for(size_t j = this->init_num_clusters; j < this->data.rows(); j++){
         unsigned int clust = distribution(generator);
         this->allocations[j] = clust;
         this->cardinalities[clust] += 1;
@@ -36,7 +36,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
     unsigned int n = this->data.rows();
     double M = this->mixture.get_totalmass();
 
-    for(unsigned int i = 0; i < n; i++){
+    for(size_t i = 0; i < n; i++){
     	// for each data unit data[i]
     	Eigen::Matrix<double, 1, Eigen::Dynamic> datum = this->data.row(i);
 
@@ -57,7 +57,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
         double tot = 0.0;
         
-        for(unsigned int k = 0; k < n_unique; k++){
+        for(size_t k = 0; k < n_unique; k++){
             probas(k) = this->mixture.prob_existing_cluster(
             	this->cardinalities[k],n) *
                 this->unique_values[k].like(datum)(0);
@@ -122,7 +122,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 this->cardinalities[c_new] += 1;
             }
         } // end of else
-    } // end of for(int i = 0; i < n; i++) loop
+    } // end of datum[i] loop
 } // end of sample_allocations()
 
 
@@ -132,14 +132,14 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
 
     std::vector<std::vector<unsigned int>> clust_idxs(n_unique);
     unsigned int n = this->allocations.size();
-    for(int i = 0; i < n; i++){ // save different cluster in each row
+    for(size_t i = 0; i < n; i++){ // save different cluster in each row
         clust_idxs[ this->allocations[i] ].push_back(i);
     }
 
-    for(int i = 0; i < n_unique; i++){
+    for(size_t i = 0; i < n_unique; i++){
         int curr_size = clust_idxs[i].size();
         Eigen::MatrixXd curr_data(curr_size, this->data.cols());
-        for(int j = 0; j < curr_size; j++){
+        for(size_t j = 0; j < curr_size; j++){
             curr_data.row(j) = this->data.row(clust_idxs[i][j]);
         }
         this->unique_values[i].sample_given_data(curr_data);

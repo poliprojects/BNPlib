@@ -19,7 +19,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     unsigned int n_unique, singleton;
     unsigned int n = this->data.rows();
 
-    for(int i = 0; i < n; i++){ // for each data unit data[i]
+    for(size_t i = 0; i < n; i++){ // for each data unit data[i]
     	Eigen::Matrix<double, 1, Eigen::Dynamic> datum = this->data.row(i);
 
         singleton = 0;
@@ -35,7 +35,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         this->cardinalities[ this->allocations[i] ] -= 1;
         
         // Draw the aux from G0
-        for(int j = singleton; j < n_aux; j++){
+        for(size_t j = singleton; j < n_aux; j++){
             aux_unique_values[j].draw();
         }
 
@@ -43,7 +43,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         Eigen::VectorXd probas(n_unique+n_aux); //k or n_unique
         
         double tot = 0.0;
-        for(int k = 0; k < n_unique; k++){ // if datum i is a singleton, then
+        for(size_t k = 0; k < n_unique; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
             probas(k) = this->mixture.prob_existing_cluster(
             	this->cardinalities[k], n) *
@@ -51,7 +51,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
             tot += probas(k);
         }
 
-        for(int k = 0; k < n_aux; k++){
+        for(size_t k = 0; k < n_aux; k++){
             probas(n_unique+k) = this->mixture.prob_new_cluster(n, n_unique) *
                 aux_unique_values[k].like(datum)(0) / n_aux;
             tot += probas(n_unique+k);
@@ -97,7 +97,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 this->cardinalities[c_new] += 1;
             }
         } // end of else
-    } // end of for(int i = 0; i < n; i++) loop
+    } // end of datum[i] loop
 } // end of sample_allocations()
 
 
@@ -112,7 +112,7 @@ Eigen::VectorXd Neal8<Hierarchy, Hypers, Mixture>::density_marginal_component(
     Eigen::VectorXd dens_addendum(this->density.first.rows());
             
     // Component from G0
-    for(int h = 0; h < n_aux; h++){
+    for(size_t h = 0; h < n_aux; h++){
         temp_hier.draw();
         dens_addendum += temp_hier.like(this->density.first) * (M/n_aux)/(M+n);
     }
