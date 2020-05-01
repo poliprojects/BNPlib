@@ -21,8 +21,8 @@ template<class Hypers>
 Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
-	Eigen::MatrixXd sigma = this->state[1].inverse();
-	EigenRowVec mu(this->state[0]);
+    Eigen::MatrixXd sigma = this->state[1].inverse();
+    EigenRowVec mu(this->state[0]);
     for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
         result(i) = std::exp(stan::math::multi_normal_lpdf(datum, mu, sigma));

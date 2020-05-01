@@ -19,13 +19,13 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     unsigned int n = data.rows();
 
     for(size_t i = 0; i < n; i++){ // for each data unit data[i]
-    	Eigen::Matrix<double, 1, Eigen::Dynamic> datum = data.row(i);
+        Eigen::Matrix<double, 1, Eigen::Dynamic> datum = data.row(i);
 
         singleton = 0;
         n_unique = unique_values.size();
      
         if(cardinalities[ allocations[i] ] == 1){
-        	// datum i is a singleton
+            // datum i is a singleton
             aux_unique_values[0].set_state( unique_values[
                 allocations[i] ].get_state() ); // move phi value in aux
             singleton = 1;
@@ -45,7 +45,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         for(size_t k = 0; k < n_unique; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
             probas(k) = this->mixture.prob_existing_cluster(
-            	cardinalities[k], n) * unique_values[k].like(datum)(0);
+                cardinalities[k], n) * unique_values[k].like(datum)(0);
             tot += probas(k);
         }
 

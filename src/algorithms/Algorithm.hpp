@@ -107,15 +107,15 @@ public:
         mixture(mixture_), data(data_), init_num_clusters(init) {
         Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
             if(hierarchy.is_multivariate() == false && data.cols() > 1){
-            std::cout << "Warning: multivariate data supplied to " <<
-               	"univariate hierarchy. The algorithm will run " <<
-               	"correctly, but all data rows other than the first" <<
-               	"one will be ignored" << std::endl;
+                std::cout << "Warning: multivariate data supplied to " <<
+                    "univariate hierarchy. The algorithm will run " <<
+                    "correctly, but all data rows other than the first" <<
+                    "one will be ignored" << std::endl;
             }
             if(init_num_clusters == 0){
                 std::cout << "Warning: initial number of clusters will be " <<
-                	"set equal to the data size (" << data.rows() << ")" <<
-                	std::endl;
+                    "set equal to the data size (" << data.rows() << ")" <<
+                    std::endl;
                 init_num_clusters = data.rows();
             }
             for(size_t i = 0; i < init_num_clusters; i++){

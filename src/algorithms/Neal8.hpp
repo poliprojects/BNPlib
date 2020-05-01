@@ -6,10 +6,10 @@
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal8 : public Neal2<Hierarchy, Hypers, Mixture>{
 protected:
-	using Algorithm<Hierarchy, Hypers, Mixture>::data;
-	using Algorithm<Hierarchy, Hypers, Mixture>::cardinalities;
-	using Algorithm<Hierarchy, Hypers, Mixture>::allocations;
-	using Algorithm<Hierarchy, Hypers, Mixture>::unique_values;
+    using Algorithm<Hierarchy, Hypers, Mixture>::data;
+    using Algorithm<Hierarchy, Hypers, Mixture>::cardinalities;
+    using Algorithm<Hierarchy, Hypers, Mixture>::allocations;
+    using Algorithm<Hierarchy, Hypers, Mixture>::unique_values;
 
     // Mehtod parameter
     unsigned int n_aux = 3;

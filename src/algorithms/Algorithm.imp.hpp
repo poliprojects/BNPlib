@@ -152,7 +152,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
 
     best_clust = collector->get_state(i);
     std::cout << "Optimal clustering: at iteration " << i << " with " <<
-    	best_clust.uniquevalues_size() << " clusters" << std::endl;
+        best_clust.uniquevalues_size() << " clusters" << std::endl;
 
     clustering_was_computed = true;
 

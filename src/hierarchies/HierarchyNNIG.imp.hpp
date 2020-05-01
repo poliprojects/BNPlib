@@ -36,9 +36,10 @@ void HierarchyNNIG<Hypers>::draw(){
 
 template<class Hypers> 
 Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(const Eigen::MatrixXd &data){
-	
-	double sigtilde = sqrt( this->hypers->get_beta0()*(this->hypers->get_lambda(
-        )+1) / (this->hypers->get_alpha0()*this->hypers->get_lambda()) );
+
+    double sigtilde = sqrt( this->hypers->get_beta0()*(
+        this->hypers->get_lambda()+1) / ( this->hypers->get_alpha0() *
+        this->hypers->get_lambda() ) );
    
     Eigen::VectorXd result(data.rows());
     for(size_t i = 0; i < data.rows(); i++){

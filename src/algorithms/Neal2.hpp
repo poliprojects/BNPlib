@@ -6,10 +6,10 @@
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal2 : public Algorithm<Hierarchy, Hypers, Mixture> {
 protected:
-	using Algorithm<Hierarchy, Hypers, Mixture>::data;
-	using Algorithm<Hierarchy, Hypers, Mixture>::cardinalities;
-	using Algorithm<Hierarchy, Hypers, Mixture>::allocations;
-	using Algorithm<Hierarchy, Hypers, Mixture>::unique_values;
+    using Algorithm<Hierarchy, Hypers, Mixture>::data;
+    using Algorithm<Hierarchy, Hypers, Mixture>::cardinalities;
+    using Algorithm<Hierarchy, Hypers, Mixture>::allocations;
+    using Algorithm<Hierarchy, Hypers, Mixture>::unique_values;
 
     // Algorithm functions
     const void print_startup_message() override;

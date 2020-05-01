@@ -35,8 +35,8 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
     double M = this->mixture.get_totalmass();
 
     for(size_t i = 0; i < n; i++){
-    	// for each data unit data[i]
-    	Eigen::Matrix<double, 1, Eigen::Dynamic> datum = data.row(i);
+        // for each data unit data[i]
+        Eigen::Matrix<double, 1, Eigen::Dynamic> datum = data.row(i);
 
         // Initialize cardinalities of unique values
         singleton = 0;
@@ -56,11 +56,11 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         
         for(size_t k = 0; k < n_unique; k++){
             probas(k) = this->mixture.prob_existing_cluster(
-            	cardinalities[k], n) * unique_values[k].like(datum)(0);
+                cardinalities[k], n) * unique_values[k].like(datum)(0);
 
             if(singleton == 1 && k == i){
-             	probas(i) = this->mixture.prob_new_cluster(n, n_unique) *
-            	unique_values[0].eval_marg(datum)(0);
+                probas(i) = this->mixture.prob_new_cluster(n, n_unique) *
+                    unique_values[0].eval_marg(datum)(0);
             }
  
             tot += probas(k);
@@ -103,8 +103,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
         else{ // if singleton == 0
             if(c_new == n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
-                Hierarchy<Hypers> new_unique(
-                	unique_values[0].get_hypers());
+                Hierarchy<Hypers> new_unique( unique_values[0].get_hypers() );
 
                 new_unique.sample_given_data(datum);
                 unique_values.push_back(new_unique); 
