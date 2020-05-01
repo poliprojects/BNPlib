@@ -112,8 +112,9 @@ public:
                	"one will be ignored" << std::endl;
             }
             if(init_num_clusters == 0){
-                std::cout << "Warning: starting number of clusters will be " <<
-                "set equal to the data size" << std::endl;
+                std::cout << "Warning: initial number of clusters will be " <<
+                	"set equal to the data size (" << data.rows() << ")" <<
+                	std::endl;
                 init_num_clusters = data.rows();
             }
             for(unsigned int i = 0; i < init_num_clusters; i++){
