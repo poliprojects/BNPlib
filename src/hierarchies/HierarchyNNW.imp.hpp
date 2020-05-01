@@ -55,7 +55,7 @@ Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
     EigenRowVec mu_n = this->hypers->get_mu0();
     double nu_n = 2*nu - dim + 1;
     Eigen::MatrixXd sigma_n = this->hypers->get_tau0().inverse() *
-        ( nu-(dim-1)/2 ) * lambda/(lambda+1);
+        ( nu-(dim-1)*0.5 ) * lambda/(lambda+1);
 
     for(int i = 0; i < n; i++){
         // use multi_student_t_lpdf(datum, nu, mu, Sigma)

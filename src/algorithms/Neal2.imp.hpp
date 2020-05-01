@@ -129,6 +129,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
     unsigned int n_unique = this->unique_values.size();
+
     std::vector<std::vector<unsigned int>> clust_idxs(n_unique);
     unsigned int n = this->allocations.size();
     for(int i = 0; i < n; i++){ // save different cluster in each row

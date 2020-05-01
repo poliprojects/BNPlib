@@ -18,7 +18,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
     // Initialize some relevant variables
     unsigned int n_unique, singleton;
     unsigned int n = this->data.rows();
-  
+
     for(int i = 0; i < n; i++){ // for each data unit data[i]
     	Eigen::Matrix<double, 1, Eigen::Dynamic> datum = this->data.row(i);
 
