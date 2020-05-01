@@ -38,7 +38,6 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
     for(unsigned int i = 0; i < n; i++){
     	// for each data unit data[i]
-
     	Eigen::Matrix<double, 1, Eigen::Dynamic> datum = this->data.row(i);
 
         // Initialize cardinalities of unique values
@@ -87,7 +86,6 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         if(singleton == 1){
             if(c_new == this->allocations[i]){
                 // case 1 of 4: SINGLETON - SINGLETON
-                Eigen::VectorXd datum_col = datum;
                 this->unique_values[ this->allocations[i] ].sample_given_data(
                 	datum);
                 this->cardinalities[c_new] += 1;
@@ -113,7 +111,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
             if(c_new == n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
                 Hierarchy<Hypers> new_unique(
                 	this->unique_values[0].get_hypers());
-        		Eigen::VectorXd datum_col = datum; // TODO??
+
                 new_unique.sample_given_data(datum);
                 this->unique_values.push_back(new_unique); 
                 this->allocations[i] = n_unique;
@@ -144,7 +142,6 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
         for(int k=0; k<curr_size; k++){
             curr_data.row(k) = this->data.row(clust_idxs[j][k]); 
         }
-
         this->unique_values[j].sample_given_data(curr_data);
     }
 
