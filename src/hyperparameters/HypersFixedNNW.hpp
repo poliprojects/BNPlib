@@ -5,7 +5,7 @@
 #include <Eigen/Dense>
 
 class HypersFixedNNW {
-private:
+protected:
     using EigenRowVec = Eigen::Matrix<double, 1, Eigen::Dynamic>;
 
     EigenRowVec mu0;
