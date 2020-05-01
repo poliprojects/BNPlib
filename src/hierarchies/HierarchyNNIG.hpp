@@ -14,6 +14,9 @@
 template<class Hypers>
 class HierarchyNNIG : public HierarchyBase<Hypers> {
 protected:
+    using HierarchyBase<Hypers>::state;
+    using HierarchyBase<Hypers>::hypers;
+
     std::vector<double> normal_gamma_update(const Eigen::VectorXd &data,
         const double mu0, const double alpha0, const double beta0,
         const double lambda0);
@@ -27,10 +30,10 @@ public:
     ~HierarchyNNIG() = default;
     HierarchyNNIG() = default;
     HierarchyNNIG(std::shared_ptr<Hypers> hypers_) {
-        this->hypers = hypers_;
-        this->state = std::vector<Eigen::MatrixXd>(2,Eigen::MatrixXd(1,1));
-        this->state[0](0,0) = this->hypers->get_mu0();
-        this->state[1](0,0) = 1;
+        hypers = hypers_;
+        state = std::vector<Eigen::MatrixXd>(2,Eigen::MatrixXd(1,1));
+        state[0](0,0) = hypers->get_mu0();
+        state[1](0,0) = 1;
     }
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;

@@ -11,6 +11,8 @@
 template<class Hypers>
 class HierarchyNNW : public HierarchyBase<Hypers> {
 protected:
+    using HierarchyBase<Hypers>::state;
+    using HierarchyBase<Hypers>::hypers;
     using EigenRowVec = Eigen::Matrix<double, 1, Eigen::Dynamic>;
     
     std::vector<Eigen::MatrixXd> normal_wishart_update(
@@ -26,11 +28,11 @@ public:
     ~HierarchyNNW() = default;
     HierarchyNNW() = default;
     HierarchyNNW(std::shared_ptr<Hypers> hypers_) {
-        this->hypers = hypers_;
+        hypers = hypers_;
 
-        unsigned int dim = this->hypers->get_mu0().size();
-        this->state.push_back( this->hypers->get_mu0() );
-        this->state.push_back( this->hypers->get_lambda() *
+        unsigned int dim = hypers->get_mu0().size();
+        state.push_back( hypers->get_mu0() );
+        state.push_back( hypers->get_lambda() *
             Eigen::MatrixXd::Identity(dim, dim) );
     }
 
