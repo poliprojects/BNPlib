@@ -15,7 +15,6 @@ MARIO PACS
 MANOVALANZA
 * Si può usare "using" o simili per non scrivere this->allocations etc ogni
   volta?
-* private vs protected
 * Spazi/a capo/etc
 
 
