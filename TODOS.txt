@@ -1,15 +1,11 @@
 TODO LIST
 
 Elena:
-* check multi with 2 clusters: non va con neal2
-* costruttori troppo grossi?
-
-
-Bruno:
-* Hypers Hierarchy friend -> use private members in Hierarchy (?)
+* costruttori grossi
 
 
 MARIO PACS
+* parametri sensati per la NNW
 * interfaccia Python (pybind) (una volta che ho catene di proto do in pasto a
   python, R..)
 * Debug/ottimizzatione
@@ -20,17 +16,15 @@ MANOVALANZA
 * Si può usare "using" o simili per non scrivere this->allocations etc ogni
   volta?
 * creating variables every round of a loop: efficient?
-* move complex constructors/destructors to imp.hpp files
-* check all auto's
-* for: unsigned vs int vs size_t vs ?
-* documentation with Doxygen
-* complete README (Virtual Machine etc)
-* check private vs protected
-* remove student_t folder once done
+* for: size_t
+* private vs protected
+* Spazi/a capo/etc
 
 
-CHECKS
-* All algorithm/hierarchy/mixture combinations, csv files, etc
+VARIE
+* Check all algorithm/hierarchy/mixture combinations, csv files, etc
+* README (Virtual Machine etc)
+* Doxygen docs
 
 
 REPORT
