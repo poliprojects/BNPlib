@@ -27,7 +27,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         if(cardinalities[ allocations[i] ] == 1){
             // datum i is a singleton
             aux_unique_values[0].set_state( unique_values[
-                allocations[i] ].get_state() ); // move phi value in aux
+                allocations[i] ].get_state(), false ); // move phi value in aux
             singleton = 1;
         }
 
@@ -64,7 +64,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         if(singleton == 1){
             if(c_new >= n_unique){ // case 1 of 4: SINGLETON - AUX
                 unique_values[ allocations[i] ].set_state(
-                    aux_unique_values[c_new-n_unique].get_state());
+                    aux_unique_values[c_new-n_unique].get_state(), false );
                 cardinalities[ allocations[i] ] += 1;
             }
             else{ // case 2 of 4: SINGLETON - OLD VALUE

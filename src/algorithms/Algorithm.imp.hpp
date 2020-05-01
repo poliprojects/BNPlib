@@ -94,7 +94,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
                 params[k] = proto_param_to_matrix(
                     state.uniquevalues(h).params(k) );
             }
-            temp_hier.set_state(params);
+            temp_hier.set_state(params, false);
 
             dens += card[h] * temp_hier.like(grid) / (M+n);
         }
