@@ -4,6 +4,10 @@ Elena:
 * costruttori grossi
 
 
+Bruno:
+* set_state and checks in hierarchies (Hypers are fine)
+
+
 MARIO PACS
 * parametri sensati per la NNW
 * interfaccia Python (pybind) (una volta che ho catene di proto do in pasto a
