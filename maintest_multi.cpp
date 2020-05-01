@@ -13,7 +13,7 @@ int main(int argc, char *argv[]){
     std::cout << "Running maintest_multi.cpp" << std::endl;
 
     // 3D-vectorial data
-    Eigen::MatrixXd data(30,3);
+    Eigen::MatrixXd data(30,3); // TODO why 30 and not 40???
     fill_eigen_matrix_from_file(data, "csv/data_multi.ssv");
 
     // Set model parameters
