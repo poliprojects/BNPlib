@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+message EigenMatrix {
+    uint32 rows = 1;
+    uint32 cols = 2;
+    repeated double data = 3;
+}
+
+message EigenVector {
+    uint32 size = 1;
+    repeated double data = 2;
+}
+
+
+message StraussState {
+    double beta = 1;
+    double gamma = 2;
+    double R = 3;
+    
+    // for debugging purposes
+    double birth_prob = 4;
+    double birth_arate = 5;
+}
+
+message NrepState {
+    double u = 1;
+    double p = 2;
+    double tau = 3;
+}
+
+message PPState {
+    oneof pp_state {
+        StraussState strauss_state = 1;
+        NrepState nrep_state = 2;
+    }
+}
+
+
+message MultivariateMixtureState {
+    int32 ma = 1;
+    int32 mna = 2;
+    int32 mtot = 3;
+
+    repeated EigenVector a_means = 4;
+    repeated EigenVector na_means = 5;
+
+    repeated EigenMatrix a_precs = 6;
+    repeated EigenMatrix na_precs = 7;
+
+    EigenVector a_jumps = 8;
+    EigenVector na_jumps = 9;
+
+    repeated int32 clus_alloc = 10; 
+    double u = 11;
+
+    PPState pp_state = 12;
+}
+
+
+message UnivariateMixtureState {
+    int32 ma = 1;
+    int32 mna = 2;
+    int32 mtot = 3;
+
+    EigenVector a_means = 4;
+    EigenVector na_means = 5;
+
+    EigenVector a_precs = 6;
+    EigenVector na_precs = 7;
+
+    EigenVector a_jumps = 8;
+    EigenVector na_jumps = 9;
+
+    repeated int32 clus_alloc = 10; 
+    double u = 11;
+
+    PPState pp_state = 12;
+}
