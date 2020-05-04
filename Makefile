@@ -21,7 +21,7 @@ OBJS = $(EXE).o $(subst .cc,.o, $(SRCS_OUTPUT)) $(subst .cpp,.o, $(SRCS))
 
 .PHONY: all clean distclean
 
-all: $(EXE)
+all: $(EXE) generate_pybind
 
 $(EXE): $(OBJS)
 	$(CXX) $(LDFLAGS) -o $(EXE) $(OBJS) $(LDLIBS)
@@ -29,6 +29,12 @@ $(EXE): $(OBJS)
 %.h: %.cc %.cpp
 
 -include $(dep)
+
+generate_pybind:
+#	$(CXX) -shared $(CFLAGS) `/usr/bin/python3.8 -m pybind11 --includes` \
+#		src/python_exports.cpp -o \
+#		bnplib`/usr/bin/python3.8-config --extension-suffix` \
+#		$(OBJS) $(LDLIBS) -fopenmp
 
 clean:
 	$(RM) *.o
