@@ -1,6 +1,7 @@
 # BNPlib: A Nonparametric C++ Library
-## Instructions
-You will need a terminal to run the following commands.
+## Requirements
+* Command line
+* Python 3.7
 
 ### Downloading from GitHub
 * Run ```git clone https://github.com/poliprojects/BNPlib.git```
