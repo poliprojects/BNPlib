@@ -4,34 +4,32 @@ Elena:
 * costruttori grossi
 
 
-Bruno:
-* set_state and checks in hierarchies (Hypers are fine)
+SCALETTA
+* hypers: check da Favaro-Teh (Elena)
+* interfaccia semplice: solo run (Bruno)
+* like NNW + chrono (Elena)
+* interfaccia: tutto il resto (traceplot???, best clust, density, cluster over
+  iterations)
+* ottimizzazione
+* check densità multi
 
 
-MARIO PACS
-* parametri sensati per la NNW (vedi Favaro Teh paper): lambda piccolo
+IMPLEMENTAZIONE
+* hyperparameters sensati per la NNW (vedi Favaro Teh paper): lambda piccolo
   (permettere libertà), mu0 media empirica, nu = dim.dati + 3, sigma0 = tale che
   la sua media sia l'identità
-* interfaccia Python (pybind) (una volta che ho catene di proto do in pasto a
-  python, R..)
-* Debug/ottimizzatione
-** -march=native -O3
-* Introduzione bayes:
-** Polya urn: infinite variabili latenti
-* Report inglese o italiano?
-* like NNW nostra
-
-* arviz (library for plots)
-* valgrind --tool=callgrind (profiler per ottimizzazione)
-* kcachegrind per analizzare output
-** ex: likelihood stan vs nostra in 5D
+* interfaccia Python (pybind)
+** highest posterior density intervals (credible intervals)
+** arviz (library for plots)
+** Ex: contour plot
+* Ottimizzatione
 ** non usare -O3 ma -G
-
-Libreria? -> setup.py, niente Makefile
-
-Ex: contour plot
-
-* highest posterior density intervals (credible intervals)
+** -march=native -O3;    -msse2 -funroll-loops -ftree-vectorize
+** valgrind --tool=callgrind (profiler per ottimizzazione)
+** kcachegrind per analizzare l'output di cui sopra
+* likelihood NNW nostra
+* check stima densità multivariata (plot, anche da salvare per il report etc
+** ex: likelihood stan vs nostra in 5D
 
 
 VARIE
@@ -42,7 +40,14 @@ VARIE
 
 
 REPORT
+* in inglese
+* Introduzione bayes
+** Polya urn: infinite variabili latenti
 * parametri non nel costruttore solitamente sono lasciati in default
 * a way to erase and add clusters more efficiently, e.g. with map
 * storing cardinalities > recomputing them at each iteration
 * set_state flag efficienza
+
+
+LIBRERIA (?)
+* setup.py, niente Makefile
