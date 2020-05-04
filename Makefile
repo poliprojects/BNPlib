@@ -32,9 +32,8 @@ $(EXE): $(OBJS)
 
 pybind_generate: $(LIB_OBJS)
 	$(CXX) -shared $(CXXFLAGS) `$(PYTHON_DIR) -m pybind11 --includes` \
-		src/python/exports.cpp -o \
-		bnplib`$(PYTHON_DIR)-config --extension-suffix` \
-		$(LIB_OBJS) $(LDLIBS)
+		src/python/exports.cpp -o bnplib`$(PYTHON_DIR)-config \
+		--extension-suffix` $(LIB_OBJS) $(LDLIBS)
 
 clean:
 	$(RM) *.o
