@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 
-#include "includes.hpp"
+#include "../../includes.hpp"
 
 using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
@@ -23,6 +23,7 @@ int run_NNIG(double mu0, double lambda, double alpha0, double beta0,
     MixtureType mix(totalmass); // 1.0
 
     // Read data from main arg
+    std::ifstream file;
     file.open(datafile);
     if(!file.is_open()){
         std::cerr << "Error: " << datafile << " file does not exist" <<
