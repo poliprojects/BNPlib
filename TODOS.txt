@@ -9,12 +9,29 @@ Bruno:
 
 
 MARIO PACS
-* parametri sensati per la NNW
+* parametri sensati per la NNW (vedi Favaro Teh paper): lambda piccolo
+  (permettere libertà), mu0 media empirica, nu = dim.dati + 3, sigma0 = tale che
+  la sua media sia l'identità
 * interfaccia Python (pybind) (una volta che ho catene di proto do in pasto a
   python, R..)
 * Debug/ottimizzatione
-* Introduzione bayes
+** -march=native -O3
+* Introduzione bayes:
+** Polya urn: infinite variabili latenti
 * Report inglese o italiano?
+* like NNW nostra
+
+* arviz (library for plots)
+* valgrind --tool=callgrind (profiler per ottimizzazione)
+* kcachegrind per analizzare output
+** ex: likelihood stan vs nostra in 5D
+** non usare -O3 ma -G
+
+Libreria? -> setup.py, niente Makefile
+
+Ex: contour plot
+
+* highest posterior density intervals (credible intervals)
 
 
 VARIE
