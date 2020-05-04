@@ -6,7 +6,6 @@ Elena:
 
 SCALETTA
 * hypers: check da Favaro-Teh (Elena)
-* interfaccia semplice: solo run (Bruno)
 * like NNW + chrono (Elena)
 * interfaccia: tutto il resto (traceplot???, best clust, density, cluster over
   iterations)
