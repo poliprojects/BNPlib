@@ -42,7 +42,7 @@ void FileCollector::finish() {
 
 State FileCollector::get_state(unsigned int i) {
     State state;
-    for(unsigned int k = 0; k < i+1; k++){
+    for(size_t k = 0; k < i+1; k++){
         state = get_next_state();
     }
     if(i<size-1){

@@ -4,7 +4,7 @@
 #include <cassert>
 
 class HypersFixedNNIG {
-private:
+protected:
     double mu0, lambda, alpha0, beta0;
 
     void check_state_validity(){

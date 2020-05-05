@@ -18,13 +18,13 @@
 
 class BaseCollector {
 protected:
-	unsigned int size = 0;
-	unsigned int curr_iter = -1;
+    unsigned int size = 0;
+    unsigned int curr_iter = -1;
 
-	virtual State next_state() = 0;
+    virtual State next_state() = 0;
 
 public:
-	// Destructor
+    // Destructor
 
     BaseCollector()=default;
 
@@ -38,10 +38,10 @@ public:
     State get_next_state(){
         curr_iter++;
         
-    	if(curr_iter >= size){
-    		throw std::out_of_range("Error: curr_iter > size in collector");
-    	}
-    	return next_state();
+        if(curr_iter >= size){
+            throw std::out_of_range("Error: curr_iter > size in collector");
+        }
+        return next_state();
     }
 
     unsigned int get_size() const {return size;}

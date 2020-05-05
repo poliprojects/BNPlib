@@ -6,7 +6,12 @@
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Neal8 : public Neal2<Hierarchy, Hypers, Mixture>{
 protected:
-    // Mehtods parameters
+    using Algorithm<Hierarchy, Hypers, Mixture>::data;
+    using Algorithm<Hierarchy, Hypers, Mixture>::cardinalities;
+    using Algorithm<Hierarchy, Hypers, Mixture>::allocations;
+    using Algorithm<Hierarchy, Hypers, Mixture>::unique_values;
+
+    // Mehtod parameter
     unsigned int n_aux = 3;
 
     // Data and values containers
@@ -30,7 +35,7 @@ public:
         const Eigen::MatrixXd &data_, const unsigned int init = 0) :
         Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, data_,
         init) {
-        for(unsigned int i = 0; i < n_aux; i++){
+        for(size_t i = 0; i < n_aux; i++){
             aux_unique_values.push_back(this->unique_values[0]);
         }
     }

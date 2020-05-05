@@ -18,3 +18,6 @@ main*
 
 # Output files
 Rplots.pdf
+
+# Python cache
+src/python/__pycache__/*

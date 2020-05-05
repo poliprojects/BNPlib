@@ -29,8 +29,11 @@ public:
     // Getters and setters
     std::vector<Eigen::MatrixXd> get_state() const {return state;}
     std::shared_ptr<Hypers> get_hypers() const {return hypers;}
-    virtual void set_state(const std::vector<Eigen::MatrixXd> &state_){
-        check_state_validity();
+    virtual void set_state(const std::vector<Eigen::MatrixXd> &state_,
+    	bool check = true){
+    	if(check){
+        	check_state_validity();
+    	}
         state = state_;
     }
 

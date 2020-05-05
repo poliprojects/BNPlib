@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "includes_main.hpp"
+#include "includes.hpp"
 #include "math.h"
 
 using HypersType = HypersFixedNNW;
@@ -77,9 +77,9 @@ int main(int argc, char *argv[]){
 
     // Density and clustering
     sampler.eval_density(grid, coll);
-    sampler.write_density_to_file("csv/dens_multi.csv");
+    sampler.write_density_to_file("csv/dens_test_multi.csv");
     unsigned int i_cap = sampler.cluster_estimate(coll);
-    sampler.write_clustering_to_file("csv/clust_multi.csv");
+    sampler.write_clustering_to_file("csv/clust_test_multi.csv");
 
     std::cout << "End of maintest_multi.cpp" << std::endl;
     return 0;

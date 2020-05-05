@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "includes_main.hpp"
+#include "includes.hpp"
 
 
 using HypersType = HypersFixedNNIG;
@@ -140,9 +140,9 @@ int main(int argc, char *argv[]){
         v_temp.data(), v_temp.size()); 
 
     (*sampler).eval_density(grid, coll);
-    (*sampler).write_density_to_file("csv/density_fact.csv");
+    (*sampler).write_density_to_file("csv/dens_ex.csv");
     unsigned int i_cap = (*sampler).cluster_estimate(coll);
-    (*sampler).write_clustering_to_file("csv/clust_fact.csv");
+    (*sampler).write_clustering_to_file("csv/clust_ex.csv");
 
     std::cout << "End of main_run.cpp" << std::endl;
     return 0;

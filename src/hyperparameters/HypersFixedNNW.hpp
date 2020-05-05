@@ -5,7 +5,7 @@
 #include <Eigen/Dense>
 
 class HypersFixedNNW {
-private:
+protected:
     using EigenRowVec = Eigen::Matrix<double, 1, Eigen::Dynamic>;
 
     EigenRowVec mu0;
@@ -45,24 +45,24 @@ public:
 
     // Setters
     void set_mu0(const EigenRowVec &mu0_){
-    	assert(mu0_.size() == mu0.size());
-    	mu0 = mu0_;
+        assert(mu0_.size() == mu0.size());
+        mu0 = mu0_;
     }
     void set_lambda(const double lambda_){
-    	assert(lambda_ > 0);
-    	lambda = lambda_;
+        assert(lambda_ > 0);
+        lambda = lambda_;
     }
     void set_tau0(const Eigen::MatrixXd &tau0_) {
-    	assert(tau0_.rows() == tau0_.cols());
-    	assert(mu0.size() == tau0_.rows());
+        assert(tau0_.rows() == tau0_.cols());
+        assert(mu0.size() == tau0_.rows());
         assert( tau0.isApprox(tau0.transpose()) );
         Eigen::LLT<Eigen::MatrixXd> llt(tau0);
         assert( llt.info() != Eigen::NumericalIssue );
-    	tau0 = tau0_;
+        tau0 = tau0_;
     }
     void set_nu(const double nu_){
-    	assert(nu_ > mu0.size()-1);
-    	nu = nu_;
+        assert(nu_ > mu0.size()-1);
+        nu = nu_;
     }
 };
 

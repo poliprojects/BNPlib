@@ -1,4 +1,3 @@
-
 #include "MemoryCollector.hpp"
 
 
@@ -18,13 +17,10 @@ void MemoryCollector::collect(State iteration_state) {
 
 
 void MemoryCollector::finish() {
-	return;
+    return;
 }
 
 
 State MemoryCollector::get_state(unsigned int i) {
-	return chains[i];
+    return chains[i];
 }
-
-
-

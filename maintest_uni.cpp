@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "includes_main.hpp"
+#include "includes.hpp"
 #include "math.h"
 
 using HypersType = HypersFixedNNIG;
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
         v.data(), v.size());
 
     // Create algorithm and set algorithm parameters
-    Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
+    Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
 
     sampler.set_rng_seed(20200229);
     sampler.set_maxiter(100);
@@ -108,9 +108,9 @@ int main(int argc, char *argv[]){
         v_temp.data(), v_temp.size()); 
 
 	sampler.eval_density(grid, coll);
-    sampler.write_density_to_file("csv/density_0.csv");
+    sampler.write_density_to_file("csv/dens_test_uni.csv");
     unsigned int i_cap = sampler.cluster_estimate(coll);
-    sampler.write_clustering_to_file("csv/clust_0.csv");
+    sampler.write_clustering_to_file("csv/clust_test_uni.csv");
 
     std::cout << "End of maintest_uni.cpp" << std::endl;
     return 0;
