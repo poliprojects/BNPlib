@@ -6,7 +6,7 @@ Elena:
 
 SCALETTA
 * hypers: check da Favaro-Teh (Elena)
-* like NNW + chrono (Elena)
+* chrono like NNW (Elena)
 * interfaccia: tutto il resto (traceplot???, best clust, density, cluster over
   iterations)
 * ottimizzazione
