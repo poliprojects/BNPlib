@@ -13,8 +13,8 @@ int main(int argc, char *argv[]){
     std::cout << "Running maintest_multi.cpp" << std::endl;
 
     // 3D-vectorial data
-    Eigen::MatrixXd data(40,3);
-    fill_eigen_matrix_from_file(data, "csv/data_multi.ssv");
+    Eigen::MatrixXd data(10,3);
+    fill_eigen_matrix_from_file(data, "csv/data_multi_2cl.ssv");
 
     // Set model parameters
     Eigen::Matrix<double,1,3> mu0;  mu0 << 1.0, 1.0, 1.0;
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
     MixtureType mix(totalmass);
 
     // Create algorithm and set algorithm parameters
-  Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
+  Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
     sampler.set_rng_seed(20200229);
     sampler.set_maxiter(1000);
     sampler.set_burnin(100);

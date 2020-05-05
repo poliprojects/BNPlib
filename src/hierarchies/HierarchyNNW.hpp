@@ -19,6 +19,12 @@ protected:
 
     void check_state_validity() override;
 
+
+    void set_tau_and_utilities(const Eigen::MatrixXd &tau);
+    Eigen::LLT<Eigen::MatrixXd> tau_chol_factor;
+    Eigen::MatrixXd tau_chol_factor_eval;
+    double tau_log_det;
+
 public:
     bool is_multivariate() const override {return true;}
 
@@ -30,8 +36,11 @@ public:
 
         unsigned int dim = this->hypers->get_mu0().size();
         this->state.push_back( this->hypers->get_mu0() );
-        this->state.push_back( this->hypers->get_lambda() *
+        //this->state.push_back( this->hypers->get_lambda() *
+            //Eigen::MatrixXd::Identity(dim, dim) );
+        set_tau_and_utilities( this->hypers->get_lambda() *
             Eigen::MatrixXd::Identity(dim, dim) );
+
     }
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;
@@ -39,7 +48,14 @@ public:
 
     void draw() override;
 
+
     void sample_given_data(const Eigen::MatrixXd &data) override;
+
+    void set_state(const std::vector<Eigen::MatrixXd> &state_) override {
+        this->state[0] = state_[0];
+        set_tau_and_utilities(state_[1]);
+
+    }
 };
 
 #include "HierarchyNNW.imp.hpp"
