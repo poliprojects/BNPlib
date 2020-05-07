@@ -12,8 +12,7 @@ void HierarchyNNW<Hypers>::check_state_validity(){
 
         // Check if tau is symmetric positive semi definite
         assert( state[1].isApprox(state[1].transpose()) );
-        Eigen::LLT<Eigen::MatrixXd> llt(state[1]);
-        assert( llt.info() != Eigen::NumericalIssue );
+        assert( tau_chol_factor.info() != Eigen::NumericalIssue );
 }
 
 template<class Hypers> 
