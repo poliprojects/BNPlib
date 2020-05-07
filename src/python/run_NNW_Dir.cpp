@@ -11,12 +11,11 @@ namespace NNWDir {
 
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
-    using EigenRowVec = Eigen::Matrix<double, 1, Eigen::Dynamic>;
 }
 
 
-int run_NNW_Dir(EigenRowVec mu0, double lambda, const Eigen::MatrixXd &tau0,
-    double nu, double totalmass,
+int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
+    double lambda, const Eigen::MatrixXd &tau0, double nu, double totalmass,
     std::string datafile, std::string algo, std::string coll_type,
     std::string filecoll_name = "collector.recordio",
     unsigned int rng = 0, unsigned int maxit = 0, unsigned int burn = 0){
@@ -29,8 +28,7 @@ int run_NNW_Dir(EigenRowVec mu0, double lambda, const Eigen::MatrixXd &tau0,
     MixtureType mix(totalmass); // 1.0
 
     // Read data from file
-    Eigen::MatrixXd data(10,3); // TODO
-    fill_eigen_matrix_from_file(data, "csv/data_multi_2cl.ssv");
+    Eigen::MatrixXd data = read_eigen_matrix("csv/data_multi_2cl.ssv");
 
     // Load algorithm factory
     Builder neal2builder = [](HypersType hy, MixtureType mix,
