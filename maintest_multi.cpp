@@ -15,9 +15,6 @@ int main(int argc, char *argv[]){
     // 3D-vectorial data
     Eigen::MatrixXd data = read_eigen_matrix("csv/data_multi_2cl.ssv");
 
-    std::cout << data << std::endl; // TODO DEBUG
-    return 0; // TODO DEBUG
-
     // Set model parameters
     Eigen::Matrix<double,1,3> mu0;  mu0 << 1.0, 1.0, 1.0;
     double lambda = 2.0;
