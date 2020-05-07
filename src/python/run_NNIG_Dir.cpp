@@ -4,21 +4,25 @@
 
 #include "../../includes.hpp"
 
-using HypersType = HypersFixedNNIG;
-using MixtureType = DirichletMixture;
-template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
-// Alias for factory
-using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-    HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
 
 
-int run_NNIG(double mu0, double lambda, double alpha0, double beta0,
+
+int run_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     double totalmass,
     std::string datafile, std::string algo, std::string coll_type,
     std::string filecoll_name = "collector.recordio",
     unsigned int rng = 0, unsigned int maxit = 0, unsigned int burn = 0){
 
-    std::cout << "Running run_NNIG.cpp" << std::endl;
+    std::cout << "Running run_NNIG_Dir.cpp" << std::endl;
+
+    // Set aliases
+    using HypersType = HypersFixedNNIG;
+    using MixtureType = DirichletMixture;
+    template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
+    using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
+        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+
+    // Build model components
     HypersType hy(mu0, lambda, alpha0, beta0); // 5.0 0.1 2.0 2.0
     MixtureType mix(totalmass); // 1.0
 
@@ -86,6 +90,6 @@ int run_NNIG(double mu0, double lambda, double alpha0, double beta0,
     // Run algorithm
     (*sampler).run(coll);
 
-    std::cout << "End of run_NNIG.cpp" << std::endl;
+    std::cout << "End of run_NNIG_Dir.cpp" << std::endl;
     return 0;
 }
