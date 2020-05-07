@@ -4,7 +4,13 @@
 
 #include "../../includes.hpp"
 
-
+namespace NNIGDir {
+    using HypersType = HypersFixedNNIG;
+    using MixtureType = DirichletMixture;
+    template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
+    using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
+        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+}
 
 
 int run_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
@@ -14,13 +20,7 @@ int run_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     unsigned int rng = 0, unsigned int maxit = 0, unsigned int burn = 0){
 
     std::cout << "Running run_NNIG_Dir.cpp" << std::endl;
-
-    // Set aliases
-    using HypersType = HypersFixedNNIG;
-    using MixtureType = DirichletMixture;
-    template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
-    using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+    using namespace NNIGDir;
 
     // Build model components
     HypersType hy(mu0, lambda, alpha0, beta0); // 5.0 0.1 2.0 2.0
