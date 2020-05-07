@@ -35,24 +35,11 @@ template<class Hypers>
 Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
-<<<<<<< HEAD
-	//Eigen::MatrixXd sigma = this->state[1].inverse();
-	EigenRowVec mu(this->state[0]);
-    //for(unsigned int i = 0; i < n; i++){
-      //  EigenRowVec datum = data.row(i);
-        //result(i) = std::exp(stan::math::multi_normal_lpdf(datum, mu, sigma));
-    //}
-
-
-    for(unsigned int i = 0; i < n; i++){
-=======
-    Eigen::MatrixXd sigma = state[1].inverse();
     EigenRowVec mu(state[0]);
     for(size_t i = 0; i < n; i++){
->>>>>>> d018b122ec487addb643a861c8f7300f300475ea
         EigenRowVec datum = data.row(i);
         result(i) = std::exp( 0.5 *(tau_log_det - (
-            tau_chol_factor_eval*(datum- mu).transpose() ).squaredNorm() ));
+            tau_chol_factor_eval * (datum-mu).transpose() ).squaredNorm() ));
     }
     return result;
 }
@@ -60,18 +47,6 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
 
 template<class Hypers> 
 void HierarchyNNW<Hypers>::draw(){
-<<<<<<< HEAD
-    Eigen::MatrixXd tau_new = stan::math::wishart_rng( this->hypers->get_nu(),
-        this->hypers->get_tau0(), this->rng );
-    Eigen::MatrixXd sigma = this->state[1].inverse();
-    EigenRowVec mu_new = stan::math::multi_normal_rng( this->hypers->get_mu0(),
-        sigma*(1/this->hypers->get_lambda()), this->rng );
-
-     this->state[0] = mu_new;
-     //this->state[1] = tau_new;
-     set_tau_and_utilities(tau_new);
-
-=======
     Eigen::MatrixXd tau_new = stan::math::wishart_rng( hypers->get_nu(),
         hypers->get_tau0(), this->rng );
     Eigen::MatrixXd sigma = state[1].inverse();
@@ -79,8 +54,7 @@ void HierarchyNNW<Hypers>::draw(){
         sigma*(1/hypers->get_lambda()), this->rng );
 
      state[0] = mu_new;
-     state[1] = tau_new;
->>>>>>> d018b122ec487addb643a861c8f7300f300475ea
+     set_tau_and_utilities(tau_new);
 }
 
 
@@ -152,15 +126,8 @@ void HierarchyNNW<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     EigenRowVec mu_new = stan::math::multi_normal_rng(mu_post,
         tau_inv*(1/lambda_post), this->rng);
     
-<<<<<<< HEAD
-    this->state[0] = mu_new;
+	state[0] = mu_new;
     set_tau_and_utilities(tau_new);
-
-    //this->state[1] = tau_new;
-=======
-    state[0] = mu_new;
-    state[1] = tau_new;
->>>>>>> d018b122ec487addb643a861c8f7300f300475ea
 }
 
 
