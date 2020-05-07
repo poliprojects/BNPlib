@@ -52,26 +52,26 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(const Eigen::MatrixXd &data){
 template<class Hypers> 
 std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
     const Eigen::VectorXd &data, const double mu0, const double alpha0,
-    const double beta0, const double lambda0){
+    const double beta0, const double lambda){
 
     double mu_post, alpha_post, beta_post, lambda_post;
     unsigned int n = data.rows();
 
     if(n == 0){
-        return std::vector<double>{mu0, alpha0, beta0, lambda0};
+        return std::vector<double>{mu0, alpha0, beta0, lambda};
     }
     
     // Compute sample mean
     double y_bar = data.mean();
 
     // Compute parameters
-    mu_post = (lambda0 * mu0 + n * y_bar) / (lambda0 + n);
+    mu_post = (lambda * mu0 + n * y_bar) / (lambda + n);
     alpha_post = alpha0 + 0.5 * n;
     // double ss = n * arma::var(data, 1); // divides by n, not n-1
     double ss = (data.dot(data)) - n*y_bar*y_bar;
-    beta_post = beta0 + 0.5 * ss + 0.5 * lambda0 * n * std::pow((y_bar - mu0),
-        2) / (n + lambda0);
-    lambda_post = lambda0 + n;
+    beta_post = beta0 + 0.5 * ss + 0.5 * lambda * n * std::pow((y_bar - mu0),
+        2) / (n + lambda);
+    lambda_post = lambda + n;
     
     return std::vector<double>{mu_post, alpha_post, beta_post, lambda_post};
 }
@@ -81,13 +81,13 @@ template<class Hypers>
 void HierarchyNNIG<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
 
     // Get current values of parameters
-    double mu0     = hypers->get_mu0();
-    double lambda0 = hypers->get_lambda();
-    double alpha0  = hypers->get_alpha0();
-    double beta0   = hypers->get_beta0();
+    double mu0    = hypers->get_mu0();
+    double lambda = hypers->get_lambda();
+    double alpha0 = hypers->get_alpha0();
+    double beta0  = hypers->get_beta0();
 
     std::vector<double> temp = normal_gamma_update(data.col(0), mu0, alpha0,
-        beta0, lambda0);
+        beta0, lambda);
 
     double mu_post     = temp[0];
     double alpha_post  = temp[1];
