@@ -8,13 +8,15 @@ namespace NNWDir {
     using HypersType = HypersFixedNNW;
     using MixtureType = DirichletMixture;
     template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
+
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+    using EigenRowVec = Eigen::Matrix<double, 1, Eigen::Dynamic>;
 }
 
 
-int run_NNW_Dir(double mu0, double lambda, double alpha0, double beta0,
-    double totalmass,
+int run_NNW_Dir(EigenRowVec mu0, double lambda, const Eigen::MatrixXd &tau0,
+    double nu, double totalmass,
     std::string datafile, std::string algo, std::string coll_type,
     std::string filecoll_name = "collector.recordio",
     unsigned int rng = 0, unsigned int maxit = 0, unsigned int burn = 0){
@@ -23,28 +25,12 @@ int run_NNW_Dir(double mu0, double lambda, double alpha0, double beta0,
     using namespace NNWDir;
 
     // Build model components
-    HypersType hy(mu0, lambda, alpha0, beta0); // 5.0 0.1 2.0 2.0
+    HypersType hy(mu0, lambda, tau0, nu); // 5.0 0.1 2.0 2.0
     MixtureType mix(totalmass); // 1.0
 
-    // Read data from main arg
-    std::ifstream file;
-    file.open(datafile);
-    if(!file.is_open()){
-        std::cerr << "Error: " << datafile << " file does not exist" <<
-            std::endl;
-        return 1;
-    }
-    std::string str, str2;
-    std::getline(file, str);
-    std::istringstream iss(str);
-    std::vector<double> v;
-    while(std::getline(iss, str2, ',')){
-        double val = ::atof(str2.c_str());
-        v.push_back(val);
-    }
-    file.close();
-    Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v.data(), v.size());
+    // Read data from file
+    Eigen::MatrixXd data(10,3); // TODO
+    fill_eigen_matrix_from_file(data, "csv/data_multi_2cl.ssv");
 
     // Load algorithm factory
     Builder neal2builder = [](HypersType hy, MixtureType mix,

@@ -26,7 +26,7 @@ int run_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     HypersType hy(mu0, lambda, alpha0, beta0); // 5.0 0.1 2.0 2.0
     MixtureType mix(totalmass); // 1.0
 
-    // Read data from main arg
+    // Read data from file
     std::ifstream file;
     file.open(datafile);
     if(!file.is_open()){
