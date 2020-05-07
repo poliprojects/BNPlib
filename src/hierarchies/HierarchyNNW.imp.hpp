@@ -18,11 +18,11 @@ void HierarchyNNW<Hypers>::check_state_validity(){
 
 template<class Hypers> 
 void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
-    if(this->state.size() == 1){ // e.g. if the hierarchy is being initialized
-        this->state.push_back(tau);
+    if(state.size() == 1){ // e.g. if the hierarchy is being initialized
+        state.push_back(tau);
     }
     else {
-        this->state[1] = tau;
+        state[1] = tau;
     }
 
     tau_chol_factor = Eigen::LLT<Eigen::MatrixXd>(tau);

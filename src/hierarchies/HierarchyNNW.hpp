@@ -49,10 +49,13 @@ public:
 
     void sample_given_data(const Eigen::MatrixXd &data) override;
 
-    void set_state(const std::vector<Eigen::MatrixXd> &state_) override {
-        this->state[0] = state_[0];
+    void set_state(const std::vector<Eigen::MatrixXd> &state_,
+    	bool check = true) override {
+        state[0] = state_[0];
         set_tau_and_utilities(state_[1]);
-
+        if(check){
+        	check_state_validity();
+        }
     }
 };
 
