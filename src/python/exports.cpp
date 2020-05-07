@@ -9,5 +9,5 @@ PYBIND11_MODULE(bnplib, m)
 {
     m.doc() = "TODO docstring";
     m.def("run_NNIG_Dir", &run_NNIG_Dir, "TODO docstring");
-    //m.def("run_NNW_Dir", &run_NNW_Dir, "TODO docstring");
+    m.def("run_NNW_Dir", &run_NNW_Dir, "TODO docstring");
 }
