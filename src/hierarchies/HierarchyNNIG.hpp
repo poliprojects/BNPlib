@@ -9,7 +9,7 @@
 // G ~ DP(M, G0)  with G0 = N-IG
 //
 // state  = mu, sigma
-// hypers = mu_0,Lambda0, alpha, beta
+// hypers = mu_0, lambda, alpha, beta
 
 template<class Hypers>
 class HierarchyNNIG : public HierarchyBase<Hypers> {
@@ -19,7 +19,7 @@ protected:
 
     std::vector<double> normal_gamma_update(const Eigen::VectorXd &data,
         const double mu0, const double alpha0, const double beta0,
-        const double lambda0);
+        const double lambda);
 
     void check_state_validity() override;
 

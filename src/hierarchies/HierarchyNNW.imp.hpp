@@ -11,18 +11,20 @@ void HierarchyNNW<Hypers>::check_state_validity(){
         assert(dim == this->state[1].cols());
 
         // Check if tau is symmetric positive semi definite
+
         assert( this->state[1].isApprox(this->state[1].transpose()) );
         Eigen::LLT<Eigen::MatrixXd> llt(this->state[1]);
         assert( llt.info() != Eigen::NumericalIssue );
+
 }
 
 template<class Hypers> 
 void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
-    if(this->state.size() == 1){ // e.g. if the hierarchy is being initialized
-        this->state.push_back(tau);
+    if(state.size() == 1){ // e.g. if the hierarchy is being initialized
+        state.push_back(tau);
     }
     else {
-        this->state[1] = tau;
+        state[1] = tau;
     }
 
     tau_chol_factor = Eigen::LLT<Eigen::MatrixXd>(tau);
@@ -43,10 +45,10 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     //}
 
 
-    for(unsigned int i = 0; i < n; i++){
+    for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
         result(i) = std::exp( 0.5 *(tau_log_det - (
-            tau_chol_factor_eval*(datum- mu).transpose() ).squaredNorm() ));
+            tau_chol_factor_eval * (datum-mu).transpose() ).squaredNorm() ));
     }
     return result;
 }
@@ -54,6 +56,7 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
 
 template<class Hypers> 
 void HierarchyNNW<Hypers>::draw(){
+<<<<<<< HEAD
     Eigen::MatrixXd tau_new = stan::math::wishart_rng( this->hypers->get_nu(),
         this->hypers->get_tau0(), this->rng );
     Eigen::MatrixXd sigma = this->state[1].inverse();
@@ -63,6 +66,7 @@ void HierarchyNNW<Hypers>::draw(){
      this->state[0] = mu_new;
      //this->state[1] = tau_new;
      set_tau_and_utilities(tau_new);
+
 
 }
 
@@ -135,10 +139,10 @@ void HierarchyNNW<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     EigenRowVec mu_new = stan::math::multi_normal_rng(mu_post,
         tau_inv*(1/lambda_post), this->rng);
     
+
     this->state[0] = mu_new;
     set_tau_and_utilities(tau_new);
 
-    //this->state[1] = tau_new;
 }
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from interface import *
+from bnp_interface import *
 
 mu0 = 5.0
 lambda_ = 0.1
