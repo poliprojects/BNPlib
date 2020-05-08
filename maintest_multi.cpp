@@ -1,12 +1,14 @@
 #include <iostream>
 #include <fstream>
+#include <chrono>
+#include "math.h"
 
 #include "includes.hpp"
 #include "math.h"
 
 using HypersType = HypersFixedNNW;
 using MixtureType = DirichletMixture;
-template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
+template <class HypersType> using HierarchyType = HierarchyNNW2<HypersType>;
 
 
 int main(int argc, char *argv[]){
@@ -26,7 +28,7 @@ int main(int argc, char *argv[]){
     MixtureType mix(totalmass);
 
     // Create algorithm and set algorithm parameters
-    Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
+    Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
     sampler.set_rng_seed(20200229);
     sampler.set_maxiter(1000);
     sampler.set_burnin(100);
@@ -68,7 +70,17 @@ int main(int argc, char *argv[]){
     }
 
     // Run sampler
+   std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();    
     sampler.run(coll);
+    end = std::chrono::system_clock::now();
+
+    typedef std::chrono::duration<int, std::ratio<1, 100000000>> shakes;
+
+    int elapsed_seconds = std::chrono::duration_cast<shakes>(
+        end-start).count();
+    std::cout << "time:" << elapsed_seconds << std::endl;
+
 
     // Take 3D grid from file 
     Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_multi.ssv");

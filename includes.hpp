@@ -5,6 +5,7 @@
 #include "src/algorithms/Neal8.hpp"
 #include "src/hierarchies/HierarchyNNIG.hpp"
 #include "src/hierarchies/HierarchyNNW.hpp"
+#include "src/hierarchies/HierarchyNNW2.hpp"
 #include "src/hyperparameters/HypersFixedNNIG.hpp"
 #include "src/hyperparameters/HypersFixedNNW.hpp"
 #include "src/mixtures/DirichletMixture.hpp"
