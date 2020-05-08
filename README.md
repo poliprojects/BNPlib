@@ -40,3 +40,11 @@
 * In Neal8 algorithm, change number of auxiliary blocks (default 3) with the
   appropriate setter method of the algorithm object: ```sampler.set_n_aux(4);```
  
+
+
+
+
+
+##############
+pip3 install pybind11
+
