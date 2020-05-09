@@ -4,6 +4,11 @@ Elena:
 * costruttori grossi
 
 
+Bruno:
+* Add using HierarchyBase<Hypers>::state; using HierarchyBase<Hypers>::hypers;
+  to HierarchyNNW and change both files
+
+
 SCALETTA
 * hypers: check da Favaro-Teh (Elena)
 * chrono like NNW (Elena)
