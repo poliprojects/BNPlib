@@ -33,7 +33,6 @@ Eigen::VectorXd HierarchyNNW2<Hypers>::like(const Eigen::MatrixXd &data){
         result(i) = std::exp(stan::math::multi_normal_lpdf(datum, mu, sigma));
     }
 
-    std::cout << result << std::endl; // TODO DEBUG
     return result;
 }
 
