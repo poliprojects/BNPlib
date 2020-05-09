@@ -8,7 +8,7 @@
 
 using HypersType = HypersFixedNNW;
 using MixtureType = DirichletMixture;
-template <class HypersType> using HierarchyType = HierarchyNNW2<HypersType>;
+template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
 
 
 int main(int argc, char *argv[]){
