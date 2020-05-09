@@ -18,10 +18,10 @@ int main(int argc, char *argv[]){
     Eigen::MatrixXd data = read_eigen_matrix("csv/data_multi_2cl.ssv");
 
     // Set model parameters
-    Eigen::Matrix<double,1,3> mu0;  mu0 << 1.0, 1.0, 1.0;
-    double lambda = 2.0;
-    Eigen::MatrixXd tau0 = Eigen::Matrix<double, 3, 3>::Identity();
+    Eigen::Matrix<double,1,2> mu0;  mu0 << 5.5, 5.5;
+    double lambda = 0.2;
     double nu = 5.0;
+    Eigen::MatrixXd tau0 = (1/nu) * Eigen::Matrix<double, 2, 2>::Identity();
     HypersType hy(mu0, lambda, tau0, nu);
 
     double totalmass = 1.0;
@@ -30,8 +30,8 @@ int main(int argc, char *argv[]){
     // Create algorithm and set algorithm parameters
     Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
     sampler.set_rng_seed(20200229);
-    sampler.set_maxiter(1000);
-    sampler.set_burnin(100);
+    sampler.set_maxiter(5000);
+    sampler.set_burnin(500);
 
     BaseCollector *coll;
     if(argc < 2){
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]){
     }
 
     // Run sampler
-   std::chrono::time_point<std::chrono::system_clock> start, end;
+   	std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();    
     sampler.run(coll);
     end = std::chrono::system_clock::now();
@@ -88,8 +88,8 @@ int main(int argc, char *argv[]){
     // Density and clustering
     sampler.eval_density(grid, coll);
     sampler.write_density_to_file("csv/dens_multi.csv");
-    unsigned int i_cap = sampler.cluster_estimate(coll);
-    sampler.write_clustering_to_file("csv/clust_multi.csv");
+    //unsigned int i_cap = sampler.cluster_estimate(coll);
+    //sampler.write_clustering_to_file("csv/clust_multi.csv");
 
     std::cout << "End of maintest_multi.cpp" << std::endl;
     return 0;
