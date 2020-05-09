@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
     MixtureType mix(totalmass);
 
     // Create algorithm and set algorithm parameters
-    Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
+    Neal8<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
     sampler.set_rng_seed(20200229);
     sampler.set_maxiter(5000);
     sampler.set_burnin(500);
