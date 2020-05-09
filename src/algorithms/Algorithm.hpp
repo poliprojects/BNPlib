@@ -72,6 +72,7 @@ public:
         initialize();
         unsigned int iter = 0;
         while(iter < maxiter){
+            std::cout << "it " << iter << std::endl; // TODO DEBUG
             step();
             if(iter >= burnin){
 

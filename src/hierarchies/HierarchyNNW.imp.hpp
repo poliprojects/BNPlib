@@ -46,6 +46,8 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
         result(i) = std::exp( 0.5 *(tau_log_det - (
             tau_chol_factor_eval * (datum-mu).transpose() ).squaredNorm() ));
     }
+    
+    std::cout << result << std::endl; // TODO DEBUG
     return result;
 }
 
