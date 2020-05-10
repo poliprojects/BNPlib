@@ -25,6 +25,7 @@ void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
     }
     else {
         this->state[1] = tau;
+        std::cout << this->state[1] << std::endl; // TODO DEBUG
     }
 
     tau_chol_factor = Eigen::LLT<Eigen::MatrixXd>(tau);

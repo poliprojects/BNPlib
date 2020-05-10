@@ -48,6 +48,7 @@ void HierarchyNNW2<Hypers>::draw(){
 
      this->state[0] = mu_new;
      this->state[1] = tau_new;
+     std::cout << this->state[1] << std::endl; // TODO DEBUG
 
 
 
@@ -125,6 +126,7 @@ void HierarchyNNW2<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
 
     this->state[0] = mu_new;
     this->state[1] = tau_new;
+    std::cout << this->state[1] << std::endl; // TODO DEBUG
 
 }
 
