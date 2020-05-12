@@ -39,7 +39,7 @@ template<class Hypers>
 void HierarchyNNW2<Hypers>::draw(){
 
     Eigen::MatrixXd tau_new = stan::math::wishart_rng( hypers->get_nu(),
-        hypers->get_tau0(), rng );
+        hypers->get_tau0(), this->rng );
     Eigen::MatrixXd sigma = state[1].inverse();
     EigenRowVec mu_new = stan::math::multi_normal_rng( hypers->get_mu0(),
         sigma*(1/hypers->get_lambda()), this->rng );
