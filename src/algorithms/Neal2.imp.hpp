@@ -72,10 +72,10 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
             tot += probas(n_unique);
         }
 
-        // Normalize
-        probas = probas / tot;
+        std::cout << "probas orig: " << probas << std::endl; // TODO DEBUG
 
-        std::cout << "probas: " << probas << std::endl; // TODO DEBUG
+        // Normalize
+        probas = probas / tot; 
         
         // Draw a NEW value for ci
         unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
