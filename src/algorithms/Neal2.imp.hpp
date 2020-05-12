@@ -72,7 +72,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
             tot += probas(n_unique);
         }
 
-        //std::cout << "probas orig: " << probas << std::endl; // TODO DEBUG
+
 
         // Normalize
         probas = probas / tot; 
@@ -84,13 +84,13 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         if(singleton == 1){
             if(c_new == allocations[i]){
                 // case 1 of 4: SINGLETON - SINGLETON
-                //std::cout << "case 1" << std::endl; // TODO DEBUG
+
                 unique_values[ allocations[i] ].sample_given_data(datum);
                 cardinalities[c_new] += 1;
             }
 
             else{ // case 2 of 4: SINGLETON - CLUSTER
-                //std::cout << "case 2" << std::endl; // TODO DEBUG
+
                 unique_values.erase( unique_values.begin() + allocations[i] );
                 
                 unsigned int c_old = allocations[i];
@@ -107,7 +107,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
         else{ // if singleton == 0
             if(c_new == n_unique){ // case 3 of 4: NOT SINGLETON - SINGLETON
-                //std::cout << "case 3" << std::endl; // TODO DEBUG
+
                 Hierarchy<Hypers> new_unique( unique_values[0].get_hypers() );
 
                 new_unique.sample_given_data(datum);
@@ -116,7 +116,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 cardinalities.push_back(1);
             }
             else{ // case 4 of 4: NOT SINGLETON - CLUSTER
-                //std::cout << "case 4" << std::endl; // TODO DEBUG
+
                 allocations[i] = c_new;
                 cardinalities[c_new] += 1;
             }

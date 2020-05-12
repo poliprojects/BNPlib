@@ -15,6 +15,7 @@ void HierarchyNNW<Hypers>::check_state_validity(){
         assert( tau_chol_factor.info() != Eigen::NumericalIssue );
 }
 
+
 template<class Hypers> 
 void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
     if(state.size() == 1){ // e.g. if the hierarchy is being initialized
@@ -24,24 +25,30 @@ void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
         state[1] = tau;
     }
 
-
     tau_chol_factor = Eigen::LLT<Eigen::MatrixXd>(tau);
     tau_chol_factor_eval = tau_chol_factor.matrixL();
     Eigen::VectorXd diag = tau_chol_factor_eval.diagonal();
     tau_log_det =  2*log(diag.array()).sum();
 }
 
+
 template<class Hypers> 
 Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
+    // TODO DEBUG all
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
 	EigenRowVec mu(state[0]);
+ 
+
     for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
-        result(i) = std::exp( 0.5 *(log(state[1].determinant()) - (
+
+        result(i) = std::exp( 0.5 *(tau_log_det - (
             (datum-mu)*state[1]* (datum-mu).transpose() )));
     }
     return std::pow(2.0*M_PI, -data.cols()/2.0)*result;
+
+
 }
 
 
