@@ -15,6 +15,7 @@ void HierarchyNNW<Hypers>::check_state_validity(){
         assert( tau_chol_factor.info() != Eigen::NumericalIssue );
 }
 
+
 template<class Hypers> 
 void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
     if(state.size() == 1){ // e.g. if the hierarchy is being initialized
@@ -23,7 +24,6 @@ void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
     else {
         state[1] = tau;
     }
-    // std::cout << this->state[1] << std::endl; // TODO DEBUG
 
     tau_chol_factor = Eigen::LLT<Eigen::MatrixXd>(tau);
     tau_chol_factor_eval = tau_chol_factor.matrixL();
@@ -31,17 +31,33 @@ void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
     tau_log_det = 2 * log(diag.array()).sum();
 }
 
+
 template<class Hypers> 
 Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
+    // TODO DEBUG all
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
 	EigenRowVec mu(state[0]);
+    Eigen::MatrixXd sigma = state[1].inverse();
+
+    //double multi_normal_prec_lpdf(
+    //    const VectorXd &x, const VectorXd &mu, const PrecMat &sigma)
+    //{
+    //    double out = sigma.get_log_det();
+    //    out -= (sigma.get_cho_factor_eval() * (x - mu)).squaredNorm();
+    //    return 0.5 * out;
+    //}
+
     for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
-        result(i) = std::exp( 0.5 *(tau_log_det - (
-            tau_chol_factor_eval * (datum-mu).transpose() ).squaredNorm() ));
+        result(i) = std::pow(2*M_PI, -data.cols()/2.0) *
+            std::exp( 0.5 *(tau_log_det - (tau_chol_factor_eval*(
+            datum-mu).transpose() ).squaredNorm()) );
+        double correct = std::exp(stan::math::multi_normal_lpdf(datum, mu,
+            sigma));
+        std::cout << correct << ": " << result(i) << std::endl;
     }
-    return std::pow(2*M_PI, -data.cols()/2)*result;
+    return result;
 }
 
 
