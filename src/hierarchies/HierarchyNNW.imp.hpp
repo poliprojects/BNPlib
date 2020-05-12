@@ -23,12 +23,12 @@ void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
     else {
         state[1] = tau;
     }
-    // std::cout << this->state[1] << std::endl; // TODO DEBUG
+
 
     tau_chol_factor = Eigen::LLT<Eigen::MatrixXd>(tau);
     tau_chol_factor_eval = tau_chol_factor.matrixL();
     Eigen::VectorXd diag = tau_chol_factor_eval.diagonal();
-    tau_log_det = 2 * log(diag.array()).sum();
+    tau_log_det =  2*log(diag.array()).sum();
 }
 
 template<class Hypers> 
@@ -38,10 +38,10 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
 	EigenRowVec mu(state[0]);
     for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
-        result(i) = std::exp( 0.5 *(tau_log_det - (
-            tau_chol_factor_eval * (datum-mu).transpose() ).squaredNorm() ));
+        result(i) = std::exp( 0.5 *(log(state[1].determinant()) - (
+            (datum-mu)*state[1]* (datum-mu).transpose() )));
     }
-    return std::pow(2*M_PI, -data.cols()/2)*result;
+    return std::pow(2.0*M_PI, -data.cols()/2.0)*result;
 }
 
 
@@ -128,6 +128,7 @@ void HierarchyNNW<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     
     state[0] = mu_new;
     set_tau_and_utilities(tau_new);
+    // std::cout << tau_new << std::endl; // TODO DEBUG
 }
 
 

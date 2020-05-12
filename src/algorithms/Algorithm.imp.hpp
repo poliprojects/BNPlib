@@ -69,11 +69,11 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     const Eigen::MatrixXd &grid, BaseCollector* collector){
 
     density.first = grid;
-    Eigen::VectorXd dens(grid.rows());
+    Eigen::VectorXd dens(Eigen::MatrixXd::Zero(grid.rows(),1));
     double M = mixture.get_totalmass();
     unsigned int n;
     State state;
-    
+                std::cout<<dens <<std::endl;
     for(size_t iter = 0; iter < collector->get_size(); iter++){
         // for each iteration of the algorithm
         state = collector->get_next_state();
@@ -87,7 +87,8 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
         for(size_t j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
-             
+            std::cout<<"iter"<<std::endl;
+            std::cout<<iter<<std::endl;
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
         for(size_t h = 0; h < state.uniquevalues_size(); h++){
             for(size_t k = 0; k < state.uniquevalues(h).params_size(); k++){
@@ -95,12 +96,16 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
                     state.uniquevalues(h).params(k) );
             }
             temp_hier.set_state(params, false);
+   
+            dens += card[h]* temp_hier.like(grid) / (M+n);
+		std::cout<<"dens"<<std::endl;
+          
+            std::cout<<dens <<std::endl;
 
-            dens += card[h] * temp_hier.like(grid) / (M+n);
         }
-
+            
         dens += density_marginal_component(temp_hier,n);
-
+                       
     }
 
     density.second = dens / collector->get_size();
