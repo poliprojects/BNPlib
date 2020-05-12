@@ -6,66 +6,55 @@
 
 template<class Hypers> 
 void HierarchyNNW<Hypers>::check_state_validity(){
-        unsigned int dim = this->state[0].size();
-        assert(dim == this->state[1].rows());
-        assert(dim == this->state[1].cols());
+        unsigned int dim = state[0].size();
+        assert(dim == state[1].rows());
+        assert(dim == state[1].cols());
 
         // Check if tau is symmetric positive semi definite
-
-        assert( this->state[1].isApprox(this->state[1].transpose()) );
-        Eigen::LLT<Eigen::MatrixXd> llt(this->state[1]);
-        assert( llt.info() != Eigen::NumericalIssue );
-
+        assert( state[1].isApprox(state[1].transpose()) );
+        assert( tau_chol_factor.info() != Eigen::NumericalIssue );
 }
 
 template<class Hypers> 
 void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
-    if(this->state.size() == 1){ // e.g. if the hierarchy is being initialized
-        this->state.push_back(tau);
+    if(state.size() == 1){ // e.g. if the hierarchy is being initialized
+        state.push_back(tau);
     }
     else {
-        this->state[1] = tau;
+        state[1] = tau;
     }
-    std::cout << this->state[1] << std::endl; // TODO DEBUG
+    // std::cout << this->state[1] << std::endl; // TODO DEBUG
 
     tau_chol_factor = Eigen::LLT<Eigen::MatrixXd>(tau);
     tau_chol_factor_eval = tau_chol_factor.matrixL();
     Eigen::VectorXd diag = tau_chol_factor_eval.diagonal();
-    tau_log_det = 2*log(diag.array()).sum();
+    tau_log_det = 2 * log(diag.array()).sum();
 }
 
 template<class Hypers> 
 Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
-
-	EigenRowVec mu(this->state[0]);
-
-
+	EigenRowVec mu(state[0]);
     for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
         result(i) = std::exp( 0.5 *(tau_log_det - (
             tau_chol_factor_eval * (datum-mu).transpose() ).squaredNorm() ));
     }
-    
     return std::pow(2*M_PI, -data.cols()/2)*result;
 }
 
 
 template<class Hypers> 
 void HierarchyNNW<Hypers>::draw(){
+    Eigen::MatrixXd tau_new = stan::math::wishart_rng( hypers->get_nu(),
+        hypers->get_tau0(), this->rng );
+    Eigen::MatrixXd sigma = state[1].inverse();
+    EigenRowVec mu_new = stan::math::multi_normal_rng( hypers->get_mu0(),
+        sigma*(1/hypers->get_lambda()), this->rng );
 
-    Eigen::MatrixXd tau_new = stan::math::wishart_rng( this->hypers->get_nu(),
-        this->hypers->get_tau0(), this->rng );
-    Eigen::MatrixXd sigma = this->state[1].inverse();
-    EigenRowVec mu_new = stan::math::multi_normal_rng( this->hypers->get_mu0(),
-        sigma*(1/this->hypers->get_lambda()), this->rng );
-
-     this->state[0] = mu_new;
-
-     set_tau_and_utilities(tau_new);
-
-
+    state[0] = mu_new;
+    set_tau_and_utilities(tau_new);
 }
 
 
@@ -74,19 +63,19 @@ Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
     unsigned int dim = data.cols();
-    double nu = this->hypers->get_nu();
-    double lambda = this->hypers->get_lambda();
+    double nu = hypers->get_nu();
+    double lambda = hypers->get_lambda();
 
-    EigenRowVec mu_n = this->hypers->get_mu0();
+    EigenRowVec mu_n = hypers->get_mu0();
     double nu_n = 2*nu - dim + 1;
-    Eigen::MatrixXd sigma_n = this->hypers->get_tau0().inverse() *
+    Eigen::MatrixXd sigma_n = hypers->get_tau0().inverse() *
         ( nu-(dim-1)*0.5 ) * lambda/(lambda+1);
 
-    for(int i = 0; i < n; i++){
+    for(size_t i = 0; i < n; i++){
         // use multi_student_t_lpdf(datum, nu, mu, Sigma)
         EigenRowVec datum = data.row(i);
-        result(i) = exp( stan::math::multi_student_t_lpdf(datum, nu_n,
-            mu_n, sigma_n) );
+        result(i) = exp( stan::math::multi_student_t_lpdf(datum, nu_n, mu_n,
+            sigma_n) );
     }
     return result;
 }
@@ -105,9 +94,9 @@ std::vector<Eigen::MatrixXd> HierarchyNNW<Hypers>::normal_wishart_update(
 
     // Compute tau_post
     Eigen::MatrixXd tau_temp = Eigen::MatrixXd::Zero(data.cols(), data.cols());
-    for(unsigned int i = 0; i < n; i++){
+    for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
-        tau_temp += (datum-mubar).transpose()*(datum-mubar); // column-times-row
+        tau_temp += (datum-mubar).transpose()*(datum-mubar); // column * row
     }
     tau_temp += (n*lambda/(n+lambda)) * (mubar-mu0).transpose()*(mubar-mu0);
     tau_temp = 0.5*tau_temp + tau0.inverse();
@@ -120,10 +109,10 @@ std::vector<Eigen::MatrixXd> HierarchyNNW<Hypers>::normal_wishart_update(
 template<class Hypers> 
 void HierarchyNNW<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     // Get current values of parameters
-    EigenRowVec mu0 = this->hypers->get_mu0();
-    double lambda = this->hypers->get_lambda();
-    Eigen::MatrixXd tau0 = this->hypers->get_tau0();
-    double nu = this->hypers->get_nu();
+    EigenRowVec mu0 = hypers->get_mu0();
+    double lambda = hypers->get_lambda();
+    Eigen::MatrixXd tau0 = hypers->get_tau0();
+    double nu = hypers->get_nu();
     std::vector<Eigen::MatrixXd> temp = normal_wishart_update(data, mu0, lambda,
         tau0, nu);
     EigenRowVec mu_post = temp[0];
@@ -137,10 +126,8 @@ void HierarchyNNW<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     EigenRowVec mu_new = stan::math::multi_normal_rng(mu_post,
         tau_inv*(1/lambda_post), this->rng);
     
-
-    this->state[0] = mu_new;
+    state[0] = mu_new;
     set_tau_and_utilities(tau_new);
-
 }
 
 

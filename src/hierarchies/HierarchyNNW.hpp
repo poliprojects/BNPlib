@@ -11,6 +11,8 @@
 template<class Hypers>
 class HierarchyNNW : public HierarchyBase<Hypers> {
 protected:
+    using HierarchyBase<Hypers>::state;
+    using HierarchyBase<Hypers>::hypers;
     using EigenRowVec = Eigen::Matrix<double, 1, Eigen::Dynamic>;
 
     // Utilities for likelihood calculation
@@ -32,12 +34,11 @@ public:
     ~HierarchyNNW() = default;
     HierarchyNNW() = default;
     HierarchyNNW(std::shared_ptr<Hypers> hypers_) {
-        this->hypers = hypers_;
-
-        unsigned int dim = this->hypers->get_mu0().size();
-        this->state.push_back( this->hypers->get_mu0() );
-
-        set_tau_and_utilities( this->hypers->get_lambda() *Eigen::MatrixXd::Identity(dim, dim) );
+        hypers = hypers_;
+        unsigned int dim = hypers->get_mu0().size();
+        state.push_back( hypers->get_mu0() );
+        set_tau_and_utilities( hypers->get_lambda() *
+            Eigen::MatrixXd::Identity(dim, dim) );
     }
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;
@@ -50,7 +51,7 @@ public:
 
     void set_state(const std::vector<Eigen::MatrixXd> &state_,
     	bool check = true) override {
-        this->state[0] = state_[0];
+        state[0] = state_[0];
         set_tau_and_utilities(state_[1]);
         if(check){
         	check_state_validity();

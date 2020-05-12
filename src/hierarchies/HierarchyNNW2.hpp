@@ -11,6 +11,8 @@
 template<class Hypers>
 class HierarchyNNW2 : public HierarchyBase<Hypers> {
 protected:
+    using HierarchyBase<Hypers>::state;
+    using HierarchyBase<Hypers>::hypers;
     using EigenRowVec = Eigen::Matrix<double, 1, Eigen::Dynamic>;
 
     
@@ -34,7 +36,7 @@ public:
      
 	this->state.push_back( this->hypers->get_lambda() *
             Eigen::MatrixXd::Identity(dim, dim) );
-    std::cout << this->state[1] << std::endl; // TODO DEBUG
+    // std::cout << this->state[1] << std::endl; // TODO DEBUG
     }
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;
