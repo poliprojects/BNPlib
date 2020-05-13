@@ -46065,7 +46065,7 @@ dens
  10.6436
  13.7995
  11.4802
-Successfully wrote density to csv/dens_multi.csv
+Successfully wrote density to csv/dens_multi.txt
 0
 0
 0
@@ -92125,5 +92125,5 @@ dens
  10.6436
  13.7995
  11.4802
-Successfully wrote density to csv/dens_multi2.csv
+Successfully wrote density to csv/dens_multi2.txt
 End of maintest_nnws.cpp

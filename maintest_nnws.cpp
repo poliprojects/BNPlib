@@ -51,9 +51,9 @@ int main(int argc, char *argv[]){
 
     // Density and clustering
     sampler.eval_density(grid, coll);
-    sampler.write_density_to_file("csv/dens_multi.csv");
+    sampler.write_density_to_file("csv/dens_multi.txt");
     sampler2.eval_density(grid, coll2);
-    sampler2.write_density_to_file("csv/dens_multi2.csv");
+    sampler2.write_density_to_file("csv/dens_multi2.txt");
 
     std::cout << "End of maintest_nnws.cpp" << std::endl;
     return 0;
