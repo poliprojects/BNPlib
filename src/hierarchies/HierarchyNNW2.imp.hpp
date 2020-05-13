@@ -23,11 +23,10 @@ Eigen::VectorXd HierarchyNNW2<Hypers>::like(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
     EigenRowVec mu(state[0]);
-	Eigen::MatrixXd sigma = state[1].inverse();
 
     for(unsigned int i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
-        result(i) = std::exp(stan::math::multi_normal_lpdf(datum, mu, sigma));
+        result(i) = std::exp(stan::math::multi_normal_lpdf(datum, mu, state[1]));
     }
 
     return result;

@@ -44,7 +44,7 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
         EigenRowVec datum = data.row(i);
 
         result(i) = std::exp( 0.5 *(tau_log_det - (
-            (datum-mu)*state[1]* (datum-mu).transpose() )));
+            (datum-mu)*state[1]* (datum-mu).transpose() ))); // TODO con (tau_chol_factor_eval* (datum-mu).transpose()).squaredNorm() non viene
     }
     return std::pow(2.0*M_PI, -data.cols()/2.0)*result;
 
