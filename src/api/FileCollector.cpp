@@ -1,4 +1,3 @@
-
 #include "FileCollector.hpp"
 
 
@@ -45,8 +44,8 @@ State FileCollector::get_state(unsigned int i) {
     for(size_t k = 0; k < i+1; k++){
         state = get_next_state();
     }
-    if(i<size-1){
-        curr_iter=-1;
+    if(i < size-1){
+        curr_iter = -1;
         fin->Close();
         close(infd);
         is_open_read = false;}
@@ -63,6 +62,3 @@ void FileCollector::collect(State iteration_state) {
         std::cout << "Writing in FileCollector failed" << std::endl;
     }
 }
-
-
-

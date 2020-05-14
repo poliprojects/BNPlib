@@ -25,7 +25,7 @@ protected:
 
 public:
     // Constructor and destructor
-    FileCollector()=default;
+    FileCollector() = default;
     FileCollector(std::string filename) : filename(filename){
         int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);
         fout = new google::protobuf::io::FileOutputStream(outfd);
@@ -48,9 +48,7 @@ public:
     State get_state(unsigned int i) override;
 
     void collect(State iteration_state) override;
-
 };
-
 
 
 #endif // FILECOLLECTOR_HPP
