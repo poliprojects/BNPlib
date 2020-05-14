@@ -46,7 +46,6 @@ public:
 
     void draw() override;
 
-
     void sample_given_data(const Eigen::MatrixXd &data) override;
 
     void set_state(const std::vector<Eigen::MatrixXd> &state_,

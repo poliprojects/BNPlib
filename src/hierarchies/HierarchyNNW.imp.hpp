@@ -38,17 +38,15 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
 	EigenRowVec mu(state[0]);
- 
 
     for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
 
-        result(i) = std::exp( 0.5 *(tau_log_det - (
-(tau_chol_factor_eval.transpose()* (datum-mu).transpose()).squaredNorm()   ))); // TODO con (tau_chol_factor_eval* (datum-mu).transpose()).squaredNorm() non viene
+        result(i) = std::exp( 0.5 * (tau_log_det - ((
+            tau_chol_factor_eval.transpose()* (datum-mu).transpose()
+            ).squaredNorm()) ) );
     }
     return std::pow(2.0*M_PI, -data.cols()/2.0)*result;
-
-
 }
 
 
@@ -135,7 +133,6 @@ void HierarchyNNW<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     
     state[0] = mu_new;
     set_tau_and_utilities(tau_new);
-    // std::cout << tau_new << std::endl; // TODO DEBUG
 }
 
 

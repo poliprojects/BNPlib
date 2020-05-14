@@ -17,7 +17,6 @@ void HierarchyNNW2<Hypers>::check_state_validity(){
 }
 
 
-
 template<class Hypers> 
 Eigen::VectorXd HierarchyNNW2<Hypers>::like(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
@@ -26,7 +25,8 @@ Eigen::VectorXd HierarchyNNW2<Hypers>::like(const Eigen::MatrixXd &data){
 
     for(unsigned int i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
-        result(i) = std::exp(stan::math::multi_normal_prec_lpdf(datum, mu, state[1]));
+        result(i) = std::exp(stan::math::multi_normal_prec_lpdf(
+            datum, mu, state[1]));
     }
 
     return result;
@@ -44,7 +44,6 @@ void HierarchyNNW2<Hypers>::draw(){
 
     state[0] = mu_new;
     state[1] = tau_new;
-    // std::cout << this->state[1] << std::endl; // TODO DEBUG
 }
 
 
@@ -118,8 +117,6 @@ void HierarchyNNW2<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     
     state[0] = mu_new;
     state[1] = tau_new;
-    //std::cout << this->state[1] << std::endl; // TODO DEBUG
-
 }
 
 

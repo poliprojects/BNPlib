@@ -36,7 +36,6 @@ public:
      
 	this->state.push_back( this->hypers->get_lambda() *
             Eigen::MatrixXd::Identity(dim, dim) );
-    // std::cout << this->state[1] << std::endl; // TODO DEBUG
     }
 
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;
@@ -44,10 +43,7 @@ public:
 
     void draw() override;
 
-
-    void sample_given_data(const Eigen::MatrixXd &data) override;
-
-   
+    void sample_given_data(const Eigen::MatrixXd &data) override;   
 };
 
 #include "HierarchyNNW2.imp.hpp"
