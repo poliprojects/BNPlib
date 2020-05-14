@@ -70,7 +70,6 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     double M = mixture.get_totalmass();
     unsigned int n;
     State state;
-    std::cout << dens << std::endl; // TODO DEBUG
     for(size_t iter = 0; iter < collector->get_size(); iter++){
         // for each iteration of the algorithm
         state = collector->get_next_state();
@@ -84,8 +83,6 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
         for(size_t j = 0; j < n; j++){
             card[ state.allocations(j) ] += 1;
         }
-        std::cout << "iter" << std::endl; // TODO DEBUG
-        std::cout << iter << std::endl; // TODO DEBUG
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
         for(size_t h = 0; h < state.uniquevalues_size(); h++){
             for(size_t k = 0; k < state.uniquevalues(h).params_size(); k++){
@@ -95,7 +92,6 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
             temp_hier.set_state(params, false);
    
             dens += card[h]* temp_hier.like(grid) / (M+n);
-			std::cout << "dens: " << dens << std::endl; // TODO
         }
             
         dens += density_marginal_component(temp_hier,n);
