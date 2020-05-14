@@ -1,10 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
-#include "math.h"
+#include "math.h" // TODO < > ?
 
 #include "includes.hpp"
-#include "math.h"
 
 using HypersType = HypersFixedNNW;
 using MixtureType = DirichletMixture;
