@@ -1,6 +1,17 @@
 #include "FileCollector.hpp"
 
 
+// State state;
+// ifstream file("path/to/file.bin", ios::in | ios::binary);
+// if (file.is_open()){
+	// bool success = state.ParseFromIstream(&file);
+	// // what happens? is only the first state parsed?
+    // if(!success){
+        // std::cout << "Parsing failed" << std::endl;
+    // }
+// }
+
+
 void FileCollector::open_for_reading() {
     infd = open(filename.c_str(), O_RDONLY);
     fin = new google::protobuf::io::FileInputStream(infd);
