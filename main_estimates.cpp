@@ -33,74 +33,40 @@ int main(int argc, char *argv[]){
     // Checks on main args
     std::ifstream file;
     if(argc < 2){
-    	std::cerr << "Error: no id given for algo as arg" << std::endl;
+        std::cerr << "Error: no id given for algo as arg" << std::endl;
         return 1;
    }
  
-
     // Load algorithm factory
-
-    Builder neal2builder_dataless = [](HypersType hy ,MixtureType mix){
-
-        return std::make_unique< Neal2<HierarchyType,HypersType,
+    Builder neal2builder_dataless = [](HypersType hy, MixtureType mix){
+        return std::make_unique< Neal2<HierarchyType, HypersType,
                 MixtureType> >(hy, mix);
         };
-	
-	Builder neal8builder_dataless = [](HypersType hy ,MixtureType mix){
-	
-        return std::make_unique< Neal8<HierarchyType,HypersType,
+    
+    Builder neal8builder_dataless = [](HypersType hy, MixtureType mix){
+        return std::make_unique< Neal8<HierarchyType, HypersType,
                 MixtureType> >(hy, mix);
         };
+
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType>::Instance();
 
-
-    algoFactory.add_builder("neal2_dataless",neal2builder_dataless);
-    algoFactory.add_builder("neal8_dataless",neal8builder_dataless);
+    algoFactory.add_builder("neal2_dataless", neal2builder_dataless);
+    algoFactory.add_builder("neal8_dataless", neal8builder_dataless);
 
     // Create algorithm without data and set algorithm parameters
     auto sampler = algoFactory.create_object(argv[1], hy, mix);
 
-
-    // Choose memory collector
-    BaseCollector *coll;
+    std::string filename;
     if(argc < 3){
-        std::cerr << "Error: need file collector type " <<
-            "(\"file\" or \"memory\") as arg" << std::endl;
-        return 1;
+        // Use default name
+        filename = "collector.recordio";
     }
-
-    std::string collector(argv[2]);
-    if(collector == "file"){
-        std::string filename;
-        if(argc < 4){
-            // Use default name
-            filename = "collector.recordio";
-        }
-        else {
-            std::string filename = argv[3]; 
-            if(argc > 4){
-                std::cout << "Warning: unused extra args present" << std::endl;
-            }
-        }
-        coll = new FileCollector(filename);
-    }
-
-    else if(collector == "memory"){
-        if(argc > 3){
-            std::cout << "Warning: unused extra args present" << std::endl;
-        }
-        coll = new MemoryCollector();
-    }
-
     else {
-        std::cerr << "Error: collector type arg must be \"file\" or \"memory\""
-            << std::endl;
-        return 1;
+        std::string filename = argv[2]; 
     }
-
-
+    BaseCollector *coll = new FileCollector(filename);
 
     // Density and clustering
     double temp = 0.0;

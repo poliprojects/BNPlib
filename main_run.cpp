@@ -62,16 +62,15 @@ int main(int argc, char *argv[]){
     // Load algorithm factory
     Builder neal2builder = [](HypersType hy, MixtureType mix,
         Eigen::VectorXd data){
-        return std::make_unique< Neal2<HierarchyType,HypersType,
+        return std::make_unique< Neal2<HierarchyType, HypersType,
                 MixtureType> >(hy, mix, data);
         };
     
     Builder neal8builder = [](HypersType hy, MixtureType mix,
         Eigen::VectorXd data){
-        return std::make_unique< Neal8<HierarchyType,HypersType,
+        return std::make_unique< Neal8<HierarchyType, HypersType,
                 MixtureType> >(hy, mix, data);
         };
-
 
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,

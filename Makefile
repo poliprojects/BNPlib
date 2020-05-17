@@ -14,7 +14,7 @@ LDFLAGS += -O3 -D_REENTRANT -fopenmp
 LDLIBS = $(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb \
 	-lpthread -Wl,-rpath,"$(STAN_ROOT_DIR)/lib/tbb"
 
-EXE = maintest_nnws
+EXE = main_estimates
 SRCS_OUTPUT = src/api/output.pb.cc
 SRCS = src/api/FileCollector.cpp src/api/MemoryCollector.cpp
 LIB_OBJS = $(subst .cpp,.o, $(SRCS)) $(subst .cc,.o, $(SRCS_OUTPUT))
