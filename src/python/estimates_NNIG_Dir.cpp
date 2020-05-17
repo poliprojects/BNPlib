@@ -15,9 +15,9 @@ namespace NNIGDir {
 
 int estimates_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     double totalmass,
-    std::string gridfile, std::string algo,
-    std::string filecoll_name = "collector.recordio",
-    std::string densfile = "src/python/density.csv"){
+    const Eigen::VectorXd &grid, const std::string &algo,
+    const std::string &filecoll_name = "collector.recordio",
+    const std::string &densfile = "src/python/density.csv"){
 
     std::cout << "Running estimates_NNIG_Dir.cpp" << std::endl;
     using namespace NNIGDir;
@@ -26,48 +26,29 @@ int estimates_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     HypersType hy(mu0, lambda, alpha0, beta0); // 5.0 0.1 2.0 2.0
     MixtureType mix(totalmass); // 1.0
 
-    // Read data from file
-    std::ifstream file;
-    file.open(gridfile);
-    if(!file.is_open()){
-        std::cerr << "Error: " << gridfile << " file does not exist" <<
-            std::endl;
-        return 1;
-    }
-    std::string str, str2;
-    std::getline(file, str);
-    std::istringstream iss(str);
-    std::vector<double> v;
-    while(std::getline(iss, str2, ',')){
-        double val = ::atof(str2.c_str());
-        v.push_back(val);
-    }
-    file.close();
-    Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v.data(), v.size());
+    //Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
+    //    v.data(), v.size());
 
     // Load algorithm factory
-    Builder neal2builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
+    Builder neal2builder_dataless = [](HypersType hy, MixtureType mix){
         return std::make_unique< Neal2<HierarchyType,HypersType,
-                MixtureType> >(hy, mix, data);
+                MixtureType> >(hy, mix);
         };
     
-    Builder neal8builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
-        return std::make_unique< Neal8<HierarchyType,HypersType,
-                MixtureType> >(hy, mix, data);
+    Builder neal8builder_dataless = [](HypersType hy, MixtureType mix){
+        return std::make_unique< Neal8<HierarchyType, HypersType,
+                MixtureType> >(hy, mix);
         };
 
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType>::Instance();
 
-    algoFactory.add_builder("neal2",neal2builder);
-    algoFactory.add_builder("neal8",neal8builder);
+    algoFactory.add_builder("neal2_dataless",neal2builder_dataless);
+    algoFactory.add_builder("neal8_dataless",neal8builder_dataless);
 
     // Create algorithm and set algorithm parameters
-    auto sampler = algoFactory.create_object(algo, hy, mix, data);
+    auto sampler = algoFactory.create_object(algo, hy, mix);
 
     // Choose memory collector
     BaseCollector *coll = new FileCollector(filecoll_name);

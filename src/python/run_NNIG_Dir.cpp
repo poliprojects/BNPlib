@@ -15,8 +15,9 @@ namespace NNIGDir {
 
 int run_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     double totalmass,
-    std::string datafile, std::string algo, std::string coll_type,
-    std::string filecoll_name = "collector.recordio",
+    const std::string &datafile, const std::string &algo,
+    const std::string &coll_type,
+    const std::string &filecoll_name = "collector.recordio",
     unsigned int rng = 0, unsigned int maxit = 0, unsigned int burn = 0){
 
     std::cout << "Running run_NNIG_Dir.cpp" << std::endl;
