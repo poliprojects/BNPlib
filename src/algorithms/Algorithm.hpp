@@ -136,6 +136,12 @@ public:
     const unsigned int get_maxiter(){return maxiter;}
     const unsigned int get_burnin(){return burnin;}
     const unsigned int get_init_num_clusters(){return init_num_clusters;}
+    const std::pair< Eigen::MatrixXd, Eigen::VectorXd > get_density(){
+        if(!density_was_computed){
+            std::domain_error("Error calling get_density(): not computed yet");
+        }
+        return density;
+    }
 
     // Setters
     void set_maxiter(const unsigned int maxiter_){maxiter = maxiter_;}

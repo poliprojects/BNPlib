@@ -9,7 +9,6 @@ Bruno:
 * Add using HierarchyBase<Hypers>::state; using HierarchyBase<Hypers>::hypers;
   to HierarchyNNW and change both files
 * move reading from univar csv to utils.hpp file, OR uniform all csv files
-* get_density (using check)
 
 
 SCALETTA
