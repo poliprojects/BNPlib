@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "math.h"
+#include <math.h>
 
 #include "includes.hpp"
 
@@ -8,16 +8,32 @@ using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
+using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
+    HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+
 
 int main(int argc, char *argv[]){
     std::cout << "Running maintest_uni.cpp" << std::endl;
 
-    // Read data from file
-    if(argc < 2){
-        std::cerr << "Error: no filename given for data as arg" << std::endl;
+    // Check main args:
+    // [0]main [1]data [2]algo [3]coll [4]filecollname
+    if(argc == 1){
+        std::cerr << "Error: no data filename given as arg" << std::endl;
         return 1;
     }
-    Eigen::VectorXd data = read_eigen_matrix(argv[1]);
+    else if(argc == 2){
+        std::cerr << "Error: no algorithm id given as arg" << std::endl;
+        return 1;
+    }
+    else if(argc == 3){
+        std::cerr << "Error: no collector type (\"file\" or \"memory\") " <<
+            "given as arg" << std::endl;
+        return 1;
+    }
+
+    // Read data from file
+    std::string datafile = argv[1];
+    Eigen::VectorXd data = read_eigen_matrix(datafile);
 
     // Set model parameters
     double mu0 = 5.0;
@@ -33,42 +49,46 @@ int main(int argc, char *argv[]){
     //std::cin >> totalmass; //1.0
     MixtureType mix(totalmass);
 
+    // Load algorithm factory
+    Builder neal2builder = [](HypersType hy, MixtureType mix,
+        Eigen::VectorXd data){
+        return std::make_unique< Neal2<HierarchyType,HypersType,
+                MixtureType> >(hy, mix, data);
+        };
+    
+    Builder neal8builder = [](HypersType hy, MixtureType mix,
+        Eigen::VectorXd data){
+        return std::make_unique< Neal8<HierarchyType,HypersType,
+                MixtureType> >(hy, mix, data);
+        };
+
+    auto &algoFactory = Factory<
+        Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
+        MixtureType>::Instance();
+
+    algoFactory.add_builder("neal2",neal2builder);
+    algoFactory.add_builder("neal8",neal8builder);
+
     // Create algorithm and set algorithm parameters
-    Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
-    sampler.set_rng_seed(20200229);
-    sampler.set_maxiter(5000);
-    sampler.set_burnin(500);
+    std::string algo = argv[2];
+    auto sampler = algoFactory.create_object(algo, hy, mix, data);
+    (*sampler).set_rng_seed(20200229);
+    (*sampler).set_maxiter(5000);
+    (*sampler).set_burnin(500);
       
     // Choose collector
     BaseCollector *coll;
-    if(argc < 3){
-        std::cerr << "Error: no collector type (\"file\" or \"memory\") " <<
-            "given as arg" << std::endl;
-        return 1;
-    }
-
-    std::string collector(argv[2]);
-    if(collector == "file"){
-        std::string filename;
-        if(argc < 4){
-            // Use default name
-            filename = "collector.recordio";
-        }
-        else {
-            std::string filename = argv[2];
-            if(argc > 4){
-                std::cout << "Warning: unused extra args present" << std::endl;
-            }
+    std::string colltype = argv[3];
+    if(colltype == "file"){
+        std::string filename = "collector.recordio";
+        if(argc > 4){
+            filename = argv[4];
         }
         coll = new FileCollector(filename);
     }
-    else if(collector == "memory"){
-        if(argc > 3){
-            std::cout << "Warning: unused extra args present" << std::endl;
-        }
+    else if(colltype == "memory"){
         coll = new MemoryCollector();
     }
-
     else {
         std::cerr << "Error: collector type must be \"file\" or \"memory\""
             << std::endl;
@@ -76,16 +96,16 @@ int main(int argc, char *argv[]){
     }
 
     // Run sampler
-    sampler.run(coll);
+    (*sampler).run(coll);
 
     // Read grid from file
     Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_uni.csv");
 
     // Density and clustering
-	sampler.eval_density(grid, coll);
-    sampler.write_density_to_file("csv/dens_test_uni.csv");
-    unsigned int i_cap = sampler.cluster_estimate(coll);
-    sampler.write_clustering_to_file("csv/clust_test_uni.csv");
+	(*sampler).eval_density(grid, coll);
+    (*sampler).write_density_to_file("csv/dens_test_uni.csv");
+    unsigned int i_cap = (*sampler).cluster_estimate(coll);
+    (*sampler).write_clustering_to_file("csv/clust_test_uni.csv");
 
     std::cout << "End of maintest_uni.cpp" << std::endl;
     return 0;
