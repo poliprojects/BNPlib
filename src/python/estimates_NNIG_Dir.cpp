@@ -27,9 +27,6 @@ int estimates_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     HypersType hy(mu0, lambda, alpha0, beta0); // 5.0 0.1 2.0 2.0
     MixtureType mix(totalmass); // 1.0
 
-    //Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-    //    v.data(), v.size());
-
     // Load algorithm factory
     BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){
         return std::make_unique< Neal2<HierarchyType, HypersType,
