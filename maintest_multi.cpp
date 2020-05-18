@@ -14,7 +14,7 @@ int main(int argc, char *argv[]){
     std::cout << "Running maintest_multi.cpp" << std::endl;
 
     // 3D-vectorial data
-    Eigen::MatrixXd data = read_eigen_matrix("csv/data_multi_2cl.ssv");
+    Eigen::MatrixXd data = read_eigen_matrix("csv/data_multi_2cl.csv");
 
     // Set model parameters
     Eigen::Matrix<double,1,2> mu0;  mu0 << 5.5, 5.5;
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
 
 
     // Take 3D grid from file 
-    Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_multi.ssv");
+    Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_multi.csv");
 
     // Density and clustering
     sampler.eval_density(grid, coll);
