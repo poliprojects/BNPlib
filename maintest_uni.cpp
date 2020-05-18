@@ -1,50 +1,49 @@
 #include <iostream>
 #include <fstream>
+#include "math.h"
 
 #include "includes.hpp"
-#include "math.h"
 
 using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
+
 int main(int argc, char *argv[]){
     std::cout << "Running maintest_uni.cpp" << std::endl;
 
-    // Set model parameters
-    double mu0, lambda, alpha0, beta0;
-    //std::cout << "Insert mu0, lambda, alpha0, beta0 values:" << std::endl;
-    //std::cin >> mu0 >> lambda >> alpha0 >> beta0;
-    mu0 = 5.0; lambda = 0.1; alpha0 = 2.0; beta0 = 2.0;
-    HypersType hy(mu0, lambda, alpha0, beta0);
-
-    double totalmass;
-    //std::cout << "Insert total mass value:" << std::endl; 
-    //std::cin >> totalmass; //1.0
-    totalmass = 1.0;
-    MixtureType mix(totalmass);
-
-    // Read data from main arg
-    std::ifstream file;
+    // Read data from file
     if(argc < 2){
         std::cerr << "Error: no filename given for data as arg" << std::endl;
         return 1;
     }
-
     Eigen::VectorXd data = read_eigen_matrix(argv[1]);
+
+    // Set model parameters
+    double mu0 = 5.0;
+    double lambda = 0.1;
+    double alpha0 = 2.0;
+    double beta0 = 2.0;
+    //std::cout << "Insert mu0, lambda, alpha0, beta0 values:" << std::endl;
+    //std::cin >> mu0 >> lambda >> alpha0 >> beta0;
+    HypersType hy(mu0, lambda, alpha0, beta0);
+
+    double totalmass = 1.0;
+    //std::cout << "Insert total mass value:" << std::endl; 
+    //std::cin >> totalmass; //1.0
+    MixtureType mix(totalmass);
 
     // Create algorithm and set algorithm parameters
     Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
-
     sampler.set_rng_seed(20200229);
-    sampler.set_maxiter(100);
-    sampler.set_burnin(10);
+    sampler.set_maxiter(5000);
+    sampler.set_burnin(500);
       
-    // Choose memory collector
+    // Choose collector
     BaseCollector *coll;
     if(argc < 3){
-        std::cerr << "Error: need file collector type " <<
-            "(\"file\" or \"memory\") as arg" << std::endl;
+        std::cerr << "Error: no collector type (\"file\" or \"memory\") " <<
+            "given as arg" << std::endl;
         return 1;
     }
 
@@ -71,7 +70,7 @@ int main(int argc, char *argv[]){
     }
 
     else {
-        std::cerr << "Error: collector type arg must be \"file\" or \"memory\""
+        std::cerr << "Error: collector type must be \"file\" or \"memory\""
             << std::endl;
         return 1;
     }
@@ -79,18 +78,10 @@ int main(int argc, char *argv[]){
     // Run sampler
     sampler.run(coll);
 
-    // Density and clustering
-    double temp = 0.0;
-    double step = 0.05;
-    double upp_bnd = 10.0;
-    std::vector<double> v_temp;
-    while(temp <= upp_bnd){
-        v_temp.push_back(temp);
-        temp += step;
-    }
-    Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v_temp.data(), v_temp.size()); 
+    // Read grid from file
+    Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_uni.csv");
 
+    // Density and clustering
 	sampler.eval_density(grid, coll);
     sampler.write_density_to_file("csv/dens_test_uni.csv");
     unsigned int i_cap = sampler.cluster_estimate(coll);

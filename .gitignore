@@ -23,3 +23,6 @@ Rplots.pdf
 
 # Python cache
 src/python/__pycache__/*
+
+# Callgrind output files
+callgrind*
