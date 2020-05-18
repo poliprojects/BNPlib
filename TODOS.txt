@@ -1,13 +1,7 @@
 TODO LIST
 
-Elena:
-* deserialize
-* output.py con protoc
-
-
 SCALETTA
 * hypers: check da Favaro-Teh (Elena)
-* chrono like NNW (Elena)
 * interfaccia: tutto il resto (traceplot???, best clust, density, cluster over
   iterations)
 * ottimizzazione
@@ -27,7 +21,6 @@ IMPLEMENTAZIONE
 ** -march=native -O3;    -msse2 -funroll-loops -ftree-vectorize
 ** valgrind --tool=callgrind (profiler per ottimizzazione)
 ** kcachegrind per analizzare l'output di cui sopra
-* likelihood NNW nostra
 * check stima densità multivariata (plot, anche da salvare per il report etc
 ** ex: likelihood stan vs nostra in 5D
 
