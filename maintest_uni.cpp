@@ -66,8 +66,8 @@ int main(int argc, char *argv[]){
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType>::Instance();
 
-    algoFactory.add_builder("neal2",neal2builder);
-    algoFactory.add_builder("neal8",neal8builder);
+    algoFactory.add_builder("neal2", neal2builder);
+    algoFactory.add_builder("neal8", neal8builder);
 
     // Create algorithm and set algorithm parameters
     std::string algo = argv[2];

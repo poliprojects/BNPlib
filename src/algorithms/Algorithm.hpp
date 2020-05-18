@@ -72,7 +72,6 @@ public:
         initialize();
         unsigned int iter = 0;
         while(iter < maxiter){
-
             step();
             if(iter >= burnin){
 
