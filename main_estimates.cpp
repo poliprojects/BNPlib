@@ -9,9 +9,8 @@ using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
 // Alias for factory
-
 using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-    HypersType, MixtureType>>(HypersType,MixtureType)>; 
+    HypersType, MixtureType>>(HypersType, MixtureType)>; 
 
 
 int main(int argc, char *argv[]){
