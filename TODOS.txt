@@ -5,10 +5,6 @@ Elena:
 * output.py con protoc
 
 
-Bruno:
-* move reading from univar csv to utils.hpp file, OR uniform all csv files
-
-
 SCALETTA
 * hypers: check da Favaro-Teh (Elena)
 * chrono like NNW (Elena)

@@ -30,24 +30,8 @@ int main(int argc, char *argv[]){
         std::cerr << "Error: no filename given for data as arg" << std::endl;
         return 1;
     }
-    file.open(argv[1]);
-    if(!file.is_open()){
-        std::cerr << "Error: " << argv[1] << " file does not exist" <<
-            std::endl;
-        return 1;
-    }
 
-    std::string str, str2;
-    std::getline(file, str);
-    std::istringstream stream(str);
-    std::vector<double> v;
-    while(std::getline(stream, str2, ',')){
-        double val = ::atof(str2.c_str());
-        v.push_back(val);
-    }
-    file.close();
-    Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v.data(), v.size());
+    Eigen::VectorXd data = read_eigen_matrix(argv[1]);
 
     // Create algorithm and set algorithm parameters
     Neal2<HierarchyType, HypersType, MixtureType> sampler(hy, mix, data);
