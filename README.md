@@ -48,3 +48,7 @@
 ##############
 pip3 install pybind11
 
+* Compile a .proto file with protoc: first ```cd src/api``` then run
+```../../lib/protobuf/src/protoc -I=. --python_out=. output.proto```
+
+
