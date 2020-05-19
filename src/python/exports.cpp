@@ -3,7 +3,7 @@
 #include "../../includes.hpp"
 #include "run_NNIG_Dir.cpp"
 #include "run_NNW_Dir.cpp"
-//#include "estimates_NNIG_Dir.cpp"
+#include "estimates_NNIG_Dir.cpp"
 
 
 PYBIND11_MODULE(bnplib, m)
