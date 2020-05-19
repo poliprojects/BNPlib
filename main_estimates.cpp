@@ -13,6 +13,8 @@ using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
     HypersType, MixtureType>>(HypersType, MixtureType)>; 
 
 
+// TODO blastiamo sto file?
+
 int main(int argc, char *argv[]){
     std::cout << "Running main_estimates.cpp" << std::endl;
 
