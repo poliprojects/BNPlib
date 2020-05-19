@@ -32,7 +32,7 @@ public:
 
     virtual void collect(State iteration_state) = 0;
     virtual State get_state(unsigned int i) = 0; 
-
+    virtual void start() = 0;
     virtual void finish() = 0;
     // Getters and setters
     State get_next_state(){

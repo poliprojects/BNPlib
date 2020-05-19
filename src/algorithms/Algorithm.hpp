@@ -71,6 +71,7 @@ public:
         print_startup_message();
         initialize();
         unsigned int iter = 0;
+        collector->start();
         while(iter < maxiter){
             step();
             if(iter >= burnin){

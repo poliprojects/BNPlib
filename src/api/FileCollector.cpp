@@ -40,6 +40,12 @@ State FileCollector::next_state() {
     return out;
 }
 
+void FileCollector::start() {
+    int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);
+        fout = new google::protobuf::io::FileOutputStream(outfd);
+        is_open_write = true;
+}
+
 
 void FileCollector::finish() {
     if(is_open_write){

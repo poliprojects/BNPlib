@@ -16,9 +16,15 @@ void MemoryCollector::collect(State iteration_state) {
 }
 
 
+void MemoryCollector::start() {
+    return;
+}
+
 void MemoryCollector::finish() {
     return;
 }
+
+
 
 
 State MemoryCollector::get_state(unsigned int i) {

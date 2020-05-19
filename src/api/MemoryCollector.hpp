@@ -12,6 +12,7 @@ protected:
 
 public:
     void collect(State iteration_state) override;
+    void start() override;
     void finish() override;
     State get_state(unsigned int i) override;
 

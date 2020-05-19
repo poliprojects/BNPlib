@@ -26,11 +26,7 @@ protected:
 public:
     // Constructor and destructor
     FileCollector() = default;
-    FileCollector(std::string filename) : filename(filename){
-        int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);
-        fout = new google::protobuf::io::FileOutputStream(outfd);
-        is_open_write = true;
-    }
+    FileCollector(std::string filename) : filename(filename){}
 
      ~FileCollector() {
         if (is_open_write){
@@ -43,6 +39,7 @@ public:
         } 
     }
 
+    void start() override;
     void finish() override;
 
     State get_state(unsigned int i) override;
