@@ -29,7 +29,7 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     MixtureType mix(totalmass); // 1.0
 
     // Read data from file
-    Eigen::MatrixXd data = read_eigen_matrix("csv/data_multi_2cl.csv");
+    Eigen::MatrixXd data = read_eigen_matrix(datafile);
 
     // Load algorithm factory
     Builder neal2builder = [](HypersType hy, MixtureType mix,
