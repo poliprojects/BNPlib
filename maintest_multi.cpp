@@ -17,18 +17,19 @@ int main(int argc, char *argv[]){
 
     // Check main args:
     // [0]main [1]data [2]algo [3]coll [4]filecollname
-    if(argc == 1){
-        std::cerr << "Error: no data filename given as arg" << std::endl;
-        return 1;
-    }
-    else if(argc == 2){
-        std::cerr << "Error: no algorithm id given as arg" << std::endl;
-        return 1;
-    }
-    else if(argc == 3){
-        std::cerr << "Error: no collector type (\"file\" or \"memory\") " <<
-            "given as arg" << std::endl;
-        return 1;
+    switch(argc){
+        case 1:
+            std::cerr << "Error: no data filename given as arg" << std::endl;
+            return 1;
+        case 2:
+            std::cerr << "Error: no algorithm id given as arg" << std::endl;
+            return 1;
+        case 3:
+           std::cerr << "Error: no collector type (\"file\" or \"memory\") " <<
+                "given as arg" << std::endl;
+            return 1;
+        default:
+            break;
     }
 
     // Read data from file
@@ -47,30 +48,36 @@ int main(int argc, char *argv[]){
 
     // Load algorithm factory
     Builder neal2builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
-        return std::make_unique< Neal2<HierarchyType,HypersType,
+        Eigen::MatrixXd data){
+        return std::make_unique< Neal2<HierarchyType, HypersType,
                 MixtureType> >(hy, mix, data);
         };
     
     Builder neal8builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
-        return std::make_unique< Neal8<HierarchyType,HypersType,
+        Eigen::MatrixXd data){
+        return std::make_unique< Neal8<HierarchyType, HypersType,
                 MixtureType> >(hy, mix, data);
         };
 
-    auto &algoFactory = Factory<
+    auto &algofactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType>::Instance();
 
-    algoFactory.add_builder("neal2", neal2builder);
-    algoFactory.add_builder("neal8", neal8builder);
+    algofactory.add_builder("neal2", neal2builder);
+    algofactory.add_builder("neal8", neal8builder);
+
+    std::cout << "f" << std::endl; // TODO DEBUG
+
+    std::cout << data.rows() << " " << data.cols() << std::endl; // TODO DEBUG
 
     // Create algorithm and set algorithm parameters
     std::string algo = argv[2];
-    auto sampler = algoFactory.create_object(algo, hy, mix, data);
+    auto sampler = algofactory.create_object(algo, hy, mix, data);
     (*sampler).set_rng_seed(20200229);
     (*sampler).set_maxiter(5000);
     (*sampler).set_burnin(500);
+
+    std::cout << "g" << std::endl; // TODO DEBUG
 
     // Choose collector
     BaseCollector *coll;
@@ -79,6 +86,10 @@ int main(int argc, char *argv[]){
         std::string filename = "collector.recordio";
         if(argc > 4){
             filename = argv[4];
+        }
+        else {
+            std::cout << "Warning: default name " << filename <<
+                " will be used for file collector" << std::endl;
         }
         coll = new FileCollector(filename);
     }
