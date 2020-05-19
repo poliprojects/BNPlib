@@ -13,7 +13,7 @@ main*
 *.so
 *.so.*
 # TODO temporary:
-!bnplib.cpython-37m-x86_64-linux-gnu.so
+!bnplib.cpython-*
 
 # Protocol Buffers files
 *.recordio
