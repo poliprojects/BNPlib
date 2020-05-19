@@ -19,7 +19,7 @@ private:
     using EstimatesBuilder = std::function< std::unique_ptr<AbstractProduct>(
         Args...)>;
     using RunBuilder = std::function< std::unique_ptr<AbstractProduct>(
-        Args..., Eigen::VectorXd)>;
+        Args..., Eigen::MatrixXd)>;
     using Builder = boost::variant<RunBuilder, EstimatesBuilder >; 
 
     // Deleted constructors
@@ -41,7 +41,7 @@ public:
     }
 
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args, const Eigen::VectorXd &data) const {
+        Args... args, const Eigen::MatrixXd &data) const {
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");

@@ -9,7 +9,7 @@ using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
 
 using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-    HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+    HypersType, MixtureType>>(HypersType, MixtureType, Eigen::MatrixXd)>;
 
 
 int main(int argc, char *argv[]){
@@ -66,18 +66,12 @@ int main(int argc, char *argv[]){
     algofactory.add_builder("neal2", neal2builder);
     algofactory.add_builder("neal8", neal8builder);
 
-    std::cout << "f" << std::endl; // TODO DEBUG
-
-    std::cout << data.rows() << " " << data.cols() << std::endl; // TODO DEBUG
-
     // Create algorithm and set algorithm parameters
     std::string algo = argv[2];
     auto sampler = algofactory.create_object(algo, hy, mix, data);
     (*sampler).set_rng_seed(20200229);
     (*sampler).set_maxiter(5000);
     (*sampler).set_burnin(500);
-
-    std::cout << "g" << std::endl; // TODO DEBUG
 
     // Choose collector
     BaseCollector *coll;
