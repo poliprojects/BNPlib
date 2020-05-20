@@ -19,8 +19,6 @@ IMPLEMENTAZIONE
 * Ottimizzatione
 ** non usare -O3 ma -G
 ** -march=native -O3;    -msse2 -funroll-loops -ftree-vectorize
-** valgrind --tool=callgrind (profiler per ottimizzazione)
-** kcachegrind per analizzare l'output di cui sopra
 * check stima densità multivariata (plot, anche da salvare per il report etc
 ** ex: likelihood stan vs nostra in 5D
 

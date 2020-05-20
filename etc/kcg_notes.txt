@@ -1,3 +1,5 @@
+Tools used: valgrind --tool=callgrind main, then KCacheGrind app
+
 Uni:
 * run() >40%, eval_density() <30%, cluster_estimate() 30% -> evenly distributed
 * As for run(), almost all time spent in step() (-> collecting is irrelevant),
