@@ -26,8 +26,9 @@ bnplib.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
 	coll_type, filecoll_name, rng, maxit, burn)
 
 algo = "neal8_dataless"
-bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile,
-	algo, filecoll_name, densfile)
+#bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile,
+#	algo, filecoll_name, densfile)
+ # TODO implement estimates s.t. you do not have to write "dataless"
 
 plot_density(densfile)
 

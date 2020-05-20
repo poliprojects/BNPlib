@@ -36,33 +36,24 @@ def estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile, algo,
 		algo, filecoll_name, densfile)
 
 
-def plot_density(densfile = "src/python/density.csv"):
+def plot_density(densfile = "src/python/density.csv",
+	imgfile = "src/python/plot.pdf"):
 	"""TODO docstring
 
 	TODO docstring but longer"""
-	with open(densfile, 'r') as file:
-		reader = csv.reader(file, delimiter=',')
-		dim = len(next(reader))
-		if dim not in (2,3):
-			print("Error: density file needs to have either 2 or 3 columns")
-			return
-		file.seek(0)
-
-		# Get values
-		vals = []
-		for line in reader:
-			vals.append(list(line))
-		
-
-		# Plot density
-		figure = plt.figure()
-		if dim == 2:
-			ax = figure.add_subplot(111)
-			plt.plot(vals[0], vals[1])
-		else: # if dim == 3
-			ax = figure.add_subplot(111, projection='3d')
-			ax.scatter(vals[0], vals[1], vals[2])
-		plt.show()
+	mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
+	cols = mat.shape[1]
+	if cols not in (2,3):
+		print("Error: density file must have 2-3 columns to be plotted")
+		return
+	figure = plt.figure()
+	if cols == 2:
+		ax = figure.add_subplot(111)
+		plt.plot(mat[:,0], mat[:,1])
+	else: # if cols == 3
+		ax = figure.add_subplot(111, projection='3d')
+		ax.scatter(mat[:,0], mat[:,1], mat[:,2])
+	plt.savefig(imgfile)
 
 
 def histogram():
