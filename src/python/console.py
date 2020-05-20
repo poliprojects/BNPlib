@@ -18,6 +18,7 @@ algo = "neal8"
 coll_type = "file"
 filecoll_name = "collector.recordio"
 densfile = "src/python/density.csv"
+imgfile = "src/python/plot.pdf"
 rng = 20200229
 maxit = 1000
 burn = 100
