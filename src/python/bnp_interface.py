@@ -36,6 +36,15 @@ def estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile, algo,
 		algo, filecoll_name, densfile)
 
 
+def estimates_NNIG_Dir_grid(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
+	filecoll_name = "collector.recordio", densfile = "src/python/density.csv"):
+	"""TODO docstring
+
+	TODO docstring but longer"""
+	bnplib.estimates_NNIG_Dir_grid(mu0, lambda_, alpha0, beta0, totalmass, grid,
+		algo, filecoll_name, densfile)
+
+
 def plot_density(densfile = "src/python/density.csv",
 	imgfile = "src/python/plot.pdf"):
 	"""TODO docstring

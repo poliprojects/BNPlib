@@ -15,7 +15,9 @@ burn = 500
 coll_type = "file"
 filecoll_name = "collector.recordio"
 
-#grid = [0.5*_ for _ in range(20)]
+g = [0.5*_ for _ in range(20)]
+grid = np.array(g)
+
 gridfile = "csv/grid_uni.csv"
 densfile = "src/python/density.csv"
 imgfile  = "src/python/plot.pdf"
@@ -24,7 +26,7 @@ bnplib.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
 	coll_type, filecoll_name, rng, maxit, burn)
 
 algo = "neal8_dataless"
-bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile,
+bnplib.estimates_NNIG_Dir_grid(mu0, lambda_, alpha0, beta0, totalmass, grid,
 	algo, filecoll_name, densfile)
 # TODO implement estimates cpp s.t. you don't have to write "_dataless"
 

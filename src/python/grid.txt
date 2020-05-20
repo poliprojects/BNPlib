@@ -1,7 +1,0 @@
-in exports.cpp:
-#include <pybind11/eigen.h>
-
-in console.py:
-((change gridfile to grid))
-g = [0.5*_ for _ in range(20)]
-grid = np.array(g)
