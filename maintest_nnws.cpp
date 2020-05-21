@@ -3,7 +3,6 @@
 #include <chrono>
 
 #include "includes.hpp"
-#include "src/hierarchies/HierarchyNNW2.hpp"
 #include "lib/math/lib/eigen_3.3.3/Eigen/Dense"
 
 using HypersType = HypersFixedNNW;
