@@ -36,16 +36,17 @@ template<class Hypers>
 Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
-	EigenRowVec mu(state[0]);
+    EigenRowVec mu(state[0]);
 
     for(size_t i = 0; i < n; i++){
         EigenRowVec datum = data.row(i);
         result(i) = std::pow(2.0*M_PI, -data.cols()/2.0) *
-        	std::exp( 0.5 * (tau_log_det - ((
+            std::exp( 0.5 * (tau_log_det - ((
             tau_chol_factor_eval.transpose()*(datum-mu).transpose()
             ).squaredNorm()) ) );
-        // instead of inefficient std::exp(stan::math::multi_normal_prec_lpdf(
-        //     datum, mu, state[1]))
+        // Unoptimized likelihood by Stan:
+        // result(i) = std::exp(stan::math::multi_normal_prec_lpdf(
+        //     datum, mu, state[1]));
     }
     return result;
 }
