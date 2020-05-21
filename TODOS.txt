@@ -1,26 +1,18 @@
 TODO LIST
 
-SCALETTA
-* hypers: check da Favaro-Teh (Elena)
-* interfaccia: tutto il resto (traceplot???, best clust, density, cluster over
-  iterations)
-* ottimizzazione
-* check densità multi
-
-
 IMPLEMENTAZIONE
 * hyperparameters sensati per la NNW (vedi Favaro Teh paper): lambda piccolo
   (permettere libertà), mu0 media empirica, nu = dim.dati + 3, sigma0 = tale che
   la sua media sia l'identità
 * interfaccia Python (pybind)
+** traceplot???, best clust, density, cluster over iterations
 ** highest posterior density intervals (credible intervals)
 ** arviz (library for plots)
 ** Ex: contour plot
 * Ottimizzatione
 ** non usare -O3 ma -G
 ** -march=native -O3;    -msse2 -funroll-loops -ftree-vectorize
-* check stima densità multivariata (plot, anche da salvare per il report etc
-** ex: likelihood stan vs nostra in 5D
+* check e plot stima densità multivariata
 
 
 VARIE
