@@ -3,7 +3,7 @@
 
 #include <fstream>
 #include <math.h>
-#include <random> //for std::mt19937
+#include <random>
 #include <tuple>
 #include <vector>
 
@@ -15,12 +15,16 @@
 #include "../api/MemoryCollector.hpp"
 
 
+//! Generic algorithm class.
+
+//! Generic algorithm class, but better explained (TODO).
+
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{
 protected:
     // Mehtods parameters
-    unsigned int maxiter = 10000;
-    unsigned int burnin  =  1000;
+    unsigned int maxiter = 10000; ///< Iterations of the algorithm
+    unsigned int burnin  =  1000; ///< Number of burn-in iterations
 
     // Data and values containers
     Eigen::MatrixXd data;

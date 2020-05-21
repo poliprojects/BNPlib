@@ -12,6 +12,10 @@ using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
     HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
 
 
+//! main program to test an univariate hierarchy.
+
+//! Longer explaination of the same thing.
+
 int main(int argc, char *argv[]){
     std::cout << "Running maintest_uni.cpp" << std::endl;
 

@@ -1,4 +1,9 @@
-#!/usr/bin/python
+"""@package docstring
+BNP Python interface.
+ 
+Documentation for BNP Python interface, but longer.
+"""
+
 import os, sys
 import matplotlib.pyplot as plt
 import numpy as np
@@ -47,9 +52,9 @@ def estimates_NNIG_Dir_grid(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
 
 def plot_density(densfile = "src/python/density.csv",
 	imgfile = "src/python/plot.pdf"):
-	"""TODO docstring
+	"""TODO docstring.
 
-	TODO docstring but longer"""
+	TODO docstring but longer."""
 	mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
 	cols = mat.shape[1]
 	if cols not in (2,3):
