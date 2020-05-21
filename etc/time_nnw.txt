@@ -1,65 +1,39 @@
+NEAL2 TESTS
+
 TEST #1 WITH RNG SEED 20200229
-Running maintest_nnws.cpp
-Warning: initial number of clusters will be set equal to the data size (10)
-Warning: initial number of clusters will be set equal to the data size (10)
-Running Neal2 algorithm...
-Done
-Running Neal2 algorithm...
-Done
 Algorithm run: 
 388900785 vs 540851769
-Successfully wrote density to csv/dens_multi.csv
-Successfully wrote density to csv/dens_multi2.csv
 Density estimation: 
 563565280 vs 540851769
-End of maintest_nnws.cpp
 
 TEST #2 WITH RNG SEED 20200229
-Running maintest_nnws.cpp
-Warning: initial number of clusters will be set equal to the data size (10)
-Warning: initial number of clusters will be set equal to the data size (10)
-Running Neal2 algorithm...
-Done
-Running Neal2 algorithm...
-Done
 Algorithm run: 
 388617038 vs 542013251
-Successfully wrote density to csv/dens_multi.csv
-Successfully wrote density to csv/dens_multi2.csv
 Density estimation: 
 563942883 vs 542013251
-End of maintest_nnws.cpp
 
 
 
 TEST #1 WITH RNG SEED 19700101
-Running maintest_nnws.cpp
-Warning: initial number of clusters will be set equal to the data size (10)
-Warning: initial number of clusters will be set equal to the data size (10)
-Running Neal2 algorithm...
-Done
-Running Neal2 algorithm...
-Done
 Algorithm run: 
 394337508 vs 548117912
-Successfully wrote density to csv/dens_multi.csv
-Successfully wrote density to csv/dens_multi2.csv
 Density estimation: 
 568775807 vs 548117912
-End of maintest_nnws.cpp
 
 TEST #2 WITH RNG SEED 19700101
-Running maintest_nnws.cpp
-Warning: initial number of clusters will be set equal to the data size (10)
-Warning: initial number of clusters will be set equal to the data size (10)
-Running Neal2 algorithm...
-Done
-Running Neal2 algorithm...
-Done
 Algorithm run: 
 394405956 vs 548015767
-Successfully wrote density to csv/dens_multi.csv
-Successfully wrote density to csv/dens_multi2.csv
 Density estimation: 
 628251596 vs 548015767
 End of maintest_nnws.cpp
+
+
+
+
+IN 5 DIMENSIONS (RNG SEED 20200229)
+OPTIMIZED:
+Run: 18 446 744 071 981 775 190
+Density:   917 014 418
+UNOPTIMIZED:
+Run: 18 446 744 072 872 478 641
+Density: 1 466 885 217
