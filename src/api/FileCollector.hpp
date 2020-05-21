@@ -41,7 +41,7 @@ public:
 
     void start() override;
     void finish() override;
-
+    std::deque<State> get_chain() override;
     State get_state(unsigned int i) override;
 
     void collect(State iteration_state) override;

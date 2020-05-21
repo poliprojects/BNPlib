@@ -68,26 +68,27 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     density.first = grid;
     Eigen::VectorXd dens(Eigen::MatrixXd::Zero(grid.rows(),1));
     double M = mixture.get_totalmass();
-    unsigned int n;
-    State state;
-    for(size_t iter = 0; iter < collector->get_size(); iter++){
+  
+    std::deque<State> chain=collector->get_chain();
+
+    unsigned n_iter=chain.size();
+    unsigned int n=chain[0].allocations_size();
+    unsigned n_params=chain[0].uniquevalues(0).params_size();
+    std::vector<Eigen::MatrixXd> params(n_params);
+
+    for(size_t iter = 0; iter < n_iter; iter++){
         // for each iteration of the algorithm
-        state = collector->get_next_state();
-        std::vector<unsigned int> card(state.uniquevalues_size(), 0);
-        std::vector<Eigen::MatrixXd> params(
-            state.uniquevalues(0).params_size() );
-        if (iter == 0){
-            n = state.allocations_size();
-            
-        }
+ 
+        std::vector<unsigned int> card(chain[iter].uniquevalues_size(), 0);
+
         for(size_t j = 0; j < n; j++){
-            card[ state.allocations(j) ] += 1;
+            card[ chain[iter].allocations(j) ] += 1;
         }
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
-        for(size_t h = 0; h < state.uniquevalues_size(); h++){
-            for(size_t k = 0; k < state.uniquevalues(h).params_size(); k++){
+        for(size_t h = 0; h < chain[iter].uniquevalues_size(); h++){
+            for(size_t k = 0; k < n_params; k++){
                 params[k] = proto_param_to_matrix(
-                    state.uniquevalues(h).params(k) );
+                    chain[iter].uniquevalues(h).params(k) );
             }
             temp_hier.set_state(params, false);
    
@@ -98,7 +99,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
                        
     }
 
-    density.second = dens / collector->get_size();
+    density.second = dens / n_iter;
     density_was_computed = true;
 }
 
@@ -107,22 +108,26 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     BaseCollector* collector){
     // also returns the index of the estimate in the chain object
+    std::deque<State> chain=collector->get_chain();
 
-    unsigned int niter = maxiter - burnin;
-    Eigen::VectorXd errors(niter);
-    unsigned int n = data.rows();
+    unsigned n_iter=chain.size();
+    unsigned int n=chain[0].allocations_size();
+
+
+
+    Eigen::VectorXd errors(n_iter);
     Eigen::MatrixXd tot_diss(n, n);
     tot_diss = Eigen::MatrixXd::Zero(n, n);
     std::vector<Eigen::MatrixXd> all_diss;
     State temp;
     
-    for(size_t h = 0; h < niter; h++){
-        temp = collector->get_next_state();
+    for(size_t h = 0; h < n_iter; h++){
+
         Eigen::MatrixXd dissim(n, n);
         dissim = Eigen::MatrixXd::Zero(n, n);
         for(size_t i = 0; i < n; i++){
             for(size_t j = 0; j < i; j++){
-                if(temp.allocations(i) == temp.allocations(j)){
+                if(chain[h].allocations(i) == chain[h].allocations(j)){
                     dissim(i,j) = 1;
                 }
             }
@@ -131,9 +136,9 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     tot_diss = tot_diss + dissim;
     }
 
-    tot_diss = tot_diss / niter;
+    tot_diss = tot_diss / n_iter;
 
-    for(size_t h = 0; h < niter; h++){
+    for(size_t h = 0; h < n_iter; h++){
         // Compute error in Frobenius norm
         errors(h) = (tot_diss-all_diss[h]).norm();
     }
@@ -141,7 +146,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     std::ptrdiff_t i;
     unsigned int min_err = errors.minCoeff(&i);
 
-    best_clust = collector->get_state(i);
+    best_clust = chain[i];
     std::cout << "Optimal clustering: at iteration " << i << " with " <<
         best_clust.uniquevalues_size() << " clusters" << std::endl;
 

@@ -31,6 +31,7 @@ public:
     virtual ~BaseCollector() = default;
 
     virtual void collect(State iteration_state) = 0;
+    virtual std::deque<State> get_chain()=0;
     virtual State get_state(unsigned int i) = 0; 
     virtual void start() = 0;
     virtual void finish() = 0;

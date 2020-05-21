@@ -14,6 +14,8 @@ public:
     void collect(State iteration_state) override;
     void start() override;
     void finish() override;
+    std::deque<State> get_chain() override{
+	return chains;}
     State get_state(unsigned int i) override;
 
     // Destructor and constructor

@@ -12,12 +12,37 @@
 // }
 
 
+
+
+
+
+std::deque<State> FileCollector::get_chain() {
+    open_for_reading();
+  
+    bool keep = true;
+    std::deque<State> out;
+
+    while (keep) {
+        State msg;
+        keep = google::protobuf::util::ParseDelimitedFromZeroCopyStream(
+            &msg, fin, nullptr);
+        if (keep)
+            out.push_back(msg);
+    }
+    fin->Close();
+    close(infd);
+    is_open_read=false;
+    return out;
+}
+
+
 void FileCollector::open_for_reading() {
     infd = open(filename.c_str(), O_RDONLY);
+    if (infd == -1)
+        std::cout << "errno: " << strerror(errno) << std::endl;
     fin = new google::protobuf::io::FileInputStream(infd);
     is_open_read = true;
 }
-
 
 State FileCollector::next_state() {
     if (!is_open_read){
