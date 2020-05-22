@@ -29,9 +29,7 @@ std::deque<State> FileCollector::get_chain() {
         if (keep)
             out.push_back(msg);
     }
-    fin->Close();
-    close(infd);
-    is_open_read=false;
+    close_reading();
     return out;
 }
 
@@ -44,6 +42,11 @@ void FileCollector::open_for_reading() {
     is_open_read = true;
 }
 
+void FileCollector::close_reading() {
+    fin->Close();
+    close(infd);
+    is_open_read = false;
+}
 State FileCollector::next_state() {
     if (!is_open_read){
         open_for_reading();
@@ -58,9 +61,7 @@ State FileCollector::next_state() {
     }
     if(curr_iter == size-1){
         curr_iter = -1;
-        fin->Close();
-        close(infd);
-        is_open_read = false;
+        close_reading();
     }
     return out;
 }
@@ -88,9 +89,7 @@ State FileCollector::get_state(unsigned int i) {
     }
     if(i < size-1){
         curr_iter = -1;
-        fin->Close();
-        close(infd);
-        is_open_read = false;}
+        close_reading();}
     return state;
 }
 
