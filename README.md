@@ -1,25 +1,16 @@
 # BNPlib: A Nonparametric C++ Library
-## Requirements
-* Command line
-* Python
 
 ## Preparation
-* Download from Github by running:
-  ```git clone https://github.com/poliprojects/BNPlib.git```
-* Python packages: pybind11 (through ```pip install pybind11```)
+* Download: ```git clone https://github.com/poliprojects/BNPlib.git```
+* Install libraries: ```bash/install_libs.sh```
+* Compile library: ```make```
+* TODO (other scripts?)
 * Compile a .proto file with protoc: first ```cd src/api``` then run:
   ```../../lib/protobuf/src/protoc -I=. --python_out=. output.proto```
 * same with Python (TODO)
 
-### Installing
-* Compile by running ```make```
-* Compile protobuf: run ```./install_protobuf.sh``` (or just
-```install_protobuf.sh```, depending on your OS)
-* Compile a .proto file with protoc: first ```cd src/api``` then run
-```../../lib/protobuf/src/protoc -I=. --cpp_out=. output.proto```
-
 ### Documentation
-* TBD
+* TODO
 
 ### Usage examples
 * ```./maintest_uni csv/data_uni.csv neal2 memory```

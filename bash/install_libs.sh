@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 # Install necessary tools
-sudo apt install autoconf automake libtool curl make g++ unzip -y
+sudo apt install autoconf automake libtool curl g++ git make unzip -y
 
-# Get protobuf library
+# Get libraries
 cd lib
 git clone --branch v3.11.0 https://github.com/protocolbuffers/protobuf.git
+git clone https://github.com/stan-dev/math.git
 
-# Compile protobuf
+# Compile protobuf library
 cd protobuf
 ./autogen.sh
 ./configure
