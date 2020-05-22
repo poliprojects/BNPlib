@@ -20,7 +20,7 @@ protected:
     bool is_open_write;
 
     void open_for_reading();
-
+    void close_reading();
     State next_state() override;
 
 public:
