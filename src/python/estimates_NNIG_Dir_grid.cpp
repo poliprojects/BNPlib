@@ -16,15 +16,17 @@ namespace NNIGDir {
 
 int estimates_NNIG_Dir_grid(double mu0, double lambda, double alpha0,
     double beta0, double totalmass,
-    const Eigen::VectorXd &grid, const std::string &algo,
+    std::vector<double> &grid, const std::string &algo,
     const std::string &filecoll_name = "collector.recordio",
     const std::string &densfile = "src/python/density.csv"){
 
     std::cout << "Running estimates_NNIG_Dir.cpp" << std::endl;
     using namespace NNIGDir;
+	
 
-    std::cout << "Grid: " << grid << std::endl; // TODO DEBUG
-
+    Eigen::VectorXd grid_eigen = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
+        grid.data(), grid.size());
+    std::cout << "Grid: " << grid_eigen << std::endl; // TODO DEBUG
     // Build model components
     HypersType hy(mu0, lambda, alpha0, beta0); // 5.0 0.1 2.0 2.0
     MixtureType mix(totalmass); // 1.0
@@ -57,7 +59,7 @@ int estimates_NNIG_Dir_grid(double mu0, double lambda, double alpha0,
     //     vec.data(), vec.size());
 
     // Run algorithm
-    (*sampler).eval_density(grid, coll);
+    (*sampler).eval_density(grid_eigen, coll);
     (*sampler).write_density_to_file(densfile);
 
     std::cout << "End of estimates_NNIG_Dir.cpp" << std::endl;

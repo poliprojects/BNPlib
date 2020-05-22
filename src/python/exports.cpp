@@ -7,6 +7,7 @@
 #include "estimates_NNIG_Dir_grid.cpp"
 
 
+
 PYBIND11_MODULE(bnplib, m)
 {
     m.doc() = "TODO docstring";

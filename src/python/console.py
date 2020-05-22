@@ -15,7 +15,7 @@ burn = 500
 coll_type = "file"
 filecoll_name = "collector.recordio"
 
-g = [0.5*_ for _ in range(20)]
+g= [0.5*_ for _ in range(20)]
 grid = np.array(g)
 
 gridfile = "csv/grid_uni.csv"
