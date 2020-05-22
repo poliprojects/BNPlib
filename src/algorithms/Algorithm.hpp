@@ -15,35 +15,52 @@
 #include "../api/MemoryCollector.hpp"
 
 
-//! Generic algorithm class.
+//! Generic algorithm template class.
 
-//! Generic algorithm class, but better explained (TODO).
+//! This template class implements a generic algorithm that generates a Markov
+//! chain on the clustering of the provided data. The class is templatized over
+//! the elements of the assumed underlying model, which are the hierarchy for,
+//! the data, its hyperparameters, and the mixture type. TODO COMPLETE
 
+//! \param Hierarchy Name of the hierarchy template class
+//! \param Hypers    Name of the hyperparameters class
+//! \param Mixture   Name of the mixture class
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{
 protected:
-    // Mehtods parameters
-    unsigned int maxiter = 10000; ///< Iterations of the algorithm
-    unsigned int burnin  =  1000; ///< Number of burn-in iterations
+    // METHOD PARAMETERS
+    //!< Iterations of the algorithm
+    unsigned int maxiter = 10000;
+    //!< Number of burn-in iterations
+    unsigned int burnin  =  1000;
 
-    // Data and values containers
+    // DATA AND VALUES CONTAINERS
+    //!< Matrix to store data points as vectors i.e. columns
     Eigen::MatrixXd data;
+    //!< Prescribed number of clusters for the initialization of the algorithm
     unsigned int init_num_clusters;
+    //!< Cardinalities of clusters
     std::vector<unsigned int> cardinalities;
+    //!< Allocation for each datum, i.e. label of the cluster it belongs to
     std::vector<unsigned int> allocations;
+    //!< Hierarchy of the unique values that identify each cluster
     std::vector< Hierarchy<Hypers> > unique_values;
+    //!< Grid of points and evaluation of density on it
     std::pair< Eigen::MatrixXd, Eigen::VectorXd > density;
+    //!< Mixture object
     Mixture mixture;
+    //!< Protobuf object that contains the best clustering
     State best_clust;
 
-    // Random engine
+    //!< Random engine
     std::mt19937 rng;
 
-    // Flags for writing functions
+    //!< Flag to check validity of density write function
     bool density_was_computed = false;
+    //!< Flag to check validity of clustering write function
     bool clustering_was_computed = false;
 
-    // Algorithm functions
+    // ALGORITHM FUNCTIONS
     virtual const void print_startup_message() = 0;
     virtual void initialize() = 0;
     virtual void sample_allocations() = 0;
