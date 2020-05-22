@@ -1,4 +1,4 @@
-#include <stan/math/prim/scal.hpp>
+#include <stan/math/prim.hpp>
 #include <gtest/gtest.h>
 #include <limits>
 
@@ -120,4 +120,24 @@ TEST(ErrorHandlingScalar, CheckBounded_nan) {
   EXPECT_THROW(check_bounded(function, name, nan, low, nan), std::domain_error);
   EXPECT_THROW(check_bounded(function, name, x, nan, nan), std::domain_error);
   EXPECT_THROW(check_bounded(function, name, nan, nan, nan), std::domain_error);
+}
+
+TEST(ErrorHandlingScalar, CheckBounded_size_zero_vector) {
+  const char* function = "check_bounded";
+  const char* name = "x";
+  double x = 0;
+  double low = -1;
+  double high = 1;
+
+  Eigen::VectorXd vx(0);
+  Eigen::VectorXd vlow(0);
+  Eigen::VectorXd vhigh(0);
+
+  EXPECT_NO_THROW(check_bounded(function, name, x, vlow, high));
+  EXPECT_NO_THROW(check_bounded(function, name, x, low, vhigh));
+  EXPECT_NO_THROW(check_bounded(function, name, x, vlow, vhigh));
+  EXPECT_NO_THROW(check_bounded(function, name, vx, low, high));
+  EXPECT_NO_THROW(check_bounded(function, name, vx, vlow, high));
+  EXPECT_NO_THROW(check_bounded(function, name, vx, low, vhigh));
+  EXPECT_NO_THROW(check_bounded(function, name, vx, vlow, vhigh));
 }

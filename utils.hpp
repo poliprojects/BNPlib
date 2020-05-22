@@ -1,7 +1,7 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#include "lib/math/lib/eigen_3.3.3/Eigen/Dense"
+#include "lib/math/lib/eigen_3.3.7/Eigen/Dense"
 #include <fstream>
 
 

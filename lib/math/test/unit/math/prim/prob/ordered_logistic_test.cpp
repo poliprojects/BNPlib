@@ -1,4 +1,4 @@
-#include <stan/math/prim/mat.hpp>
+#include <stan/math/prim.hpp>
 #include <gtest/gtest.h>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/math/distributions.hpp>
@@ -190,6 +190,10 @@ TEST(ProbDistributionOrderedLogistic, error_check) {
       stan::math::ordered_logistic_rng(stan::math::positive_infinity(), c, rng),
       std::domain_error);
   c << -inf, 2.0, -5, inf;
+  EXPECT_THROW(stan::math::ordered_logistic_rng(4.0, c, rng),
+               std::domain_error);
+
+  c << -2, 5, 2.0, 10;
   EXPECT_THROW(stan::math::ordered_logistic_rng(4.0, c, rng),
                std::domain_error);
 }

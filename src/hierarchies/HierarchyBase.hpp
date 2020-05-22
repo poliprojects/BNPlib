@@ -5,9 +5,9 @@
 #include <memory>
 #include <random>
 #include <vector>
-#include <stan/math/prim/mat.hpp>
+#include <stan/math/prim/fun.hpp>
 
-
+#include <stan/math/prim/prob.hpp>
 template<class Hypers>
 class HierarchyBase {
 protected:

@@ -3,8 +3,10 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/scal/fun/size_zero.hpp>
-#include <stan/math/prim/scal/fun/value_of.hpp>
+#include <stan/math/prim/fun/log.hpp>
+#include <stan/math/prim/fun/max_size.hpp>
+#include <stan/math/prim/fun/size_zero.hpp>
+#include <stan/math/prim/fun/value_of.hpp>
 #include <cmath>
 
 namespace stan {
@@ -15,24 +17,24 @@ return_type_t<T_y, T_loc, T_scale, T_shape> pareto_type_2_lccdf(
     const T_y& y, const T_loc& mu, const T_scale& lambda,
     const T_shape& alpha) {
   using T_partials_return = partials_return_t<T_y, T_loc, T_scale, T_shape>;
-
-  if (size_zero(y, mu, lambda, alpha)) {
-    return 0.0;
-  }
-
-  static const char* function = "pareto_type_2_lccdf";
-
   using std::log;
-
-  T_partials_return P(0.0);
-
-  check_greater_or_equal(function, "Random variable", y, mu);
+  static const char* function = "pareto_type_2_lccdf";
   check_not_nan(function, "Random variable", y);
   check_nonnegative(function, "Random variable", y);
   check_positive_finite(function, "Scale parameter", lambda);
   check_positive_finite(function, "Shape parameter", alpha);
-  check_consistent_sizes(function, "Random variable", y, "Scale parameter",
-                         lambda, "Shape parameter", alpha);
+  check_consistent_sizes(function, "Random variable", y, "Location parameter",
+                         mu, "Scale parameter", lambda, "Shape parameter",
+                         alpha);
+  check_greater_or_equal(function, "Random variable", y, mu);
+
+  if (size_zero(y, mu, lambda, alpha)) {
+    return 0;
+  }
+
+  T_partials_return P(0.0);
+  operands_and_partials<T_y, T_loc, T_scale, T_shape> ops_partials(
+      y, mu, lambda, alpha);
 
   scalar_seq_view<T_y> y_vec(y);
   scalar_seq_view<T_loc> mu_vec(mu);
@@ -40,60 +42,38 @@ return_type_t<T_y, T_loc, T_scale, T_shape> pareto_type_2_lccdf(
   scalar_seq_view<T_shape> alpha_vec(alpha);
   size_t N = max_size(y, mu, lambda, alpha);
 
-  operands_and_partials<T_y, T_loc, T_scale, T_shape> ops_partials(
-      y, mu, lambda, alpha);
-
-  VectorBuilder<true, T_partials_return, T_y, T_loc, T_scale, T_shape> ccdf_log(
-      N);
-
-  VectorBuilder<!is_constant_all<T_y, T_loc, T_scale, T_shape>::value,
-                T_partials_return, T_y, T_loc, T_scale, T_shape>
-      a_over_lambda_plus_y(N);
-
-  VectorBuilder<!is_constant_all<T_shape>::value, T_partials_return, T_y, T_loc,
-                T_scale, T_shape>
-      log_1p_y_over_lambda(N);
-
-  for (size_t i = 0; i < N; i++) {
-    const T_partials_return y_dbl = value_of(y_vec[i]);
-    const T_partials_return mu_dbl = value_of(mu_vec[i]);
-    const T_partials_return lambda_dbl = value_of(lambda_vec[i]);
-    const T_partials_return alpha_dbl = value_of(alpha_vec[i]);
-    const T_partials_return temp = 1.0 + (y_dbl - mu_dbl) / lambda_dbl;
-    const T_partials_return log_temp = log(temp);
-
-    ccdf_log[i] = -alpha_dbl * log_temp;
-
-    if (!is_constant_all<T_y, T_loc, T_scale, T_shape>::value) {
-      a_over_lambda_plus_y[i] = alpha_dbl / (y_dbl - mu_dbl + lambda_dbl);
-    }
-
-    if (!is_constant_all<T_shape>::value) {
-      log_1p_y_over_lambda[i] = log_temp;
-    }
-  }
-
   for (size_t n = 0; n < N; n++) {
     const T_partials_return y_dbl = value_of(y_vec[n]);
     const T_partials_return mu_dbl = value_of(mu_vec[n]);
     const T_partials_return lambda_dbl = value_of(lambda_vec[n]);
+    const T_partials_return alpha_dbl = value_of(alpha_vec[n]);
+    const T_partials_return temp = 1.0 + (y_dbl - mu_dbl) / lambda_dbl;
 
-    P += ccdf_log[n];
+    const T_partials_return log_temp = log(temp);
+    const T_partials_return rep_deriv
+        = is_constant_all<T_y, T_loc, T_scale, T_shape>::value
+              ? 0
+              : alpha_dbl / (y_dbl - mu_dbl + lambda_dbl);
+
+    const T_partials_return ccdf_log = -alpha_dbl * log_temp;
+
+    P += ccdf_log;
 
     if (!is_constant_all<T_y>::value) {
-      ops_partials.edge1_.partials_[n] -= a_over_lambda_plus_y[n];
+      ops_partials.edge1_.partials_[n] -= rep_deriv;
     }
     if (!is_constant_all<T_loc>::value) {
-      ops_partials.edge2_.partials_[n] += a_over_lambda_plus_y[n];
+      ops_partials.edge2_.partials_[n] += rep_deriv;
     }
     if (!is_constant_all<T_scale>::value) {
       ops_partials.edge3_.partials_[n]
-          += a_over_lambda_plus_y[n] * (y_dbl - mu_dbl) / lambda_dbl;
+          += rep_deriv * (y_dbl - mu_dbl) / lambda_dbl;
     }
     if (!is_constant_all<T_shape>::value) {
-      ops_partials.edge4_.partials_[n] -= log_1p_y_over_lambda[n];
+      ops_partials.edge4_.partials_[n] -= log_temp;
     }
   }
+
   return ops_partials.build(P);
 }
 

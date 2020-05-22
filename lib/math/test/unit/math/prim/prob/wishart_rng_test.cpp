@@ -1,5 +1,5 @@
-#include <stan/math/prim/mat.hpp>
-#include <test/unit/math/prim/mat/util.hpp>
+#include <stan/math/prim.hpp>
+#include <test/unit/math/prim/util.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/math/distributions/chi_squared.hpp>
 #include <gtest/gtest.h>
@@ -36,9 +36,9 @@ TEST(probdistributionsWishartRng, symmetry) {
 }
 
 TEST(ProbDistributionsWishart, marginalTwoChiSquareGoodnessFitTest) {
-  using Eigen::MatrixXd;
   using boost::math::chi_squared;
   using boost::math::digamma;
+  using Eigen::MatrixXd;
   using stan::math::determinant;
   using stan::math::wishart_rng;
   using std::log;

@@ -1,5 +1,7 @@
-#include <stan/math/rev/meta.hpp>
+#include <stan/math/rev/meta/is_var.hpp>  // just this is bad
+
 #include <stan/math/prim/meta.hpp>
+#include <stan/math/rev/meta.hpp>
 #include <test/unit/math/require_util.hpp>
 #include <gtest/gtest.h>
 #include <type_traits>
@@ -37,37 +39,35 @@ TEST(requires_rev_scal, var_any_not_test) {
   require_scal_checker<stan::require_any_not_var_t, var, var>::any_not();
 }
 
-TEST(requires_rev_scal, var_or_fvar_test) {
+TEST(requires_rev_scal, autodiff_test) {
   using stan::math::var;
   using stan::test::require_scal_checker;
-  require_scal_checker<stan::require_var_or_fvar_t, var, var>::unary();
+  require_scal_checker<stan::require_autodiff_t, var, var>::unary();
 }
-TEST(requires_rev_scal, var_or_fvar_not_test) {
+TEST(requires_rev_scal, autodiff_not_test) {
   using stan::math::var;
   using stan::test::require_scal_checker;
-  require_scal_checker<stan::require_not_var_or_fvar_t, var, var>::not_unary();
+  require_scal_checker<stan::require_not_autodiff_t, var, var>::not_unary();
 }
-TEST(requires_rev_scal, var_or_fvar_all_test) {
+TEST(requires_rev_scal, autodiff_all_test) {
   using stan::math::var;
   using stan::test::require_scal_checker;
-  require_scal_checker<stan::require_all_var_or_fvar_t, var, var>::all();
+  require_scal_checker<stan::require_all_autodiff_t, var, var>::all();
 }
-TEST(requires_rev_scal, var_or_fvar_all_not_test) {
+TEST(requires_rev_scal, autodiff_all_not_test) {
   using stan::math::var;
   using stan::test::require_scal_checker;
-  require_scal_checker<stan::require_all_not_var_or_fvar_t, var,
-                       var>::all_not();
+  require_scal_checker<stan::require_all_not_autodiff_t, var, var>::all_not();
 }
-TEST(requires_rev_scal, var_or_fvar_any_test) {
+TEST(requires_rev_scal, autodiff_any_test) {
   using stan::math::var;
   using stan::test::require_scal_checker;
-  require_scal_checker<stan::require_any_var_or_fvar_t, var, var>::any();
+  require_scal_checker<stan::require_any_autodiff_t, var, var>::any();
 }
-TEST(requires_rev_scal, var_or_fvar_any_not_test) {
+TEST(requires_rev_scal, autodiff_any_not_test) {
   using stan::math::var;
   using stan::test::require_scal_checker;
-  require_scal_checker<stan::require_any_not_var_or_fvar_t, var,
-                       var>::any_not();
+  require_scal_checker<stan::require_any_not_autodiff_t, var, var>::any_not();
 }
 
 TEST(requires_rev_scal, stan_scalar_test) {

@@ -3,10 +3,14 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/scal/fun/constants.hpp>
-#include <stan/math/prim/scal/fun/erfc.hpp>
-#include <stan/math/prim/scal/fun/size_zero.hpp>
-#include <stan/math/prim/scal/fun/value_of.hpp>
+#include <stan/math/prim/fun/constants.hpp>
+#include <stan/math/prim/fun/erfc.hpp>
+#include <stan/math/prim/fun/exp.hpp>
+#include <stan/math/prim/fun/log.hpp>
+#include <stan/math/prim/fun/max_size.hpp>
+#include <stan/math/prim/fun/size.hpp>
+#include <stan/math/prim/fun/size_zero.hpp>
+#include <stan/math/prim/fun/value_of.hpp>
 #include <cmath>
 
 namespace stan {
@@ -15,23 +19,20 @@ namespace math {
 template <typename T_y, typename T_loc, typename T_scale>
 return_type_t<T_y, T_loc, T_scale> lognormal_lcdf(const T_y& y, const T_loc& mu,
                                                   const T_scale& sigma) {
-  static const char* function = "lognormal_lcdf";
   using T_partials_return = partials_return_t<T_y, T_loc, T_scale>;
-
-  T_partials_return cdf_log = 0.0;
-
   using std::exp;
   using std::log;
-
-  if (size_zero(y, mu, sigma)) {
-    return cdf_log;
-  }
-
+  static const char* function = "lognormal_lcdf";
   check_not_nan(function, "Random variable", y);
   check_nonnegative(function, "Random variable", y);
   check_finite(function, "Location parameter", mu);
   check_positive_finite(function, "Scale parameter", sigma);
 
+  if (size_zero(y, mu, sigma)) {
+    return 0;
+  }
+
+  T_partials_return cdf_log = 0.0;
   operands_and_partials<T_y, T_loc, T_scale> ops_partials(y, mu, sigma);
 
   scalar_seq_view<T_y> y_vec(y);
@@ -39,13 +40,11 @@ return_type_t<T_y, T_loc, T_scale> lognormal_lcdf(const T_y& y, const T_loc& mu,
   scalar_seq_view<T_scale> sigma_vec(sigma);
   size_t N = max_size(y, mu, sigma);
 
-  for (size_t i = 0; i < size(y); i++) {
+  for (size_t i = 0; i < stan::math::size(y); i++) {
     if (value_of(y_vec[i]) == 0.0) {
       return ops_partials.build(negative_infinity());
     }
   }
-
-  const double log_half = std::log(0.5);
 
   for (size_t n = 0; n < N; n++) {
     const T_partials_return y_dbl = value_of(y_vec[n]);
@@ -57,7 +56,7 @@ return_type_t<T_y, T_loc, T_scale> lognormal_lcdf(const T_y& y, const T_loc& mu,
         = SQRT_TWO_OVER_SQRT_PI * exp(-scaled_diff * scaled_diff) / sigma_dbl;
 
     const T_partials_return erfc_calc = erfc(-scaled_diff);
-    cdf_log += log_half + log(erfc_calc);
+    cdf_log += LOG_HALF + log(erfc_calc);
 
     if (!is_constant_all<T_y>::value) {
       ops_partials.edge1_.partials_[n] += rep_deriv / erfc_calc / y_dbl;

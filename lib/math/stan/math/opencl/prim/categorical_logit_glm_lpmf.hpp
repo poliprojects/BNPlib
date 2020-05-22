@@ -4,15 +4,15 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/scal/fun/size_zero.hpp>
-#include <stan/math/prim/mat/fun/sum.hpp>
+#include <stan/math/prim/fun/size_zero.hpp>
+#include <stan/math/prim/fun/sum.hpp>
 #include <Eigen/Core>
 
 #include <stan/math/opencl/matrix_cl.hpp>
 #include <stan/math/opencl/copy.hpp>
+#include <stan/math/opencl/multiply.hpp>
 #include <stan/math/opencl/kernel_generator.hpp>
 #include <stan/math/opencl/kernels/categorical_logit_glm_lpmf.hpp>
-#include <stan/math/opencl/prim/transpose.hpp>
 
 namespace stan {
 namespace math {
@@ -21,7 +21,7 @@ namespace math {
  * Returns the log PMF of the Generalized Linear Model (GLM)
  * with categorical distribution and logit (softmax) link function.
  * This is an overload of the GLM in
- * prim/mar/prob/categorical_logit_glm_lpmf.hpp that is implemented in OpenCL.
+ * prim/prob/categorical_logit_glm_lpmf.hpp that is implemented in OpenCL.
  *
  * @tparam T_alpha_scalar type of scalar in the intercept vector
  * @tparam T_beta_scalar type of a scalar in the matrix of weights
@@ -71,8 +71,6 @@ return_type_t<T_alpha_scalar, T_beta_scalar> categorical_logit_glm_lpmf(
 
   const auto& beta_val = value_of_rec(beta);
   const auto& alpha_val = value_of_rec(alpha);
-
-  const auto& alpha_val_vec = as_column_vector_or_scalar(alpha_val).transpose();
 
   const int local_size
       = opencl_kernels::categorical_logit_glm.get_option("LOCAL_SIZE_");

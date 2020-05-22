@@ -1,20 +1,24 @@
 #ifndef STAN_MATH_REV_META_OPERANDS_AND_PARTIALS_HPP
 #define STAN_MATH_REV_META_OPERANDS_AND_PARTIALS_HPP
 
+#include <stan/math/rev/meta.hpp>
 #include <stan/math/rev/core/chainablestack.hpp>
 #include <stan/math/rev/core/precomputed_gradients.hpp>
 #include <stan/math/rev/core/var.hpp>
 #include <stan/math/rev/core/vari.hpp>
+#include <stan/math/rev/fun/typedefs.hpp>
 #include <stan/math/prim/meta/broadcast_array.hpp>
-#include <stan/math/prim/meta/operands_and_partials.hpp>
+#include <stan/math/prim/meta/is_eigen.hpp>
 #include <stan/math/prim/meta/is_vector_like.hpp>
+#include <stan/math/prim/meta/operands_and_partials.hpp>
 #include <stan/math/prim/meta/likely.hpp>
-#include <stan/math/rev/mat/fun/typedefs.hpp>
-#include <stan/math/prim/meta/size.hpp>
+#include <stan/math/prim/meta/promote_scalar_type.hpp>
+#include <stan/math/prim/fun/size.hpp>
 #include <vector>
 
 namespace stan {
 namespace math {
+
 namespace internal {
 
 /** \ingroup type_trait
@@ -163,11 +167,10 @@ class ops_partials_edge<double, std::vector<var>> {
   int size() { return this->operands_.size(); }
 };
 
-template <int R, int C>
-class ops_partials_edge<double, Eigen::Matrix<var, R, C>> {
+template <typename Op>
+class ops_partials_edge<double, Op, require_eigen_st<is_var, Op>> {
  public:
-  using Op = Eigen::Matrix<var, R, C>;
-  using partials_t = Eigen::Matrix<double, R, C>;
+  using partials_t = promote_scalar_t<double, Op>;
   partials_t partials_;                       // For univariate use-cases
   broadcast_array<partials_t> partials_vec_;  // For multivariate
   explicit ops_partials_edge(const Op& ops)
@@ -199,7 +202,7 @@ template <int R, int C>
 class ops_partials_edge<double, std::vector<Eigen::Matrix<var, R, C>>> {
  public:
   using Op = std::vector<Eigen::Matrix<var, R, C>>;
-  using partial_t = Eigen::Matrix<double, -1, -1>;
+  using partial_t = Eigen::Matrix<double, R, C>;
   std::vector<partial_t> partials_vec_;
   explicit ops_partials_edge(const Op& ops)
       : partials_vec_(ops.size()), operands_(ops) {

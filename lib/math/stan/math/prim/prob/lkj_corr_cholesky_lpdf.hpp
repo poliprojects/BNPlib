@@ -3,9 +3,10 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/mat/fun/make_nu.hpp>
+#include <stan/math/prim/fun/log.hpp>
+#include <stan/math/prim/fun/make_nu.hpp>
+#include <stan/math/prim/fun/multiply.hpp>
 #include <stan/math/prim/prob/lkj_corr_log.hpp>
-#include <stan/math/prim/mat/fun/multiply.hpp>
 
 namespace stan {
 namespace math {
@@ -16,10 +17,8 @@ template <bool propto, typename T_covar, typename T_shape>
 return_type_t<T_covar, T_shape> lkj_corr_cholesky_lpdf(
     const Eigen::Matrix<T_covar, Eigen::Dynamic, Eigen::Dynamic>& L,
     const T_shape& eta) {
-  static const char* function = "lkj_corr_cholesky_lpdf";
-
   using lp_ret = return_type_t<T_covar, T_shape>;
-  lp_ret lp(0.0);
+  static const char* function = "lkj_corr_cholesky_lpdf";
   check_positive(function, "Shape parameter", eta);
   check_lower_triangular(function, "Random variable", L);
 
@@ -28,13 +27,15 @@ return_type_t<T_covar, T_shape> lkj_corr_cholesky_lpdf(
     return 0.0;
   }
 
+  lp_ret lp(0.0);
+
   if (include_summand<propto, T_shape>::value) {
     lp += do_lkj_constant(eta, K);
   }
   if (include_summand<propto, T_covar, T_shape>::value) {
     const int Km1 = K - 1;
     Eigen::Matrix<T_covar, Eigen::Dynamic, 1> log_diagonals
-        = L.diagonal().tail(Km1).array().log();
+        = log(L.diagonal().tail(Km1).array());
     Eigen::Matrix<lp_ret, Eigen::Dynamic, 1> values(Km1);
     for (int k = 0; k < Km1; k++) {
       values(k) = (Km1 - k - 1) * log_diagonals(k);

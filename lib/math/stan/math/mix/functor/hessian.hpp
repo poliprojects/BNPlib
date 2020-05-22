@@ -2,7 +2,7 @@
 #define STAN_MATH_MIX_FUNCTOR_HESSIAN_HPP
 
 #include <stan/math/fwd/core.hpp>
-#include <stan/math/prim/mat/fun/Eigen.hpp>
+#include <stan/math/prim/fun/Eigen.hpp>
 #include <stan/math/rev/core.hpp>
 #include <stdexcept>
 
@@ -50,27 +50,23 @@ void hessian(const F& f, const Eigen::Matrix<double, Eigen::Dynamic, 1>& x,
     fx = f(x);
     return;
   }
-  try {
-    for (int i = 0; i < x.size(); ++i) {
-      start_nested();
-      Eigen::Matrix<fvar<var>, Eigen::Dynamic, 1> x_fvar(x.size());
-      for (int j = 0; j < x.size(); ++j) {
-        x_fvar(j) = fvar<var>(x(j), i == j);
-      }
-      fvar<var> fx_fvar = f(x_fvar);
-      grad(i) = fx_fvar.d_.val();
-      if (i == 0) {
-        fx = fx_fvar.val_.val();
-      }
-      stan::math::grad(fx_fvar.d_.vi_);
-      for (int j = 0; j < x.size(); ++j) {
-        H(i, j) = x_fvar(j).val_.adj();
-      }
-      recover_memory_nested();
+  for (int i = 0; i < x.size(); ++i) {
+    // Run nested autodiff in this scope
+    nested_rev_autodiff nested;
+
+    Eigen::Matrix<fvar<var>, Eigen::Dynamic, 1> x_fvar(x.size());
+    for (int j = 0; j < x.size(); ++j) {
+      x_fvar(j) = fvar<var>(x(j), i == j);
     }
-  } catch (const std::exception& e) {
-    recover_memory_nested();
-    throw;
+    fvar<var> fx_fvar = f(x_fvar);
+    grad(i) = fx_fvar.d_.val();
+    if (i == 0) {
+      fx = fx_fvar.val_.val();
+    }
+    stan::math::grad(fx_fvar.d_.vi_);
+    for (int j = 0; j < x.size(); ++j) {
+      H(i, j) = x_fvar(j).val_.adj();
+    }
   }
 }
 

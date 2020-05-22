@@ -2,7 +2,7 @@
 #define STAN_MATH_PRIM_ERR_CHECK_MULTIPLICABLE_HPP
 
 #include <stan/math/prim/meta.hpp>
-#include <stan/math/prim/mat/fun/Eigen.hpp>
+#include <stan/math/prim/fun/Eigen.hpp>
 #include <stan/math/prim/err/check_size_match.hpp>
 #include <stan/math/prim/err/check_positive.hpp>
 
@@ -29,11 +29,8 @@ namespace math {
 template <typename T1, typename T2>
 inline void check_multiplicable(const char* function, const char* name1,
                                 const T1& y1, const char* name2, const T2& y2) {
-  check_positive(function, name1, "rows()", y1.rows());
-  check_positive(function, name2, "cols()", y2.cols());
   check_size_match(function, "Columns of ", name1, y1.cols(), "Rows of ", name2,
                    y2.rows());
-  check_positive(function, name1, "cols()", y1.cols());
 }
 }  // namespace math
 }  // namespace stan

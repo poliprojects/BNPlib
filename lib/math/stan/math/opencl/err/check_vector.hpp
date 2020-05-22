@@ -3,7 +3,7 @@
 #ifdef STAN_OPENCL
 
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/mat/fun/Eigen.hpp>
+#include <stan/math/prim/fun/Eigen.hpp>
 #include <stan/math/opencl/matrix_cl.hpp>
 #include <sstream>
 #include <string>
@@ -12,7 +12,7 @@
 namespace stan {
 namespace math {
 
-/** \ingroup opencl
+/** \ingroup error_checks_opencl
  * Check if the matrix is either a row vector or column vector.
  * This function checks the runtime size of the matrix to check
  * whether it is a row or column vector.

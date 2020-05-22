@@ -4,7 +4,8 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/mat/fun/Eigen.hpp>
+#include <stan/math/prim/fun/Eigen.hpp>
+#include <stan/math/prim/fun/vec_concat.hpp>
 #include <stan/math/opencl/buffer_types.hpp>
 #include <stan/math/opencl/kernel_cl.hpp>
 #include <stan/math/opencl/matrix_cl.hpp>
@@ -15,7 +16,6 @@
 #include <stan/math/opencl/kernels/unpack.hpp>
 #include <stan/math/opencl/err/check_opencl.hpp>
 #include <stan/math/opencl/err/check_triangular.hpp>
-#include <stan/math/prim/arr/fun/vec_concat.hpp>
 
 #include <CL/cl2.hpp>
 #include <algorithm>
@@ -72,7 +72,6 @@ inline matrix_cl<Vec_scalar> to_matrix_cl(Vec&& src) {
  * @param src source matrix on the OpenCL device
  * @return Eigen matrix with a copy of the data in the source matrix
  */
-
 template <int R = Eigen::Dynamic, int C = Eigen::Dynamic, typename T,
           typename = require_arithmetic_t<T>>
 inline Eigen::Matrix<T, R, C> from_matrix_cl(const matrix_cl<T>& src) {

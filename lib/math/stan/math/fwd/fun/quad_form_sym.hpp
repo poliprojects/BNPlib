@@ -3,45 +3,60 @@
 
 #include <stan/math/fwd/core.hpp>
 #include <stan/math/fwd/fun/multiply.hpp>
-#include <stan/math/fwd/fun/dot_product.hpp>
+#include <stan/math/prim/fun/dot_product.hpp>
 
 namespace stan {
 namespace math {
 
-template <int RA, int CA, int RB, int CB, typename T>
-inline Eigen::Matrix<fvar<T>, CB, CB> quad_form_sym(
-    const Eigen::Matrix<fvar<T>, RA, CA>& A,
-    const Eigen::Matrix<double, RB, CB>& B) {
+/**
+ * Return the quadratic form \f$ B^T A B \f$ of a symmetric matrix.
+ *
+ * Symmetry of the resulting matrix is guaranteed.
+ *
+ * @tparam EigMat1 type of the first (symmetric) matrix
+ * @tparam EigMat2 type of the second matrix
+ *
+ * @param A symmetric matrix
+ * @param B second matrix
+ * @return The quadratic form, which is a symmetric matrix of size CB.
+ * @throws std::invalid_argument if A is not symmetric, or if A cannot be
+ * multiplied by B
+ */
+template <typename EigMat1, typename EigMat2,
+          require_all_eigen_t<EigMat1, EigMat2>* = nullptr,
+          require_not_eigen_col_vector_t<EigMat2>* = nullptr,
+          require_any_vt_fvar<EigMat1, EigMat2>* = nullptr>
+inline promote_scalar_t<return_type_t<EigMat1, EigMat2>, EigMat2> quad_form_sym(
+    const EigMat1& A, const EigMat2& B) {
+  using T_ret = return_type_t<EigMat1, EigMat2>;
   check_multiplicable("quad_form_sym", "A", A, "B", B);
   check_symmetric("quad_form_sym", "A", A);
-  Eigen::Matrix<fvar<T>, CB, CB> ret(multiply(transpose(B), multiply(A, B)));
-  return T(0.5) * (ret + transpose(ret));
+  promote_scalar_t<T_ret, EigMat2> ret(multiply(B.transpose(), multiply(A, B)));
+  return T_ret(0.5) * (ret + ret.transpose());
 }
 
-template <int RA, int CA, int RB, typename T>
-inline fvar<T> quad_form_sym(const Eigen::Matrix<fvar<T>, RA, CA>& A,
-                             const Eigen::Matrix<double, RB, 1>& B) {
+/**
+ * Return the quadratic form \f$ B^T A B \f$ of a symmetric matrix.
+ *
+ * @tparam EigMat type of the (symmetric) matrix
+ * @tparam ColVec type of the vector
+ *
+ * @param A symmetric matrix
+ * @param B vector
+ * @return The quadratic form (a scalar).
+ * @throws std::invalid_argument if A is not symmetric, or if A cannot be
+ * multiplied by B
+ */
+template <typename EigMat, typename ColVec, require_eigen_t<EigMat>* = nullptr,
+          require_eigen_col_vector_t<ColVec>* = nullptr,
+          require_any_vt_fvar<EigMat, ColVec>* = nullptr>
+inline return_type_t<EigMat, ColVec> quad_form_sym(const EigMat& A,
+                                                   const ColVec& B) {
   check_multiplicable("quad_form_sym", "A", A, "B", B);
   check_symmetric("quad_form_sym", "A", A);
   return dot_product(B, multiply(A, B));
 }
-template <int RA, int CA, int RB, int CB, typename T>
-inline Eigen::Matrix<fvar<T>, CB, CB> quad_form_sym(
-    const Eigen::Matrix<double, RA, CA>& A,
-    const Eigen::Matrix<fvar<T>, RB, CB>& B) {
-  check_multiplicable("quad_form_sym", "A", A, "B", B);
-  check_symmetric("quad_form_sym", "A", A);
-  Eigen::Matrix<fvar<T>, CB, CB> ret(multiply(transpose(B), multiply(A, B)));
-  return T(0.5) * (ret + transpose(ret));
-}
 
-template <int RA, int CA, int RB, typename T>
-inline fvar<T> quad_form_sym(const Eigen::Matrix<double, RA, CA>& A,
-                             const Eigen::Matrix<fvar<T>, RB, 1>& B) {
-  check_multiplicable("quad_form_sym", "A", A, "B", B);
-  check_symmetric("quad_form_sym", "A", A);
-  return dot_product(B, multiply(A, B));
-}
 }  // namespace math
 }  // namespace stan
 

@@ -1,6 +1,4 @@
-#include <stan/math/prim/arr.hpp>
-#include <stan/math/prim/mat.hpp>
-#include <stan/math/prim/scal.hpp>
+#include <stan/math/prim.hpp>
 #include <gtest/gtest.h>
 #include <limits>
 #include <vector>
@@ -54,6 +52,7 @@ TEST(ErrorHandlingArr, CheckNotNanVectorized_one_indexed_message) {
 TEST(ErrorHandlingMatrix, checkNotNanEigenRow) {
   stan::math::vector_d y;
   y.resize(3);
+  y << 1, 2, 3;
 
   EXPECT_NO_THROW(stan::math::check_not_nan("checkNotNanEigenRow(%1)", "y", y));
   EXPECT_NO_THROW(stan::math::check_not_nan("checkNotNanEigenRow(%1)", "y", y));

@@ -3,7 +3,7 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/mat/fun/crossprod.hpp>
+#include <stan/math/prim/fun/crossprod.hpp>
 #include <stan/math/prim/prob/chi_square_rng.hpp>
 #include <stan/math/prim/prob/normal_rng.hpp>
 #include <cmath>
@@ -14,11 +14,9 @@ namespace math {
 template <class RNG>
 inline Eigen::MatrixXd wishart_rng(double nu, const Eigen::MatrixXd& S,
                                    RNG& rng) {
-  static const char* function = "wishart_rng";
-
   using Eigen::MatrixXd;
-  typename index_type<MatrixXd>::type k = S.rows();
-
+  static const char* function = "wishart_rng";
+  index_type_t<MatrixXd> k = S.rows();
   check_square(function, "scale parameter", S);
   check_greater(function, "degrees of freedom > dims - 1", nu, k - 1);
 

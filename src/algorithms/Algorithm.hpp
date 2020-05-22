@@ -8,7 +8,8 @@
 #include <vector>
 
 #include <Eigen/Dense> 
-#include <stan/math/prim/mat.hpp>
+#include <stan/math/prim/fun.hpp>
+#include <stan/math/prim/prob.hpp>
 
 #include "../api/output.pb.h"
 #include "../api/FileCollector.hpp"

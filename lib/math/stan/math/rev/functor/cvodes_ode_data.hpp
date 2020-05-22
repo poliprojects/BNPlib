@@ -2,8 +2,8 @@
 #define STAN_MATH_REV_FUNCTOR_CVODES_ODE_DATA_HPP
 
 #include <stan/math/rev/meta.hpp>
-#include <stan/math/prim/functor/coupled_ode_system.hpp>
 #include <stan/math/rev/functor/coupled_ode_system.hpp>
+#include <stan/math/prim/functor/coupled_ode_system.hpp>
 #include <cvodes/cvodes.h>
 #include <sunmatrix/sunmatrix_dense.h>
 #include <sunlinsol/sunlinsol_dense.h>
@@ -22,7 +22,6 @@ namespace math {
  * @tparam T_initial type of initial values
  * @tparam T_param type of parameters
  */
-
 template <typename F, typename T_initial, typename T_param>
 class cvodes_ode_data {
   const F& f_;
@@ -55,7 +54,7 @@ class cvodes_ode_data {
    * RHS (<code>cv_rhs_sens</code>) and for the ODE Jacobian wrt
    * to the states (<code>cv_jacobian_states</code>).
    *
-   * The callbacks required by CVODES are detailled in
+   * The callbacks required by CVODES are detailed in
    * https://computation.llnl.gov/sites/default/files/public/cvs_guide.pdf
    *
    * Note: The supplied callbacks do always return 0 which flags to
@@ -164,14 +163,15 @@ class cvodes_ode_data {
    * y to be the initial of the coupled ode system.
    */
   inline int jacobian_states(double t, const double y[], SUNMatrix J) const {
-    start_nested();
+    // Run nested autodiff in this scope
+    nested_rev_autodiff nested;
+
     const std::vector<var> y_vec_var(y, y + N_);
     coupled_ode_system<F, var, double> ode_jacobian(f_, y_vec_var, theta_dbl_,
                                                     x_, x_int_, msgs_);
     std::vector<double>&& jacobian_y = std::vector<double>(ode_jacobian.size());
     ode_jacobian(ode_jacobian.initial_state(), jacobian_y, t);
     std::move(jacobian_y.begin() + N_, jacobian_y.end(), SM_DATA_D(J));
-    recover_memory_nested();
     return 0;
   }
 

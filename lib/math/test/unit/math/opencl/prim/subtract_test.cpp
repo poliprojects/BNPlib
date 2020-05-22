@@ -1,5 +1,5 @@
 #ifdef STAN_OPENCL
-#include <stan/math/prim/mat.hpp>
+#include <stan/math/prim.hpp>
 #include <stan/math/opencl/opencl.hpp>
 #include <gtest/gtest.h>
 #include <algorithm>
@@ -15,7 +15,7 @@ TEST(MathMatrixCL, subtract_v_exception_pass) {
   EXPECT_NO_THROW(d33 = d11 - d22);
 }
 
-// TODO(Steve): This should probably throw expection?
+// TODO(Steve): This should probably throw exception?
 // The dimensions do not match
 TEST(MathMatrixCL, subtract_v_exception_pass_zero) {
   stan::math::vector_d d1, d2;

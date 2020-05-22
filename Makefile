@@ -1,6 +1,6 @@
 PYTHON_DIR := /usr/bin/python3
 STAN_ROOT_DIR := lib/math
-EIGEN_DIR := $(STAN_ROOT_DIR)/lib/eigen_3.3.3/
+EIGEN_DIR := $(STAN_ROOT_DIR)/lib/eigen_3.3.7/
 CXX = g++ -fPIC
 CXXFLAGS += -fopenmp -D_REENTRANT \
 	-I$(STAN_ROOT_DIR) \

@@ -4,19 +4,17 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/scal/fun/constants.hpp>
-#include <stan/math/prim/scal/fun/multiply_log.hpp>
-#include <stan/math/prim/scal/fun/digamma.hpp>
-#include <stan/math/prim/mat/fun/lgamma.hpp>
-#include <stan/math/prim/mat/fun/value_of_rec.hpp>
-#include <stan/math/prim/arr/fun/value_of_rec.hpp>
-#include <stan/math/prim/arr/fun/sum.hpp>
-#include <stan/math/prim/scal/fun/sum.hpp>
-#include <stan/math/prim/mat/fun/sum.hpp>
+#include <stan/math/prim/fun/constants.hpp>
+#include <stan/math/prim/fun/digamma.hpp>
+#include <stan/math/prim/fun/lgamma.hpp>
+#include <stan/math/prim/fun/multiply_log.hpp>
+#include <stan/math/prim/fun/size.hpp>
+#include <stan/math/prim/fun/sum.hpp>
+#include <stan/math/prim/fun/value_of_rec.hpp>
 #include <stan/math/opencl/copy.hpp>
+#include <stan/math/opencl/multiply.hpp>
 #include <stan/math/opencl/kernel_generator.hpp>
 #include <stan/math/opencl/kernels/neg_binomial_2_log_glm_lpmf.hpp>
-
 #include <vector>
 #include <cmath>
 
@@ -32,7 +30,7 @@ namespace math {
  * simplified gradients.
  * If containers are supplied, returns the log sum of the probabilities.
  * This is an overload of the GLM in
- * prim/mar/prob/neg_binomial_2_log_glm_lpdf.hpp that is implemented in OpenCL.
+ * prim/prob/neg_binomial_2_log_glm_lpdf.hpp that is implemented in OpenCL.
  * @tparam T_alpha type of the intercept(s);
  * this can be a vector (of the same length as y) of intercepts or a single
  * value (for models with constant intercept);
@@ -78,11 +76,11 @@ return_type_t<T_alpha, T_beta, T_precision> neg_binomial_2_log_glm_lpmf(
   check_consistent_size(function, "Weight vector", beta, M);
   if (is_vector<T_precision>::value) {
     check_size_match(function, "Rows of ", "x_cl", N, "size of ", "phi",
-                     size(phi));
+                     stan::math::size(phi));
   }
   if (is_vector<T_alpha>::value) {
     check_size_match(function, "Rows of ", "x_cl", N, "size of ", "alpha",
-                     size(alpha));
+                     stan::math::size(alpha));
   }
   check_positive_finite(function, "Precision parameter", phi);
 
@@ -101,8 +99,6 @@ return_type_t<T_alpha, T_beta, T_precision> neg_binomial_2_log_glm_lpmf(
   const auto& beta_val_vec = as_column_vector_or_scalar(beta_val);
   const auto& alpha_val_vec = as_column_vector_or_scalar(alpha_val);
   const auto& phi_val_vec = as_column_vector_or_scalar(phi_val);
-
-  const auto& phi_arr = as_array_or_scalar(phi_val_vec);
 
   const int local_size
       = opencl_kernels::neg_binomial_2_log_glm.get_option("LOCAL_SIZE_");
@@ -138,9 +134,10 @@ return_type_t<T_alpha, T_beta, T_precision> neg_binomial_2_log_glm_lpmf(
         cl::NDRange(local_size * wgs), cl::NDRange(local_size), logp_cl,
         theta_derivative_cl, theta_derivative_sum_cl, phi_derivative_cl, y_cl,
         x_cl, alpha_cl, beta_cl, phi_cl, N, M, y_cl.size() != 1,
-        size(alpha) != 1, size(phi) != 1, need_theta_derivative,
-        need_theta_derivative_sum, need_phi_derivative, need_phi_derivative_sum,
-        need_logp1, need_logp2, need_logp3, need_logp4, need_logp5);
+        stan::math::size(alpha) != 1, stan::math::size(phi) != 1,
+        need_theta_derivative, need_theta_derivative_sum, need_phi_derivative,
+        need_phi_derivative_sum, need_logp1, need_logp2, need_logp3, need_logp4,
+        need_logp5);
   } catch (const cl::Error& e) {
     check_opencl_error(function, e);
   }

@@ -2,6 +2,7 @@
 #define STAN_MATH_REV_CORE_PRECOMPUTED_GRADIENTS_HPP
 
 #include <stan/math/prim/err/check_consistent_sizes.hpp>
+// #include <stan/math/rev/meta.hpp>
 #include <stan/math/rev/core/vari.hpp>
 #include <stan/math/rev/core/var.hpp>
 #include <algorithm>
@@ -41,6 +42,9 @@ class precomputed_gradients_vari : public vari {
    * Construct a precomputed vari with the specified value,
    * operands, and gradients.
    *
+   * @tparam Arith An arithmetic type
+   * @tparam VecVar A vector of vars
+   * @tparam VecArith A vector of arithmetic types
    * @param[in] val The value of the variable.
    * @param[in] vars Vector of operands.
    * @param[in] gradients Vector of partial derivatives of value
@@ -48,8 +52,8 @@ class precomputed_gradients_vari : public vari {
    * @throws std::invalid_argument if the sizes of the vectors
    * don't match.
    */
-  precomputed_gradients_vari(double val, const std::vector<var>& vars,
-                             const std::vector<double>& gradients)
+  template <typename Arith, typename VecVar, typename VecArith>
+  precomputed_gradients_vari(Arith val, VecVar&& vars, VecArith&& gradients)
       : vari(val),
         size_(vars.size()),
         varis_(ChainableStack::instance_->memalloc_.alloc_array<vari*>(
@@ -80,17 +84,23 @@ class precomputed_gradients_vari : public vari {
  * specified value, vector of operands, and vector of partial
  * derivatives of value with respect to the operands.
  *
+ * @tparam Arith An arithmetic type
+ * @tparam VecVar A vector of vars
+ * @tparam VecArith A vector of arithmetic types
  * @param[in] value The value of the resulting dependent variable.
  * @param[in] operands operands.
  * @param[in] gradients vector of partial derivatives of result with
  * respect to operands.
- * @return An auto-diff variable that uses the precomputed
- *   gradients provided.
+ * @return An autodiff variable that uses the precomputed
+ * gradients provided.
  */
-inline var precomputed_gradients(double value, const std::vector<var>& operands,
-                                 const std::vector<double>& gradients) {
-  return var(new precomputed_gradients_vari(value, operands, gradients));
+template <typename Arith, typename VecVar, typename VecArith>
+inline var precomputed_gradients(Arith value, VecVar&& operands,
+                                 VecArith&& gradients) {
+  return {new precomputed_gradients_vari(value, std::forward<VecVar>(operands),
+                                         std::forward<VecArith>(gradients))};
 }
+
 }  // namespace math
 }  // namespace stan
 #endif

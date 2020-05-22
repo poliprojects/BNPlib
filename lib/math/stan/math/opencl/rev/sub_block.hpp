@@ -2,7 +2,7 @@
 #define STAN_MATH_OPENCL_REV_SUB_BLOCK_HPP
 #ifdef STAN_OPENCL
 
-#include <stan/math/prim/mat/fun/typedefs.hpp>
+#include <stan/math/prim/fun/typedefs.hpp>
 #include <stan/math/opencl/opencl_context.hpp>
 #include <stan/math/opencl/rev/matrix_cl.hpp>
 #include <stan/math/opencl/sub_block.hpp>
@@ -11,7 +11,7 @@
 
 namespace stan {
 namespace math {
-/**
+/** \ingroup matrix_cl_group
  * Write the contents of A into
  * \c this starting at the top left of \c this
  * @param A input matrix

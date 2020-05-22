@@ -1,7 +1,7 @@
 #ifndef STAN_MATH_PRIM_META_vector_SEQ_VIEW_HPP
 #define STAN_MATH_PRIM_META_vector_SEQ_VIEW_HPP
 
-#include <stan/math/prim/mat/fun/Eigen.hpp>
+#include <stan/math/prim/fun/Eigen.hpp>
 #include <vector>
 
 namespace stan {
@@ -54,7 +54,7 @@ class vector_seq_view<Eigen::Matrix<S, Eigen::Dynamic, 1> > {
  * only allows std::vectors as the container type, since we would have
  * difficulty figuring out which contained type was the container otherwise.
  *
- * @tparam S the type inside of the underlying Vector
+ * @tparam S the type inside of the underlying RowVector
  */
 template <typename S>
 class vector_seq_view<Eigen::Matrix<S, 1, Eigen::Dynamic> > {
@@ -103,7 +103,7 @@ class vector_seq_view<std::vector<Eigen::Matrix<S, Eigen::Dynamic, 1> > > {
  * only allows std::vectors as the container type, since we would have
  * difficulty figuring out which contained type was the container otherwise.
  *
- * @tparam S the type inside of the underlying Vector
+ * @tparam S the type inside of the underlying RowVector
  */
 template <typename S>
 class vector_seq_view<std::vector<Eigen::Matrix<S, 1, Eigen::Dynamic> > > {
@@ -117,6 +117,7 @@ class vector_seq_view<std::vector<Eigen::Matrix<S, 1, Eigen::Dynamic> > > {
  private:
   const std::vector<Eigen::Matrix<S, 1, Eigen::Dynamic> >& v_;
 };
+
 }  // namespace stan
 
 #endif

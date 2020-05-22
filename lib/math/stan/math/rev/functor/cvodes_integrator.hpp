@@ -2,13 +2,13 @@
 #define STAN_MATH_REV_FUNCTOR_INTEGRATE_ODE_CVODES_HPP
 
 #include <stan/math/rev/meta.hpp>
-#include <stan/math/prim/err.hpp>
-#include <stan/math/prim/arr/fun/value_of.hpp>
-#include <stan/math/prim/functor/coupled_ode_observer.hpp>
-#include <stan/math/prim/functor/coupled_ode_system.hpp>
 #include <stan/math/rev/functor/coupled_ode_system.hpp>
 #include <stan/math/rev/functor/cvodes_utils.hpp>
 #include <stan/math/rev/functor/cvodes_ode_data.hpp>
+#include <stan/math/prim/err.hpp>
+#include <stan/math/prim/fun/value_of.hpp>
+#include <stan/math/prim/functor/coupled_ode_observer.hpp>
+#include <stan/math/prim/functor/coupled_ode_system.hpp>
 #include <cvodes/cvodes.h>
 #include <sunlinsol/sunlinsol_dense.h>
 #include <algorithm>
@@ -21,6 +21,7 @@ namespace math {
 /**
  * Integrator interface for CVODES' ODE solvers (Adams & BDF
  * methods).
+ *
  * @tparam Lmm ID of ODE solver (1: ADAMS, 2: BDF)
  */
 template <int Lmm>
@@ -44,13 +45,14 @@ class cvodes_integrator {
    *
    * The solver used is based on the backward differentiation
    * formula which is an implicit numerical integration scheme
-   * appropiate for stiff ODE systems.
+   * appropriate for stiff ODE systems.
    *
    * @tparam F type of ODE system function.
    * @tparam T_initial type of scalars for initial values.
    * @tparam T_param type of scalars for parameters.
    * @tparam T_t0 type of scalar of initial time point.
    * @tparam T_ts type of time-points where ODE solution is returned.
+   *
    * @param[in] f functor for the base ordinary differential equation.
    * @param[in] y0 initial state.
    * @param[in] t0 initial time.
@@ -69,8 +71,7 @@ class cvodes_integrator {
    */
   template <typename F, typename T_initial, typename T_param, typename T_t0,
             typename T_ts>
-  std::vector<std::vector<
-      typename stan::return_type<T_initial, T_param, T_t0, T_ts>::type>>
+  std::vector<std::vector<return_type_t<T_initial, T_param, T_t0, T_ts>>>
   integrate(const F& f, const std::vector<T_initial>& y0, const T_t0& t0,
             const std::vector<T_ts>& ts, const std::vector<T_param>& theta,
             const std::vector<double>& x, const std::vector<int>& x_int,
@@ -121,9 +122,7 @@ class cvodes_integrator {
 
     const size_t coupled_size = cvodes_data.coupled_ode_.size();
 
-    std::vector<std::vector<
-        typename stan::return_type<T_initial, T_param, T_t0, T_ts>::type>>
-        y;
+    std::vector<std::vector<return_type_t<T_initial, T_param, T_t0, T_ts>>> y;
     coupled_ode_observer<F, T_initial, T_param, T_t0, T_ts> observer(
         f, y0, theta, t0, ts, x, x_int, msgs, y);
 
@@ -188,6 +187,7 @@ class cvodes_integrator {
     return y;
   }
 };  // cvodes integrator
+
 }  // namespace math
 }  // namespace stan
 #endif

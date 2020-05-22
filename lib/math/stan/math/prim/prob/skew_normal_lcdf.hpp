@@ -3,12 +3,15 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/scal/fun/constants.hpp>
-#include <stan/math/prim/scal/fun/erf.hpp>
-#include <stan/math/prim/scal/fun/erfc.hpp>
-#include <stan/math/prim/scal/fun/owens_t.hpp>
-#include <stan/math/prim/scal/fun/size_zero.hpp>
-#include <stan/math/prim/scal/fun/value_of.hpp>
+#include <stan/math/prim/fun/constants.hpp>
+#include <stan/math/prim/fun/erf.hpp>
+#include <stan/math/prim/fun/erfc.hpp>
+#include <stan/math/prim/fun/exp.hpp>
+#include <stan/math/prim/fun/log.hpp>
+#include <stan/math/prim/fun/max_size.hpp>
+#include <stan/math/prim/fun/owens_t.hpp>
+#include <stan/math/prim/fun/size_zero.hpp>
+#include <stan/math/prim/fun/value_of.hpp>
 #include <cmath>
 
 namespace stan {
@@ -17,15 +20,10 @@ namespace math {
 template <typename T_y, typename T_loc, typename T_scale, typename T_shape>
 return_type_t<T_y, T_loc, T_scale, T_shape> skew_normal_lcdf(
     const T_y& y, const T_loc& mu, const T_scale& sigma, const T_shape& alpha) {
-  static const char* function = "skew_normal_lcdf";
   using T_partials_return = partials_return_t<T_y, T_loc, T_scale, T_shape>;
-
-  T_partials_return cdf_log(0.0);
-
-  if (size_zero(y, mu, sigma, alpha)) {
-    return cdf_log;
-  }
-
+  using std::exp;
+  using std::log;
+  static const char* function = "skew_normal_lcdf";
   check_not_nan(function, "Random variable", y);
   check_finite(function, "Location parameter", mu);
   check_not_nan(function, "Scale parameter", sigma);
@@ -35,12 +33,13 @@ return_type_t<T_y, T_loc, T_scale, T_shape> skew_normal_lcdf(
   check_consistent_sizes(function, "Random variable", y, "Location parameter",
                          mu, "Scale parameter", sigma, "Shape paramter", alpha);
 
+  if (size_zero(y, mu, sigma, alpha)) {
+    return 0;
+  }
+
+  T_partials_return cdf_log(0.0);
   operands_and_partials<T_y, T_loc, T_scale, T_shape> ops_partials(y, mu, sigma,
                                                                    alpha);
-
-  using std::exp;
-  using std::log;
-
   scalar_seq_view<T_y> y_vec(y);
   scalar_seq_view<T_loc> mu_vec(mu);
   scalar_seq_view<T_scale> sigma_vec(sigma);
@@ -63,7 +62,7 @@ return_type_t<T_y, T_loc, T_scale, T_shape> skew_normal_lcdf(
     cdf_log += log(cdf_log_);
 
     const T_partials_return deriv_erfc
-        = SQRT_TWO_OVER_SQRT_PI * 0.5 * exp(-scaled_diff_sq) / sigma_dbl;
+        = INV_SQRT_TWO_PI * exp(-scaled_diff_sq) / sigma_dbl;
     const T_partials_return deriv_owens
         = erf(alpha_dbl * scaled_diff) * exp(-scaled_diff_sq)
           / SQRT_TWO_OVER_SQRT_PI / (-TWO_PI) / sigma_dbl;

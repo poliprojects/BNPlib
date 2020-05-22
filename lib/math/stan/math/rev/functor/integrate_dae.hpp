@@ -9,6 +9,7 @@
 
 namespace stan {
 namespace math {
+
 /**
  * Return the solutions for a semi-explicit DAE system with residual
  * specified by functor F,
@@ -16,6 +17,7 @@ namespace math {
  *
  * @tparam DAE type of DAE system
  * @tparam Tpar scalar type of parameter theta
+ *
  * @param[in] f functor for the base ordinary differential equation
  * @param[in] yy0 initial state
  * @param[in] yp0 initial derivative state
@@ -25,7 +27,7 @@ namespace math {
  * @param[in] theta parameters
  * @param[in] x_r real data
  * @param[in] x_i int data
- * @param[in] rtol relative tolerance passed to IDAS, requred <10^-3
+ * @param[in] rtol relative tolerance passed to IDAS, required <10^-3
  * @param[in] atol absolute tolerance passed to IDAS, problem-dependent
  * @param[in] max_num_steps maximal number of admissable steps
  * between time-points
@@ -53,6 +55,7 @@ std::vector<std::vector<Tpar> > integrate_dae(
 
   return solver.integrate(dae, t0, ts);
 }
+
 }  // namespace math
 }  // namespace stan
 

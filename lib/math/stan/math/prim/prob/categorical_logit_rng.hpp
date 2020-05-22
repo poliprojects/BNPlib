@@ -3,14 +3,15 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/mat/fun/cumulative_sum.hpp>
-#include <stan/math/prim/mat/fun/softmax.hpp>
-#include <stan/math/prim/mat/fun/Eigen.hpp>
+#include <stan/math/prim/fun/cumulative_sum.hpp>
+#include <stan/math/prim/fun/softmax.hpp>
+#include <stan/math/prim/fun/Eigen.hpp>
 #include <boost/random/uniform_01.hpp>
 #include <boost/random/variate_generator.hpp>
 
 namespace stan {
 namespace math {
+
 /** \ingroup multivar_dists
  * Return a draw from a Categorical distribution given a
  * a vector of unnormalized log probabilities and a psuedo-random
@@ -28,9 +29,7 @@ template <class RNG>
 inline int categorical_logit_rng(const Eigen::VectorXd& beta, RNG& rng) {
   using boost::uniform_01;
   using boost::variate_generator;
-
   static const char* function = "categorical_logit_rng";
-
   check_finite(function, "Log odds parameter", beta);
 
   variate_generator<RNG&, uniform_01<> > uniform01_rng(rng, uniform_01<>());

@@ -1,7 +1,7 @@
 #include <stan/math/rev/core.hpp>
 #include <stan/math/rev/functor/algebra_solver_powell.hpp>
 #include <stan/math/rev/functor/algebra_solver_newton.hpp>
-#include <test/unit/math/rev/mat/fun/util.hpp>
+#include <test/unit/math/rev/fun/util.hpp>
 #include <test/unit/math/rev/functor/util_algebra_solver.hpp>
 #include <test/unit/util.hpp>
 #include <gtest/gtest.h>
@@ -10,7 +10,7 @@
 #include <vector>
 #include <string>
 
-// Every test exists in four verions for the cases
+// Every test exists in four versions for the cases
 // where y (the auxiliary parameters) are passed as
 // data (double type) or parameters (var types),
 // and the cases where the solver is based on Powell's

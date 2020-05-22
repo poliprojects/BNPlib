@@ -2,7 +2,7 @@
 #define STAN_MATH_OPENCL_REV_TRIANGULAR_TRANSPOSE_HPP
 #ifdef STAN_OPENCL
 
-#include <stan/math/prim/mat/fun/typedefs.hpp>
+#include <stan/math/prim/fun/typedefs.hpp>
 #include <stan/math/opencl/matrix_cl_view.hpp>
 #include <stan/math/opencl/triangular_transpose.hpp>
 #include <stan/math/opencl/rev/matrix_cl.hpp>
@@ -10,8 +10,8 @@
 namespace stan {
 namespace math {
 
-/**
- * Copies a lower/upper triangular of a matrix to it's upper/lower.
+/** \ingroup matrix_cl_group
+ * Copies the lower/upper triangle of a matrix to its upper/lower triangle.
  *
  * @tparam triangular_map Specifies if the copy is
  * lower-to-upper or upper-to-lower triangular. The value

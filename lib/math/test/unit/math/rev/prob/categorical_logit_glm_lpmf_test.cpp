@@ -1,10 +1,6 @@
-#include <stan/math/rev/mat.hpp>
-#include <stan/math.hpp>
+#include <stan/math/rev.hpp>
+#include <stan/math/prim.hpp>
 #include <gtest/gtest.h>
-#include <stan/math/prim/scal/fun/value_of.hpp>
-#include <stan/math/prim/meta/return_type.hpp>
-#include <stan/math/prim/err/check_consistent_size.hpp>
-#include <stan/math/prim/prob.hpp>
 #include <cmath>
 #include <vector>
 
@@ -18,12 +14,11 @@ using stan::math::var;
 using std::vector;
 
 template <bool propto, typename T_x, typename T_alpha, typename T_beta>
-typename stan::return_type<T_x, T_alpha, T_beta>::type
-categorical_logit_glm_simple_lpmf(
+stan::return_type_t<T_x, T_alpha, T_beta> categorical_logit_glm_simple_lpmf(
     const vector<int>& y, const Matrix<T_x, Dynamic, Dynamic>& x,
     const T_alpha& alpha, const Matrix<T_beta, Dynamic, Dynamic>& beta) {
-  typedef typename stan::return_type<T_x, T_beta>::type T_x_beta;
-  typedef typename stan::return_type<T_x, T_beta, T_alpha>::type T_return;
+  using T_x_beta = stan::return_type_t<T_x, T_beta>;
+  using T_return = stan::return_type_t<T_x, T_beta, T_alpha>;
 
   const size_t N_instances = x.rows();
 

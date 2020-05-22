@@ -1,8 +1,8 @@
 #ifndef TEST_UNIT_MATH_PRIM_PROB_VECTOR_RNG_TEST_RIG_HPP
 #define TEST_UNIT_MATH_PRIM_PROB_VECTOR_RNG_TEST_RIG_HPP
 
+#include <stan/math/prim.hpp>
 #include <gtest/gtest.h>
-#include <stan/math/prim/mat.hpp>
 #include <vector>
 
 /*
@@ -29,8 +29,8 @@
  *   T_out generate_samples(T_param1 p1, T_param2 p2, T_param3, T_rng)
  * where T_param1, T_param2, and T_param3 can be any combination of:
  *   int, double, std::vector<int>, std::vector<double>, VectorXd, & RowVectorXd
- * and T_rng is a boost random number generator. p2 and p3 are required for the
- * function signature, but they can be ignored if they are not needed.
+ * and T_rng is a boost random number generator. p1, p2 and p3 are required for
+ * the function signature, but they can be ignored if they are not needed.
  *
  * Each element of the output, out[i], should correspond to a random variate
  * generated according to parameters p1[i], p2[i], and p3[i]
@@ -42,10 +42,11 @@
  * input vectors. These should cause invalid_argument errors.
  *
  * The output of generate_samples must be of
- *   size(out) == stan::math::size(p1) if only p1 is used
- *   size(out) == stan::math::max_size(p1, p2) if p1 and p2 are used
- *   size(out) == stan::math::max_size(p1, p2, p3) if all parameters are used
- * It must be defined to take three arguments, but not all must be used.
+ *   stan::math::size(out) == stan::math::size(p1) if only p1 is used
+ *   stan::math::size(out) == stan::math::max_size(p1, p2) if p1 and p2 are used
+ *   stan::math::size(out) == stan::math::max_size(p1, p2, p3) if all parameters
+ * are used It must be defined to take three arguments, but not all must be
+ * used.
  *
  * good_p1_ and bad_p1_ should be initialized to lists of valid and invalid
  * floating point parameters for the first parameter of the tested RNG
@@ -152,10 +153,18 @@ class VectorRNGTestRig {
       : VectorRNGTestRig(N, M, good_p1, good_p1_int, bad_p1, bad_p1_int, {}, {},
                          {}, {}, {}, {}, {}, {}) {}
 
+  VectorRNGTestRig(int N, int M)
+      : VectorRNGTestRig(N, M, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}) {
+  }
+
   /*
-   * If no good values for p2 or p3 are provided, it is assumed that those
+   * If no good values for p1, p2 or p3 are provided, it is assumed that those
    * parameters are unused
    */
+  bool p1_is_used() const {
+    return good_p1_.size() > 0 || good_p1_int_.size() > 0;
+  }
+
   bool p2_is_used() const {
     return good_p2_.size() > 0 || good_p2_int_.size() > 0;
   }

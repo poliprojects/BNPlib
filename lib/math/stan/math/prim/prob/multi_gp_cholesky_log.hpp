@@ -2,7 +2,7 @@
 #define STAN_MATH_PRIM_PROB_MULTI_GP_CHOLESKY_LOG_HPP
 
 #include <stan/math/prim/meta.hpp>
-#include <stan/math/prim/mat/fun/Eigen.hpp>
+#include <stan/math/prim/fun/Eigen.hpp>
 #include <stan/math/prim/prob/multi_gp_cholesky_lpdf.hpp>
 
 namespace stan {
@@ -21,7 +21,7 @@ namespace math {
  *
  * @param y A dxN matrix
  * @param L The Cholesky decomposition of a kernel matrix
- * @param w A d-dimensional vector of positve inverse scale parameters for each
+ * @param w A d-dimensional vector of positive inverse scale parameters for each
  * output.
  * @return The log of the multivariate GP density.
  * @throw std::domain_error if Sigma is not square, not symmetric,

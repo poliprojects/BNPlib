@@ -7,7 +7,7 @@
 #include <stan/math/opencl/err.hpp>
 #include <stan/math/opencl/sub_block.hpp>
 
-#include <stan/math/prim/mat/fun/Eigen.hpp>
+#include <stan/math/prim/fun/Eigen.hpp>
 #include <stan/math/prim/meta.hpp>
 
 namespace stan {
@@ -32,7 +32,7 @@ inline matrix_cl<T> multiply_transpose(const matrix_cl<T>& A) {
     return temp;
   }
   // padding the matrices so the dimensions are divisible with local
-  // improves performance becasuse we can omit if statements in the
+  // improves performance because we can omit if statements in the
   // multiply kernel
   int local = opencl_kernels::multiply_transpose.make_functor.get_opts().at(
       "THREAD_BLOCK_SIZE");

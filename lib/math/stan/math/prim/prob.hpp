@@ -75,6 +75,14 @@
 #include <stan/math/prim/prob/dirichlet_lpdf.hpp>
 #include <stan/math/prim/prob/dirichlet_lpmf.hpp>
 #include <stan/math/prim/prob/dirichlet_rng.hpp>
+#include <stan/math/prim/prob/discrete_range_ccdf_log.hpp>
+#include <stan/math/prim/prob/discrete_range_cdf.hpp>
+#include <stan/math/prim/prob/discrete_range_cdf_log.hpp>
+#include <stan/math/prim/prob/discrete_range_lccdf.hpp>
+#include <stan/math/prim/prob/discrete_range_lcdf.hpp>
+#include <stan/math/prim/prob/discrete_range_log.hpp>
+#include <stan/math/prim/prob/discrete_range_lpmf.hpp>
+#include <stan/math/prim/prob/discrete_range_rng.hpp>
 #include <stan/math/prim/prob/double_exponential_ccdf_log.hpp>
 #include <stan/math/prim/prob/double_exponential_cdf.hpp>
 #include <stan/math/prim/prob/double_exponential_cdf_log.hpp>
@@ -126,6 +134,7 @@
 #include <stan/math/prim/prob/gumbel_log.hpp>
 #include <stan/math/prim/prob/gumbel_lpdf.hpp>
 #include <stan/math/prim/prob/gumbel_rng.hpp>
+#include <stan/math/prim/prob/hmm_marginal_lpdf.hpp>
 #include <stan/math/prim/prob/hypergeometric_log.hpp>
 #include <stan/math/prim/prob/hypergeometric_lpmf.hpp>
 #include <stan/math/prim/prob/hypergeometric_rng.hpp>
@@ -287,8 +296,14 @@
 #include <stan/math/prim/prob/skew_normal_log.hpp>
 #include <stan/math/prim/prob/skew_normal_lpdf.hpp>
 #include <stan/math/prim/prob/skew_normal_rng.hpp>
+#include <stan/math/prim/prob/std_normal_ccdf_log.hpp>
+#include <stan/math/prim/prob/std_normal_cdf.hpp>
+#include <stan/math/prim/prob/std_normal_cdf_log.hpp>
+#include <stan/math/prim/prob/std_normal_lcdf.hpp>
+#include <stan/math/prim/prob/std_normal_lccdf.hpp>
 #include <stan/math/prim/prob/std_normal_log.hpp>
 #include <stan/math/prim/prob/std_normal_lpdf.hpp>
+#include <stan/math/prim/prob/std_normal_rng.hpp>
 #include <stan/math/prim/prob/student_t_ccdf_log.hpp>
 #include <stan/math/prim/prob/student_t_cdf.hpp>
 #include <stan/math/prim/prob/student_t_cdf_log.hpp>

@@ -3,11 +3,13 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/scal/fun/constants.hpp>
-#include <stan/math/prim/scal/fun/lgamma.hpp>
-#include <stan/math/prim/scal/fun/size_zero.hpp>
-#include <stan/math/prim/mat/fun/value_of_rec.hpp>
-#include <stan/math/prim/arr/fun/value_of_rec.hpp>
+#include <stan/math/prim/fun/constants.hpp>
+#include <stan/math/prim/fun/exp.hpp>
+#include <stan/math/prim/fun/lgamma.hpp>
+#include <stan/math/prim/fun/size.hpp>
+#include <stan/math/prim/fun/size_zero.hpp>
+#include <stan/math/prim/fun/to_ref.hpp>
+#include <stan/math/prim/fun/value_of_rec.hpp>
 #include <cmath>
 
 namespace stan {
@@ -20,6 +22,7 @@ namespace math {
  * compute a more efficient version of poisson_log_lpmf(y, alpha + x * beta)
  * by using analytically simplified gradients.
  * If containers are supplied, returns the log sum of the probabilities.
+ *
  * @tparam T_y type of vector of variates (labels), integers >=0;
  * this can also be a single positive integer;
  * @tparam T_x_scalar type of a scalar in the matrix of independent variables
@@ -47,8 +50,6 @@ template <bool propto, typename T_y, typename T_x_scalar, int T_x_rows,
 return_type_t<T_x_scalar, T_alpha, T_beta> poisson_log_glm_lpmf(
     const T_y& y, const Eigen::Matrix<T_x_scalar, T_x_rows, Eigen::Dynamic>& x,
     const T_alpha& alpha, const T_beta& beta) {
-  static const char* function = "poisson_log_glm_lpmf";
-
   using Eigen::Array;
   using Eigen::Dynamic;
   using Eigen::Matrix;
@@ -62,9 +63,10 @@ return_type_t<T_x_scalar, T_alpha, T_beta> poisson_log_glm_lpmf(
       typename std::conditional_t<T_x_rows == 1, T_partials_return,
                                   Array<T_partials_return, Dynamic, 1>>;
 
-  const size_t N_instances = T_x_rows == 1 ? size(y) : x.rows();
+  const size_t N_instances = T_x_rows == 1 ? stan::math::size(y) : x.rows();
   const size_t N_attributes = x.cols();
 
+  static const char* function = "poisson_log_glm_lpmf";
   check_consistent_size(function, "Vector of dependent variables", y,
                         N_instances);
   check_consistent_size(function, "Weight vector", beta, N_attributes);
@@ -81,18 +83,19 @@ return_type_t<T_x_scalar, T_alpha, T_beta> poisson_log_glm_lpmf(
 
   T_partials_return logp(0);
 
-  const auto& x_val = value_of_rec(x);
+  const auto& x_val = to_ref(value_of_rec(x));
   const auto& y_val = value_of_rec(y);
   const auto& beta_val = value_of_rec(beta);
   const auto& alpha_val = value_of_rec(alpha);
 
-  const auto& y_val_vec = as_column_vector_or_scalar(y_val);
-  const auto& beta_val_vec = as_column_vector_or_scalar(beta_val);
+  const auto& y_val_vec = to_ref(as_column_vector_or_scalar(y_val));
+  const auto& beta_val_vec = to_ref(as_column_vector_or_scalar(beta_val));
   const auto& alpha_val_vec = as_column_vector_or_scalar(alpha_val);
 
   Array<T_partials_return, Dynamic, 1> theta(N_instances);
   if (T_x_rows == 1) {
-    T_theta_tmp theta_tmp = x_val * beta_val_vec;
+    T_theta_tmp theta_tmp
+        = forward_as<T_theta_tmp>((x_val * beta_val_vec)(0, 0));
     theta = theta_tmp + as_array_or_scalar(alpha_val_vec);
   } else {
     theta = x_val * beta_val_vec;
@@ -114,10 +117,9 @@ return_type_t<T_x_scalar, T_alpha, T_beta> poisson_log_glm_lpmf(
       logp -= lgamma(forward_as<double>(y_val) + 1);
     }
   }
-  if (include_summand<propto, T_partials_return>::value) {
-    logp += sum(as_array_or_scalar(y_val_vec) * theta.array()
-                - exp(theta.array()));
-  }
+
+  logp += sum(as_array_or_scalar(y_val_vec) * theta.array()
+              - exp(theta.array()));
 
   operands_and_partials<Eigen::Matrix<T_x_scalar, T_x_rows, Eigen::Dynamic>,
                         T_alpha, T_beta>

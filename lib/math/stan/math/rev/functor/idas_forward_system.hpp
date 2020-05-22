@@ -2,12 +2,12 @@
 #define STAN_MATH_REV_FUNCTOR_IDAS_FORWARD_SYSTEM_HPP
 
 #include <stan/math/rev/meta.hpp>
-#include <stan/math/prim/arr/fun/value_of.hpp>
-#include <stan/math/prim/err.hpp>
-#include <stan/math/prim/mat/fun/typedefs.hpp>
-#include <stan/math/rev/mat/fun/typedefs.hpp>
+#include <stan/math/rev/fun/typedefs.hpp>
 #include <stan/math/rev/functor/idas_system.hpp>
 #include <stan/math/rev/functor/jacobian.hpp>
+#include <stan/math/prim/err.hpp>
+#include <stan/math/prim/fun/typedefs.hpp>
+#include <stan/math/prim/fun/value_of.hpp>
 #include <idas/idas.h>
 #include <nvector/nvector_serial.h>
 #include <ostream>
@@ -62,7 +62,7 @@ class idas_forward_system : public idas_system<F, Tyy, Typ, Tpar> {
   }
 
   /**
-   * destructor to deallocate IDAS solution memory and workspace.
+   * Destructor to deallocate IDAS solution memory and workspace.
    */
   ~idas_forward_system() {
     if (this->need_sens) {
@@ -72,24 +72,24 @@ class idas_forward_system : public idas_system<F, Tyy, Typ, Tpar> {
   }
 
   /**
-   * return N_Vector pointer array of sensitivity
+   * Return N_Vector pointer array of sensitivity
    */
   N_Vector* nv_yys() { return nv_yys_; }
 
   /**
-   * return N_Vector pointer array of sensitivity time derivative
+   * Return N_Vector pointer array of sensitivity time derivative
    */
   N_Vector* nv_yps() { return nv_yps_; }
 
   /**
-   * convert to void pointer for IDAS callbacks
+   * Convert to void pointer for IDAS callbacks
    */
   void* to_user_data() {  // prepare to inject DAE info
     return static_cast<void*>(this);
   }
 
   /**
-   * return a lambda for sensitivity residual callback.
+   * Return a lambda for sensitivity residual callback.
    */
   IDASensResFn sensitivity_residual() const {
     return [](int ns, double t, N_Vector yy, N_Vector yp, N_Vector res,
@@ -121,56 +121,48 @@ class idas_forward_system : public idas_system<F, Tyy, Typ, Tpar> {
       auto yys_mat = matrix_d_from_NVarray(yys, ns);
       auto yps_mat = matrix_d_from_NVarray(yps, ns);
 
-      try {
-        stan::math::start_nested();
+      // Run nested autodiff in this scope
+      stan::math::nested_rev_autodiff nested;
 
-        MatrixXd J, r;
-        VectorXd f_val;
+      MatrixXd J, r;
+      VectorXd f_val;
 
-        auto fyy
-            = [&t, &vyp, &vtheta, &N, &dae](const matrix_v& x) -> vector_v {
-          std::vector<var> yy(x.data(), x.data() + N);
+      auto fyy = [&t, &vyp, &vtheta, &N, &dae](const matrix_v& x) -> vector_v {
+        std::vector<var> yy(x.data(), x.data() + N);
+        auto eval
+            = dae->f_(t, yy, vyp, vtheta, dae->x_r_, dae->x_i_, dae->msgs_);
+        Eigen::Map<vector_v> res(eval.data(), N);
+        return res;
+      };
+      stan::math::jacobian(fyy, vec_yy, f_val, J);
+      r = J * yys_mat;
+
+      auto fyp = [&t, &vyy, &vtheta, &N, &dae](const matrix_v& x) -> vector_v {
+        std::vector<var> yp(x.data(), x.data() + N);
+        auto eval
+            = dae->f_(t, vyy, yp, vtheta, dae->x_r_, dae->x_i_, dae->msgs_);
+        Eigen::Map<vector_v> res(eval.data(), N);
+        return res;
+      };
+      stan::math::jacobian(fyp, vec_yp, f_val, J);
+      r += J * yps_mat;
+
+      if (dae->is_var_par) {
+        auto fpar
+            = [&t, &vyy, &vyp, &N, &M, &dae](const matrix_v& x) -> vector_v {
+          std::vector<var> par(x.data(), x.data() + M);
           auto eval
-              = dae->f_(t, yy, vyp, vtheta, dae->x_r_, dae->x_i_, dae->msgs_);
+              = dae->f_(t, vyy, vyp, par, dae->x_r_, dae->x_i_, dae->msgs_);
           Eigen::Map<vector_v> res(eval.data(), N);
           return res;
         };
-        stan::math::jacobian(fyy, vec_yy, f_val, J);
-        r = J * yys_mat;
-
-        auto fyp
-            = [&t, &vyy, &vtheta, &N, &dae](const matrix_v& x) -> vector_v {
-          std::vector<var> yp(x.data(), x.data() + N);
-          auto eval
-              = dae->f_(t, vyy, yp, vtheta, dae->x_r_, dae->x_i_, dae->msgs_);
-          Eigen::Map<vector_v> res(eval.data(), N);
-          return res;
-        };
-        stan::math::jacobian(fyp, vec_yp, f_val, J);
-        r += J * yps_mat;
-
-        if (dae->is_var_par) {
-          auto fpar
-              = [&t, &vyy, &vyp, &N, &M, &dae](const matrix_v& x) -> vector_v {
-            std::vector<var> par(x.data(), x.data() + M);
-            auto eval
-                = dae->f_(t, vyy, vyp, par, dae->x_r_, dae->x_i_, dae->msgs_);
-            Eigen::Map<vector_v> res(eval.data(), N);
-            return res;
-          };
-          stan::math::jacobian(fpar, vec_par, f_val, J);
-          r.block(0, (dae->is_var_yy0 ? N : 0) + (dae->is_var_yp0 ? N : 0), N,
-                  M)
-              += J;  // only for theta
-        }
-
-        matrix_d_to_NVarray(r, ress, ns);
-      } catch (const std::exception& e) {
-        stan::math::recover_memory_nested();
-        throw;
+        stan::math::jacobian(fpar, vec_par, f_val, J);
+        r.block(0, (dae->is_var_yy0 ? N : 0) + (dae->is_var_yp0 ? N : 0), N,
+                M)
+            += J;  // only for theta
       }
 
-      stan::math::recover_memory_nested();
+      matrix_d_to_NVarray(r, ress, ns);
 
       return 0;
     };

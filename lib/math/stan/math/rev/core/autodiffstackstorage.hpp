@@ -48,10 +48,10 @@ namespace math {
  * (gcc, clang, Intel) extension which requires initialization with a
  * compile time constant expression. The C++11 keyword thread_local
  * does allow for constant and dynamic initialization of the
- * TLS. Thus, only the __thread keyword gurantees that constant
- * initialization and it's implied speedup, is used.
+ * TLS. Thus, only the __thread keyword guarantees that constant
+ * initialization and its implied speedup, is used.
  *
- * The initialzation of the AD instance at run-time is handled by the
+ * The initialization of the AD instance at run-time is handled by the
  * lifetime of a AutodiffStackSingleton object. More specifically, the
  * first instance of the AutodiffStackSingleton object will initialize
  * the AD instance and take ownership (it is the only one instance
@@ -71,11 +71,11 @@ namespace math {
  * inlining to get maximal performance. However, the design suffers
  * from "the static init order fiasco"[0]. Whenever the static init
  * order fiasco occurs, the C++ client of the library may instantiate
- * a AutodiffStackSingleton object at the adequate code position prior
+ * an AutodiffStackSingleton object at the adequate code position prior
  * to any AD tape access to ensure proper initialization order. In
  * exchange, we get a more performant singleton pattern with automatic
  * initialization of the AD stack for the main thread. There has been
- * some discussion on earlier designs using the Mayer singleton
+ * some discussion on earlier designs using the Meyer singleton
  * approach; see [1] and [2] and the discussions those PRs link to as
  * well.
  *

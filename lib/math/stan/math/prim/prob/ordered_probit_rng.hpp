@@ -3,7 +3,7 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/scal/fun/Phi.hpp>
+#include <stan/math/prim/fun/Phi.hpp>
 #include <stan/math/prim/prob/categorical_rng.hpp>
 
 namespace stan {
@@ -12,7 +12,6 @@ namespace math {
 template <class RNG>
 inline int ordered_probit_rng(double eta, const Eigen::VectorXd& c, RNG& rng) {
   static const char* function = "ordered_probit";
-
   check_finite(function, "Location parameter", eta);
   check_greater(function, "Size of cut points parameter", c.size(), 0);
   check_ordered(function, "Cut points vector", c);

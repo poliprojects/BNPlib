@@ -3,13 +3,13 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/scal/fun/constants.hpp>
-#include <stan/math/prim/mat/fun/value_of_rec.hpp>
-#include <stan/math/prim/scal/fun/size_zero.hpp>
-#include <stan/math/prim/scal/fun/sum.hpp>
-#include <stan/math/prim/mat/fun/log.hpp>
-#include <stan/math/prim/arr/fun/value_of_rec.hpp>
-
+#include <stan/math/prim/fun/constants.hpp>
+#include <stan/math/prim/fun/log.hpp>
+#include <stan/math/prim/fun/size.hpp>
+#include <stan/math/prim/fun/size_zero.hpp>
+#include <stan/math/prim/fun/sum.hpp>
+#include <stan/math/prim/fun/to_ref.hpp>
+#include <stan/math/prim/fun/value_of_rec.hpp>
 #include <cmath>
 
 namespace stan {
@@ -22,6 +22,7 @@ namespace math {
  * The idea is that normal_id_glm_lpdf(y, x, alpha, beta, sigma) should
  * compute a more efficient version of normal_lpdf(y, alpha + x * beta, sigma)
  * by using analytically simplified gradients.
+ *
  * @tparam T_y type of vector of dependent variables (labels);
  * @tparam T_x_scalar type of a scalar in the matrix of independent variables
  * (features)
@@ -35,6 +36,7 @@ namespace math {
  * @tparam T_scale type of the (positive) scale(s);
  * this can be a vector (of the same length as y, for heteroskedasticity)
  * or a scalar.
+ *
  * @param y scalar or vector of dependent variables. If it is a scalar it will
  * be broadcast - used for all instances.
  * @param x design matrix or row vector. If it is a row vector it will be
@@ -57,7 +59,6 @@ return_type_t<T_y, T_x_scalar, T_alpha, T_beta, T_scale> normal_id_glm_lpdf(
   using Eigen::Dynamic;
   using Eigen::Matrix;
   using Eigen::VectorXd;
-
   using T_partials_return
       = partials_return_t<T_y, T_x_scalar, T_alpha, T_beta, T_scale>;
   using T_scale_val = typename std::conditional_t<
@@ -68,11 +69,10 @@ return_type_t<T_y, T_x_scalar, T_alpha, T_beta, T_scale> normal_id_glm_lpdf(
       typename std::conditional_t<T_x_rows == 1, T_partials_return,
                                   Array<T_partials_return, Dynamic, 1>>;
 
-  static const char *function = "normal_id_glm_lpdf";
-
-  const size_t N_instances = T_x_rows == 1 ? size(y) : x.rows();
+  const size_t N_instances = T_x_rows == 1 ? stan::math::size(y) : x.rows();
   const size_t N_attributes = x.cols();
 
+  static const char *function = "normal_id_glm_lpdf";
   check_consistent_size(function, "Vector of dependent variables", y,
                         N_instances);
   check_consistent_size(function, "Weight vector", beta, N_attributes);
@@ -84,21 +84,20 @@ return_type_t<T_y, T_x_scalar, T_alpha, T_beta, T_scale> normal_id_glm_lpdf(
   if (size_zero(y, sigma)) {
     return 0;
   }
-
   if (!include_summand<propto, T_y, T_x_scalar, T_alpha, T_beta,
                        T_scale>::value) {
     return 0;
   }
 
-  const auto &x_val = value_of_rec(x);
+  const auto &x_val = to_ref(value_of_rec(x));
   const auto &beta_val = value_of_rec(beta);
   const auto &alpha_val = value_of_rec(alpha);
   const auto &sigma_val = value_of_rec(sigma);
   const auto &y_val = value_of_rec(y);
 
-  const auto &beta_val_vec = as_column_vector_or_scalar(beta_val);
+  const auto &beta_val_vec = to_ref(as_column_vector_or_scalar(beta_val));
   const auto &alpha_val_vec = as_column_vector_or_scalar(alpha_val);
-  const auto &sigma_val_vec = as_column_vector_or_scalar(sigma_val);
+  const auto &sigma_val_vec = to_ref(as_column_vector_or_scalar(sigma_val));
   const auto &y_val_vec = as_column_vector_or_scalar(y_val);
 
   T_scale_val inv_sigma = 1 / as_array_or_scalar(sigma_val_vec);
@@ -108,7 +107,8 @@ return_type_t<T_y, T_x_scalar, T_alpha, T_beta, T_scale> normal_id_glm_lpdf(
 
   Array<T_partials_return, Dynamic, 1> y_scaled(N_instances);
   if (T_x_rows == 1) {
-    T_y_scaled_tmp y_scaled_tmp = x_val * beta_val_vec;
+    T_y_scaled_tmp y_scaled_tmp
+        = forward_as<T_y_scaled_tmp>((x_val * beta_val_vec)(0, 0));
     y_scaled = (as_array_or_scalar(y_val_vec) - y_scaled_tmp
                 - as_array_or_scalar(alpha_val_vec))
                * inv_sigma;
@@ -168,6 +168,8 @@ return_type_t<T_y, T_x_scalar, T_alpha, T_beta, T_scale> normal_id_glm_lpdf(
         ops_partials.edge5_.partials_[0]
             = (y_scaled_sq_sum - N_instances) * forward_as<double>(inv_sigma);
       }
+    } else {
+      y_scaled_sq_sum = sum(y_scaled * y_scaled);
     }
   } else {
     y_scaled_sq_sum = sum(y_scaled * y_scaled);

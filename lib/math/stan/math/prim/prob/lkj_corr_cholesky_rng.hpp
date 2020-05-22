@@ -4,7 +4,7 @@
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
 #include <stan/math/prim/prob/beta_rng.hpp>
-#include <stan/math/prim/mat/fun/read_corr_L.hpp>
+#include <stan/math/prim/fun/read_corr_L.hpp>
 
 namespace stan {
 namespace math {
@@ -12,7 +12,6 @@ namespace math {
 template <class RNG>
 inline Eigen::MatrixXd lkj_corr_cholesky_rng(size_t K, double eta, RNG& rng) {
   static const char* function = "lkj_corr_cholesky_rng";
-
   check_positive(function, "Shape parameter", eta);
 
   Eigen::ArrayXd CPCs((K * (K - 1)) / 2);

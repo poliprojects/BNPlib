@@ -2,9 +2,8 @@
 #define STAN_MATH_FWD_FUN_SUM_HPP
 
 #include <stan/math/fwd/core.hpp>
-#include <stan/math/prim/arr/fun/sum.hpp>
-#include <stan/math/prim/mat/fun/Eigen.hpp>
-#include <stan/math/prim/mat/fun/sum.hpp>
+#include <stan/math/prim/fun/Eigen.hpp>
+#include <stan/math/prim/fun/sum.hpp>
 #include <vector>
 
 namespace stan {
@@ -14,12 +13,12 @@ namespace math {
  * Return the sum of the entries of the specified standard
  * vector.
  *
- * @tparam T Type of vector entries.
+ * @tparam T type of elements in the vector
  * @param m Vector.
  * @return Sum of vector entries.
  */
 template <typename T>
-inline fvar<T> sum(const std::vector<fvar<T> >& m) {
+inline fvar<T> sum(const std::vector<fvar<T>>& m) {
   if (m.size() == 0) {
     return 0.0;
   }
@@ -35,24 +34,18 @@ inline fvar<T> sum(const std::vector<fvar<T> >& m) {
 /**
  * Return the sum of the entries of the specified matrix.
  *
- * @tparam T Type of matrix entries.
- * @tparam R Row type of matrix.
- * @tparam C Column type of matrix.
+ * @tparam T type of the matrix
+ *
  * @param m Matrix.
  * @return Sum of matrix entries.
  */
-template <typename T, int R, int C>
-inline fvar<T> sum(const Eigen::Matrix<fvar<T>, R, C>& m) {
+template <typename T, require_eigen_vt<is_fvar, T>* = nullptr>
+inline value_type_t<T> sum(const T& m) {
   if (m.size() == 0) {
     return 0.0;
   }
-  Eigen::Matrix<T, Eigen::Dynamic, 1> vals(m.size());
-  Eigen::Matrix<T, Eigen::Dynamic, 1> tans(m.size());
-  for (int i = 0; i < m.size(); ++i) {
-    vals(i) = m(i).val();
-    tans(i) = m(i).tangent();
-  }
-  return fvar<T>(sum(vals), sum(tans));
+  const Eigen::Ref<const plain_type_t<T>>& m_ref = m;
+  return {sum(m_ref.val()), sum(m_ref.d())};
 }
 
 }  // namespace math

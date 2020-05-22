@@ -41,12 +41,13 @@ def check_non_unique_test_names():
                 # look for TEST() and TEST_F()
                 matches = re.findall(r"TEST(?:_F)?\((.*?)\)", test_file_content, re.DOTALL)
                 for x in matches:
-                    # strips for test names written in two lines
-                    x_stripped = x.replace("\n", "").replace(" ", "").replace(",",", ")
-                    if x_stripped in tests:                        
-                        duplicates[x_stripped].append(filepath)
-                    else:
-                        tests[x_stripped] = filepath
+                    if not ("#" in x):
+                        # strips for test names written in two lines
+                        x_stripped = x.replace("\n", "").replace(" ", "").replace(",",", ")
+                        if x_stripped in tests:                        
+                            duplicates[x_stripped].append(filepath)
+                        else:
+                            tests[x_stripped] = filepath
     errors = []
     if len(duplicates)>0:
         duplicates_error_msg = ""
@@ -57,7 +58,7 @@ def check_non_unique_test_names():
             for y in duplicates[x]:
                 duplicates_error_msg += "\t" + y + "\n"
         errors.append(
-            "Tests or test fixtures with non-unqiue names found in test/unit:\n\n" +
+            "Tests or test fixtures with non-unique names found in test/unit:\n\n" +
             duplicates_error_msg
         )
     return errors
@@ -175,35 +176,7 @@ def main():
         },
     ]
     errors.extend(grep_patterns("rev", "stan/math/rev", rev_checks))
-
-    # Check for files inside stan/math/*/scal that contain stan/math/*/arr or stan/math/*/mat
-    scal_checks = [
-        {
-            "pattern": "<stan/math/.*/arr/",
-            "message": "File includes an array header file.",
-        },
-        {"pattern": "<vector>", "message": "File includes an std::vector header."},
-        {"pattern": "std::vector", "message": "File uses std::vector."},
-        {
-            "pattern": "<stan/math/.*/mat/",
-            "message": "File includes a matrix header file.",
-        },
-        {"pattern": "<Eigen", "message": "File includes an Eigen header."},
-        {"pattern": "Eigen::", "message": "File uses Eigen."},
-    ]
-    errors.extend(grep_patterns("scal", "stan/math/*/scal", scal_checks))
-
-    # Check for files inside stan/math/*/arr that contain stan/math/*/mat or Eigen
-    arr_checks = [
-        {
-            "pattern": "<stan/math/.*/mat/",
-            "message": "File includes an matrix header file.",
-        },
-        {"pattern": "<Eigen", "message": "File includes an Eigen header."},
-        {"pattern": "Eigen::", "message": "File uses Eigen."},
-    ]
-    errors.extend(grep_patterns("arr", "stan/math/*/arr", arr_checks))
-
+    
     # Check to make sure we use C++14 constructs in stan/math
     cpp14_checks = [
         {
@@ -256,16 +229,6 @@ def main():
         },
     ]
     errors.extend(grep_patterns("C++14", "stan/math", cpp14_checks))
-
-    # Check for includes of stan/math/*/meta/*.hpp inside stan/math, excluding meta.hpp files and the /meta subfolder
-    meta_checks = [
-        {
-            "pattern": "<stan/math/.*/meta/.*hpp",
-            "message": "File includes */meta/*.hpp header file. Should include meta.hpp",
-        }
-    ]
-    meta_exclude = ["stan/math/*/meta", "stan/math/*/meta.hpp"]
-    errors.extend(grep_patterns("meta", "stan/math", meta_checks, meta_exclude))
 
     #  Check that we do not use non-reentrant safe functions from std
     thread_safe_checks = [

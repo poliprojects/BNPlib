@@ -3,7 +3,12 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/scal/fun/size_zero.hpp>
+#include <stan/math/prim/fun/exp.hpp>
+#include <stan/math/prim/fun/log.hpp>
+#include <stan/math/prim/fun/size.hpp>
+#include <stan/math/prim/fun/size_zero.hpp>
+#include <stan/math/prim/fun/to_ref.hpp>
+#include <stan/math/prim/fun/value_of_rec.hpp>
 #include <Eigen/Core>
 #include <cmath>
 
@@ -42,18 +47,17 @@ categorical_logit_glm_lpmf(
     const Eigen::Matrix<T_beta_scalar, Eigen::Dynamic, Eigen::Dynamic>& beta) {
   using T_partials_return
       = partials_return_t<T_x_scalar, T_alpha_scalar, T_beta_scalar>;
-  static const char* function = "categorical_logit_glm_lpmf";
-
   using Eigen::Array;
   using Eigen::Dynamic;
   using Eigen::Matrix;
   using std::exp;
   using std::log;
 
-  const size_t N_instances = T_x_rows == 1 ? size(y) : x.rows();
+  const size_t N_instances = T_x_rows == 1 ? stan::math::size(y) : x.rows();
   const size_t N_attributes = x.cols();
   const size_t N_classes = beta.cols();
 
+  static const char* function = "categorical_logit_glm_lpmf";
   check_consistent_size(function, "Vector of dependent variables", y,
                         N_instances);
   check_consistent_size(function, "Intercept vector", alpha, N_classes);
@@ -71,8 +75,8 @@ categorical_logit_glm_lpmf(
     return 0;
   }
 
-  const auto& x_val = value_of_rec(x);
-  const auto& beta_val = value_of_rec(beta);
+  const auto& x_val = to_ref(value_of_rec(x));
+  const auto& beta_val = to_ref(value_of_rec(beta));
   const auto& alpha_val = value_of_rec(alpha);
 
   const auto& alpha_val_vec = as_column_vector_or_scalar(alpha_val).transpose();

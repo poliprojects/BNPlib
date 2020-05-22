@@ -3,7 +3,7 @@
 
 #include <stan/math/prim/meta.hpp>
 #include <stan/math/prim/err.hpp>
-#include <stan/math/prim/scal/fun/inv_logit.hpp>
+#include <stan/math/prim/fun/inv_logit.hpp>
 #include <stan/math/prim/prob/categorical_rng.hpp>
 #include <boost/random/variate_generator.hpp>
 
@@ -14,14 +14,10 @@ template <class RNG>
 inline int ordered_logistic_rng(
     double eta, const Eigen::Matrix<double, Eigen::Dynamic, 1>& c, RNG& rng) {
   using boost::variate_generator;
-
   static const char* function = "ordered_logistic";
-
   check_finite(function, "Location parameter", eta);
   check_greater(function, "Size of cut points parameter", c.size(), 0);
-  for (int i = 1; i < c.size(); ++i) {
-    check_greater(function, "Cut points parameter", c(i), c(i - 1));
-  }
+  check_ordered(function, "Cut points parameter", c);
   check_finite(function, "Cut points parameter", c(c.size() - 1));
   check_finite(function, "Cut points parameter", c(0));
 

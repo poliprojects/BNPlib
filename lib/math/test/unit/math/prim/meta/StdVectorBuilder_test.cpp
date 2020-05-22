@@ -1,4 +1,5 @@
 #include <stan/math/prim/meta.hpp>
+#include <stan/math/prim/fun/size.hpp>
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -29,8 +30,8 @@ TEST(MathMetaPrim, StdVectorBuilder_true_false_scalar) {
 }
 
 TEST(MathMetaPrim, StdVectorBuilder_type_check_scalar) {
-  using stan::StdVectorBuilder;
   using stan::contains_std_vector;
+  using stan::StdVectorBuilder;
 
   bool r
       = contains_std_vector<StdVectorBuilder<true, double, int>::type>::value;
@@ -68,8 +69,8 @@ TEST(MathMetaPrim, StdVectorBuilder_true_false_vector) {
 }
 
 TEST(MathMetaPrim, StdVectorBuilder_type_check_vector) {
-  using stan::StdVectorBuilder;
   using stan::contains_std_vector;
+  using stan::StdVectorBuilder;
 
   bool r = contains_std_vector<
       StdVectorBuilder<true, double, std::vector<int>>::type>::value;
@@ -124,8 +125,8 @@ TEST(MathMetaPrim, StdVectorBuilder_true_false_matrix) {
 }
 
 TEST(MathMetaPrim, StdVectorBuilder_type_check_matrix) {
-  using stan::StdVectorBuilder;
   using stan::contains_std_vector;
+  using stan::StdVectorBuilder;
 
   bool r = contains_std_vector<StdVectorBuilder<
       true, double, std::vector<Eigen::VectorXd>>::type>::value;
