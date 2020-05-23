@@ -21,13 +21,17 @@ grid = np.array(g)
 gridfile = "csv/grid_uni.csv"
 densfile = "src/python/density.csv"
 imgfile  = "src/python/plot.pdf"
+clusterfile= "src/python/best_clustering.csv"
 
 bnplib.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
 	coll_type, filecoll_name, rng, maxit, burn)
 
 algo = "neal8_dataless"
-bnplib.estimates_NNIG_Dir_grid(mu0, lambda_, alpha0, beta0, totalmass, grid,
-	algo, filecoll_name, densfile)
+bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile,
+	algo, filecoll_name, densfile, clusterfile)
 # TODO implement estimates cpp s.t. you don't have to write "_dataless"
 
 plot_density(densfile, imgfile)
+
+plotcardinalities(clusterfile)
+histogram()

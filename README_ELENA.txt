@@ -9,7 +9,8 @@ chmod +x install_protobuf.sh
 ./bash/install_protobuf.sh
 
 
- git clone https://github.com/stan-dev/math.git
+cd lib
+git clone https://github.com/stan-dev/math.git
 
 
 ##################

@@ -18,7 +18,8 @@ int estimates_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     double totalmass,
     const std::string &gridfile, const std::string &algo,
     const std::string &filecoll_name = "collector.recordio",
-    const std::string &densfile = "src/python/density.csv"){
+    const std::string &densfile = "src/python/density.csv",
+    const std::string &clusterfile = "src/python/best_clustering.csv"){
 
     std::cout << "Running estimates_NNIG_Dir.cpp" << std::endl;
     using namespace NNIGDir;
@@ -36,12 +37,10 @@ int estimates_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
             std::endl;
         return 1;
     }
-    std::string str, str2;
-    std::getline(file, str);
-    std::istringstream iss(str);
+    std::string str;
     std::vector<double> v;
-    while(std::getline(iss, str2, ',')){
-        double val = ::atof(str2.c_str());
+    while(std::getline(file, str)){
+        double val = ::atof(str.c_str());
         v.push_back(val);
     }
     file.close();
@@ -76,7 +75,9 @@ int estimates_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     // Run algorithm
     (*sampler).eval_density(grid, coll);
     (*sampler).write_density_to_file(densfile);
-
+    unsigned int i_cap = (*sampler).cluster_estimate(coll);
+    (*sampler).write_clustering_to_file(clusterfile);
+    
     std::cout << "End of estimates_NNIG_Dir.cpp" << std::endl;
     return 0;
 }

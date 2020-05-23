@@ -3,6 +3,8 @@ BNP Python interface.
  
 Documentation for BNP Python interface, but longer.
 """
+from deserialize import deserialize
+import output_pb2
 
 import os, sys
 import matplotlib.pyplot as plt
@@ -56,6 +58,8 @@ def plot_density(densfile = "src/python/density.csv",
 
 	TODO docstring but longer."""
 	mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
+
+
 	cols = mat.shape[1]
 	if cols not in (2,3):
 		print("Error: density file must have 2-3 columns to be plotted")
@@ -70,5 +74,26 @@ def plot_density(densfile = "src/python/density.csv",
 	plt.savefig(imgfile)
 
 
-def histogram():
-	pass # plt.hist()
+def histogram(imgfile = "src/python/hist.pdf"):
+	
+	d=deserialize()
+	figure = plt.figure()
+	num_clusters=[]
+	
+	for i in d[0]:  
+  		num_clusters.append(len(i.uniquevalues))
+
+	plt.hist(num_clusters)
+	plt.savefig(imgfile)	
+	
+	
+	
+def plotcardinalities(clusterfile= "src/python/best_clustering.csv", imgfile = "src/python/best_clustering.pdf"):
+	mat = np.loadtxt(open(clusterfile, 'rb'), delimiter=',')
+	figure = plt.figure()
+	plt.hist(mat[:,0])
+	plt.savefig(imgfile)	
+	
+	
+	
+	

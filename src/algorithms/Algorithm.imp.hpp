@@ -85,6 +85,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
             card[ chain[iter].allocations(j) ] += 1;
         }
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
+        
         for(size_t h = 0; h < chain[iter].uniquevalues_size(); h++){
             for(size_t k = 0; k < n_params; k++){
                 params[k] = proto_param_to_matrix(
@@ -170,9 +171,9 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
     std::ofstream file;
     file.open(filename);
 
-    for(size_t i = 0; i < data.rows(); i++){
+    for(size_t i = 0; i < best_clust.allocations_size(); i++){
         unsigned int ci = best_clust.allocations(i);
-        file << i << "," << data.row(i) << "," << ci;
+        file << ci;
         for(size_t j = 0; j < best_clust.uniquevalues(ci).params_size(); j++){
             file << "," << proto_param_to_matrix( 
                 best_clust.uniquevalues(ci).params(j) );

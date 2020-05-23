@@ -36,12 +36,10 @@ int run_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
             std::endl;
         return 1;
     }
-    std::string str, str2;
-    std::getline(file, str);
-    std::istringstream iss(str);
+    std::string str;
     std::vector<double> v;
-    while(std::getline(iss, str2, ',')){
-        double val = ::atof(str2.c_str());
+    while(std::getline(file, str)){
+        double val = ::atof(str.c_str());
         v.push_back(val);
     }
     file.close();
