@@ -17,3 +17,7 @@ make check
 sudo make install
 sudo ldconfig
 cd ../..
+
+# Install Python tools
+pip3 install pybind11 matlplotlib
+pip3 install --user --upgrade google-api-python-client
