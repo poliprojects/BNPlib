@@ -1,17 +1,13 @@
-
 sudo apt install git
 git clone https://github.com/poliprojects/BNPlib.git
-
 
 (sudo apt-get install libprotobuf-dev protobuf-compiler) mi sa inutile
 
 chmod +x bash/install_protobuf.sh
 ./bash/install_protobuf.sh
 
-
 cd lib
 git clone https://github.com/stan-dev/math.git
-
 
 ##################
 PYTHON
