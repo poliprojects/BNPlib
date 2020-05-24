@@ -17,9 +17,9 @@ namespace NNIGDir {
 int estimates_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     double totalmass,
     const std::string &gridfile, const std::string &algo,
-    const std::string &filecoll_name = "collector.recordio",
+    const std::string &collfile = "collector.recordio",
     const std::string &densfile = "src/python/density.csv",
-    const std::string &clusterfile = "src/python/best_clustering.csv"){
+    const std::string &clustfile = "src/python/best_clust.csv"){
 
     std::cout << "Running estimates_NNIG_Dir.cpp" << std::endl;
     using namespace NNIGDir;
@@ -70,13 +70,13 @@ int estimates_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     auto sampler = algoFactory.create_object(algo, hy, mix);
 
     // Choose memory collector
-    BaseCollector *coll = new FileCollector(filecoll_name);
+    BaseCollector *coll = new FileCollector(collfile);
 
     // Run algorithm
     (*sampler).eval_density(grid, coll);
     (*sampler).write_density_to_file(densfile);
     unsigned int i_cap = (*sampler).cluster_estimate(coll);
-    (*sampler).write_clustering_to_file(clusterfile);
+    (*sampler).write_clustering_to_file(clustfile);
     
     std::cout << "End of estimates_NNIG_Dir.cpp" << std::endl;
     return 0;

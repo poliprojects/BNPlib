@@ -16,49 +16,51 @@ import bnplib
 
 
 def run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
-	coll_type, filecoll_name = "collector.recordio", rng = 0, maxit = 0,
-	burn = 0):
+	colltype, collfile = "collector.recordio", rng = 0, maxit = 0, burn = 0):
 	"""TODO docstring
 
 	TODO docstring but longer"""
 	bnplib.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
-		coll_type, filecoll_name, rng, maxit, burn)
+		colltype, collfile, rng, maxit, burn)
 
 
-def run_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, datafile, algo, coll_type,
-	filecoll_name = "collector.recordio", rng = 0, maxit = 0, burn = 0):
+def run_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, datafile, algo, colltype,
+	collfile = "collector.recordio", rng = 0, maxit = 0, burn = 0):
 	"""TODO docstring
 
 	TODO docstring but longer"""
 	bnplib.run_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, datafile, algo,
-		coll_type, filecoll_name, rng, maxit, burn)
+		colltype, collfile, rng, maxit, burn)
 
 
 def estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile, algo,
-	filecoll_name = "collector.recordio", densfile = "src/python/density.csv"):
+	collfile = "collector.recordio", densfile = "src/python/density.csv"):
 	"""TODO docstring
 
 	TODO docstring but longer"""
 	bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile,
-		algo, filecoll_name, densfile)
+		algo, collfile, densfile)
 
 
-def estimates_NNIG_Dir_grid(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
-	filecoll_name = "collector.recordio", densfile = "src/python/density.csv"):
-	"""TODO docstring
+def chain_histogram(collfile = "collector.recordio",
+	imgfile = "src/python/chain.pdf"):
+	d = deserialize(collfile)
+	figure = plt.figure()
+	num_clusters = []
+	
+	for i in d[0]:  
+		num_clusters.append(len(i.uniquevalues))
 
-	TODO docstring but longer"""
-	bnplib.estimates_NNIG_Dir_grid(mu0, lambda_, alpha0, beta0, totalmass, grid,
-		algo, filecoll_name, densfile)
+	plt.hist(num_clusters)
+	plt.savefig(imgfile)	
 
 
 def plot_density(densfile = "src/python/density.csv",
-	imgfile = "src/python/plot.pdf"):
+	imgfile = "src/python/density.pdf"):
 	"""TODO docstring.
 
 	TODO docstring but longer."""
 	mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
-
 
 	cols = mat.shape[1]
 	if cols not in (2,3):
@@ -74,26 +76,9 @@ def plot_density(densfile = "src/python/density.csv",
 	plt.savefig(imgfile)
 
 
-def histogram(imgfile = "src/python/hist.pdf"):
-	
-	d=deserialize()
-	figure = plt.figure()
-	num_clusters=[]
-	
-	for i in d[0]:  
-  		num_clusters.append(len(i.uniquevalues))
-
-	plt.hist(num_clusters)
-	plt.savefig(imgfile)	
-	
-	
-	
-def plotcardinalities(clusterfile= "src/python/best_clustering.csv", imgfile = "src/python/best_clustering.pdf"):
-	mat = np.loadtxt(open(clusterfile, 'rb'), delimiter=',')
+def plot_best_clust_cards(clustfile = "src/python/best_clust.csv",
+	imgfile = "src/python/best_clust.pdf"):
+	mat = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
 	figure = plt.figure()
 	plt.hist(mat[:,0])
-	plt.savefig(imgfile)	
-	
-	
-	
-	
+	plt.savefig(imgfile)

@@ -17,8 +17,8 @@ namespace NNWDir {
 int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     double lambda, const Eigen::MatrixXd &tau0, double nu, double totalmass,
     const std::string &datafile, const std::string &algo,
-    const std::string &coll_type,
-    const std::string &filecoll_name = "collector.recordio",
+    const std::string &colltype,
+    const std::string &collfile = "collector.recordio",
     unsigned int rng = 0, unsigned int maxit = 0, unsigned int burn = 0){
 
     std::cout << "Running run_NNW_Dir.cpp" << std::endl;
@@ -60,10 +60,10 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
 
     // Choose memory collector
     BaseCollector *coll;
-    if(coll_type == "file"){
-        coll = new FileCollector(filecoll_name);
+    if(colltype == "file"){
+        coll = new FileCollector(collfile);
     }
-    else if(coll_type == "memory"){
+    else if(colltype == "memory"){
         coll = new MemoryCollector();
     }
     else {

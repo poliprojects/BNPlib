@@ -12,26 +12,27 @@ rng = 20200229
 maxit = 5000
 burn = 500
 
-coll_type = "file"
-filecoll_name = "collector.recordio"
-
-g= [0.5*_ for _ in range(20)]
+g = [0.5*_ for _ in range(20)]
 grid = np.array(g)
 
+colltype = "file"
+collfile = "collector.recordio"
 gridfile = "csv/grid_uni.csv"
 densfile = "src/python/density.csv"
-imgfile  = "src/python/plot.pdf"
-clusterfile= "src/python/best_clustering.csv"
+clustfile = "src/python/best_clust.csv"
+imgfilebest = "src/python/best_clust.pdf"
+imgfilechain = "src/python/chain.pdf"
+imgfiledens = "src/python/density.pdf"
 
 bnplib.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
-	coll_type, filecoll_name, rng, maxit, burn)
+	colltype, collfile, rng, maxit, burn)
+
+chain_histogram(collfile, imgfilechain)
 
 algo = "neal8_dataless"
 bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile,
-	algo, filecoll_name, densfile, clusterfile)
+	algo, collfile, densfile, clustfile)
 # TODO implement estimates cpp s.t. you don't have to write "_dataless"
 
-plot_density(densfile, imgfile)
-
-plotcardinalities(clusterfile)
-histogram()
+plot_best_clust_cards(clustfile, imgfilebest)
+plot_density(densfile, imgfiledens)
