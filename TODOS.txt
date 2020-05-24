@@ -1,14 +1,8 @@
 TODO LIST
 
 IMPLEMENTAZIONE
-* hyperparameters sensati per la NNW (vedi Favaro Teh paper): lambda piccolo
-  (permettere libertà), mu0 media empirica, nu = dim.dati + 3, sigma0 = tale che
-  la sua media sia l'identità
-* interfaccia Python (pybind)
-** traceplot???, best clust, density, cluster over iterations
-** highest posterior density intervals (credible intervals)
-** arviz (library for plots)
-** Ex: contour plot
+* plot Python: highest posterior density intervals (credible intervals), arviz
+  (library), contour plot
 * Ottimizzatione
 ** non usare -O3 ma -G
 ** -march=native -O3;    -msse2 -funroll-loops -ftree-vectorize
@@ -30,6 +24,9 @@ REPORT
 * a way to erase and add clusters more efficiently, e.g. with map
 * storing cardinalities > recomputing them at each iteration
 * set_state flag efficienza
+* hyperparameters per la NNW: lambda piccolo (permette libertà), mu0 media
+  empirica, nu = dim.dati + 3, sigma0 = tale che la sua media (nu * tau0) sia
+  l'identità
 
 
 LIBRERIA (?)
