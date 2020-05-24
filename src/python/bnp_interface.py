@@ -34,12 +34,13 @@ def run_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, datafile, algo, colltype,
 
 
 def estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile, algo,
-	collfile = "collector.recordio", densfile = "src/python/density.csv"):
+	collfile = "collector.recordio", densfile = "src/python/density.csv",
+	only = ""):
 	"""TODO docstring
 
 	TODO docstring but longer"""
 	bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile,
-		algo, collfile, densfile)
+		algo, collfile, densfile, only)
 
 
 def chain_histogram(collfile = "collector.recordio",
