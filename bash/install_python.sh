@@ -7,9 +7,9 @@ sudo apt install python3.7
 
 sudo apt install python3-pip
 pip3 install pybind11
+#pip3 install --user --upgrade google-api-python-client
 
 sudo apt install python3-matplotlib
 
 make
-python3 src/python/bnp_interface.py
 python3 src/python/console.py
