@@ -7,7 +7,7 @@ alpha0 = 2.0
 beta0 = 2.0
 totalmass = 1.0
 datafile = "csv/data_uni.csv"
-algo = "neal8"
+algo = "neal2"
 rng = 20200229
 maxit = 5000
 burn = 500
@@ -19,10 +19,11 @@ colltype = "file"
 collfile = "collector.recordio"
 gridfile = "csv/grid_uni.csv"
 densfile = "src/python/density.csv"
-clustfile = "src/python/best_clust.csv"
-imgfilebest = "src/python/best_clust.pdf"
+clustfile = "src/python/clust.csv"
+imgfileclust = "src/python/clust.pdf"
 imgfilechain = "src/python/chain.pdf"
 imgfiledens = "src/python/density.pdf"
+only = "cd"
 
 bnplib.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
 	colltype, collfile, rng, maxit, burn)
@@ -31,8 +32,10 @@ chain_histogram(collfile, imgfilechain)
 
 algo = "neal8_dataless"
 bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile,
-	algo, collfile, densfile, clustfile)
+	algo, collfile, densfile, clustfile, only)
 # TODO implement estimates cpp s.t. you don't have to write "_dataless"
+# TODO: is it really worth keeping the dataless constructors in the factory?
 
-plot_best_clust_cards(clustfile, imgfilebest)
+plot_clust_cards(clustfile, imgfileclust)
 plot_density(densfile, imgfiledens)
+print("The end")

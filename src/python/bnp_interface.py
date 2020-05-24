@@ -35,12 +35,12 @@ def run_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, datafile, algo, colltype,
 
 def estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile, algo,
 	collfile = "collector.recordio", densfile = "src/python/density.csv",
-	only = ""):
+	clustfile = "src/python/clust.", only = ""):
 	"""TODO docstring
 
 	TODO docstring but longer"""
 	bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile,
-		algo, collfile, densfile, only)
+		algo, collfile, densfile, clustfile, only)
 
 
 def chain_histogram(collfile = "collector.recordio",
@@ -77,8 +77,8 @@ def plot_density(densfile = "src/python/density.csv",
 	plt.savefig(imgfile)
 
 
-def plot_best_clust_cards(clustfile = "src/python/best_clust.csv",
-	imgfile = "src/python/best_clust.pdf"):
+def plot_clust_cards(clustfile = "src/python/clust.csv",
+	imgfile = "src/python/clust.pdf"):
 	mat = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
 	figure = plt.figure()
 	plt.hist(mat[:,0])
