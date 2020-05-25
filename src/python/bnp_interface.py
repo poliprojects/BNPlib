@@ -12,35 +12,6 @@ sys.path.insert(0, LIBPATH)
 import bnplibpy
 
 
-# TODO remove these?
-#def run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
-#	colltype, collfile = "collector.recordio", rng = 0, maxit = 0, burn = 0):
-#	"""Docstring
-#
-#	Docstring but longer"""
-#	bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
-#		colltype, collfile, rng, maxit, burn)
-#
-#
-#def run_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, datafile, algo, colltype,
-#	collfile = "collector.recordio", rng = 0, maxit = 0, burn = 0):
-#	"""Docstring
-#
-#	Docstring but longer"""
-#	bnplibpy.run_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, datafile, algo,
-#		colltype, collfile, rng, maxit, burn)
-#
-#
-#def estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
-#	collfile = "collector.recordio", densfile = "src/python/density.csv",
-#	clustfile = "src/python/clust.", only = ""):
-#	"""Docstring
-#
-#	Docstring but longer"""
-#	bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid,
-#		algo, collfile, densfile, clustfile, only)
-
-
 def deserialize(collfile = "collector.recordio"):
 	with open(collfile, 'rb') as f:
 		buf = f.read()
