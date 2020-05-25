@@ -6,7 +6,6 @@ IMPLEMENTAZIONE
 * Ottimizzatione
 ** non usare -O3 ma -G
 ** -march=native -O3;    -msse2 -funroll-loops -ftree-vectorize
-* check e plot stima densità multivariata
 
 
 VARIE

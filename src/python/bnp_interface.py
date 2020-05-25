@@ -1,10 +1,12 @@
-from deserialize import deserialize
+from google.protobuf.internal.encoder import _VarintBytes
+from google.protobuf.internal.decoder import _DecodeVarint32
 import output_pb2
 
 import os, sys
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
+
 LIBPATH = ''.join((os.path.dirname(os.path.realpath(__file__)), "/../.."))
 sys.path.insert(0, LIBPATH)
 import bnplibpy
@@ -39,6 +41,22 @@ import bnplibpy
 #		algo, collfile, densfile, clustfile, only)
 
 
+def deserialize(collfile = "collector.recordio"):
+	with open(collfile, 'rb') as f:
+		buf = f.read()
+		n = 0
+		d = []
+		while n < len(buf):
+			msg_len, new_pos = _DecodeVarint32(buf, n)
+			n = new_pos
+			msg_buf = buf[n:n+msg_len]
+			n += msg_len
+			read_metric = output_pb2.State()
+			read_metric.ParseFromString(msg_buf)
+			d.append(read_metric)
+	return[d]
+
+
 def chain_histogram(collfile = "collector.recordio",
 	imgfile = "src/python/chain.pdf"):
 	d = deserialize(collfile)
@@ -49,7 +67,8 @@ def chain_histogram(collfile = "collector.recordio",
 		num_clusters.append(len(i.uniquevalues))
 
 	plt.hist(num_clusters)
-	plt.savefig(imgfile)	
+	plt.savefig(imgfile)
+	print("Successfully saved plot to", imgfile)
 
 
 def plot_density(densfile = "src/python/density.csv",
@@ -71,6 +90,7 @@ def plot_density(densfile = "src/python/density.csv",
 		ax = figure.add_subplot(111, projection='3d')
 		ax.scatter(mat[:,0], mat[:,1], mat[:,2])
 	plt.savefig(imgfile)
+	print("Successfully saved plot to", imgfile)
 
 
 def plot_clust_cards(clustfile = "src/python/clust.csv",
@@ -79,3 +99,4 @@ def plot_clust_cards(clustfile = "src/python/clust.csv",
 	figure = plt.figure()
 	plt.hist(mat[:,0])
 	plt.savefig(imgfile)
+	print("Successfully saved plot to", imgfile)
