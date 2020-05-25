@@ -33,11 +33,9 @@ TESTS by Mario
 
 
 VARIE
+* dataless in console.py (vedi file) 
 * plot Python: highest posterior density intervals (credible intervals), arviz
   (library), contour plot
-* Ottimizzatione
-** non usare -O3 ma -G
-** -march=native -O3;    -msse2 -funroll-loops -ftree-vectorize
 * Spazi, a capo, etc
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
 * README (Virtual Machine etc)
@@ -59,6 +57,8 @@ REPORT
 * hyperparameters per la NNW: lambda piccolo (permette libertà), mu0 media
   empirica, nu = dim.dati + 3, sigma0 = tale che la sua media (nu * tau0) sia
   l'identità
+* spiegare le flag di efficienza: -march=native -O3 -msse2 -funroll-loops
+  -ftree-vectorize
 
 
 LIBRERIA (?)

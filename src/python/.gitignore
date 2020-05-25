@@ -1,3 +1,5 @@
 # Output files
 *.pdf
 *.csv
+
+!test_res/*
