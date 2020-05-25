@@ -13,4 +13,5 @@ PYBIND11_MODULE(bnplibpy, m)
     m.def("run_NNIG_Dir", &run_NNIG_Dir, "TODO docstring");
     m.def("run_NNW_Dir", &run_NNW_Dir, "TODO docstring");
     m.def("estimates_NNIG_Dir", &estimates_NNIG_Dir, "TODO docstring");
+    m.def("estimates_NNW_Dir", &estimates_NNW_Dir, "TODO docstring");
 }
