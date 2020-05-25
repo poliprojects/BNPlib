@@ -1,18 +1,43 @@
 TODO LIST
 
-IMPLEMENTAZIONE
+
+TESTS by Mario
+* Univariati (dati 1-3 già pronti):
+1) y_i ~ 0.5 N(-3, 1) + 0.5 N(3, 1), i=1,... 200
+   mu_0 = 0.0
+   lambda = 0.1 (o 10, dipende dalla parametrizzazione)
+   a, b = 2 (parametri della inv-gamma)
+2) y_i ~ 0.9 N(-5, 1) + 0.1 N(5, 1), i=1,... 1000
+   stessi parametri di prima
+3) y_i ~ 0.3 N(-2, 0.8^2) + 0.3 N(0, 0.8^2) + 0.4 N(2, 1) i=1,... 200
+4) y_i ~ 0.5 t(5, -5, 1 ) + 0.5 SkewNormal(2, -5, 1) i=1,... 400
+   (per generare questi dati guardate il pacchetto python Scipy)
+
+* Multivariati:
+5) y_i ~ 0.5 N((-3, -3), I) + 0.5 N((3, 3), I) i=1, ... 400
+6-8) dati come prima (media della prima componente mistura tutti -3, e della
+     seconda tutti +3) all'aumentare della dimensione (d=2, 5, 10, 20)
+     per dimensioni sopra il 10 non dovrebbe più funzionare granchè...
+* plot delle densità stimate e densità vere
+* riportate rand-index della partizione stimata (solo per dimensione 1 e 2,
+  dovrebbe venire sempre alto tranne magari l'esempio con la t e SkewNormal, ma
+  la densità dovrebbe venire bene uguale)
+
+
+VARIE
 * plot Python: highest posterior density intervals (credible intervals), arviz
   (library), contour plot
 * Ottimizzatione
 ** non usare -O3 ma -G
 ** -march=native -O3;    -msse2 -funroll-loops -ftree-vectorize
-
-
-VARIE
 * Spazi, a capo, etc
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
 * README (Virtual Machine etc)
 * Doxygen docs
+* confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
+  i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto: 
+  di default usa uno slice sampler che non è molto efficiente, selezionate il
+  sampler marginale ('MAR') e matchate gli iperparametri.
 
 
 REPORT
