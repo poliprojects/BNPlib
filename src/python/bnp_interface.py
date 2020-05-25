@@ -10,6 +10,7 @@ sys.path.insert(0, LIBPATH)
 import bnplibpy
 
 
+# TODO remove these?
 #def run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
 #	colltype, collfile = "collector.recordio", rng = 0, maxit = 0, burn = 0):
 #	"""Docstring
