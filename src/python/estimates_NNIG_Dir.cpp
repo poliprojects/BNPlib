@@ -14,9 +14,9 @@ namespace NNIGDir {
 }
 
 
-int estimates_NNIG_Dir(double mu0, double lambda_, double alpha0, double beta0,
-    double totalmass,
-    const std::string &gridfile, const std::string &algo,
+int estimates_NNIG_Dir(double mu0, double lambda_, double alpha0,
+    double beta0, double totalmass,
+    const Eigen::VectorXd &grid, const std::string &algo,
     const std::string &collfile = "collector.recordio",
     const std::string &densfile = "src/python/density.csv",
     const std::string &clustfile = "src/python/clust.csv",
@@ -28,24 +28,6 @@ int estimates_NNIG_Dir(double mu0, double lambda_, double alpha0, double beta0,
     // Build model components
     HypersType hy(mu0, lambda_, alpha0, beta0); // 5.0 0.1 2.0 2.0
     MixtureType mix(totalmass); // 1.0
-
-    // Read grid from file
-    std::ifstream file;
-    file.open(gridfile);
-    if(!file.is_open()){
-        std::cerr << "Error: " << gridfile << " file does not exist" <<
-            std::endl;
-        return 1;
-    }
-    std::string str;
-    std::vector<double> v;
-    while(std::getline(file, str)){
-        double val = ::atof(str.c_str());
-        v.push_back(val);
-    }
-    file.close();
-    Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v.data(), v.size());
 
     // Load algorithm factory
     BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){

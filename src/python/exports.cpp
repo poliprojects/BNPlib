@@ -1,4 +1,5 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/eigen.h>
 
 #include "../../includes.hpp"
 #include "run_NNIG_Dir.cpp"

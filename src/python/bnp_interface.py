@@ -1,8 +1,3 @@
-"""@package docstring
-BNP Python interface.
- 
-Documentation for BNP Python interface, but longer.
-"""
 from deserialize import deserialize
 import output_pb2
 
@@ -33,13 +28,13 @@ def run_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, datafile, algo, colltype,
 		colltype, collfile, rng, maxit, burn)
 
 
-def estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile, algo,
+def estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
 	collfile = "collector.recordio", densfile = "src/python/density.csv",
 	clustfile = "src/python/clust.", only = ""):
 	"""TODO docstring
 
 	TODO docstring but longer"""
-	bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, gridfile,
+	bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid,
 		algo, collfile, densfile, clustfile, only)
 
 
