@@ -17,20 +17,20 @@ grid = np.array(g)
 
 colltype = "file"
 collfile = "collector.recordio"
-densfile = "src/python/density.csv"
+densfile = "src/python/dens.csv"
 clustfile = "src/python/clust.csv"
 imgfileclust = "src/python/clust.pdf"
 imgfilechain = "src/python/chain.pdf"
-imgfiledens = "src/python/density.pdf"
+imgfiledens = "src/python/dens.pdf"
 only = "all"
 
-bnplib.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
+bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
 	colltype, collfile, rng, maxit, burn)
 
 chain_histogram(collfile, imgfilechain)
 
 algo = ''.join((algo, '_dataless'))
-bnplib.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
+bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
 	collfile, densfile, clustfile, only)
 # TODO implement estimates cpp s.t. you don't have to write "_dataless"
 # TODO: is it really worth keeping the dataless constructors in the factory?

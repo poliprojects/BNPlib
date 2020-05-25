@@ -7,7 +7,7 @@
 #include "estimates_NNIG_Dir.cpp"
 
 
-PYBIND11_MODULE(bnplib, m)
+PYBIND11_MODULE(bnplibpy, m)
 {
     m.doc() = "TODO docstring";
     m.def("run_NNIG_Dir", &run_NNIG_Dir, "TODO docstring");
