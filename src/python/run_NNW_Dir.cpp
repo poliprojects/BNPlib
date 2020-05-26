@@ -10,7 +10,7 @@ namespace NNWDir {
     template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
 
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::MatrixXd)>;
 }
 
 
@@ -25,21 +25,21 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     using namespace NNWDir;
 
     // Build model components
-    HypersType hy(mu0, lambda, tau0, nu); // 5.0 0.1 2.0 2.0
-    MixtureType mix(totalmass); // 1.0
+    HypersType hy(mu0, lambda, tau0, nu);
+    MixtureType mix(totalmass);
 
     // Read data from file
     Eigen::MatrixXd data = read_eigen_matrix(datafile);
 
     // Load algorithm factory
     Builder neal2builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
+        Eigen::MatrixXd data){
         return std::make_unique< Neal2<HierarchyType,HypersType,
                 MixtureType> >(hy, mix, data);
         };
     
     Builder neal8builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
+        Eigen::MatrixXd data){
         return std::make_unique< Neal8<HierarchyType,HypersType,
                 MixtureType> >(hy, mix, data);
         };

@@ -173,10 +173,19 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
 
     for(size_t i = 0; i < best_clust.allocations_size(); i++){
         unsigned int ci = best_clust.allocations(i);
-        file << ci;
+        file << ci<< ",";
         for(size_t j = 0; j < best_clust.uniquevalues(ci).params_size(); j++){
-            file << "," << proto_param_to_matrix( 
-                best_clust.uniquevalues(ci).params(j) );
+        Eigen::MatrixXd temp_param(proto_param_to_matrix( 
+                    best_clust.uniquevalues(ci).params(j)));
+            for(size_t k = 0; k < temp_param.rows(); k++){
+                for(size_t z = 0; z < temp_param.cols(); z++){
+                    if(z==temp_param.cols()-1 && k==temp_param.rows()-1 && j==best_clust.uniquevalues(ci).params_size()-1)
+                        file << temp_param(k,z);
+                    else
+                        file<< temp_param(k,z)<< ",";
+                    
+                }
+            }
         }
         file << std::endl;
     }

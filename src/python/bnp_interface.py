@@ -6,6 +6,7 @@ import os, sys
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
+from mpl_toolkits.mplot3d import Axes3D
 
 LIBPATH = ''.join((os.path.dirname(os.path.realpath(__file__)), "/../.."))
 sys.path.insert(0, LIBPATH)

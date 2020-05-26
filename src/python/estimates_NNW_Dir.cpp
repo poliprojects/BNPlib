@@ -62,6 +62,6 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic>  mu0, doubl
         (*sampler).write_clustering_to_file(clustfile);
     }
 
-    std::cout << "End of estimates_NNIG_Dir.cpp" << std::endl;
+    std::cout << "End of estimates_NNW_Dir.cpp" << std::endl;
     return 0;
 }

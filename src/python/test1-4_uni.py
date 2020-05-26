@@ -24,13 +24,13 @@ for i in range(1,5):
 	print("Starting test", i)
 
 	# Write file names
-	datafile  = ''.join(("csv/test/data", i, ".csv"))
-	collfile  = ''.join(("collector", i, ".recordio"))
-	densfile  = ''.join(("src/python/test_res/dens",  i, ".csv"))
-	clustfile = ''.join(("src/python/test_res/clust", i, ".csv"))
-	imgfileclust = ''.join(("src/python/test_res/clust", i, ".pdf"))
-	imgfilechain = ''.join(("src/python/test_res/chain", i, ".pdf"))
-	imgfiledens  = ''.join(("src/python/test_res/dens",  i, ".pdf"))
+	datafile  = ''.join(("csv/test/data", str(i), ".csv"))
+	collfile  = ''.join(("collector", str(i), ".recordio"))
+	densfile  = ''.join(("src/python/test_res/dens",  str(i), ".csv"))
+	clustfile = ''.join(("src/python/test_res/clust", str(i), ".csv"))
+	imgfileclust = ''.join(("src/python/test_res/clust", str(i), ".pdf"))
+	imgfilechain = ''.join(("src/python/test_res/chain", str(i), ".pdf"))
+	imgfiledens  = ''.join(("src/python/test_res/dens",  str(i), ".pdf"))
 	bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile,
 		algo, colltype, collfile, rng, maxit, burn)
 
