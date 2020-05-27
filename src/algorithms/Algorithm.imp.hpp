@@ -113,7 +113,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
 
 
 //! \param coll Collector containing the algorithm chain
-//| \return     Index of the iteration containing the best estimate
+//! \return     Index of the iteration containing the best estimate
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     BaseCollector* coll){
@@ -163,10 +163,10 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
 }
 
 
-//! /param filename Name of file to write to
+//! \param filename Name of file to write to
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
-    std::string filename) const {
+void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(const
+	std::string &filename) const {
     if(!clustering_was_computed){
         std::cerr << "Error: cannot write clustering to file; " <<
             "cluster_estimate() must be called first" << std::endl;
@@ -206,10 +206,10 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
 }
 
 
-//! /param filename Name of file to write to
+//! \param filename Name of file to write to
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
-    std::string filename) const {
+void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(const
+    std::string &filename) const {
     if(!density_was_computed){
         std::cerr << "Error: cannot write density to file; eval_density() " <<
             "must be called first" << std::endl;

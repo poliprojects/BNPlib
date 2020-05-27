@@ -20,9 +20,11 @@
 
 //! This template class implements a generic algorithm that generates a Markov
 //! chain on the clustering of the provided data.
+//!
 //! An algorithm that inherits from this abstract class will have multiple iter-
 //! ations of the same step, which is further split into substeps, each of which
 //! updates specific values for the Markov chain.
+//!
 //! The underlying model for the data is assumed to be a so-called hierarchical
 //! model, where each datum is independently drawn from a common likelihood
 //! function, whose parameters are specific to each unit and are iid generated
@@ -32,6 +34,7 @@
 //! called unique values. The probabliity distribution for data from each clus-
 //! ter is called a hierarchy and can itself have hyperparameters, either fixed
 //! or random.
+//!
 //! This class is templatized over the types of the elements of this model: the
 //! hierarchies of cluster, their hyperparameters, and the mixture.
 
@@ -128,10 +131,11 @@ public:
     //! Estimates the clustering structure of the data via LS minimization
     virtual unsigned int cluster_estimate(BaseCollector* collector);
     //! Writes unique values of each datum in csv form
-    void write_clustering_to_file(
-        std::string filename = "csv/clust_best.csv") const;
+    void write_clustering_to_file(const std::string &filename =
+    	"csv/clust_best.csv") const;
     //! Writes grid and density evaluation on it in csv form
-    void write_density_to_file(std::string filename = "csv/density.csv") const;
+    void write_density_to_file(const std::string &filename =
+    	"csv/density.csv") const;
 
     // DESTRUCTOR AND CONSTRUCTORS
     virtual ~Algorithm() = default;
