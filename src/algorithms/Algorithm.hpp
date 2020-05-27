@@ -16,12 +16,15 @@
 #include "../api/MemoryCollector.hpp"
 
 
-//! Abstract template class for a generic algorithm.
+//! Abstract template class for a generic iterative BNP algorithm.
 
 //! This template class implements a generic algorithm that generates a Markov
 //! chain on the clustering of the provided data.
-//! In particular, the underlying model is assumed to be a so-called hierarchi-
-//! cal model, where each datum is independently drawn from a common likelihood
+//! An algorithm that inherits from this abstract class will have multiple iter-
+//! ations of the same step, which is further split into substeps, each of which
+//! updates specific values for the Markov chain.
+//! The underlying model for the data is assumed to be a so-called hierarchical
+//! model, where each datum is independently drawn from a common likelihood
 //! function, whose parameters are specific to each unit and are iid generated
 //! from a random probability measure, called the mixture. Different data points
 //! may have the same parameters as each other, and thus a clustering structure
@@ -29,8 +32,8 @@
 //! called unique values. The probabliity distribution for data from each clus-
 //! ter is called a hierarchy and can itself have hyperparameters, either fixed
 //! or random.
-//! This class is templatized over the types of the elements of this
-//! model: the hierarchies of cluster, their hyperparameters, and the mixture.
+//! This class is templatized over the types of the elements of this model: the
+//! hierarchies of cluster, their hyperparameters, and the mixture.
 
 //! \param  Hierarchy Name of the hierarchy template class
 //! \param  Hypers    Name of the hyperparameters class
@@ -88,7 +91,7 @@ protected:
     virtual void sample_weights() = 0;
     virtual void update_hypers() = 0;
     virtual const void print_ending_message();
-
+    //! Saves the current iteration's state in Protobuf form to a collector
     void save_state(BaseCollector* collector, unsigned int iter){
         collector->collect( get_state_as_proto(iter) );
     }
@@ -102,7 +105,7 @@ protected:
     }
 
 public:
-    //! Runs the algorithm and save the chain into a memory collector
+    //! Runs the algorithm and saves the whole chain to a collector
     void run(BaseCollector* collector){
         print_startup_message();
         initialize();
@@ -119,6 +122,7 @@ public:
         print_ending_message();
     }
 
+    // ESTIMATE FUNCTIONS
     //! Evaluates the overall data pdf on a gived grid of points
     virtual void eval_density(const Eigen::MatrixXd &grid,
         BaseCollector* const collector);
@@ -144,6 +148,7 @@ public:
                     "one will be ignored" << std::endl;
             }
             if(init_num_clusters == 0){
+                // If not provided, standard initializ.: one datum per cluster
                 std::cout << "Warning: initial number of clusters will be " <<
                     "set equal to the data size (" << data.rows() << ")" <<
                     std::endl;
@@ -153,7 +158,6 @@ public:
                 unique_values.push_back(hierarchy);
             }
     }
-
     Algorithm(const Hypers &hypers_, const Mixture &mixture_,
          const unsigned int init = 0) :
         mixture(mixture_), init_num_clusters(init) {

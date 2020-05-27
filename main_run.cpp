@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
     HypersType hy(mu0, lambda, alpha0, beta0);
 
     double totalmass;
-    //std::cout << "Insert total mass value:" << std::endl; 
+    //std::cout << "Insert total mass value:" << std::endl;
     //std::cin >> totalmass; //1.0
     totalmass = 1.0;
     MixtureType mix(totalmass);
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]){
             filename = "collector.recordio";
         }
         else {
-            std::string filename = argv[4]; 
+            std::string filename = argv[4];
             if(argc > 5){
                 std::cout << "Warning: unused extra args present" << std::endl;
             }
@@ -136,7 +136,7 @@ int main(int argc, char *argv[]){
         temp += step;
     }
     Eigen::VectorXd grid = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v_temp.data(), v_temp.size()); 
+        v_temp.data(), v_temp.size());
 
     (*sampler).eval_density(grid, coll);
     (*sampler).write_density_to_file("csv/dens_ex.csv");

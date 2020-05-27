@@ -50,7 +50,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         cardinalities[ allocations[i] ] -= 1;
         
         // Compute probabilities of clusters
-        Eigen::VectorXd probas(n_unique+(1-singleton)); 
+        Eigen::VectorXd probas(n_unique+(1-singleton));
 
         double tot = 0.0;
         
@@ -75,7 +75,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
 
         // Normalize
-        probas = probas / tot; 
+        probas = probas / tot;
         
         // Draw a NEW value for ci
         unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
@@ -111,7 +111,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 Hierarchy<Hypers> new_unique( unique_values[0].get_hypers() );
 
                 new_unique.sample_given_data(datum);
-                unique_values.push_back(new_unique); 
+                unique_values.push_back(new_unique);
                 allocations[i] = n_unique;
                 cardinalities.push_back(1);
             }
@@ -152,8 +152,8 @@ Eigen::VectorXd Neal2<Hierarchy, Hypers, Mixture>::density_marginal_component(
     Hierarchy<Hypers> &temp_hier, unsigned int n){
     // Component from G0 (exploit conjugacy using explicit expression)
     double M = this->mixture.get_totalmass();
-    Eigen::VectorXd dens_addendum(this->density.first.rows());    
-    dens_addendum = temp_hier.eval_marg(this->density.first) * M/(M+n); 
+    Eigen::VectorXd dens_addendum(this->density.first.rows());
+    dens_addendum = temp_hier.eval_marg(this->density.first) * M/(M+n);
     return dens_addendum;
 }
 

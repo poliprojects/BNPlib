@@ -4,13 +4,13 @@
 #include "HierarchyNNIG.hpp"
 
 
-template<class Hypers> 
+template<class Hypers>
 void HierarchyNNIG<Hypers>::check_state_validity(){
     assert(state[1](0,0) > 0);
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 Eigen::VectorXd HierarchyNNIG<Hypers>::like(const Eigen::MatrixXd &data){
     Eigen::VectorXd result(data.rows());
     for(size_t i = 0; i < data.rows(); i++){
@@ -21,7 +21,7 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::like(const Eigen::MatrixXd &data){
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 void HierarchyNNIG<Hypers>::draw(){
     double sigma2_new = sqrt( stan::math::inv_gamma_rng(
         hypers->get_alpha0(), hypers->get_beta0(), this->rng) );
@@ -34,7 +34,7 @@ void HierarchyNNIG<Hypers>::draw(){
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(const Eigen::MatrixXd &data){
 
     double sigtilde = sqrt( hypers->get_beta0()*(hypers->get_lambda()+1) /
@@ -49,7 +49,7 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(const Eigen::MatrixXd &data){
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
     const Eigen::VectorXd &data, const double mu0, const double alpha0,
     const double beta0, const double lambda){
@@ -77,7 +77,7 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 void HierarchyNNIG<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
 
     // Get current values of parameters
@@ -99,7 +99,7 @@ void HierarchyNNIG<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     sigma2_new = sqrt(stan::math::inv_gamma_rng(alpha_post, beta_post,
         this->rng));
     mu_new = stan::math::normal_rng(mu_post, sqrt(sigma2_new/lambda_post),
-        this->rng); 
+        this->rng);
     state[0](0,0) = mu_new;
     state[1](0,0) = sigma2_new;
 }

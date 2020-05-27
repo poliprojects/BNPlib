@@ -53,7 +53,7 @@ int main(int argc, char *argv[]){
     HypersType hy(mu0, lambda, alpha0, beta0);
 
     double totalmass = 1.0;
-    //std::cout << "Insert total mass value:" << std::endl; 
+    //std::cout << "Insert total mass value:" << std::endl;
     //std::cin >> totalmass; //1.0
     MixtureType mix(totalmass);
 
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]){
     (*sampler).set_rng_seed(20200229);
     (*sampler).set_maxiter(5000);
     (*sampler).set_burnin(500);
-      
+    
     // Choose collector
     BaseCollector *coll;
     std::string colltype = argv[3];
