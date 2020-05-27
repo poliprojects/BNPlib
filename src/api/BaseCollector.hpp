@@ -54,7 +54,7 @@ public:
     }
 
     //! Writes the given state to the collector
-    virtual void collect(State iteration_state) = 0;
+    virtual void collect(State iter_state) = 0;
 
     // GETTERS AND SETTERS
     //! Returns i-th state in the collector
