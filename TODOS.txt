@@ -42,7 +42,7 @@ VARIE
 * Doxygen docs
 ** Python files
 ** \param and \return in .cpp files
-* \\! line, then member, then newline in .hpp files
+** \\! line, then member, then newline in .hpp files
 * confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
   i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto: 
   di default usa uno slice sampler che non è molto efficiente, selezionate il
