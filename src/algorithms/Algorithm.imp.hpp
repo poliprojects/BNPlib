@@ -4,13 +4,17 @@
 #include "Algorithm.hpp"
 
 
+//! \param  iter Number of the current iteration
+//! \return      Protobuf-object version of the current state
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
     unsigned int iter){
 
+    // Transcribe allocations vector
     State iter_out;
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
+    // Transcribe unique values vector
     for(size_t i = 0; i < unique_values.size(); i++){
         UniqueValues uniquevalues_temp;
         for(size_t k = 0; k < unique_values[i].get_state().size(); k++){

@@ -38,7 +38,6 @@
 //! \param  Hierarchy Name of the hierarchy template class
 //! \param  Hypers    Name of the hyperparameters class
 //! \param  Mixture   Name of the mixture class
-//! \return           ???
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{
 protected:
