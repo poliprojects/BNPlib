@@ -132,7 +132,7 @@ void HierarchyNNW<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     Eigen::MatrixXd tau_inv = tau_new.inverse();
     EigenRowVec mu_new = stan::math::multi_normal_rng(mu_post,
         tau_inv*(1/lambda_post), this->rng);
-    
+
     state[0] = mu_new;
     set_tau_and_utilities(tau_new);
 }

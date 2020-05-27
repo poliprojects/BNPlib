@@ -23,7 +23,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
         singleton = 0;
         n_unique = unique_values.size();
-     
+
         if(cardinalities[ allocations[i] ] == 1){
             // datum i is a singleton
             aux_unique_values[0].set_state( unique_values[
@@ -32,7 +32,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         }
 
         cardinalities[ allocations[i] ] -= 1;
-        
+
         // Draw the aux from G0
         for(size_t j = singleton; j < n_aux; j++){
             aux_unique_values[j].draw();
@@ -40,7 +40,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
         // Draw a NEW value for ci
         Eigen::VectorXd probas(n_unique+n_aux); //k or n_unique
-        
+
         double tot = 0.0;
         for(size_t k = 0; k < n_unique; k++){ // if datum i is a singleton, then
             // card[k] when k=allocations[i] is equal to 0 -> probas[k]=0
@@ -69,7 +69,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
             }
             else{ // case 2 of 4: SINGLETON - OLD VALUE
                 unique_values.erase( unique_values.begin() + allocations[i] );
-                
+
                 unsigned int c_old = allocations[i];
                 allocations[i] = c_new;
                 for(auto &c : allocations){ // relabeling
@@ -81,7 +81,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 cardinalities.erase(cardinalities.begin() + c_old);
             } // end of else
         } // end of if(singleton == 1)
-        
+
         else{ // if singleton == 0
             if(c_new >= n_unique){ // case 3 of 4: NOT SINGLETON - AUX
                 unique_values.push_back( aux_unique_values[c_new-n_unique] );
@@ -103,7 +103,7 @@ Eigen::VectorXd Neal8<Hierarchy, Hypers, Mixture>::density_marginal_component(
     Hierarchy<Hypers> &temp_hier, unsigned int n){
     double M = this->mixture.get_totalmass();
     Eigen::VectorXd dens_addendum(this->density.first.rows());
-            
+
     // Component from G0
     for(size_t h = 0; h < n_aux; h++){
         temp_hier.draw();

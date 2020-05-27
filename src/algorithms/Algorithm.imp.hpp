@@ -4,8 +4,8 @@
 #include "Algorithm.hpp"
 
 
-//! \param  iter Number of the current iteration
-//! \return      Protobuf-object version of the current state
+//! \param iter Number of the current iteration
+//! \return     Protobuf-object version of the current state
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
     unsigned int iter){
@@ -26,7 +26,7 @@ State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
                     col_temp.add_elems(par_temp(h,j));
                 }
                 par_temp_proto.add_par_cols();
-                *par_temp_proto.mutable_par_cols(j) = col_temp;     
+                *par_temp_proto.mutable_par_cols(j) = col_temp; 
             }
             uniquevalues_temp.add_params();
             *uniquevalues_temp.mutable_params(k) = par_temp_proto;
@@ -38,14 +38,17 @@ State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
 }
 
 
+//! \param un_val Unique value in Protobuf-object form
+//! \return       Matrix version of un_val
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
-    const Param &par) const {
+    const Param &un_val) const {
     Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(
-        par.par_cols(0).elems_size(), par.par_cols_size() );
-    for(size_t h = 0; h < par.par_cols_size(); h++){
-        for(size_t j = 0; j < par.par_cols(h).elems_size(); j++){
-            par_matrix(j,h) = par.par_cols(h).elems(j);
+        un_val.par_cols(0).elems_size(), un_val.par_cols_size() );
+
+    for(size_t h = 0; h < un_val.par_cols_size(); h++){
+        for(size_t j = 0; j < un_val.par_cols(h).elems_size(); j++){
+            par_matrix(j,h) = un_val.par_cols(h).elems(j);
         }
     }
     return par_matrix;
@@ -58,61 +61,76 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
 }
 
 
+//! \param grid Grid of points in matrix form to evaluate the density on
+//! \param coll Collector containing the algorithm chain
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
-    const Eigen::MatrixXd &grid, BaseCollector* collector){
+    const Eigen::MatrixXd &grid, BaseCollector* coll){
 
+    // Initialize objects
     density.first = grid;
     Eigen::VectorXd dens(Eigen::MatrixXd::Zero(grid.rows(),1));
     double M = mixture.get_totalmass();
-  
-    std::deque<State> chain = collector->get_chain();
 
+    // Read chain from collector
+    std::deque<State> chain = coll->get_chain();
     unsigned n_iter = chain.size();
     unsigned int n = chain[0].allocations_size();
     unsigned n_params = chain[0].uniquevalues(0).params_size();
+
     std::vector<Eigen::MatrixXd> params(n_params);
 
+    // Loop over non-burn-in algorithm iterations
     for(size_t iter = 0; iter < n_iter; iter++){
-        // for each iteration of the algorithm
- 
+        // Compute clusters cardinalities
         std::vector<unsigned int> card(chain[iter].uniquevalues_size(), 0);
         for(size_t j = 0; j < n; j++){
             card[ chain[iter].allocations(j) ] += 1;
         }
+        // Initialize temporary hierarchy
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
 
+        // Loop over current iteration's unique values
         for(size_t h = 0; h < chain[iter].uniquevalues_size(); h++){
+            // Extract and copy unique values in temp_hier
             for(size_t k = 0; k < n_params; k++){
                 params[k] = proto_param_to_matrix(
                     chain[iter].uniquevalues(h).params(k) );
             }
             temp_hier.set_state(params, false);
-   
-            dens += card[h]* temp_hier.like(grid) / (M+n);
+
+            // Update density estimate (cluster component)
+            dens += card[h] * temp_hier.like(grid) / (M+n);
         }
-        dens += density_marginal_component(temp_hier,n);
+        // Update density estimate (marginal component)
+        dens += density_marginal_component(temp_hier, n);
     }
+
+    // Average over iterations
     density.second = dens / n_iter;
+    // Update flag
     density_was_computed = true;
 }
 
 
+//! \param coll Collector containing the algorithm chain
+//| \return     Index of the iteration containing the best estimate
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
-    BaseCollector* collector){
-    // also returns the index of the estimate in the chain object
-    std::deque<State> chain = collector->get_chain();
+    BaseCollector* coll){
 
+    // Read chain from collector
+    std::deque<State> chain = coll->get_chain();
+
+    // Initialize objects
     unsigned n_iter = chain.size();
     unsigned int n = chain[0].allocations_size();
-
     Eigen::VectorXd errors(n_iter);
     Eigen::MatrixXd tot_diss(n, n);
     tot_diss = Eigen::MatrixXd::Zero(n, n);
     std::vector<Eigen::MatrixXd> all_diss;
     State temp;
-    
+
     for(size_t h = 0; h < n_iter; h++){
         Eigen::MatrixXd dissim(n, n);
         dissim = Eigen::MatrixXd::Zero(n, n);
@@ -133,7 +151,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
         // Compute error in Frobenius norm
         errors(h) = (tot_diss-all_diss[h]).norm();
     }
-    
+
     std::ptrdiff_t i;
     unsigned int min_err = errors.minCoeff(&i);
 
@@ -204,7 +222,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
         }
         file << density.second(i) << std::endl;
     }
-    
+
     file.close();
     std::cout << "Successfully wrote density to " << filename << std::endl;
 }

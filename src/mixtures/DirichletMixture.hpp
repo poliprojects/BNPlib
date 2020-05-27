@@ -18,7 +18,7 @@ public:
         const {
         return card/(n-1+totalmass);
     }
-    
+
     double prob_new_cluster(const unsigned int n, const unsigned int n_unique)
         const {
         return totalmass/(n-1+totalmass);

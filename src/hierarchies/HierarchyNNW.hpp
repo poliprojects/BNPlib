@@ -20,7 +20,7 @@ protected:
     Eigen::MatrixXd tau_chol_factor_eval;
     double tau_log_det;
     void set_tau_and_utilities(const Eigen::MatrixXd &tau);
-    
+
     std::vector<Eigen::MatrixXd> normal_wishart_update(
     const Eigen::MatrixXd &data, const EigenRowVec &mu0, const double lambda,
     const Eigen::MatrixXd &tau0, const double nu);

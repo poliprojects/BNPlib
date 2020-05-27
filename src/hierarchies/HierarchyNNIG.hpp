@@ -25,7 +25,7 @@ protected:
 
 public:
     bool is_multivariate() const override {return false;}
-    
+
     // Destructor and constructor
     ~HierarchyNNIG() = default;
     HierarchyNNIG() = default;

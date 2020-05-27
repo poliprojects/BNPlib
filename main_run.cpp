@@ -65,7 +65,7 @@ int main(int argc, char *argv[]){
         return std::make_unique< Neal2<HierarchyType, HypersType,
                 MixtureType> >(hy, mix, data);
         };
-    
+
     Builder neal8builder = [](HypersType hy, MixtureType mix,
         Eigen::VectorXd data){
         return std::make_unique< Neal8<HierarchyType, HypersType,

@@ -45,15 +45,15 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         if(cardinalities[ allocations[i] ] == 1){
             singleton = 1; // datum i is a singleton
         }
-        
+
         // Remove datum from cluster
         cardinalities[ allocations[i] ] -= 1;
-        
+
         // Compute probabilities of clusters
         Eigen::VectorXd probas(n_unique+(1-singleton));
 
         double tot = 0.0;
-        
+
         for(size_t k = 0; k < n_unique; k++){
             probas(k) = this->mixture.prob_existing_cluster(
                 cardinalities[k], n) * unique_values[k].like(datum)(0);
@@ -62,7 +62,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 probas(i) = this->mixture.prob_new_cluster(n, n_unique) *
                     unique_values[0].eval_marg(datum)(0);
             }
- 
+
             tot += probas(k);
         }
 
@@ -76,10 +76,10 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
         // Normalize
         probas = probas / tot;
-        
+
         // Draw a NEW value for ci
         unsigned int c_new = stan::math::categorical_rng(probas, this->rng) - 1;
-        
+
         // Assign datum to the new cluster
         if(singleton == 1){
             if(c_new == allocations[i]){
@@ -92,7 +92,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
             else{ // case 2 of 4: SINGLETON - CLUSTER
 
                 unique_values.erase( unique_values.begin() + allocations[i] );
-                
+
                 unsigned int c_old = allocations[i];
                 allocations[i] = c_new;
                 for(auto &c : allocations){ // relabeling

@@ -33,7 +33,7 @@ public:
     HypersFixedNNW(const EigenRowVec &mu0_, const double lambda_,
         const Eigen::MatrixXd &tau0_, const double nu_):
         mu0(mu0_), lambda(lambda_), tau0(tau0_), nu(nu_) {
-        
+
         check_state_validity();
         }
 

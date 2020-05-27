@@ -38,7 +38,7 @@ public:
     // Getters and setters
     State get_next_state(){
         curr_iter++;
-        
+
         if(curr_iter >= size){
             throw std::out_of_range("Error: curr_iter > size in collector");
         }

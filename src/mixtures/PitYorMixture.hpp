@@ -26,7 +26,7 @@ public:
         const unsigned int n_unique) const {
         return (strength+discount*n_unique)/(n-1+strength);
     }
-    
+
     // Getters and setters
     double get_strength() const {return strength;}
     double get_discount() const {return discount;}

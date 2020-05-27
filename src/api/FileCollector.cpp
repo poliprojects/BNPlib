@@ -1,24 +1,9 @@
 #include "FileCollector.hpp"
 
 
-// State state;
-// ifstream file("path/to/file.bin", ios::in | ios::binary);
-// if (file.is_open()){
-	// bool success = state.ParseFromIstream(&file);
-	// // what happens? is only the first state parsed?
-    // if(!success){
-        // std::cout << "Parsing failed" << std::endl;
-    // }
-// }
-
-
-
-
-
-
 std::deque<State> FileCollector::get_chain() {
     open_for_reading();
-  
+
     bool keep = true;
     std::deque<State> out;
 
@@ -42,11 +27,14 @@ void FileCollector::open_for_reading() {
     is_open_read = true;
 }
 
+
 void FileCollector::close_reading() {
     fin->Close();
     close(infd);
     is_open_read = false;
 }
+
+
 State FileCollector::next_state() {
     if (!is_open_read){
         open_for_reading();
@@ -65,6 +53,7 @@ State FileCollector::next_state() {
     }
     return out;
 }
+
 
 void FileCollector::start() {
     int outfd = open(filename.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0777);

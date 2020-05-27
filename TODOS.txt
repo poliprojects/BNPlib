@@ -37,6 +37,7 @@ VARIE
 * plot Python: highest posterior density intervals (credible intervals), arviz
   (library), contour plot
 * Spazi, a capo, etc
+* Rename some files? (api, output, dataless)
 ** grep -R "[^ ] $" src/*
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
 * README (Virtual Machine etc)

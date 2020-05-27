@@ -28,7 +28,7 @@ void HierarchyNNIG<Hypers>::draw(){
 
     double mu_new = stan::math::normal_rng(hypers->get_mu0(),
         sqrt(sigma2_new/hypers->get_lambda()), this->rng);
-    
+
     state[0](0,0) = mu_new;
     state[1](0,0) = sigma2_new;
 }
@@ -39,7 +39,7 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(const Eigen::MatrixXd &data){
 
     double sigtilde = sqrt( hypers->get_beta0()*(hypers->get_lambda()+1) /
         (hypers->get_alpha0() * hypers->get_lambda()) );
-   
+
     Eigen::VectorXd result(data.rows());
     for(size_t i = 0; i < data.rows(); i++){
         result(i) = exp( stan::math::student_t_lpdf(data(i,0),
@@ -60,7 +60,7 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
     if(n == 0){
         return std::vector<double>{mu0, alpha0, beta0, lambda};
     }
-    
+
     // Compute sample mean
     double y_bar = data.mean();
 
@@ -72,7 +72,7 @@ std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
     beta_post = beta0 + 0.5 * ss + 0.5 * lambda * n * std::pow((y_bar - mu0),
         2) / (n + lambda);
     lambda_post = lambda + n;
-    
+
     return std::vector<double>{mu_post, alpha_post, beta_post, lambda_post};
 }
 
