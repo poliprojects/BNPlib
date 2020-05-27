@@ -37,12 +37,13 @@ VARIE
 * plot Python: highest posterior density intervals (credible intervals), arviz
   (library), contour plot
 * Spazi, a capo, etc
+** grep -R "[^ ] $" src/*
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
 * README (Virtual Machine etc)
 * Doxygen docs
 ** Python files
 ** \param and \return in .cpp files
-* \\! line, then member, then newline in .hpp files
+** \\! line, then member, then newline in .hpp files
 * confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
   i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto: 
   di default usa uno slice sampler che non è molto efficiente, selezionate il

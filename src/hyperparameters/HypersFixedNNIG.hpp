@@ -38,7 +38,7 @@ public:
     }
     void set_beta0(const double beta0_){
         assert(beta0_  > 0);
-        beta0 = beta0_; 
+        beta0 = beta0_;
     }
     void set_lambda(const double lambda_){
         assert(lambda_ > 0);

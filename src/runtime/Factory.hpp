@@ -15,12 +15,12 @@ template<class AbstractProduct, typename... Args>
 class Factory{
 private:
     // Aliases
-    using Identifier = std::string;    
+    using Identifier = std::string;
     using EstimatesBuilder = std::function< std::unique_ptr<AbstractProduct>(
         Args...)>;
     using RunBuilder = std::function< std::unique_ptr<AbstractProduct>(
         Args..., Eigen::MatrixXd)>;
-    using Builder = boost::variant<RunBuilder, EstimatesBuilder >; 
+    using Builder = boost::variant<RunBuilder, EstimatesBuilder >;
 
     // Deleted constructors
     Factory() = default;

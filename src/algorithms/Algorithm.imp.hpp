@@ -4,23 +4,17 @@
 #include "Algorithm.hpp"
 
 
-// Algorithm functions
-
-template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
-    std::cout << "Done" << std::endl;
-}
-
-
-// Auxiliary tools
-
+//! \param  iter Number of the current iteration
+//! \return      Protobuf-object version of the current state
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
     unsigned int iter){
 
+    // Transcribe allocations vector
     State iter_out;
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
 
+    // Transcribe unique values vector
     for(size_t i = 0; i < unique_values.size(); i++){
         UniqueValues uniquevalues_temp;
         for(size_t k = 0; k < unique_values[i].get_state().size(); k++){
@@ -44,7 +38,6 @@ State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
 }
 
 
-
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
     const Param &par) const {
@@ -59,7 +52,11 @@ Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
 }
 
 
-// Other tools
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+const void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
+    std::cout << "Done" << std::endl;
+}
+
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
@@ -69,23 +66,22 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     Eigen::VectorXd dens(Eigen::MatrixXd::Zero(grid.rows(),1));
     double M = mixture.get_totalmass();
   
-    std::deque<State> chain=collector->get_chain();
+    std::deque<State> chain = collector->get_chain();
 
-    unsigned n_iter=chain.size();
-    unsigned int n=chain[0].allocations_size();
-    unsigned n_params=chain[0].uniquevalues(0).params_size();
+    unsigned n_iter = chain.size();
+    unsigned int n = chain[0].allocations_size();
+    unsigned n_params = chain[0].uniquevalues(0).params_size();
     std::vector<Eigen::MatrixXd> params(n_params);
 
     for(size_t iter = 0; iter < n_iter; iter++){
         // for each iteration of the algorithm
  
         std::vector<unsigned int> card(chain[iter].uniquevalues_size(), 0);
-
         for(size_t j = 0; j < n; j++){
             card[ chain[iter].allocations(j) ] += 1;
         }
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
-        
+
         for(size_t h = 0; h < chain[iter].uniquevalues_size(); h++){
             for(size_t k = 0; k < n_params; k++){
                 params[k] = proto_param_to_matrix(
@@ -95,11 +91,8 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
    
             dens += card[h]* temp_hier.like(grid) / (M+n);
         }
-            
         dens += density_marginal_component(temp_hier,n);
-                       
     }
-
     density.second = dens / n_iter;
     density_was_computed = true;
 }
@@ -109,12 +102,10 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     BaseCollector* collector){
     // also returns the index of the estimate in the chain object
-    std::deque<State> chain=collector->get_chain();
+    std::deque<State> chain = collector->get_chain();
 
-    unsigned n_iter=chain.size();
-    unsigned int n=chain[0].allocations_size();
-
-
+    unsigned n_iter = chain.size();
+    unsigned int n = chain[0].allocations_size();
 
     Eigen::VectorXd errors(n_iter);
     Eigen::MatrixXd tot_diss(n, n);
@@ -123,7 +114,6 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     State temp;
     
     for(size_t h = 0; h < n_iter; h++){
-
         Eigen::MatrixXd dissim(n, n);
         dissim = Eigen::MatrixXd::Zero(n, n);
         for(size_t i = 0; i < n; i++){
@@ -133,8 +123,8 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
                 }
             }
         }
-    all_diss.push_back(dissim);
-    tot_diss = tot_diss + dissim;
+        all_diss.push_back(dissim);
+        tot_diss = tot_diss + dissim;
     }
 
     tot_diss = tot_diss / n_iter;
@@ -160,8 +150,6 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
     std::string filename) const {
-    // number,datum,cluster,params1,params2,...
-
     if(!clustering_was_computed){
         std::cerr << "Error: cannot write clustering to file; " <<
             "cluster_estimate() must be called first" << std::endl;
@@ -173,17 +161,19 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
 
     for(size_t i = 0; i < best_clust.allocations_size(); i++){
         unsigned int ci = best_clust.allocations(i);
-        file << ci<< ",";
+        file << ci << ",";
         for(size_t j = 0; j < best_clust.uniquevalues(ci).params_size(); j++){
-        Eigen::MatrixXd temp_param(proto_param_to_matrix( 
-                    best_clust.uniquevalues(ci).params(j)));
+            Eigen::MatrixXd temp_param(proto_param_to_matrix(
+                best_clust.uniquevalues(ci).params(j)));
             for(size_t k = 0; k < temp_param.rows(); k++){
                 for(size_t z = 0; z < temp_param.cols(); z++){
-                    if(z==temp_param.cols()-1 && k==temp_param.rows()-1 && j==best_clust.uniquevalues(ci).params_size()-1)
+                    if(z == temp_param.cols()-1 && k == temp_param.rows()-1 &&
+                        j == best_clust.uniquevalues(ci).params_size()-1){
                         file << temp_param(k,z);
-                    else
-                        file<< temp_param(k,z)<< ",";
-                    
+                    }
+                    else{
+                        file << temp_param(k,z) << ",";
+                    }
                 }
             }
         }

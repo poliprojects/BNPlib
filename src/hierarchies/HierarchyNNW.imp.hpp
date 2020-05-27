@@ -4,7 +4,7 @@
 #include "HierarchyNNW.hpp"
 
 
-template<class Hypers> 
+template<class Hypers>
 void HierarchyNNW<Hypers>::check_state_validity(){
         unsigned int dim = state[0].size();
         assert(dim == state[1].rows());
@@ -16,7 +16,7 @@ void HierarchyNNW<Hypers>::check_state_validity(){
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
     if(state.size() == 1){ // e.g. if the hierarchy is being initialized
         state.push_back(tau);
@@ -32,7 +32,7 @@ void HierarchyNNW<Hypers>::set_tau_and_utilities(const Eigen::MatrixXd &tau){
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
@@ -52,7 +52,7 @@ Eigen::VectorXd HierarchyNNW<Hypers>::like(const Eigen::MatrixXd &data){
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 void HierarchyNNW<Hypers>::draw(){
     Eigen::MatrixXd tau_new = stan::math::wishart_rng( hypers->get_nu(),
         hypers->get_tau0(), this->rng );
@@ -65,7 +65,7 @@ void HierarchyNNW<Hypers>::draw(){
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
     unsigned int n = data.rows();
     Eigen::VectorXd result(n);
@@ -88,7 +88,7 @@ Eigen::VectorXd HierarchyNNW<Hypers>::eval_marg(const Eigen::MatrixXd &data){
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 std::vector<Eigen::MatrixXd> HierarchyNNW<Hypers>::normal_wishart_update(
     const Eigen::MatrixXd &data, const EigenRowVec &mu0, const double lambda,
     const Eigen::MatrixXd &tau0, const double nu){
@@ -113,7 +113,7 @@ std::vector<Eigen::MatrixXd> HierarchyNNW<Hypers>::normal_wishart_update(
 }
 
 
-template<class Hypers> 
+template<class Hypers>
 void HierarchyNNW<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     // Get current values of parameters
     EigenRowVec mu0 = hypers->get_mu0();

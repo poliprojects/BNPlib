@@ -36,7 +36,7 @@ public:
         if(is_open_read){
             fin->Close();
             close(infd);
-        } 
+        }
     }
 
     void start() override;
