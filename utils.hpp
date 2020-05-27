@@ -14,12 +14,12 @@ Eigen::MatrixXd read_eigen_matrix(const std::string &filename) {
     double buffer[MAXBUFSIZE];
     std::ifstream istr(filename);
 
-    if(!istr.is_open()) {
+    if(!istr.is_open()){
         std::string err = "Error: file " + filename + " does not exist";
         throw std::invalid_argument(err);
     }
 
-    while(!istr.eof()) {
+    while(!istr.eof()){
         std::string line;
         getline(istr, line);
 
@@ -28,10 +28,10 @@ Eigen::MatrixXd read_eigen_matrix(const std::string &filename) {
         while(!stream.eof()){
             stream >> buffer[ cols*rows + temp++ ];
         }
-        if (temp == 0){
+        if(temp == 0){
             continue;
         }
-        if (cols == 0){
+        if(cols == 0){
             cols = temp;
         }
         rows++;
@@ -42,9 +42,11 @@ Eigen::MatrixXd read_eigen_matrix(const std::string &filename) {
     rows--;
 
     Eigen::MatrixXd result(rows,cols);
-    for (size_t i = 0; i < rows; i++)
-        for (size_t j = 0; j < cols; j++)
+    for(size_t i = 0; i < rows; i++){
+        for(size_t j = 0; j < cols; j++){
             result(i,j) = buffer[ cols*i + j ];
+        }
+    }
 
     return result;
 };
