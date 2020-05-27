@@ -24,3 +24,6 @@ src/python/__pycache__/*
 
 # Callgrind output files
 callgrind*
+
+# Documentation folder
+doc/*
