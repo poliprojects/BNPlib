@@ -15,8 +15,9 @@ protected:
     google::protobuf::io::FileOutputStream *fout;
     std::string filename;
 
-    // ...
+    //! Flag that indicates if the collector is open in read-mode
     bool is_open_read = false;
+    //! Flag that indicates if the collector is open in write-mode
     bool is_open_write;
 
     void open_for_reading();
@@ -24,10 +25,7 @@ protected:
     State next_state() override;
 
 public:
-    // Constructor and destructor
-    FileCollector() = default;
-    FileCollector(std::string filename) : filename(filename){}
-
+    // DESTRUCTOR AND CONSTRUCTORS
      ~FileCollector() {
         if (is_open_write){
             fout->Close();
@@ -38,13 +36,19 @@ public:
             close(infd);
         }
     }
-
+    FileCollector() = default; // TODO serve?
+    FileCollector(std::string filename) : filename(filename){} // TODO &
+    //! Initializes collector
     void start() override;
+    //! Closes collector
     void finish() override;
-    std::deque<State> get_chain() override;
-    State get_state(unsigned int i) override;
 
+    //! Writes the given state to the collector
     void collect(State iteration_state) override;
+    //! Returns i-th state in the collector
+    State get_state(unsigned int i) override;
+    //! Returns the whole chain in form of a deque of States
+    std::deque<State> get_chain() override;
 };
 
 

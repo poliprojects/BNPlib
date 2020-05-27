@@ -9,6 +9,12 @@ using HypersType = HypersFixedNNW;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
 
+//! \file
+
+//! main program to test an univariate hierarchy.
+
+//! Longer explaination of the same thing.
+
 int main(int argc, char *argv[]){
     std::cout << "Running maintest_nnws.cpp" << std::endl;
 

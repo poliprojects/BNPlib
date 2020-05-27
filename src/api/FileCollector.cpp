@@ -7,12 +7,13 @@ std::deque<State> FileCollector::get_chain() {
     bool keep = true;
     std::deque<State> out;
 
-    while (keep) {
+    while(keep){
         State msg;
         keep = google::protobuf::util::ParseDelimitedFromZeroCopyStream(
             &msg, fin, nullptr);
-        if (keep)
+        if(keep){
             out.push_back(msg);
+        }
     }
     close_reading();
     return out;

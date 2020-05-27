@@ -23,7 +23,8 @@
 //!
 //! An algorithm that inherits from this abstract class will have multiple iter-
 //! ations of the same step, which is further split into substeps, each of which
-//! updates specific values for the Markov chain.
+//! updates specific values of the state of Markov chain, which is composed of
+//! the allocations vector and the unique values vector (see below).
 //!
 //! The underlying model for the data is assumed to be a so-called hierarchical
 //! model, where each datum is independently drawn from a common likelihood
@@ -31,9 +32,10 @@
 //! from a random probability measure, called the mixture. Different data points
 //! may have the same parameters as each other, and thus a clustering structure
 //! on data emerges, with each cluster being identified by its own parameters,
-//! called unique values. The probabliity distribution for data from each clus-
-//! ter is called a hierarchy and can itself have hyperparameters, either fixed
-//! or random.
+//! called unique values. The allocation of a datum is instead the label that
+//! indicates the cluster it is currently assigned to. The probability distribu-
+//! tion for data from each cluster is called a hierarchy and it can have its
+//! own hyperparameters, either random themselves or fixed.
 //!
 //! This class is templatized over the types of the elements of this model: the
 //! hierarchies of cluster, their hyperparameters, and the mixture.

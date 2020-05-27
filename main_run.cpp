@@ -3,6 +3,7 @@
 
 #include "includes.hpp"
 
+// TODO blastiamo questo file?
 
 using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
@@ -12,6 +13,11 @@ template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
     HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
 
+//! \file
+
+//! main program to test an univariate hierarchy.
+
+//! Longer explaination of the same thing.
 
 int main(int argc, char *argv[]){
     std::cout << "Running main_run.cpp" << std::endl;
