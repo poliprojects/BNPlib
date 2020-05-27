@@ -69,7 +69,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     // Initialize objects
     density.first = grid;
     Eigen::VectorXd dens(Eigen::MatrixXd::Zero(grid.rows(),1));
-    double M = mixture.get_totalmass();
+    double M = mixture.get_totalmass(); // TODO
 
     // Read chain from collector
     std::deque<State> chain = coll->get_chain();

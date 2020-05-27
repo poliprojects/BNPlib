@@ -10,7 +10,7 @@
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::VectorXd Neal2<Hierarchy, Hypers, Mixture>::density_marginal_component(
     Hierarchy<Hypers> &temp_hier, unsigned int n){
-    double M = this->mixture.get_totalmass();
+    double M = this->mixture.get_totalmass(); // TODO
     Eigen::VectorXd dens_addendum(this->density.first.rows());
     // Exploit conjugacy of hierarchy
     dens_addendum = temp_hier.eval_marg(this->density.first) * M/(M+n);
@@ -51,16 +51,14 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
     // Initialize relevant values
     unsigned int n = data.rows();
-    double M = this->mixture.get_totalmass();
+    double M = this->mixture.get_totalmass(); // TODO
 
     // Loop over data points
     for(size_t i = 0; i < n; i++){
         // Current i-th datum as row vector
         Eigen::Matrix<double, 1, Eigen::Dynamic> datum = data.row(i);
-
         // Initialize current number of clusters
         unsigned int n_clust = unique_values.size();
-
         // Initialize pseudo-flag
         int singleton = 0;
         if(cardinalities[ allocations[i] ] == 1){
@@ -126,7 +124,6 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
             if(c_new == n_clust){
                 // Case 3: datum moves from a non-singleton to a new cluster
                 Hierarchy<Hypers> new_unique( unique_values[0].get_hypers() );
-
                 // Generate new unique values with posterior sampling
                 new_unique.sample_given_data(datum);
                 unique_values.push_back(new_unique);
@@ -145,20 +142,25 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::sample_unique_values(){
+    // Initialize relevant values
     unsigned int n_clust = unique_values.size();
-
-    std::vector<std::vector<unsigned int>> clust_idxs(n_clust);
     unsigned int n = allocations.size();
-    for(size_t i = 0; i < n; i++){ // save different cluster in each row
+
+    // Vector that represents all clusters by the indexes of their data points
+    std::vector<std::vector<unsigned int>> clust_idxs(n_clust);
+    for(size_t i = 0; i < n; i++){
         clust_idxs[ allocations[i] ].push_back(i);
     }
 
+    // Loop over clusters
     for(size_t i = 0; i < n_clust; i++){
         unsigned int curr_size = clust_idxs[i].size();
+        // Build vector that contains the data points in the current cluster
         Eigen::MatrixXd curr_data(curr_size, data.cols());
         for(size_t j = 0; j < curr_size; j++){
             curr_data.row(j) = data.row( clust_idxs[i][j] );
         }
+        // Update unique values via the posterior distribution
         unique_values[i].sample_given_data(curr_data);
     }
 }

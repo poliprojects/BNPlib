@@ -37,7 +37,7 @@ protected:
     using Algorithm<Hierarchy, Hypers, Mixture>::unique_values;
 
     // AUXILIARY TOOLS
-    //! Computes a part of the density estimation for the data
+    //! Computes marginal contribution of a given iteration & cluster
     Eigen::VectorXd density_marginal_component(Hierarchy<Hypers> &temp_hier,
         unsigned int n) override;
 
@@ -55,10 +55,17 @@ public:
     // DESTRUCTOR AND CONSTRUCTORS
     ~Neal2() = default;
     Neal2() = default;
+    //! \param hypers_  Hyperparameters object for the model
+    //! \param mixture_ Mixture object for the model
+    //! \param data_    Matrix of column-vectorial data points
+    //! \param init     Prescribed n. of clusters for the algorithm initializ.
     Neal2(const Hypers &hypers_, const Mixture &mixture_,
         const Eigen::MatrixXd &data_, const unsigned int init = 0) :
         Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(hypers_, mixture_,
             data_, init) {}
+    //! \param hypers_  Hyperparameters object for the model
+    //! \param mixture_ Mixture object for the model
+    //! \param init     Prescribed n. of clusters for the algorithm initializ.
     Neal2(const Hypers &hypers_, const Mixture &mixture_,
         const unsigned int init = 0) :
         Algorithm<Hierarchy, Hypers, Mixture>::Algorithm(hypers_, mixture_,
