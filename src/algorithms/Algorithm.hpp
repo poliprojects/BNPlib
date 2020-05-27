@@ -7,7 +7,7 @@
 #include <tuple>
 #include <vector>
 
-#include <Eigen/Dense> 
+#include <Eigen/Dense>
 #include <stan/math/prim/fun.hpp>
 #include <stan/math/prim/prob.hpp>
 
@@ -16,50 +16,69 @@
 #include "../api/MemoryCollector.hpp"
 
 
-//! Generic algorithm template class.
+//! Abstract template class for a generic algorithm.
 
 //! This template class implements a generic algorithm that generates a Markov
-//! chain on the clustering of the provided data. The class is templatized over
-//! the elements of the assumed underlying model, which are the hierarchy for,
-//! the data, its hyperparameters, and the mixture type. TODO COMPLETE
+//! chain on the clustering of the provided data.
+//! In particular, the underlying model is assumed to be a so-called hierarchi-
+//! cal model, where each datum is independently drawn from a common likelihood
+//! function, whose parameters are specific to each unit and are iid generated
+//! from a random probability measure, called the mixture. Different data points
+//! may have the same parameters as each other, and thus a clustering structure
+//! on data emerges, with each cluster being identified by its own parameters,
+//! called unique values. The probabliity distribution for data from each clus-
+//! ter is called a hierarchy and can itself have hyperparameters, either fixed
+//! or random.
+//! This class is templatized over the types of the elements of this
+//! model: the hierarchies of cluster, their hyperparameters, and the mixture.
 
-//! \param Hierarchy Name of the hierarchy template class
-//! \param Hypers    Name of the hyperparameters class
-//! \param Mixture   Name of the mixture class
+//! \param  Hierarchy Name of the hierarchy template class
+//! \param  Hypers    Name of the hyperparameters class
+//! \param  Mixture   Name of the mixture class
+//! \return           ???
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{
 protected:
     // METHOD PARAMETERS
-    //!< Iterations of the algorithm
+    //! Iterations of the algorithm
     unsigned int maxiter = 10000;
-    //!< Number of burn-in iterations
+    //! Number of burn-in iterations, which will be discarded
     unsigned int burnin  =  1000;
 
     // DATA AND VALUES CONTAINERS
-    //!< Matrix to store data points as vectors i.e. columns
+    //! Matrix to store data points as vectors i.e. columns
     Eigen::MatrixXd data;
-    //!< Prescribed number of clusters for the initialization of the algorithm
+    //! Prescribed number of clusters for the algorithm initialization
     unsigned int init_num_clusters;
-    //!< Cardinalities of clusters
+    //! Cardinalities of clusters
     std::vector<unsigned int> cardinalities;
-    //!< Allocation for each datum, i.e. label of the cluster it belongs to
+    //! Allocation for each datum, i.e. label of the cluster it belongs to
     std::vector<unsigned int> allocations;
-    //!< Hierarchy of the unique values that identify each cluster
+    //! Hierarchy of the unique values that identify each cluster
     std::vector< Hierarchy<Hypers> > unique_values;
-    //!< Grid of points and evaluation of density on it
+    //! Grid of points and evaluation of density on it
     std::pair< Eigen::MatrixXd, Eigen::VectorXd > density;
-    //!< Mixture object
+    //! Mixture object
     Mixture mixture;
-    //!< Protobuf object that contains the best clustering
+    //! Protobuf object that contains the best clustering
     State best_clust;
-
-    //!< Random engine
+    //! Random engine
     std::mt19937 rng;
 
-    //!< Flag to check validity of density write function
+    // MISCELLANEOUS
+    //! Flag to check validity of density write function
     bool density_was_computed = false;
-    //!< Flag to check validity of clustering write function
+    //! Flag to check validity of clustering write function
     bool clustering_was_computed = false;
+
+    // AUXILIARY TOOLS
+    //! Returns the values of an algo iteration as a Protobuf object
+    State get_state_as_proto(unsigned int iter);
+    //! Turns a single unique value from Protobuf object form into a matrix
+    Eigen::MatrixXd proto_param_to_matrix(const Param& par) const;
+    //! Computes a part of the density estimation for the data
+    virtual Eigen::VectorXd density_marginal_component(
+        Hierarchy<Hypers> &temp_hier, unsigned int n) = 0;
 
     // ALGORITHM FUNCTIONS
     virtual const void print_startup_message() = 0;
@@ -73,13 +92,8 @@ protected:
     void save_state(BaseCollector* collector, unsigned int iter){
         collector->collect( get_state_as_proto(iter) );
     }
-    
-    // Auxiliary tools
-    State get_state_as_proto(unsigned int iter);
 
-    Eigen::MatrixXd proto_param_to_matrix(const Param& par) const;
-
-    // Single step of algorithm
+    //! Single step of algorithm
     void step(){
         sample_allocations();
         sample_unique_values();
@@ -88,7 +102,7 @@ protected:
     }
 
 public:
-    // Running tool
+    //! Runs the algorithm and save the chain into a memory collector
     void run(BaseCollector* collector){
         print_startup_message();
         initialize();
@@ -105,21 +119,18 @@ public:
         print_ending_message();
     }
 
-    // Other tools
+    //! Evaluates the overall data pdf on a gived grid of points
     virtual void eval_density(const Eigen::MatrixXd &grid,
         BaseCollector* const collector);
-
+    //! Estimates the clustering structure of the data via LS minimization
     virtual unsigned int cluster_estimate(BaseCollector* collector);
-
-    virtual Eigen::VectorXd density_marginal_component(
-        Hierarchy<Hypers> &temp_hier, unsigned int n) = 0;
-
+    //! Writes unique values of each datum in csv form
     void write_clustering_to_file(
         std::string filename = "csv/clust_best.csv") const;
-
+    //! Writes grid and density evaluation on it in csv form
     void write_density_to_file(std::string filename = "csv/density.csv") const;
 
-    // Destructors and constructors:
+    // DESTRUCTOR AND CONSTRUCTORS
     virtual ~Algorithm() = default;
     Algorithm() = default;
     Algorithm(const Hypers &hypers_, const Mixture &mixture_,
@@ -141,17 +152,16 @@ public:
             for(size_t i = 0; i < init_num_clusters; i++){
                 unique_values.push_back(hierarchy);
             }
-            
     }
 
     Algorithm(const Hypers &hypers_, const Mixture &mixture_,
          const unsigned int init = 0) :
         mixture(mixture_), init_num_clusters(init) {
         Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
-        unique_values.push_back(hierarchy);            
+        unique_values.push_back(hierarchy);
     }
 
-    // Getters
+    // GETTERS
     const unsigned int get_maxiter(){return maxiter;}
     const unsigned int get_burnin(){return burnin;}
     const unsigned int get_init_num_clusters(){return init_num_clusters;}
@@ -162,7 +172,7 @@ public:
         return density;
     }
 
-    // Setters
+    // SETTERS
     void set_maxiter(const unsigned int maxiter_){maxiter = maxiter_;}
     void set_burnin(const unsigned int burnin_){burnin = burnin_;}
     void set_init_num_clusters(const unsigned int init){

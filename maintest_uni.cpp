@@ -11,6 +11,7 @@ template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
     HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
 
+//! \file
 
 //! main program to test an univariate hierarchy.
 
@@ -19,7 +20,9 @@ using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
 int main(int argc, char *argv[]){
     std::cout << "Running maintest_uni.cpp" << std::endl;
 
-    // Check main args:
+    // =========================================================================
+    // CHECK MAIN ARGS
+    // =========================================================================
     // [0]main [1]data [2]algo [3]coll [4]filecollname
     switch(argc){
         case 1:
