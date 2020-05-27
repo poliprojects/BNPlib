@@ -5,7 +5,7 @@ mu0 = 0.0
 lambda_ = 0.1
 alpha0 = 2.0
 beta0 = 2.0
-totalmass = "TODO"
+totalmass = 1
 algo = "neal2"
 algoDL = ''.join((algo, '_dataless'))
 rng = 20200229
@@ -14,13 +14,14 @@ burn = 1000
 colltype = "file"
 only = "all"
 
-grid1 = np.arange(-5, +5, 0.5)
-grid2 = np.arange(-7, +7, 0.5)
-grid3 = np.arange(-4, +4, 0.5)
-grid4 = "TODO"
+grid = np.arange(-5, +5.1, 0.5)
+#grid2 = np.arange(-7, +7, 0.5)
+#grid3 = np.arange(-4, +4, 0.5)
+#grid4 = "TODO"
 # or linspace
 
-for i in range(1,5):
+c=[3]
+for i in c:
 	print("Starting test", i)
 
 	# Write file names
@@ -41,6 +42,7 @@ for i in range(1,5):
 
 	plot_clust_cards(clustfile, imgfileclust)
 	plot_density(densfile, imgfiledens)
-
+	trueclustfile=''.join(("csv/test/true_clust", str(i), ".csv"))
+	print_clust_rand_indx(clustfile, trueclustfile)
 
 print("The end")
