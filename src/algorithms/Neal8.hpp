@@ -44,11 +44,11 @@ public:
         const unsigned int init = 0) :
         Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, init) {}
 
-    // Getters and setters
+    // GETTERS AND SETTERS
     const unsigned int get_n_aux(){return n_aux;}
     void set_n_aux(const unsigned int n_aux_){n_aux = n_aux_;}
 
-}; // end of Class Neal8
+};
 
 #include "Neal8.imp.hpp"
 

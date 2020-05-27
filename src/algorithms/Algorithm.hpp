@@ -41,6 +41,7 @@
 //! \param Hierarchy Name of the hierarchy template class
 //! \param Hypers    Name of the hyperparameters class
 //! \param Mixture   Name of the mixture class
+
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 class Algorithm{
 protected:
@@ -81,7 +82,7 @@ protected:
     State get_state_as_proto(unsigned int iter);
     //! Turns a single unique value from Protobuf object form into a matrix
     Eigen::MatrixXd proto_param_to_matrix(const Param &par) const;
-    //! Computes a part of the density estimation for the data
+    //! Computes marginal contribution of a given iteration & cluster
     virtual Eigen::VectorXd density_marginal_component(
         Hierarchy<Hypers> &temp_hier, unsigned int n) = 0;
 
