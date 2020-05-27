@@ -9,7 +9,6 @@
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
     unsigned int iter){
-
     // Transcribe allocations vector
     State iter_out;
     *iter_out.mutable_allocations() = {allocations.begin(), allocations.end()};
@@ -46,6 +45,7 @@ Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
     Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(
         un_val.par_cols(0).elems_size(), un_val.par_cols_size() );
 
+    // Loop over unique values to copy them one at a time
     for(size_t h = 0; h < un_val.par_cols_size(); h++){
         for(size_t j = 0; j < un_val.par_cols(h).elems_size(); j++){
             par_matrix(j,h) = un_val.par_cols(h).elems(j);
@@ -66,7 +66,6 @@ const void Algorithm<Hierarchy, Hypers, Mixture>::print_ending_message(){
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     const Eigen::MatrixXd &grid, BaseCollector* coll){
-
     // Initialize objects
     density.first = grid;
     Eigen::VectorXd dens(Eigen::MatrixXd::Zero(grid.rows(),1));
@@ -118,7 +117,6 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     BaseCollector* coll){
-
     // Read chain from collector
     std::deque<State> chain = coll->get_chain();
 
@@ -126,14 +124,14 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     unsigned n_iter = chain.size();
     unsigned int n = chain[0].allocations_size();
     Eigen::VectorXd errors(n_iter);
-    Eigen::MatrixXd tot_diss(n, n);
-    tot_diss = Eigen::MatrixXd::Zero(n, n);
+    Eigen::MatrixXd tot_diss(n, n) = Eigen::MatrixXd::Zero(n, n);
     std::vector<Eigen::MatrixXd> all_diss;
     State temp;
 
+    // Loop over iterations
     for(size_t h = 0; h < n_iter; h++){
-        Eigen::MatrixXd dissim(n, n);
-        dissim = Eigen::MatrixXd::Zero(n, n);
+        // Compoute dissimilarity matrix
+        Eigen::MatrixXd dissim = Eigen::MatrixXd::Zero(n, n);
         for(size_t i = 0; i < n; i++){
             for(size_t j = 0; j < i; j++){
                 if(chain[h].allocations(i) == chain[h].allocations(j)){
@@ -144,27 +142,28 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
         all_diss.push_back(dissim);
         tot_diss = tot_diss + dissim;
     }
-
+    // Average over iterations
     tot_diss = tot_diss / n_iter;
 
+    // Compute Frobenius norm error of all iterations
     for(size_t h = 0; h < n_iter; h++){
-        // Compute error in Frobenius norm
         errors(h) = (tot_diss-all_diss[h]).norm();
     }
 
+    // Find iteration with the least error
     std::ptrdiff_t i;
     unsigned int min_err = errors.minCoeff(&i);
-
     best_clust = chain[i];
     std::cout << "Optimal clustering: at iteration " << i << " with " <<
         best_clust.uniquevalues_size() << " clusters" << std::endl;
-
+    // Update flag
     clustering_was_computed = true;
 
     return i;
 }
 
 
+//! /param filename Name of file to write to
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
     std::string filename) const {
@@ -174,17 +173,22 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
         return;
     }
 
+    // Open file
     std::ofstream file;
     file.open(filename);
 
+    // Loop over allocations vector of the saved best clustering
     for(size_t i = 0; i < best_clust.allocations_size(); i++){
         unsigned int ci = best_clust.allocations(i);
+        // Write allocation to file
         file << ci << ",";
+        // Loop over unique values vector
         for(size_t j = 0; j < best_clust.uniquevalues(ci).params_size(); j++){
             Eigen::MatrixXd temp_param(proto_param_to_matrix(
                 best_clust.uniquevalues(ci).params(j)));
             for(size_t k = 0; k < temp_param.rows(); k++){
                 for(size_t z = 0; z < temp_param.cols(); z++){
+                    // Write unique value to file
                     if(z == temp_param.cols()-1 && k == temp_param.rows()-1 &&
                         j == best_clust.uniquevalues(ci).params_size()-1){
                         file << temp_param(k,z);
@@ -202,24 +206,28 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
 }
 
 
+//! /param filename Name of file to write to
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
     std::string filename) const {
-
     if(!density_was_computed){
         std::cerr << "Error: cannot write density to file; eval_density() " <<
             "must be called first" << std::endl;
         return;
     }
 
+    // Open file
     std::ofstream file;
     file.open(filename);
 
+    // Loop over grid points
     for(size_t i = 0; i < density.first.rows(); i++){
         Eigen::VectorXd point = density.first.row(i);
+        // Write point coordinates
         for(size_t j = 0; j < point.size(); j++){
             file << point(j) << ",";
         }
+        // Write density value
         file << density.second(i) << std::endl;
     }
 
