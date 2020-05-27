@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import csv
 from mpl_toolkits.mplot3d import Axes3D
+from sklearn.metrics.cluster import adjusted_rand_score
 
 LIBPATH = ''.join((os.path.dirname(os.path.realpath(__file__)), "/../.."))
 sys.path.insert(0, LIBPATH)
@@ -72,3 +73,10 @@ def plot_clust_cards(clustfile = "src/python/clust.csv",
 	plt.hist(mat[:,0])
 	plt.savefig(imgfile)
 	print("Successfully saved plot to", imgfile)
+	
+	
+def print_clust_rand_indx(clustfile = "src/python/clust.csv",
+	trueclustfile = "src/csv/test/true_clust.csv"):
+	mat = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
+	mat_true = np.loadtxt(open(trueclustfile, 'rb'), delimiter=',')
+	print(adjusted_rand_score(mat[:,0], mat_true))
