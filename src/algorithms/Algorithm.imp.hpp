@@ -124,7 +124,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     unsigned n_iter = chain.size();
     unsigned int n = chain[0].allocations_size();
     Eigen::VectorXd errors(n_iter);
-    Eigen::MatrixXd tot_diss(n, n) = Eigen::MatrixXd::Zero(n, n);
+    Eigen::MatrixXd tot_diss = Eigen::MatrixXd::Zero(n, n);
     std::vector<Eigen::MatrixXd> all_diss;
     State temp;
 
