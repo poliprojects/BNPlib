@@ -9,8 +9,8 @@ totalmass = 1
 algo = "neal2"
 algoDL = ''.join((algo, '_dataless'))
 rng = 20200229
-maxit = 10000
-burn = 1000
+maxit = 500
+burn = 100
 colltype = "file"
 only = "all"
 
@@ -20,7 +20,7 @@ grid = np.arange(-5, +5.1, 0.5)
 #grid4 = "TODO"
 # or linspace
 
-c=[3]
+c=[2]
 for i in c:
 	print("Starting test", i)
 

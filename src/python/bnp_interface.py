@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import csv
 from mpl_toolkits.mplot3d import Axes3D
-from sklearn.metrics.cluster import adjusted_rand_score
 
+
+from scipy.special import comb
 LIBPATH = ''.join((os.path.dirname(os.path.realpath(__file__)), "/../.."))
 sys.path.insert(0, LIBPATH)
 import bnplibpy
@@ -74,9 +75,25 @@ def plot_clust_cards(clustfile = "src/python/clust.csv",
 	plt.savefig(imgfile)
 	print("Successfully saved plot to", imgfile)
 	
-	
+
+def rand_index_score(clusters, classes):
+    tp_plus_fp = comb(np.bincount(clusters), 2).sum()
+    tp_plus_fn = comb(np.bincount(classes), 2).sum()
+    A = np.c_[(clusters, classes)]
+    tp = sum(comb(np.bincount(A[A[:, 0] == i, 1]), 2).sum()
+             for i in set(clusters))
+    fp = tp_plus_fp - tp
+    fn = tp_plus_fn - tp
+    tn = comb(len(A), 2) - tp - fp - fn
+    return (tp + tn) / (tp + fp + fn + tn)
+    
 def print_clust_rand_indx(clustfile = "src/python/clust.csv",
 	trueclustfile = "src/csv/test/true_clust.csv"):
-	mat = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
+	mat_pred = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
 	mat_true = np.loadtxt(open(trueclustfile, 'rb'), delimiter=',')
-	print(adjusted_rand_score(mat[:,0], mat_true))
+	values=np.unique(mat_pred[:,1])
+	new_indx=np.arange(len(values))
+	for i in range(0,mat_pred.shape[0]):
+		mat_pred[i,0]=new_indx[np.where(values==mat_pred[i,1])]
+	print("Rand index score:",rand_index_score(mat_pred[:,0].astype(int), mat_true.astype(int)))
+
