@@ -48,7 +48,7 @@ VARIE
 * Redo callgrind and time stuff (optimization)
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
 * README (Virtual Machine etc)
-* Doxygen docs for Python files
+* Doxygen docs for mains and Python folder
 * (?) plot Python: highest posterior density intervals (credible intervals),
   arviz (library), contour plot
 
