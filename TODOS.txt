@@ -34,7 +34,12 @@ TESTS by Mario
 
 
 VARIE
+* fix aux_unique_values (non generati nuovamente per ogni dato, ma una volta
+  per iterazione)
+* fix totalmass
+* incorporate draw() and sample_given_data() common calculations
 * dataless in console.py (vedi file) 
+* cluster_estimate() with sparse matrices (?)
 * plot Python: highest posterior density intervals (credible intervals), arviz
   (library), contour plot
 * Spazi, a capo, etc
@@ -44,8 +49,6 @@ VARIE
 * README (Virtual Machine etc)
 * Doxygen docs
 ** Python files
-** \param and \return in .cpp files
-** \\! line, then member, then newline in .hpp files
 * confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
   i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto: 
   di default usa uno slice sampler che non è molto efficiente, selezionate il
