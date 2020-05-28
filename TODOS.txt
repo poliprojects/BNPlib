@@ -1,17 +1,8 @@
 TODO LIST
 
 
-SCALETTA
-* Tests: test 4 (Scipy), test 5-8 (multivariate), run all tests, plots+index
-* Doxygen doc
-* Report
-* Slides
-* Varie piccole cose
-* REDO CALLGRIND
-
-
-TESTS by Mario
-* Univariati (dati 1-3 già pronti):
+TESTS
+* Univariati:
 1) y_i ~ 0.5 N(-3, 1) + 0.5 N(3, 1), i=1,... 200
    mu_0 = 0.0
    lambda = 0.1 (o 10, dipende dalla parametrizzazione)
@@ -33,31 +24,33 @@ TESTS by Mario
   la densità dovrebbe venire bene uguale)
 
 
-VARIE
-* const uniformly before or after
-* useless default constructors
-* NNIG has status sig or sig^2?
-* check ifndef's vars for all files
+IMPLEMENTAZIONE
 * check row vs column data
-* fix aux_unique_values (non generati nuovamente per ogni dato, ma una volta
-  per iterazione)
-* fix totalmass
+* useless default constructors in classes
+* NNIG has status sig or sig^2?
+* dataless (see e.g. console.py)
+* fix aux_unique_values ("non generati nuovamente per ogni dato, ma una volta
+  per iterazione")
+* fix totalmass / PitYor stuff
 * incorporate draw() and sample_given_data() common calculations
-* dataless in console.py (vedi file) 
 * cluster_estimate() with sparse matrices (?)
-* plot Python: highest posterior density intervals (credible intervals), arviz
-  (library), contour plot
-* Spazi, a capo, etc
+
+
+STILE
 * Rename some files (api, output, dataless) and functions (draw, sample, prob)
-** grep -R "[^ ] $" src/*
+* const uniformly before or after functions
+* check ifndef's vars for all files
+* grep -R "[^ ] $" src/*
+* Spazi, a capo, etc
+
+
+VARIE
+* Redo callgrind and time stuff (optimization)
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
 * README (Virtual Machine etc)
-* Doxygen docs
-** Python files
-* confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
-  i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto: 
-  di default usa uno slice sampler che non è molto efficiente, selezionate il
-  sampler marginale ('MAR') e matchate gli iperparametri.
+* Doxygen docs for Python files
+* (?) plot Python: highest posterior density intervals (credible intervals),
+  arviz (library), contour plot
 
 
 REPORT
@@ -73,6 +66,10 @@ REPORT
   l'identità
 * spiegare le flag di efficienza: -march=native -O3 -msse2 -funroll-loops
   -ftree-vectorize
+* confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
+  i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto: 
+  di default usa uno slice sampler che non è molto efficiente, selezionate il
+  sampler marginale ('MAR') e matchate gli iperparametri.
 
 
 LIBRERIA (?)
