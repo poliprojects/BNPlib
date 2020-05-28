@@ -23,8 +23,8 @@ public:
     }
 
     double prob_new_cluster(const unsigned int n,
-        const unsigned int n_unique) const {
-        return (strength+discount*n_unique)/(n-1+strength);
+        const unsigned int n_clust) const {
+        return (strength+discount*n_clust)/(n-1+strength);
     }
 
     // Getters and setters
