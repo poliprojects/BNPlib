@@ -6,17 +6,18 @@
 
 //! Normal Normal-InverseGamma hierarchy for univariate data.
 
-//! This class represents a hiearchy, i.e. a cluster, whose data are distributed
-//! according to a normal likelihood, the parameters of which have a Normal-In-
-//! verseGamma centering distribution. That is:
-//! f(xi|mu,sig^2) = N(mu,sig^2)
-//!     (mu,sig^2) ~ G
-//!              G ~ MM(M, G0)
-//!             G0 = N-IG
-//! Therefore the state of this hierarchy is (mu, sigma) and their hyperparame-
-//! ters contained in the Hypers object are (mu_0, lambda, alpha, beta).
-//! Note that this hierarchy is conjugate, thus the marginal and the posterior
-//! distribution are available in closed form.
+//! This class represents a hierarchy, i.e. a cluster, whose univariate data are
+//! distributed according to a normal likelihood, the parameters of which have a
+//! Normal-InverseGamma centering distribution. That is:
+//!           phi = (mu,sig)     (state)
+//! f(x_i|mu,sig) = N(mu,sig^2)  (data likelihood)
+//!    (mu,sig^2) ~ G            (unique values distribution)
+//!             G ~ MM           (mixture model)
+//!            G0 = N-IG         (centering distribution)
+//! Therefore the state's hyperparameters, contained in the Hypers object, are
+//! (mu_0, lambda, alpha, beta). Note that this hierarchy is conjugate, thus the
+//! marginal and the posterior distribution are available in closed form and
+//! Neal's algorithm 2 may be used with it.
 
 //! \param Hypers Name of the hyperparameters class
 
@@ -30,7 +31,7 @@ protected:
     //! Raises error if the state values are not valid w.r.t. their own domain
     void check_state_validity() override;
 
-    //! ...
+    //! Returns updated values of the prior hyperparameters via their posterior
     std::vector<double> normal_gamma_update(const Eigen::VectorXd &data,
         const double mu0, const double alpha0, const double beta0,
         const double lambda);
@@ -56,9 +57,9 @@ public:
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;
 
     // SAMPLING FUNCTIONS
-    //! Generates new values for state from its prior distribution
+    //! Generates new values for state from the centering prior distribution
     void draw() override;
-    //! Generates new values for state from its posterior distribution
+    //! Generates new values for state from the centering posterior distribution
     void sample_given_data(const Eigen::MatrixXd &data) override;
 };
 

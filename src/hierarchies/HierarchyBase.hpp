@@ -12,17 +12,18 @@
 //! Abstract base template class for a hierarchy object.
 
 //! This template class represents a hierarchy object in a generic iterative BNP
-//! algorithm, that is, a single set of unique values, called the state of the
-//! hierarchy, with their own prior distribution attached to it. This object al-
-//! so corresponds to a single cluster in the algorithm, in the sense that the
-//! state is the set of parameters for the distribution of the data points that
-//! belong to it. Since the prior distribution for the state is often the same
-//! across multiple different hierarchies, the hyperparameters object is ac-
-//! cessed to via a shared pointer. Lastly, any hierarchy that inherits from
-//! this class contains multiple ways of updating the state, either via its pri-
-//! or or its posterior distribution, and of evaluating the data distribution,
-//! either its likelihood (whose parameters are the state) or its marginal di-
-//! stribution.
+//! algorithm, that is, a single set of unique values with their own prior dis-
+//! tribution attached to it. These values are part of the Markov chain's state
+//! chain (which includes multiple hierarchies) and are simply referred to as
+//! the state of the hierarchy. This object also corresponds to a single cluster
+//! in the algorithm, in the sense that its state is the set of parameters for
+//! the distribution of the data points that belong to it. Since the prior dis-
+//! tribution for the state is often the same across multiple different hierar-
+//! chies, the hyperparameters object is accessed via a shared pointer. Lastly,
+//! any hierarchy that inherits from this class contains multiple ways of upda-
+//! ting the state, either via prior or posterior distributions, and of evalua-
+//! ting the distribution of the data, either its likelihood (whose parameters
+//! are the state) or its marginal distribution.
 
 //! \param Hypers Name of the hyperparameters class
 
@@ -55,9 +56,9 @@ public:
     virtual Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) = 0;
 
     // SAMPLING FUNCTIONS
-    //! Generates new values for state from its prior distribution
+    //! Generates new values for state from the centering prior distribution
     virtual void draw() = 0;
-    //! Generates new values for state from its posterior distribution
+    //! Generates new values for state from the centering posterior distribution
     virtual void sample_given_data(const Eigen::MatrixXd &data) = 0;
 
     // GETTERS AND SETTERS

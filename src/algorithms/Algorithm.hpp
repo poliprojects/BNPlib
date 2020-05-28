@@ -40,6 +40,7 @@
 //!   x_i ~ f(x_i|phi_(c_i))  (data likelihood)
 //! phi_c ~ G                 (unique values distribution)
 //!     G ~ MM                (mixture model)
+//!  E[G] = G0                (centering distribution)
 //! where c_i is the allocation of the i-th datum.
 //!
 //! This class is templatized over the types of the elements of this model: the
