@@ -34,6 +34,8 @@ TESTS by Mario
 
 
 VARIE
+* NNIG has status sig or sig^2?
+* check row vs column data
 * fix aux_unique_values (non generati nuovamente per ogni dato, ma una volta
   per iterazione)
 * fix totalmass
