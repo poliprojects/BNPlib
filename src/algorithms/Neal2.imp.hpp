@@ -51,7 +51,6 @@ template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
     // Initialize relevant values
     unsigned int n = data.rows();
-    double M = this->mixture.get_totalmass(); // TODO
 
     // Loop over data points
     for(size_t i = 0; i < n; i++){
