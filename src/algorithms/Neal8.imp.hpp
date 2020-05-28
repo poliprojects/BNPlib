@@ -66,8 +66,8 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
             probas(k) = this->mixture.prob_existing_cluster(
                 cardinalities[k], n) * unique_values[k].like(datum)(0);
             tot += probas(k);
-            // Note: if datum is a singleton, then, when k=allocations[i],
-            // card[k]=0: cluster k will never be chosen
+            // Note: if datum is a singleton, then, when k = allocations[i],
+            // one has card[k] = 0: cluster k will never be chosen
         }
         // Loop over auxiliary blocks
         for(size_t k = 0; k < n_aux; k++){

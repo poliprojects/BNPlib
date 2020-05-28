@@ -29,7 +29,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
     // Initialize objects
     cardinalities.reserve(data.rows());
     std::default_random_engine generator;
-    // Uniform probability on clusters, given their initial number
+    // Build uniform probability on clusters, given their initial number
     std::uniform_int_distribution<int> distro(0,this->init_num_clusters-1);
 
     // Allocate one datum per cluster first, and update cardinalities

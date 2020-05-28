@@ -10,19 +10,18 @@
 //! the clustering of the provided data.
 //!
 //! Using this algorithm implicitly assumes that the provided hierarchy class
-//! represents a hierarchical model, i.e. a model for which the posterior dis-
-//! tribution for the model parameters has the same form as their prior distri-
-//! bution. Conjugacy is made use of in the computation of the estimated den-
-//! sity's marginal component, since the marginal distribution for the data can
-//! be expressed analytically.
+//! represents a conjugate model, i.e. one in which posterior distributions have
+//! the same form as their corresponding prior distributions. Conjugacy is made
+//! use of in the computation of the estimated density's marginal component,
+//! since the marginal distribution for the data can be expressed analytically.
 //!
 //! The basic idea for this algorithm is randomly drawing new allocations for
 //! the data points according to weights that depend on the cardinalities of the
-//! current clustering and on the mixture model used; this way, sometimes new
-//! clusters are created and thus new unique values for them must be generated.
-//! After that, unique values for each cluster are updated via the model's pos-
-//! terior distribution, which again has a closed-form expression thanks to con-
-//! jugacy.
+//! current clustering and on the mixture model used. This way, sometimes new
+//! clusters are created, and thus new unique values for them must be generated
+//! from the prior centering distribution. After that, unique values for each
+//! cluster are instead updated via the posterior distribution, which again has
+//! a closed-form expression thanks to conjugacy.
 
 //! \param Hierarchy Name of the hierarchy template class
 //! \param Hypers    Name of the hyperparameters class

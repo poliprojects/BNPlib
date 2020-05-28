@@ -16,8 +16,8 @@
 //! ters choose their unique values. They offset the lack of conjugacy of the
 //! model by allowing an estimate of the (uncomputable) marginal density via a
 //! weighted mean on these new blocks. Other than this and some minor adjust-
-//! ments in the allocation sampling phase to circumvent non-conjugacy, the al-
-//! gorithm is the same as Neal 2.
+//! ments in the allocation sampling phase to circumvent non-conjugacy, it is
+//! the same as Neal's algorithm 2.
 
 //! \param Hierarchy Name of the hierarchy template class
 //! \param Hypers    Name of the hyperparameters class
