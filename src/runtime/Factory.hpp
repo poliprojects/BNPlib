@@ -11,10 +11,25 @@
 #include <iostream>
 
 
+//! Generic object factory for an abstract product.
+
+//! An object factory allows to choose one of several derived objects from a
+//! single abstract base class at runtime. This type of class is implemented as
+//! a singleton and stores functions that build such objects, called the buil-
+//! ders, which can be called at need at runtime, based on identifiers of the
+//! specific objects. The storage must first be filled with the appropriate
+//! builders, which can be as simple as a function returning a smart pointer to
+//! a new instance. This can be done in a main file or in an appropriate func-
+//! tion. This factory is templatized as a variadic template, that allows pas-
+//! sing any number of parameters of any type to the contructors of the objects.
+
+//! \param AbstractProduct Class name for the abstract base object
+//! \param Args...         Generic collection of parameters to pass to the ob-
+//!                        jects' consturctors
+
 template<class AbstractProduct, typename... Args>
 class Factory{
 private:
-    // Aliases
     using Identifier = std::string;
     using EstimatesBuilder = std::function< std::unique_ptr<AbstractProduct>(
         Args...)>;
@@ -22,26 +37,36 @@ private:
         Args..., Eigen::MatrixXd)>;
     using Builder = boost::variant<RunBuilder, EstimatesBuilder >;
 
-    // Deleted constructors
+    //! Storage for algorithm builders
+    std::map<Identifier, Builder> storage;
+
+    // CONSTRUCTORS AND COPY OOPERATORS
     Factory() = default;
     Factory(const Factory &f) = delete;
     Factory& operator=(const Factory &f) = delete;
 
-    // Storage for algorithm builders
-    std::map<Identifier, Builder> storage;
-
 public:
-    // Destructor
+    //! Public destructor
     ~Factory() = default;
 
-    // Method to create the factory
+
+    //! Creates the factory via Meyer's trick
+
+    //! \return A reference to the factory object
     static Factory& Instance(){
         static Factory factory;
         return factory;
     }
 
+
+    //! Creates a specific object based on an identifier
+
+    //! \param name Identifier for the object
+    //! \param args Collection of any number of parameters
+    //! \param data Eigen matrix to pass to the constructors
+    //! \return     An unique pointer to the created object
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args, const Eigen::MatrixXd &data) const {
+        Args... args, const Eigen::MatrixXd &data) const { // TODO
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
@@ -52,6 +77,13 @@ public:
         }
     }
 
+
+    //! Creates a specific object based on an identifier
+
+    //! \param name Identifier for the object
+    //! \param args Collection of any number of parameters
+    //! \param data Eigen matrix to pass to the constructors
+    //! \return     An unique pointer to the created object
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
         Args... args) const {
         auto f = storage.find(name);
@@ -64,6 +96,11 @@ public:
         }
     }
 
+
+    //! Adds a builder function to the storage
+
+    //! \param name    Identifier to associate the builder with
+    //! \param bulider Builder function for a specific object type
     void add_builder(const Identifier &name, const Builder &builder){
         auto f = storage.insert(std::make_pair(name, builder));
         if(f.second == false){
@@ -73,6 +110,8 @@ public:
         }
     }
 
+
+    //! Returns a list of identifiers of all builders in the storage
     std::vector<Identifier> list_of_known_builders() const {
         std::vector<Identifier> tmp;
         tmp.reserve(storage.size());

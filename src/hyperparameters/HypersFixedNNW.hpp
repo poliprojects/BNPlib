@@ -4,46 +4,53 @@
 #include <cassert>
 #include <Eigen/Dense>
 
+
+//! Class that represents fixed hyperparameters for an NNW hierarchy.
+
+//! That is, it represents hyperparameters without a prior distribution. It can
+//! be used as a template argument for the multivariate template class,
+//! HierarchyNNW. All constructors and setters have validity checks for the
+//! inserted values.
+
 class HypersFixedNNW {
 protected:
     using EigenRowVec = Eigen::Matrix<double, 1, Eigen::Dynamic>;
 
+    // HYPERPARAMETERS
     EigenRowVec mu0;
     double lambda;
     Eigen::MatrixXd tau0;
     double nu;
 
-    void check_state_validity(){
+    //! Raises error if the hypers values are not valid w.r.t. their own domain
+    void check_hypers_validity(){
         unsigned int dim = mu0.size();
         assert(lambda > 0);
         assert(dim == tau0.rows());
-        assert(tau0.rows() == tau0.cols());
         assert(nu > dim-1);
 
-        // Check if tau0 is symmetric positive semi definite
+        // Check if tau0 is a square symmetric positive semidefinite matrix
+        assert(tau0.rows() == tau0.cols());
         assert( tau0.isApprox(tau0.transpose()) );
         Eigen::LLT<Eigen::MatrixXd> llt(tau0);
         assert( llt.info() != Eigen::NumericalIssue );
     }
 
 public:
-    // Destructor and constructor
+    // DESTRUCTOR AND CONSTRUCTORS
     ~HypersFixedNNW() = default;
     HypersFixedNNW() = default;
     HypersFixedNNW(const EigenRowVec &mu0_, const double lambda_,
         const Eigen::MatrixXd &tau0_, const double nu_):
         mu0(mu0_), lambda(lambda_), tau0(tau0_), nu(nu_) {
-
-        check_state_validity();
+        check_hypers_validity();
         }
 
-    // Getters
+    // GETTERS AND SETTERS
     const EigenRowVec get_mu0(){return mu0;}
     const double get_lambda(){return lambda;}
     const Eigen::MatrixXd get_tau0(){return tau0;}
     const double get_nu(){return nu;}
-
-    // Setters
     void set_mu0(const EigenRowVec &mu0_){
         assert(mu0_.size() == mu0.size());
         mu0 = mu0_;
@@ -53,6 +60,7 @@ public:
         lambda = lambda_;
     }
     void set_tau0(const Eigen::MatrixXd &tau0_) {
+        // Check if tau0 is a square symmetric positive semidefinite matrix
         assert(tau0_.rows() == tau0_.cols());
         assert(mu0.size() == tau0_.rows());
         assert( tau0.isApprox(tau0.transpose()) );

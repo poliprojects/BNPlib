@@ -3,34 +3,41 @@
 
 #include <cassert>
 
+
+//! Class that represents fixed hyperparameters for an NNIG hierarchy.
+
+//! That is, it represents hyperparameters without a prior distribution. It can
+//! be used as a template argument for the univariate template class,
+//! HierarchyNNIG. All constructors and setters have validity checks for the
+//! inserted values.
+
 class HypersFixedNNIG {
 protected:
+    // HYPERPARAMETERS
     double mu0, lambda, alpha0, beta0;
 
-    void check_state_validity(){
+    //! Raises error if the hypers values are not valid w.r.t. their own domain
+    void check_hypers_validity(){
         assert(lambda > 0);
         assert(alpha0 > 0);
         assert(beta0  > 0);
     }
 
 public:
-    // Destructor and constructor
+    // DESTRUCTOR AND CONSTRUCTORS
     ~HypersFixedNNIG() = default;
     HypersFixedNNIG() = default;
     HypersFixedNNIG(const double mu0_, const double lambda_,
         const double alpha0_, const double beta0_):
         mu0(mu0_), lambda(lambda_), alpha0(alpha0_), beta0(beta0_) {
-
-        check_state_validity();
+        check_hypers_validity();
     }
 
-    // Getters
+    // GETTERS AND SETTERS
     const double get_mu0(){return mu0;}
     const double get_alpha0(){return alpha0;}
     const double get_beta0(){return beta0;}
     const double get_lambda(){return lambda;}
-
-    // Setters
     void set_mu0(const double mu0_){mu0 = mu0_;}
     void set_alpha0(const double alpha0_){
         assert(alpha0_ > 0);
