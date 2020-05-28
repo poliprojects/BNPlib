@@ -9,14 +9,15 @@
 //! This class represents a hierarchy, i.e. a cluster, whose univariate data are
 //! distributed according to a normal likelihood, the parameters of which have a
 //! Normal-InverseGamma centering distribution. That is:
-//!           phi = (mu,sig)     (state)
+//!           phi = (mu,sig)     (state) TODO (also below)
 //! f(x_i|mu,sig) = N(mu,sig^2)  (data likelihood)
 //!    (mu,sig^2) ~ G            (unique values distribution)
 //!             G ~ MM           (mixture model)
 //!            G0 = N-IG         (centering distribution)
-//! Therefore the state's hyperparameters, contained in the Hypers object, are
-//! (mu_0, lambda, alpha, beta). Note that this hierarchy is conjugate, thus the
-//! marginal and the posterior distribution are available in closed form and
+//! state[0] = mu is called location, and state[1] = sig^2 is called scale. The
+//! state's hyperparameters, contained in the Hypers object, are (mu_0, lambda,
+//! alpha, beta), all scalar values. Note that this hierarchy is conjugate, thus
+//! the marginal and the posterior distribution are available in closed form and
 //! Neal's algorithm 2 may be used with it.
 
 //! \param Hypers Name of the hyperparameters class

@@ -10,7 +10,35 @@ void HierarchyNNIG<Hypers>::check_state_validity(){
 }
 
 
-//! \param data Matrix of row-vectorial data points
+//! \param data                       Column vector of data points
+//! \param mu0, alpha0, beta0, lambda Original values for hyperparameters
+//! \return                           Vector of updated values for hyperpar.s
+template<class Hypers>
+std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
+    const Eigen::VectorXd &data, const double mu0, const double alpha0,
+    const double beta0, const double lambda){
+    // Initialize relevant variables
+    double mu_post, alpha_post, beta_post, lambda_post;
+    unsigned int n = data.rows();
+
+    if(n == 0){ // no update possible
+        return std::vector<double>{mu0, alpha0, beta0, lambda};
+    }
+
+    // Compute updated hyperparameters
+    double y_bar = data.mean(); // sample mean
+    mu_post = (lambda * mu0 + n * y_bar) / (lambda + n);
+    alpha_post = alpha0 + 0.5 * n;
+    double ss = (data.dot(data)) - n*y_bar*y_bar; // sum of squares
+    beta_post = beta0 + 0.5*ss + 0.5*lambda*n * (y_bar - mu0)*(y_bar - mu0) /
+        (n + lambda);
+    lambda_post = lambda + n;
+
+    return std::vector<double>{mu_post, alpha_post, beta_post, lambda_post};
+}
+
+
+//! \param data Column vector of data points
 //! \return     Likehood vector evaluated in data
 template<class Hypers>
 Eigen::VectorXd HierarchyNNIG<Hypers>::like(const Eigen::MatrixXd &data){
@@ -19,6 +47,29 @@ Eigen::VectorXd HierarchyNNIG<Hypers>::like(const Eigen::MatrixXd &data){
         // Compute likelihood for each data point
         result(i) = exp(stan::math::normal_lpdf(data(i,0), state[0](0,0),
             state[1](0,0)));
+    }
+    return result;
+}
+
+
+//! \param data Column vector of data points
+//! \return     Marginal distribution vector evaluated in data
+template<class Hypers>
+Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(const Eigen::MatrixXd &data){
+    // Get values of hyperparameters
+    double mu0    = hypers->get_mu0();
+    double lambda = hypers->get_lambda();
+    double alpha0 = hypers->get_alpha0();
+    double beta0  = hypers->get_beta0();
+
+    // Compute standard deviation of marginal distribution
+    double sig_n = sqrt( beta0*(lambda+1)/(alpha0*lambda) );
+
+    Eigen::VectorXd result(data.rows());
+    for(size_t i = 0; i < data.rows(); i++){
+        // Compute marginal for each data point
+        result(i) = exp( stan::math::student_t_lpdf(data(i,0), 2*alpha0, mu0,
+            sig_n) );
     }
     return result;
 }
@@ -44,60 +95,7 @@ void HierarchyNNIG<Hypers>::draw(){
 }
 
 
-//! \param data Matrix of row-vectorial data points
-//! \return     Marginal distribution vector evaluated in data
-template<class Hypers>
-Eigen::VectorXd HierarchyNNIG<Hypers>::eval_marg(const Eigen::MatrixXd &data){
-    // Get values of hyperparameters
-    double mu0    = hypers->get_mu0();
-    double lambda = hypers->get_lambda();
-    double alpha0 = hypers->get_alpha0();
-    double beta0  = hypers->get_beta0();
-
-    // Compute standard deviation of marginal distribution
-    double sigtilde = sqrt( beta0*(lambda+1)/(alpha0*lambda) );
-
-    Eigen::VectorXd result(data.rows());
-    for(size_t i = 0; i < data.rows(); i++){
-        // Compute marginal for each data point
-        result(i) = exp( stan::math::student_t_lpdf(data(i,0), 2*alpha0, mu0,
-            sigtilde) );
-    }
-    return result;
-}
-
-
-//! \param data                       Matrix of row-vectorial data points
-//! \param mu0, alpha0, beta0, lambda Original values for hyperparameters
-//! \return                           Vector of updated values for hyperpar.s
-template<class Hypers>
-std::vector<double> HierarchyNNIG<Hypers>::normal_gamma_update(
-    const Eigen::VectorXd &data, const double mu0, const double alpha0,
-    const double beta0, const double lambda){
-    // Initialize relevant variables
-    double mu_post, alpha_post, beta_post, lambda_post;
-    unsigned int n = data.rows();
-
-    if(n == 0){ // no update possible
-        return std::vector<double>{mu0, alpha0, beta0, lambda};
-    }
-
-    // Compute sample mean
-    double y_bar = data.mean();
-
-    // Compute updated hyperparameters
-    mu_post = (lambda * mu0 + n * y_bar) / (lambda + n);
-    alpha_post = alpha0 + 0.5 * n;
-    double ss = (data.dot(data)) - n*y_bar*y_bar; // sum of squares
-    beta_post = beta0 + 0.5*ss + 0.5*lambda*n * (y_bar - mu0)*(y_bar - mu0) /
-        (n + lambda);
-    lambda_post = lambda + n;
-
-    return std::vector<double>{mu_post, alpha_post, beta_post, lambda_post};
-}
-
-
-//! \param data Matrix of row-vectorial data points
+//! \param data Column vector of data points
 template<class Hypers>
 void HierarchyNNIG<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     // Get values of hyperparameters
@@ -119,6 +117,8 @@ void HierarchyNNIG<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
         this->rng));
     double mu_new = stan::math::normal_rng(mu_post, sqrt(sigma2_new/
     	lambda_post), this->rng);
+
+    // Update state
     state[0](0,0) = mu_new;
     state[1](0,0) = sigma2_new;
 }
