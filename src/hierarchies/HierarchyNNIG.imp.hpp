@@ -95,11 +95,10 @@ void HierarchyNNIG<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     double lambda_post = temp[3];
 
     // Get a sample
-    double sigma2_new,mu_new;
-    sigma2_new = sqrt(stan::math::inv_gamma_rng(alpha_post, beta_post,
+    double sigma2_new = sqrt(stan::math::inv_gamma_rng(alpha_post, beta_post,
         this->rng));
-    mu_new = stan::math::normal_rng(mu_post, sqrt(sigma2_new/lambda_post),
-        this->rng);
+    double mu_new = stan::math::normal_rng(mu_post, sqrt(sigma2_new/
+    	lambda_post), this->rng);
     state[0](0,0) = mu_new;
     state[1](0,0) = sigma2_new;
 }

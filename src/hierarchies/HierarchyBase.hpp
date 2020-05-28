@@ -11,24 +11,33 @@
 
 //! Abstract base template class for a hierarchy object.
 
-//! ...
-//!
-//! ...
+//! This template class represents a hierarchy object in a generic iterative BNP
+//! algorithm, that is, a single set of unique values, called the state of the
+//! hierarchy, with their own prior distribution attached to it. This object al-
+//! so corresponds to a single cluster in the algorithm, in the sense that the
+//! state is the set of parameters for the distribution of the data points that
+//! belong to it. Since the prior distribution for the state is often the same
+//! across multiple different hierarchies, the hyperparameters object is ac-
+//! cessed to via a shared pointer. Lastly, any hierarchy that inherits from
+//! this class contains multiple ways of updating the state, either via its pri-
+//! or or its posterior distribution, and of evaluating the data distribution,
+//! either its likelihood (whose parameters are the state) or its marginal di-
+//! stribution.
 
 //! \param Hypers Name of the hyperparameters class
 
 template<class Hypers>
 class HierarchyBase {
 protected:
-    //! Current values of the state of the Markov chain
+    //! Current unique values state of this cluster
     std::vector<Eigen::MatrixXd> state;
-    //! Pointer to the hyperparameters object of the hierarchy parameters
+    //! Pointer to the hyperparameters object of the state
     std::shared_ptr<Hypers> hypers;
     //! Random engine
     std::mt19937 rng;
 
     // AUXILIARY TOOLS
-    //! Raises error if parameters are not valid w.r.t. their own domain
+    //! Raises error if the state values are not valid w.r.t. their own domain
     virtual void check_state_validity() = 0;
 
 public:
@@ -40,15 +49,15 @@ public:
     HierarchyBase() = default;
 
     // EVALUATION FUNCTIONS
-    //! Evaluates model likelihood in the given points
+    //! Evaluates the likelihood of data in the given points
     virtual Eigen::VectorXd like(const Eigen::MatrixXd &data) = 0;
-    //! Evaluates marginal distribution of data in the given points
+    //! Evaluates the marginal distribution of data in the given points
     virtual Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) = 0;
 
     // SAMPLING FUNCTIONS
-    //! ... (TODO check)
+    //! Generates new values for state from its prior distribution
     virtual void draw() = 0;
-    //! ...
+    //! Generates new values for state from its posterior distribution
     virtual void sample_given_data(const Eigen::MatrixXd &data) = 0;
 
     // GETTERS AND SETTERS

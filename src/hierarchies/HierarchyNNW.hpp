@@ -28,9 +28,9 @@ protected:
     double tau_log_det;
 
     // AUXILIARY TOOLS
-    //! Raises error if parameters are not valid w.r.t. their own domain
+    //! ...
     void check_state_validity() override;
-    //! Special setter for the second part of the 
+    //! Special setter for state[1], the precision tau, and its utilities
     void set_tau_and_utilities(const Eigen::MatrixXd &tau);
 
     //! ...
@@ -54,9 +54,9 @@ public:
     }
 
     // EVALUATION FUNCTIONS
-    //! Evaluates model likelihood in the given points
+    //! ...
     Eigen::VectorXd like(const Eigen::MatrixXd &data) override;
-    //! Evaluates marginal distribution of data in the given points
+    //! ...
     Eigen::VectorXd eval_marg(const Eigen::MatrixXd &data) override;
 
     // SAMPLING FUNCTIONS
