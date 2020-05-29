@@ -16,7 +16,7 @@
 #include "../api/MemoryCollector.hpp"
 
 
-//! Abstract template class for a generic iterative BNP algorithm.
+//! Abstract template class for a Gibbs sampling iterative BNP algorithm.
 
 //! This template class implements a generic algorithm that generates a Markov
 //! chain on the clustering of the provided data.
@@ -25,6 +25,8 @@
 //! ations of the same step. Steps are further split into substeps, each of
 //! which updates specific values of the state of the Markov chain, which is
 //! composed of the allocations vector and the unique values vector (see below).
+//! This is known as a Gibbs sampling structure, where a set of values is upda-
+//! ted according to a conditional distribution given all other values.
 //! The underlying model for the data is assumed to be a so-called hierarchical
 //! model, where each datum is independently drawn from a common likelihood
 //! function, whose parameters are specific to each unit and are iid generated

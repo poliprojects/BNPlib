@@ -6,8 +6,8 @@
 
 //! Template class for Neal's algorithm 8 for conjugate hierarchies
 
-//! This class implements Neal's algorithm 8 that generates a Markov chain on
-//! the clustering of the provided data.
+//! This class implements Neal's Gibbs sampling algorithm 8 that generates a
+//! Markov chain on the clustering of the provided data.
 //!
 //! It is a generalization of Neal's algorithm 2 which works for any hierarchi-
 //! cal model, even non-conjugate ones, unlike its predecessor. The main diffe-

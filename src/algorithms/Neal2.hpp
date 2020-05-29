@@ -6,8 +6,8 @@
 
 //! Template class for Neal's algorithm 2 for conjugate hierarchies
 
-//! This class implements Neal's algorithm 2 that generates a Markov chain on
-//! the clustering of the provided data.
+//! This class implements Neal's Gibbs sampling algorithm 2 that generates a
+//! Markov chain on the clustering of the provided data.
 //!
 //! Using this algorithm implicitly assumes that the provided hierarchy class
 //! represents a conjugate model, i.e. one in which posterior distributions have
