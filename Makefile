@@ -14,8 +14,8 @@ LDLIBS = $(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb \
 
 
 EXE = maintest_uni
-SRCS_OUTPUT = src/api/output.pb.cc
-SRCS = src/api/FileCollector.cpp src/api/MemoryCollector.cpp
+SRCS_OUTPUT = src/collectors/output.pb.cc
+SRCS = src/collectors/FileCollector.cpp src/collectors/MemoryCollector.cpp
 LIB_OBJS = $(subst .cpp,.o, $(SRCS)) $(subst .cc,.o, $(SRCS_OUTPUT))
 OBJS = $(EXE).o $(LIB_OBJS)
 
@@ -37,7 +37,7 @@ pybind_generate: $(LIB_OBJS)
 
 clean:
 	$(RM) *.o
-	$(RM) src/api/*.o
+	$(RM) src/collectors/*.o
 
 distclean: clean
 	$(RM) $(EXE)

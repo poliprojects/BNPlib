@@ -5,7 +5,7 @@
 * Install libraries: ```bash/install_libs.sh```
 * Compile library: ```make```
 * TODO (other scripts?)
-* Compile a .proto file with protoc: first ```cd src/api``` then run:
+* Compile a .proto file with protoc: first ```cd src/collectors``` then run:
   ```../../lib/protobuf/src/protoc -I=. --python_out=. output.proto```
 * same with Python (TODO)
 

@@ -11,9 +11,9 @@
 #include <stan/math/prim/fun.hpp>
 #include <stan/math/prim/prob.hpp>
 
-#include "../api/output.pb.h"
-#include "../api/FileCollector.hpp"
-#include "../api/MemoryCollector.hpp"
+#include "../collectors/output.pb.h"
+#include "../collectors/FileCollector.hpp"
+#include "../collectors/MemoryCollector.hpp"
 
 
 //! Abstract template class for a Gibbs sampling iterative BNP algorithm.
