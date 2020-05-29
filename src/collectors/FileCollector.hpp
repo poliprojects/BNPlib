@@ -40,7 +40,7 @@ public:
             close(infd);
         }
     }
-    FileCollector() = default; // TODO serve?
+    FileCollector() = default;
     FileCollector(const std::string &filename_) : filename(filename_){}
     //! Initializes collector
     void start() override;

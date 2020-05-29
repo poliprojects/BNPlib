@@ -4,10 +4,8 @@
 #include "lib/math/lib/eigen_3.3.7/Eigen/Dense"
 #include <fstream>
 
-
 #define MAXBUFSIZE ((int) 1e6)
 
-// TODO hpp vs cpp
 
 Eigen::MatrixXd read_eigen_matrix(const std::string &filename) {
     unsigned int cols = 0, rows = 0;

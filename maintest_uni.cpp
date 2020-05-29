@@ -4,18 +4,15 @@
 
 #include "includes.hpp"
 
+//! \file
+
+//! Static main program to test an univariate hierarchy.
+
+//! You can change the classes used for the model through the aliases below.
 using HypersType = HypersFixedNNIG;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
-using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-    HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
-
-//! \file
-
-//! main program to test an univariate hierarchy.
-
-//! Longer explaination of the same thing.
 
 int main(int argc, char *argv[]){
     std::cout << "Running maintest_uni.cpp" << std::endl;
@@ -39,11 +36,18 @@ int main(int argc, char *argv[]){
             break;
     }
 
-    // Read data from file
+
+    // =========================================================================
+    // READ DATA AND GRID FROM FILE
+    // =========================================================================
     std::string datafile = argv[1];
     Eigen::VectorXd data = read_eigen_matrix(datafile);
+    Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_uni.csv");
 
-    // Set model parameters
+
+    // =========================================================================
+    // SET MODEL PARAMETERS
+    // =========================================================================
     double mu0 = 5.0;
     double lambda = 0.1;
     double alpha0 = 2.0;
@@ -57,13 +61,18 @@ int main(int argc, char *argv[]){
     //std::cin >> totalmass; //1.0
     MixtureType mix(totalmass);
 
-    // Load algorithm factory
+
+    // =========================================================================
+    // LOAD ALGORITHM FACTORY
+    // =========================================================================
+    using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
+        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+
     Builder neal2builder = [](HypersType hy, MixtureType mix,
         Eigen::VectorXd data){
         return std::make_unique< Neal2<HierarchyType, HypersType,
                 MixtureType> >(hy, mix, data);
         };
-
     Builder neal8builder = [](HypersType hy, MixtureType mix,
         Eigen::VectorXd data){
         return std::make_unique< Neal8<HierarchyType, HypersType,
@@ -77,14 +86,20 @@ int main(int argc, char *argv[]){
     algofactory.add_builder("neal2", neal2builder);
     algofactory.add_builder("neal8", neal8builder);
 
-    // Create algorithm and set algorithm parameters
+
+    // =========================================================================
+    // CREATE ALGORITHM AND SET ALGORITHM PARAMETERS
+    // =========================================================================
     std::string algo = argv[2];
     auto sampler = algofactory.create_object(algo, hy, mix, data);
     (*sampler).set_rng_seed(20200229);
     (*sampler).set_maxiter(5000);
     (*sampler).set_burnin(500);
 
-    // Choose collector
+
+    // =========================================================================
+    // CHOOSE COLLECTOR
+    // =========================================================================
     BaseCollector *coll;
     std::string colltype = argv[3];
     if(colltype == "file"){
@@ -103,13 +118,15 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    // Run sampler
+    // =========================================================================
+    // RUN SAMPLER
+    // =========================================================================
     (*sampler).run(coll);
 
-    // Read grid from file
-    Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_uni.csv");
 
-    // Density and clustering
+    // =========================================================================
+    // DENSITY AND CLUSTER ESTIMATES
+    // =========================================================================
     (*sampler).eval_density(grid, coll);
     (*sampler).write_density_to_file("csv/dens_uni.csv");
     unsigned int i_cap = (*sampler).cluster_estimate(coll);

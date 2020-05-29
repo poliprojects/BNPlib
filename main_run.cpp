@@ -10,8 +10,6 @@ using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
 // Alias for factory
-using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-    HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
 
 //! \file
 
@@ -66,6 +64,9 @@ int main(int argc, char *argv[]){
         v.data(), v.size());
 
     // Load algorithm factory
+    using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
+        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+
     Builder neal2builder = [](HypersType hy, MixtureType mix,
         Eigen::VectorXd data){
         return std::make_unique< Neal2<HierarchyType, HypersType,
