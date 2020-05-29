@@ -92,7 +92,7 @@ protected:
     Eigen::MatrixXd proto_param_to_matrix(const Param &par) const;
     //! Computes marginal contribution of a given iteration & cluster
     virtual Eigen::VectorXd density_marginal_component(
-        Hierarchy<Hypers> &temp_hier, unsigned int n) = 0;
+        Hierarchy<Hypers> &temp_hier) = 0;
 
     // ALGORITHM FUNCTIONS
     virtual const void print_startup_message() = 0;

@@ -28,15 +28,15 @@ public:
         assert(0 <= discount && discount < 1);
     }
 
-    // PROBABILITIES FUNCTIONS
-    double prob_existing_cluster(const unsigned int card, const unsigned int n)
+    // PROBABILITIES FUNCTIONS (TODO)
+    double mass_existing_cluster(const unsigned int card, const unsigned int n)
         const {
-        return (card-discount)/(n-1+strength);
+        return (card-discount)/(n+strength);
     }
 
-    double prob_new_cluster(const unsigned int n,
-        const unsigned int n_clust) const {
-        return (strength+discount*n_clust)/(n-1+strength);
+    double mass_new_cluster(const unsigned int n_clust, const unsigned int n)
+    	const {
+        return (strength+discount*n_clust)/(n+strength);
     }
 
     // GETTERS AND SETTERS

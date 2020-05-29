@@ -69,7 +69,6 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     // Initialize objects
     density.first = grid;
     Eigen::VectorXd dens(Eigen::MatrixXd::Zero(grid.rows(),1));
-    double M = mixture.get_totalmass(); // TODO
 
     // Read chain from collector
     std::deque<State> chain = coll->get_chain();
@@ -82,7 +81,8 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
     // Loop over non-burn-in algorithm iterations
     for(size_t iter = 0; iter < n_iter; iter++){
         // Compute clusters cardinalities
-        std::vector<unsigned int> card(chain[iter].uniquevalues_size(), 0);
+        unsigned int n_clust = chain[iter].uniquevalues_size();
+        std::vector<unsigned int> card(n_clust, 0);
         for(size_t j = 0; j < n; j++){
             card[ chain[iter].allocations(j) ] += 1;
         }
@@ -90,7 +90,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
         Hierarchy<Hypers> temp_hier(unique_values[0].get_hypers());
 
         // Loop over current iteration's unique values
-        for(size_t h = 0; h < chain[iter].uniquevalues_size(); h++){
+        for(size_t h = 0; h < n_clust; h++){
             // Extract and copy unique values in temp_hier
             for(size_t k = 0; k < n_params; k++){
                 params[k] = proto_param_to_matrix(
@@ -99,10 +99,12 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
             temp_hier.set_state(params, false);
 
             // Update density estimate (cluster component)
-            dens += card[h] * temp_hier.like(grid) / (M+n);
+            dens += mixture.mass_existing_cluster(card[h], n) * temp_hier.like(
+                grid);
         }
         // Update density estimate (marginal component)
-        dens += density_marginal_component(temp_hier, n);
+        dens += mixture.mass_new_cluster(n_clust, n) *
+            density_marginal_component(temp_hier);
     }
 
     // Average over iterations

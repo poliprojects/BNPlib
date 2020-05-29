@@ -5,18 +5,16 @@
 
 
 //! \param temp_hier Temporary hierarchy object
-//! \param n         Cardinality of the currently evaluated cluster
 //! \return          Vector of evaluation of component on the provided grid
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::VectorXd Neal8<Hierarchy, Hypers, Mixture>::density_marginal_component(
-    Hierarchy<Hypers> &temp_hier, unsigned int n){
-    double M = this->mixture.get_totalmass(); // TODO
+    Hierarchy<Hypers> &temp_hier){
     Eigen::VectorXd dens_addendum(this->density.first.rows());
-    // Loop over unique values for an approximation of the marginal
+    // Loop over unique values for a "sample mean" of the marginal
     for(size_t h = 0; h < n_aux; h++){
-        // Generate unique values from their prior
+        // Generate unique values from their prior centering distribution
         temp_hier.draw();
-        dens_addendum += temp_hier.like(this->density.first) * (M/n_aux)/(M+n);
+        dens_addendum += temp_hier.like(this->density.first) / n_aux;
     }
     return dens_addendum;
 }
@@ -63,8 +61,8 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         // Loop over clusters
         for(size_t k = 0; k < n_clust; k++){
             // Probability of being assigned to an already existing cluster
-            probas(k) = this->mixture.prob_existing_cluster(
-                cardinalities[k], n) * unique_values[k].like(datum)(0);
+            probas(k) = this->mixture.mass_existing_cluster(
+                cardinalities[k], n-1) * unique_values[k].like(datum)(0);
             tot += probas(k);
             // Note: if datum is a singleton, then, when k = allocations[i],
             // one has card[k] = 0: cluster k will never be chosen
@@ -72,7 +70,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
         // Loop over auxiliary blocks
         for(size_t k = 0; k < n_aux; k++){
             // Probability of being assigned to a newly generated cluster
-            probas(n_clust+k) = this->mixture.prob_new_cluster(n, n_clust) *
+            probas(n_clust+k) = this->mixture.mass_new_cluster(n_clust, n-1) *
                 aux_unique_values[k].like(datum)(0) / n_aux;
             tot += probas(n_clust+k);
         }

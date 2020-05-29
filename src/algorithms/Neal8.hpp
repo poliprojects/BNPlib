@@ -39,8 +39,8 @@ protected:
 
     // AUXILIARY TOOLS
     //! Computes marginal contribution of a given iteration & cluster
-    Eigen::VectorXd density_marginal_component(Hierarchy<Hypers> &temp_hier,
-        unsigned int n) override;
+    Eigen::VectorXd density_marginal_component(Hierarchy<Hypers> &temp_hier)
+        override;
 
     // ALGORITHM FUNCTIONS
     const void print_startup_message() override;

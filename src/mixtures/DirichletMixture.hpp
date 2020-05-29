@@ -26,14 +26,14 @@ public:
     }
 
     // PROBABILITIES FUNCTIONS (TODO)
-    double prob_existing_cluster(const unsigned int card, const unsigned int n)
+    double mass_existing_cluster(const unsigned int card, const unsigned int n)
         const {
-        return card/(n-1+totalmass);
+        return card/(n+totalmass);
     }
 
-    double prob_new_cluster(const unsigned int n, const unsigned int n_clust)
+    double mass_new_cluster(const unsigned int n_clust, const unsigned int n)
         const {
-        return totalmass/(n-1+totalmass);
+        return totalmass/(n+totalmass);
     }
 
     // GETTERS AND SETTERS

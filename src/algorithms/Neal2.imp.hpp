@@ -5,16 +5,12 @@
 
 
 //! \param temp_hier Temporary hierarchy object
-//! \param n         Cardinality of the currently evaluated cluster
 //! \return          Vector of evaluation of component on the provided grid
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 Eigen::VectorXd Neal2<Hierarchy, Hypers, Mixture>::density_marginal_component(
-    Hierarchy<Hypers> &temp_hier, unsigned int n){
-    double M = this->mixture.get_totalmass(); // TODO
-    Eigen::VectorXd dens_addendum(this->density.first.rows());
+    Hierarchy<Hypers> &temp_hier){
     // Exploit conjugacy of hierarchy
-    dens_addendum = temp_hier.eval_marg(this->density.first) * M/(M+n);
-    return dens_addendum;
+    return temp_hier.eval_marg(this->density.first);
 }
 
 
@@ -73,18 +69,18 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
         // Loop over clusters
         for(size_t k = 0; k < n_clust; k++){
             // Probability of being assigned to an already existing cluster
-            probas(k) = this->mixture.prob_existing_cluster(
-                cardinalities[k], n) * unique_values[k].like(datum)(0);
+            probas(k) = this->mixture.mass_existing_cluster(
+                cardinalities[k], n-1) * unique_values[k].like(datum)(0);
             if(singleton == 1 && k == i){
                 // Probability of being assigned to a newly generated cluster
-                probas(i) = this->mixture.prob_new_cluster(n, n_clust) *
+                probas(i) = this->mixture.mass_new_cluster(n_clust, n-1) *
                     unique_values[0].eval_marg(datum)(0);
             }
             tot += probas(k);
         }
         if(singleton == 0){
             // Further update with marginal component
-            probas(n_clust) = this->mixture.prob_new_cluster(n, n_clust) *
+            probas(n_clust) = this->mixture.mass_new_cluster(n_clust, n-1) *
                 unique_values[0].eval_marg(datum)(0);
             tot += probas(n_clust);
         }

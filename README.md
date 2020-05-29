@@ -15,15 +15,6 @@
 ### Usage examples
 * ```./maintest_uni csv/data_uni.csv neal2 memory```
 
-#### main_factory_run
-* ```./main_factory_run csv/data.csv "neal2" "memory"```
-* ```./main_factory_run csv/data.csv "neal2" "file" ("filename")```
-
-
-#### main_factory_dataless
-* ```./main_factory_dataless "neal2_dataless" "memory"```
-* ```./main_factory_dataless "neal2" "file" ("filename")```
-
 ### Code instructions
 * Change number of total iterations (default 10000) and burn-in iterations
   (default 1000) with the appropriate setter methods of the algorithm object:
