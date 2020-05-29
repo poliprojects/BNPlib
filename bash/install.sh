@@ -19,5 +19,5 @@ sudo ldconfig
 cd ../..
 
 # Install Python tools
-pip3 install pybind11 matlplotlib
-pip3 install --user --upgrade google-api-python-client
+python3 -m pip install pybind11 matlplotlib scipy
+python3 -m pip install --user --upgrade google-api-python-client
