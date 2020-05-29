@@ -6,8 +6,8 @@ State MemoryCollector::next_state() {
         curr_iter = -1;
         return chain[size-1];
     }
-    else{
-    	return chain[curr_iter];
+    else {
+        return chain[curr_iter];
     }
 }
 

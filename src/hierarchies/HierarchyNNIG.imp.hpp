@@ -116,7 +116,7 @@ void HierarchyNNIG<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     double sigma2_new = sqrt(stan::math::inv_gamma_rng(alpha_post, beta_post,
         this->rng));
     double mu_new = stan::math::normal_rng(mu_post, sqrt(sigma2_new/
-    	lambda_post), this->rng);
+        lambda_post), this->rng);
 
     // Update state
     state[0](0,0) = mu_new;

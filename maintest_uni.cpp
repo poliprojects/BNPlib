@@ -110,7 +110,7 @@ int main(int argc, char *argv[]){
     Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_uni.csv");
 
     // Density and clustering
-	(*sampler).eval_density(grid, coll);
+    (*sampler).eval_density(grid, coll);
     (*sampler).write_density_to_file("csv/dens_uni.csv");
     unsigned int i_cap = (*sampler).cluster_estimate(coll);
     (*sampler).write_clustering_to_file("csv/clust_uni.csv");

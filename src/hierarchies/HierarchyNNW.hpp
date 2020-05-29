@@ -80,11 +80,11 @@ public:
     //! \param state_ State value to set
     //! \param check  If true, a state validity check occurs after assignment
     void set_state(const std::vector<Eigen::MatrixXd> &state_,
-    	bool check = true) override {
+        bool check = true) override {
         state[0] = state_[0];
         set_tau_and_utilities(state_[1]);
         if(check){
-        	check_state_validity();
+            check_state_validity();
         }
     }
 };

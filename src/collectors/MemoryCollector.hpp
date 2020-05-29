@@ -6,7 +6,7 @@
 
 class MemoryCollector: public BaseCollector {
 protected:
-	//! Deque that contains all states in Protobuf-object form
+    //! Deque that contains all states in Protobuf-object form
     std::deque<State> chain;
 
     //! Reads the next state, based on the curr_iter curson

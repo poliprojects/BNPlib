@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
         return 1;
     }
     else if(argc < 3){
-    	std::cerr << "Error: no id given for algo as arg" << std::endl;
+        std::cerr << "Error: no id given for algo as arg" << std::endl;
         return 1;
     }
 

@@ -17,7 +17,7 @@
 
 class BaseMixture {
 public:
-	// DESTRUCTOR AND CONSTRUCTORS
+    // DESTRUCTOR AND CONSTRUCTORS
     virtual ~BaseMixture() = default;
     BaseMixture() = default;
 
@@ -29,7 +29,7 @@ public:
     //! \param n    Total number of data points
     //! \return     Probability value
     virtual const double mass_existing_cluster(const unsigned int card,
-    	const unsigned int n) = 0;
+        const unsigned int n) = 0;
 
 
     //! Mass probability for choosing a newly created cluster
@@ -38,7 +38,7 @@ public:
     //! \param n       Total number of data points
     //! \return        Probability value
     virtual const double mass_new_cluster(const unsigned int n_clust,
-    	const unsigned int n) = 0;
+        const unsigned int n) = 0;
 };
 
 

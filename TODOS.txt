@@ -30,18 +30,16 @@ TESTS
 
 
 IMPLEMENTAZIONE
-* check row vs column data
+* row vs column data
 * useless default constructors in classes
 * NNIG has status sig or sig^2?
 * dataless (see e.g. console.py)
-* incorporate draw() and sample_given_data() common calculations
 * cluster_estimate() with sparse matrices (?)
 
 
 STILE
 * Rename some files (output) and functions (draw, sample)
 * Move .proto files?
-* check ifndef's vars for all files
 * grep -R "[^ ] $" src/*
 * Spazi, a capo, etc
 

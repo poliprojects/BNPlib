@@ -143,10 +143,10 @@ public:
     virtual unsigned int cluster_estimate(BaseCollector* collector);
     //! Writes unique values of each datum in csv form
     const void write_clustering_to_file(const std::string &filename =
-    	"csv/clust_best.csv");
+        "csv/clust_best.csv");
     //! Writes grid and density evaluation on it in csv form
     const void write_density_to_file(const std::string &filename =
-    	"csv/density.csv");
+        "csv/density.csv");
 
     // DESTRUCTOR AND CONSTRUCTORS
     virtual ~Algorithm() = default;

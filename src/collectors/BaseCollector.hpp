@@ -26,7 +26,7 @@
 
 class BaseCollector {
 protected:
-	//! Current size of the chain
+    //! Current size of the chain
     unsigned int size = 0;
     //! Read cursor that indicates the current iteration
     unsigned int curr_iter = -1;

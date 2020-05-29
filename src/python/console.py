@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 from bnp_interface import *
 
 mu0 = 5.0
@@ -25,13 +25,13 @@ imgfiledens = "src/python/dens.pdf"
 only = "all"
 
 bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
-	colltype, collfile, rng, maxit, burn)
+    colltype, collfile, rng, maxit, burn)
 
 chain_histogram(collfile, imgfilechain)
 
 algo = ''.join((algo, '_dataless'))
 bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
-	collfile, densfile, clustfile, only)
+    collfile, densfile, clustfile, only)
 # TODO implement estimates cpp s.t. you don't have to write "_dataless"
 # TODO: is it really worth keeping the dataless constructors in the factory?
 
@@ -41,7 +41,7 @@ g = np.arange(-5, +5, 0.5)
 grid = np.repeat(g,2).T
 matr = np.linspace(np.repeat(0, 2),np.repeat(10, 2),10)
 
-z=np.identity(10)
+z = np.identity(10)
 print(z)
 
 print("The end")

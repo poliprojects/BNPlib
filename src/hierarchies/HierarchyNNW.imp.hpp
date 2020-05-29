@@ -128,7 +128,7 @@ void HierarchyNNW<Hypers>::draw(){
 
     // Generate new state values from their prior centering distribution
     Eigen::MatrixXd tau_new = stan::math::wishart_rng( nu, tau0, this->rng );
-    Eigen::MatrixXd sigma = state[1].inverse();
+    Eigen::MatrixXd sigma = tau_new.inverse();
     EigenRowVec mu_new = stan::math::multi_normal_rng( mu0, sigma*(1/lambda),
         this->rng );
 
@@ -158,9 +158,9 @@ void HierarchyNNW<Hypers>::sample_given_data(const Eigen::MatrixXd &data){
     // Generate new state values from their prior centering distribution
     Eigen::MatrixXd tau_new = stan::math::wishart_rng(nu_post, tau_post,
         this->rng);
-    Eigen::MatrixXd tau_inv = tau_new.inverse();
+    Eigen::MatrixXd sigma = tau_new.inverse();
     EigenRowVec mu_new = stan::math::multi_normal_rng(mu_post,
-        tau_inv*(1/lambda_post), this->rng);
+        sigma*(1/lambda_post), this->rng);
 
     // Update state
     state[0] = mu_new;
