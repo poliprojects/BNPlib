@@ -1,6 +1,8 @@
 #ifndef PITYORMIXTURE_HPP
 #define PITYORMIXTURE_HPP
 
+#include "BaseMixture.hpp"
+
 
 //! Class that represents the Pitman-Yor process mixture model.
 
@@ -13,7 +15,7 @@
 //! count factor, while the weight for a newly created cluster is the remaining
 //! one counting the total amount as the sample size increased by the strength.
 
-class PitYorMixture {
+class PitYorMixture : BaseMixture {
 protected:
     //! Strength and discount parameters
     double strength, discount;
@@ -28,14 +30,26 @@ public:
         assert(0 <= discount && discount < 1);
     }
 
-    // PROBABILITIES FUNCTIONS (TODO)
+
+    // PROBABILITIES FUNCTIONS
+    //! Mass probability for choosing an already existing cluster
+
+    //! \param card Cardinality of the cluster
+    //! \param n    Total number of data points
+    //! \return     Probability value
     double mass_existing_cluster(const unsigned int card, const unsigned int n)
-        const {
+        const override {
         return (card-discount)/(n+strength);
     }
 
+
+    //! Mass probability for choosing a newly created cluster
+
+    //! \param n_clust Number of clusters
+    //! \param n       Total number of data points
+    //! \return        Probability value
     double mass_new_cluster(const unsigned int n_clust, const unsigned int n)
-    	const {
+    	const override {
         return (strength+discount*n_clust)/(n+strength);
     }
 

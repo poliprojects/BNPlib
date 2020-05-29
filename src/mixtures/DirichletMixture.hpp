@@ -1,6 +1,8 @@
 #ifndef DIRICHLETMIXTURE_HPP
 #define DIRICHLETMIXTURE_HPP
 
+#include "BaseMixture.hpp"
+
 
 //! Class that represents the Dirichlet process mixture model.
 
@@ -12,7 +14,7 @@
 //! tion of a new cluster, and weights of already existing clusters are propor-
 //! tional to their cardinalities.
 
-class DirichletMixture {
+class DirichletMixture : public BaseMixture {
 protected:
     //! Total mass parameters
     double totalmass;
@@ -25,14 +27,26 @@ public:
         assert(totalmass >= 0);
     }
 
-    // PROBABILITIES FUNCTIONS (TODO)
+
+    // PROBABILITIES FUNCTIONS
+    //! Mass probability for choosing an already existing cluster
+
+    //! \param card Cardinality of the cluster
+    //! \param n    Total number of data points
+    //! \return     Probability value
     double mass_existing_cluster(const unsigned int card, const unsigned int n)
-        const {
+        const override {
         return card/(n+totalmass);
     }
 
+
+    //! Mass probability for choosing a newly created cluster
+
+    //! \param n_clust Number of clusters
+    //! \param n       Total number of data points
+    //! \return        Probability value
     double mass_new_cluster(const unsigned int n_clust, const unsigned int n)
-        const {
+        const override {
         return totalmass/(n+totalmass);
     }
 

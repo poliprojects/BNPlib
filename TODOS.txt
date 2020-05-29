@@ -1,6 +1,11 @@
 TODO LIST
 
 
+CHANGELOG
+* Sistemata faccenda totalmass
+* Creata classe BaseMixture
+
+
 TESTS
 * Univariati:
 1) y_i ~ 0.5 N(-3, 1) + 0.5 N(3, 1), i=1,... 200
