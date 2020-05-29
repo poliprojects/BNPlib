@@ -4,6 +4,7 @@
 
 #include "../../includes.hpp"
 
+
 namespace NNIGDir {
     using HypersType = HypersFixedNNIG;
     using MixtureType = DirichletMixture;
@@ -13,9 +14,23 @@ namespace NNIGDir {
         HypersType, MixtureType>>(HypersType, MixtureType)>;
 }
 
+//! Clustering and density estimates for an NNIG + Dirichlet mixture model.
 
-int estimates_NNIG_Dir(double mu0, double lambda_, double alpha0,
-    double beta0, double totalmass,
+//! The Markov chain from which the estimates will be produced is contained in
+//! a file collector whose filename is given. A user can opt to run only the
+//! clustering or the density estimate (default case is both).
+
+//! \param mu0, lambda_, alpha0 Model parameters
+//! \param beta0, totalmass     More model parameters
+//! \param grid                 Vector of points to evaluate the density in
+//! \param algo                 Name of the algorithm used
+//! \param collfile             File collector that contains the chain
+//! \param densfile             File to which density estimate will be printed
+//! \param clustfile            File to which cluster estimate will be printed
+//! \param only                 "clust" or "dens" to not run the other
+
+int estimates_NNIG_Dir(const double mu0, const double lambda_,
+	const double alpha0, const double beta0, const double totalmass,
     const Eigen::VectorXd &grid, const std::string &algo,
     const std::string &collfile = "collector.recordio",
     const std::string &densfile = "src/python/density.csv",
@@ -26,8 +41,8 @@ int estimates_NNIG_Dir(double mu0, double lambda_, double alpha0,
     using namespace NNIGDir;
 
     // Build model components
-    HypersType hy(mu0, lambda_, alpha0, beta0); // 5.0 0.1 2.0 2.0
-    MixtureType mix(totalmass); // 1.0
+    HypersType hy(mu0, lambda_, alpha0, beta0);
+    MixtureType mix(totalmass);
 
     // Load algorithm factory
     BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){
@@ -49,7 +64,7 @@ int estimates_NNIG_Dir(double mu0, double lambda_, double alpha0,
     // Create algorithm
     auto sampler = algoFactory.create_object(algo, hy, mix);
 
-    // Choose memory collector
+    // Create file collector
     BaseCollector *coll = new FileCollector(collfile);
 
     // Compute estimates

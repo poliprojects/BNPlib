@@ -4,6 +4,12 @@ TODO LIST
 CHANGELOG
 * Sistemata faccenda totalmass
 * Creata classe BaseMixture
+* Aggiunta cluster_estimate2() che usa le Sparse Matrix
+* Rimosso colltype dall'interfaccia Python (tanto ha senso usare solo il file
+  collector)
+* Aggiunto n_aux all'interfaccia Python
+* Di conseguenza, aggiunto set_n_aux() anche alla classe base Algorithm per
+  ragioni di polimorfismo (in quella classe la funzione non fa nulla)
 
 
 TESTS
@@ -34,16 +40,18 @@ IMPLEMENTAZIONE
 * useless default constructors in classes
 * NNIG has status sig or sig^2?
 * dataless (see e.g. console.py)
-* cluster_estimate() with sparse matrices (?)
+* Test cluster_estimate() vs cluster_estimate2()
 
 
 STILE
+* Fix BNP models in algorithms and hierarchies
 * Rename some files (output) and functions (draw, sample)
 * Move .proto files?
 * grep -R "[^ ] $" src/*; spazi; a capo; etc
 
 
-VARIE
+VARI
+* Make Python files appear in the docs
 * Redo callgrind and time stuff (optimization)
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
 * README (Virtual Machine etc)

@@ -13,38 +13,38 @@ namespace NNIGDir {
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
 }
 
+//! Runs algorithm for an NNIG + Dirichlet mixture model.
 
-int run_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
-    double totalmass,
+//! The Markov chain produced by the algorithm will be saved to a collector. A
+//! file collector must be used if one wants to follow up the algorithm run with
+//! the estimates run using the Python interface of this library.
+
+//! \param mu0, lambda_, alpha0 Model parameters
+//! \param beta0, totalmass     More model parameters
+//! \param datafile             csv file from which the model data is read
+//! \param algo                 Name of the algorithm used
+//! \param collfile             Name of file collector to which save the chain
+//! \param rng                  RNG seed for the algorithm
+//! \param maxit                Number of iterations of the algorithm
+//! \param burn                 Number of burn-in (discarded) iterations
+//! \param n_aux                If algo="neal8", number of auxiliary blocks used
+
+int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
+	const double beta0, const double totalmass,
     const std::string &datafile, const std::string &algo,
-    const std::string &colltype,
     const std::string &collfile = "collector.recordio",
-    unsigned int rng = 0, unsigned int maxit = 0, unsigned int burn = 0){
+    const unsigned int rng = 0, const unsigned int maxit = 0,
+    const unsigned int burn = 0, const unsigned int n_aux = 0){
 
     std::cout << "Running run_NNIG_Dir.cpp" << std::endl;
     using namespace NNIGDir;
 
     // Build model components
-    HypersType hy(mu0, lambda, alpha0, beta0); // 5.0 0.1 2.0 2.0
-    MixtureType mix(totalmass); // 1.0
+    HypersType hy(mu0, lambda_, alpha0, beta0);
+    MixtureType mix(totalmass);
 
     // Read data from file
-    std::ifstream file;
-    file.open(datafile);
-    if(!file.is_open()){
-        std::cerr << "Error: " << datafile << " file does not exist" <<
-            std::endl;
-        return 1;
-    }
-    std::string str;
-    std::vector<double> v;
-    while(std::getline(file, str)){
-        double val = ::atof(str.c_str());
-        v.push_back(val);
-    }
-    file.close();
-    Eigen::VectorXd data = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
-        v.data(), v.size());
+    Eigen::VectorXd data = read_eigen_matrix(datafile);
 
     // Load algorithm factory
     Builder neal2builder = [](HypersType hy, MixtureType mix,
@@ -72,20 +72,10 @@ int run_NNIG_Dir(double mu0, double lambda, double alpha0, double beta0,
     if(rng != 0)   (*sampler).set_rng_seed(rng);
     if(maxit != 0) (*sampler).set_maxiter(maxit);
     if(burn != 0)  (*sampler).set_burnin(burn);
+    if(algo == "neal8" && n_aux != 0) (*sampler).set_n_aux(n_aux);
 
-    // Choose memory collector
-    BaseCollector *coll;
-    if(colltype == "file"){
-        coll = new FileCollector(collfile);
-    }
-    else if(colltype == "memory"){
-        coll = new MemoryCollector();
-    }
-    else {
-        std::cerr << "Error: collector type arg must be \"file\" or \"memory\""
-            << std::endl;
-        return 1;
-    }
+    // Create file collector
+    BaseCollector *coll = new FileCollector(collfile);
 
     // Run algorithm
     (*sampler).run(coll);

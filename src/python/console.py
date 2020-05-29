@@ -11,11 +11,11 @@ algo = "neal2"
 rng = 20200229
 maxit = 5000
 burn = 500
+n_aux = 3
 
 g = [0.5*_ for _ in range(20)]
 grid = np.array(g)
 
-colltype = "file"
 collfile = "collector.recordio"
 densfile = "src/python/dens.csv"
 clustfile = "src/python/clust.csv"
@@ -25,7 +25,7 @@ imgfiledens = "src/python/dens.pdf"
 only = "all"
 
 bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
-    colltype, collfile, rng, maxit, burn)
+    collfile, rng, maxit, burn, n_aux)
 
 chain_histogram(collfile, imgfilechain)
 

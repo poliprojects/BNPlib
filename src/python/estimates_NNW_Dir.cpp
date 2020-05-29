@@ -4,6 +4,7 @@
 
 #include "../../includes.hpp"
 
+
 namespace NNWDir {
     using HypersType = HypersFixedNNW;
     using MixtureType = DirichletMixture;
@@ -13,9 +14,24 @@ namespace NNWDir {
         HypersType, MixtureType>>(HypersType, MixtureType)>;
 }
 
+//! Clustering and density estimates for an NNW + Dirichlet mixture model.
+
+//! The Markov chain from which the estimates will be produced is contained in
+//! a file collector whose filename is given. A user can opt to run only the
+//! clustering or the density estimate (default case is both).
+
+//! \param mu0, lambda_, tau0 Model parameters
+//! \param nu, totalmass      More model parameters
+//! \param grid               Matrix of vector points to evaluate the density in
+//! \param algo               Name of the algorithm used
+//! \param collfile           File collector that contains the chain
+//! \param densfile           File to which density estimate will be printed
+//! \param clustfile          File to which cluster estimate will be printed
+//! \param only               "clust" or "dens" to not run the other
 
 int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
-    double lambda, const Eigen::MatrixXd &tau0, double nu, double totalmass,
+    const double lambda_, const Eigen::MatrixXd &tau0, const double nu,
+    const double totalmass,
     const Eigen::MatrixXd &grid, const std::string &algo,
     const std::string &collfile = "collector_multi.recordio",
     const std::string &densfile = "src/python/density_multi.csv",
@@ -26,8 +42,8 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     using namespace NNWDir;
 
     // Build model components
-    HypersType hy(mu0, lambda, tau0, nu);
-    MixtureType mix(totalmass); // 1.0
+    HypersType hy(mu0, lambda_, tau0, nu);
+    MixtureType mix(totalmass);
 
     // Load algorithm factory
     BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){
@@ -49,7 +65,7 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     // Create algorithm
     auto sampler = algoFactory.create_object(algo, hy, mix);
 
-    // Choose memory collector
+    // Create file collector
     BaseCollector *coll = new FileCollector(collfile);
 
     // Compute estimates

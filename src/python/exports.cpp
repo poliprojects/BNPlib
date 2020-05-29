@@ -7,6 +7,8 @@
 #include "estimates_NNIG_Dir.cpp"
 #include "estimates_NNW_Dir.cpp"
 
+//! Builds the Python version of the library.
+
 PYBIND11_MODULE(bnplibpy, m)
 {
     m.doc() = "TODO docstring";

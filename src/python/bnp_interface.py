@@ -14,9 +14,12 @@ import bnplibpy
 
 
 def deserialize(collfile = "collector.recordio"):
-    """TODO docstring.
+    """Reads collector from file and returns it as a list of Protobuf objects.
 
-    TODO docstring but longer."""
+    collfile is the name of the saved file collector. All Protobuf messages in
+    the returned list are instances of the custom State class, that is, they
+    correspond to the whole state of a single iteration of an algorithm of this
+    library."""
     with open(collfile, 'rb') as f:
         buf = f.read()
         n = 0
@@ -29,7 +32,7 @@ def deserialize(collfile = "collector.recordio"):
             read_metric = output_pb2.State()
             read_metric.ParseFromString(msg_buf)
             d.append(read_metric)
-    return[d]
+    return[d] # TODO why []?
 
 
 def get_grid(d):
@@ -58,9 +61,12 @@ def empirical_mean(datafile):
 
 def chain_histogram(collfile = "collector.recordio",
     imgfile = "src/python/chain.pdf"):
-    """TODO docstring.
+    """Prints an histogram of the number of clusters for different iterations.
 
-    TODO docstring but longer."""
+    collfile is the name of the saved file collector. After deserialization, for
+    each State object (i.e. for every iteration of the algorithm) the number of
+    clusters at that time is counted and plotted in an histogram, which is then
+    saved to the imgfile file."""
     d = deserialize(collfile)
     figure = plt.figure()
     num_clusters = []
@@ -75,9 +81,13 @@ def chain_histogram(collfile = "collector.recordio",
 
 def plot_density(densfile = "src/python/density.csv",
     imgfile = "src/python/density.pdf"):
-    """TODO docstring.
+    """Reads a 2D or 3D density from a csv file and plots it.
 
-    TODO docstring but longer."""
+    densfile is the file from which the density will be read. Such file must
+    consist of 3 to 4 columns, the last of which is the density value and the
+    remaining ones are the coordinates of the points of evaluation of that va-
+    lue. Then, a 2D or 3D plot is produced and saved to the imgfile file. If the
+    dimension is not 2 or 3, this function does nothing."""
     mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
 
     cols = mat.shape[1]
@@ -97,9 +107,13 @@ def plot_density(densfile = "src/python/density.csv",
 
 def plot_clust_cards(clustfile = "src/python/clust.csv",
     imgfile = "src/python/clust.pdf"):
-    """TODO docstring.
+    """Reads a clustering structure from a csv file and plots the cardinalities.
 
-    TODO docstring but longer."""
+    clustfile is the file from which the clustering will be read. This function
+    reads the first column of the file and interprets it as the numeric labels
+    of the clusters the data points belong to, with each for being a different
+    datum. An histogram of the cardinalities of these clusters is then produced
+    and saved to the imgfile file."""
     mat = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     figure = plt.figure()
     plt.hist(mat[:,0])

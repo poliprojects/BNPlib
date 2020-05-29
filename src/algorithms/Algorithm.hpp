@@ -206,6 +206,8 @@ public:
         init_num_clusters = init;
     }
     void set_rng_seed(const unsigned int seed){rng.seed(seed);}
+    //! Does nothing except for Neal8
+    virtual void set_n_aux(const unsigned int n_aux_){return;}
 };
 
 #include "Algorithm.imp.hpp"

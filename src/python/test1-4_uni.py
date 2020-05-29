@@ -11,7 +11,7 @@ algoDL = ''.join((algo, '_dataless'))
 rng = 20200229
 maxit = 500
 burn = 100
-colltype = "file"
+n_aux = 3
 only = "all"
 
 grid = np.arange(-5, +5.1, 0.5)
@@ -33,7 +33,7 @@ for i in c:
     imgfilechain = ''.join(("src/python/test_res/chain", str(i), ".pdf"))
     imgfiledens  = ''.join(("src/python/test_res/dens",  str(i), ".pdf"))
     bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile,
-        algo, colltype, collfile, rng, maxit, burn)
+        algo, collfile, rng, maxit, burn, n_aux)
 
     chain_histogram(collfile, imgfilechain)
     

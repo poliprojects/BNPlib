@@ -8,7 +8,7 @@ algoDL = ''.join((algo, '_dataless'))
 rng = 20200229
 maxit = 1000
 burn = 100
-colltype = "file"
+n_aux = 3
 only = "all"
 
 d = [2,5,10,20]
@@ -26,7 +26,7 @@ for i in c:
     nu = d[i-5]+3
     tau0 = (1/nu) * np.identity(d[i-5])
     bnplibpy.run_NNW_Dir(mu0, lambda_,tau0, nu, totalmass, datafile, algo,
-        colltype, collfile, rng, maxit, burn)
+        collfile, rng, maxit, burn, n_aux)
     chain_histogram(collfile, imgfilechain)
     grid = get_grid(d[i-5])
     bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid[0],
