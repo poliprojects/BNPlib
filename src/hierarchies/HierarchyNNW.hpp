@@ -51,7 +51,7 @@ protected:
 
 public:
     //! Returns true if the hierarchy models multivariate data (here, true)
-    bool is_multivariate() const override {return true;}
+    const bool is_multivariate() override {return true;}
 
     // DESTRUCTOR AND CONSTRUCTORS
     ~HierarchyNNW() = default;

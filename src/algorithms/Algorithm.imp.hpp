@@ -40,8 +40,9 @@ State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
 //! \param un_val Unique value in Protobuf-object form
 //! \return       Matrix version of un_val
 template<template <class> class Hierarchy, class Hypers, class Mixture>
+const
 Eigen::MatrixXd Algorithm<Hierarchy, Hypers, Mixture>::proto_param_to_matrix(
-    const Param &un_val) const {
+    const Param &un_val) {
     Eigen::MatrixXd par_matrix = Eigen::MatrixXd::Zero(
         un_val.par_cols(0).elems_size(), un_val.par_cols_size() );
 
@@ -167,8 +168,8 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
 
 //! \param filename Name of file to write to
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(const
-	std::string &filename) const {
+const void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
+    const std::string &filename) {
     if(!clustering_was_computed){
         std::cerr << "Error: cannot write clustering to file; " <<
             "cluster_estimate() must be called first" << std::endl;
@@ -210,8 +211,8 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(const
 
 //! \param filename Name of file to write to
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(const
-    std::string &filename) const {
+const void Algorithm<Hierarchy, Hypers, Mixture>::write_density_to_file(
+    const std::string &filename) {
     if(!density_was_computed){
         std::cerr << "Error: cannot write density to file; eval_density() " <<
             "must be called first" << std::endl;

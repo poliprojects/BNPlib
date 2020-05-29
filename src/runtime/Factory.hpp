@@ -65,8 +65,8 @@ public:
     //! \param args Collection of any number of parameters
     //! \param data Eigen matrix to pass to the constructors
     //! \return     An unique pointer to the created object
-    std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args, const Eigen::MatrixXd &data) const { // TODO
+    const std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
+        Args... args, const Eigen::MatrixXd &data) { // TODO
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
@@ -84,8 +84,8 @@ public:
     //! \param args Collection of any number of parameters
     //! \param data Eigen matrix to pass to the constructors
     //! \return     An unique pointer to the created object
-    std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args) const {
+    const std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
+        Args... args) {
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
@@ -112,7 +112,7 @@ public:
 
 
     //! Returns a list of identifiers of all builders in the storage
-    std::vector<Identifier> list_of_known_builders() const {
+    const std::vector<Identifier> list_of_known_builders() {
         std::vector<Identifier> tmp;
         tmp.reserve(storage.size());
         for(auto i = storage.begin(); i != storage.end(); i++){

@@ -37,8 +37,8 @@ public:
     //! \param card Cardinality of the cluster
     //! \param n    Total number of data points
     //! \return     Probability value
-    double mass_existing_cluster(const unsigned int card, const unsigned int n)
-        const override {
+    const double mass_existing_cluster(const unsigned int card,
+        const unsigned int n) override {
         return (card-discount)/(n+strength);
     }
 
@@ -48,14 +48,14 @@ public:
     //! \param n_clust Number of clusters
     //! \param n       Total number of data points
     //! \return        Probability value
-    double mass_new_cluster(const unsigned int n_clust, const unsigned int n)
-    	const override {
+    const double mass_new_cluster(const unsigned int n_clust,
+        const unsigned int n) override {
         return (strength+discount*n_clust)/(n+strength);
     }
 
     // GETTERS AND SETTERS
-    double get_strength() const {return strength;}
-    double get_discount() const {return discount;}
+    const double get_strength() {return strength;}
+    const double get_discount() {return discount;}
     void set_strength(const double strength_){strength = strength_;}
     void set_discount(const double discount_){discount = discount_;}
 };

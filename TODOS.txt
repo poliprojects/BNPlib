@@ -41,7 +41,6 @@ IMPLEMENTAZIONE
 STILE
 * Rename some files (output) and functions (draw, sample)
 * Move .proto files?
-* const uniformly before or after functions
 * check ifndef's vars for all files
 * grep -R "[^ ] $" src/*
 * Spazi, a capo, etc

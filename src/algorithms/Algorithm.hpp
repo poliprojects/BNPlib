@@ -91,7 +91,7 @@ protected:
     //! Returns the values of an algo iteration as a Protobuf object
     State get_state_as_proto(unsigned int iter);
     //! Turns a single unique value from Protobuf object form into a matrix
-    Eigen::MatrixXd proto_param_to_matrix(const Param &par) const;
+    const Eigen::MatrixXd proto_param_to_matrix(const Param &par);
     //! Computes marginal contribution of a given iteration & cluster
     virtual Eigen::VectorXd density_marginal_component(
         Hierarchy<Hypers> &temp_hier) = 0;
@@ -142,11 +142,11 @@ public:
     //! Estimates the clustering structure of the data via LS minimization
     virtual unsigned int cluster_estimate(BaseCollector* collector);
     //! Writes unique values of each datum in csv form
-    void write_clustering_to_file(const std::string &filename =
-    	"csv/clust_best.csv") const;
+    const void write_clustering_to_file(const std::string &filename =
+    	"csv/clust_best.csv");
     //! Writes grid and density evaluation on it in csv form
-    void write_density_to_file(const std::string &filename =
-    	"csv/density.csv") const;
+    const void write_density_to_file(const std::string &filename =
+    	"csv/density.csv");
 
     // DESTRUCTOR AND CONSTRUCTORS
     virtual ~Algorithm() = default;
@@ -186,7 +186,7 @@ public:
         unique_values.push_back(hierarchy);
     }
 
-    // GETTERS
+    // GETTERS AND SETTERS
     const unsigned int get_maxiter(){return maxiter;}
     const unsigned int get_burnin(){return burnin;}
     const unsigned int get_init_num_clusters(){return init_num_clusters;}
@@ -197,7 +197,6 @@ public:
         return density;
     }
 
-    // SETTERS
     void set_maxiter(const unsigned int maxiter_){maxiter = maxiter_;}
     void set_burnin(const unsigned int burnin_){burnin = burnin_;}
     void set_init_num_clusters(const unsigned int init){

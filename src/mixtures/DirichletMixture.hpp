@@ -34,8 +34,8 @@ public:
     //! \param card Cardinality of the cluster
     //! \param n    Total number of data points
     //! \return     Probability value
-    double mass_existing_cluster(const unsigned int card, const unsigned int n)
-        const override {
+    const double mass_existing_cluster(const unsigned int card,
+        const unsigned int n) override {
         return card/(n+totalmass);
     }
 
@@ -45,13 +45,13 @@ public:
     //! \param n_clust Number of clusters
     //! \param n       Total number of data points
     //! \return        Probability value
-    double mass_new_cluster(const unsigned int n_clust, const unsigned int n)
-        const override {
+    const double mass_new_cluster(const unsigned int n_clust,
+        const unsigned int n) override {
         return totalmass/(n+totalmass);
     }
 
     // GETTERS AND SETTERS
-    double get_totalmass() const {return totalmass;}
+    const double get_totalmass() {return totalmass;}
     void set_totalmass(const double totalmass_){totalmass = totalmass_;}
 };
 
