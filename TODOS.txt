@@ -1,6 +1,11 @@
 TODO LIST
 
 
+BRUNO
+* Doc: algos are Gibbs samplers
+* Fix totalmass stuff
+
+
 TESTS
 * Univariati:
 1) y_i ~ 0.5 N(-3, 1) + 0.5 N(3, 1), i=1,... 200
@@ -31,7 +36,6 @@ IMPLEMENTAZIONE
 * dataless (see e.g. console.py)
 * fix aux_unique_values ("non generati nuovamente per ogni dato, ma una volta
   per iterazione")
-* fix totalmass / PitYor stuff
 * incorporate draw() and sample_given_data() common calculations
 * cluster_estimate() with sparse matrices (?)
 
