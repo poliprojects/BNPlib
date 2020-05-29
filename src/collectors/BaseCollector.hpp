@@ -22,7 +22,10 @@
 //! collector for short. A collector is meant to store the state of a Markov
 //! chain at all iterations, composed of the allocations and the unique values
 //! vectors. These values are stored in classes built via the Google Protocol
-//! Buffers library, also known as Protobuf.
+//! Buffers library, also known as Protobuf. In particular, t the end of each
+//! iteration of a BNP algorithm of this library, its state is saved to the
+//! collector. This means that the collector will contain the states of the
+//! whole Markov chain by the end of the running of the algorithm.
 
 class BaseCollector {
 protected:
