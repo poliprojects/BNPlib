@@ -47,4 +47,4 @@ public:
 };
 
 
-#endif // DIRICHLETMIXTURE_HPP
+#endif // PITYORMIXTURE_HPP
