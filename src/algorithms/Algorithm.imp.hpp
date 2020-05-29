@@ -25,7 +25,7 @@ State Algorithm<Hierarchy, Hypers, Mixture>::get_state_as_proto(
                     col_temp.add_elems(par_temp(h,j));
                 }
                 par_temp_proto.add_par_cols();
-                *par_temp_proto.mutable_par_cols(j) = col_temp; 
+                *par_temp_proto.mutable_par_cols(j) = col_temp;
             }
             uniquevalues_temp.add_params();
             *uniquevalues_temp.mutable_params(k) = par_temp_proto;

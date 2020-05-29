@@ -10,12 +10,12 @@ namespace NNWDir {
     template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
     
     using BuilderDL = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType, MixtureType)>; 
+        HypersType, MixtureType>>(HypersType, MixtureType)>;
 }
 
 
-int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic>  mu0, double lambda, const Eigen::MatrixXd tau0,
-    double nu, double totalmass,
+int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
+    double lambda, const Eigen::MatrixXd &tau0, double nu, double totalmass,
     const Eigen::MatrixXd &grid, const std::string &algo,
     const std::string &collfile = "collector_multi.recordio",
     const std::string &densfile = "src/python/density_multi.csv",
@@ -33,7 +33,7 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic>  mu0, doubl
     BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){
         return std::make_unique< Neal2<HierarchyType, HypersType,
                 MixtureType> >(hy, mix);
-        }; 
+        };
     BuilderDL neal8builder_dataless = [](HypersType hy, MixtureType mix){
         return std::make_unique< Neal8<HierarchyType, HypersType,
                 MixtureType> >(hy, mix);

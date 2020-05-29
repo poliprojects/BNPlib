@@ -20,7 +20,7 @@ grid = np.arange(-5, +5.1, 0.5)
 #grid4 = "TODO"
 # or linspace
 
-c=[2]
+c = [2]
 for i in c:
     print("Starting test", i)
 
@@ -42,7 +42,7 @@ for i in c:
 
     plot_clust_cards(clustfile, imgfileclust)
     plot_density(densfile, imgfiledens)
-    trueclustfile=''.join(("csv/test/true_clust", str(i), ".csv"))
+    trueclustfile = ''.join(("csv/test/true_clust", str(i), ".csv"))
     print_clust_rand_indx(clustfile, trueclustfile)
 
 print("The end")

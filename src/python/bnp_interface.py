@@ -14,6 +14,9 @@ import bnplibpy
 
 
 def deserialize(collfile = "collector.recordio"):
+    """TODO docstring.
+
+    TODO docstring but longer."""
     with open(collfile, 'rb') as f:
         buf = f.read()
         n = 0
@@ -30,12 +33,14 @@ def deserialize(collfile = "collector.recordio"):
 
 
 def get_grid(d):
+    """TODO docstring.
+
+    TODO docstring but longer."""
     uni_g = np.arange(-5, +5.1, 0.5)
     arr = [uni_g for y in range(d)]
-    mesh= np.meshgrid(*arr)
-    nrows=len(mesh[0].flat)
-    grid = np.zeros((nrows,d))
-
+    mesh = np.meshgrid(*arr)
+    nrows = len(mesh[0].flat)
+    grid = np.zeros((nrows, d))
 
     for i in range(0,d):
         grid[:,i] = mesh[i].flat
@@ -44,12 +49,18 @@ def get_grid(d):
 
 
 def empirical_mean(datafile):
+    """TODO docstring.
+
+    TODO docstring but longer."""
     mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
     return[np.mean(mat, axis=0)]
 
 
 def chain_histogram(collfile = "collector.recordio",
     imgfile = "src/python/chain.pdf"):
+    """TODO docstring.
+
+    TODO docstring but longer."""
     d = deserialize(collfile)
     figure = plt.figure()
     num_clusters = []
@@ -86,6 +97,9 @@ def plot_density(densfile = "src/python/density.csv",
 
 def plot_clust_cards(clustfile = "src/python/clust.csv",
     imgfile = "src/python/clust.pdf"):
+    """TODO docstring.
+
+    TODO docstring but longer."""
     mat = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     figure = plt.figure()
     plt.hist(mat[:,0])
@@ -94,11 +108,14 @@ def plot_clust_cards(clustfile = "src/python/clust.csv",
     
 
 def rand_index_score(clusters, classes):
+    """TODO docstring.
+
+    TODO docstring but longer."""
     tp_plus_fp = comb(np.bincount(clusters), 2).sum()
     tp_plus_fn = comb(np.bincount(classes), 2).sum()
     A = np.c_[(clusters, classes)]
-    tp = sum(comb(np.bincount(A[A[:, 0] == i, 1]), 2).sum()
-             for i in set(clusters))
+    tp = sum( comb(np.bincount(A[A[:, 0] == i, 1]), 2).sum()
+        for i in set(clusters) )
     fp = tp_plus_fp - tp
     fn = tp_plus_fn - tp
     tn = comb(len(A), 2) - tp - fp - fn
@@ -107,11 +124,14 @@ def rand_index_score(clusters, classes):
 
 def print_clust_rand_indx(clustfile = "src/python/clust.csv",
     trueclustfile = "src/csv/test/true_clust.csv"):
+    """TODO docstring.
+
+    TODO docstring but longer."""
     mat_pred = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     mat_true = np.loadtxt(open(trueclustfile, 'rb'), delimiter=',')
-    values=np.unique(mat_pred[:,1])
-    new_indx=np.arange(len(values))
-    for i in range(0,mat_pred.shape[0]):
-        mat_pred[i,0]=new_indx[np.where(values==mat_pred[i,1])]
-    print("Rand index score:",rand_index_score(mat_pred[:,0].astype(int),
+    values = np.unique(mat_pred[:,1])
+    new_indx = np.arange(len(values))
+    for i in range(0, mat_pred.shape[0]):
+        mat_pred[i,0] = new_indx[ np.where(values == mat_pred[i,1]) ]
+    print("Rand index score:", rand_index_score(mat_pred[:,0].astype(int),
         mat_true.astype(int)))

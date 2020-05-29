@@ -10,7 +10,7 @@ namespace NNIGDir {
     template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
     
     using BuilderDL = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType, MixtureType)>; 
+        HypersType, MixtureType>>(HypersType, MixtureType)>;
 }
 
 
@@ -33,7 +33,7 @@ int estimates_NNIG_Dir(double mu0, double lambda_, double alpha0,
     BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){
         return std::make_unique< Neal2<HierarchyType, HypersType,
                 MixtureType> >(hy, mix);
-        }; 
+        };
     BuilderDL neal8builder_dataless = [](HypersType hy, MixtureType mix){
         return std::make_unique< Neal8<HierarchyType, HypersType,
                 MixtureType> >(hy, mix);
