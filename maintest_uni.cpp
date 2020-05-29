@@ -130,6 +130,7 @@ int main(int argc, char *argv[]){
     (*sampler).eval_density(grid, coll);
     (*sampler).write_density_to_file("csv/dens_uni.csv");
     unsigned int i_cap = (*sampler).cluster_estimate(coll);
+    unsigned int i_cap2 = (*sampler).cluster_estimate2(coll); // TODO
     (*sampler).write_clustering_to_file("csv/clust_uni.csv");
 
     std::cout << "End of maintest_uni.cpp" << std::endl;

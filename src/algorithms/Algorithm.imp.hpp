@@ -165,6 +165,59 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
 }
 
 
+template<template <class> class Hierarchy, class Hypers, class Mixture>
+unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate2( // TODO
+    BaseCollector* coll){
+    // Read chain from collector
+    std::deque<State> chain = coll->get_chain();
+
+    // Initialize objects
+    unsigned n_iter = chain.size();
+    unsigned int n = chain[0].allocations_size();
+    Eigen::VectorXd errors(n_iter);
+    Eigen::MatrixXd tot_diss = Eigen::MatrixXd::Zero(n, n);
+    std::vector< Eigen::SparseMatrix<double> > all_diss;
+    State temp;
+
+    // Loop over iterations
+    for(size_t h = 0; h < n_iter; h++){
+        // Compoute dissimilarity matrix
+        std::vector< Eigen::Triplet<double> > triplets_list;
+        triplets_list.reserve(n*n/2);
+        for(size_t i = 0; i < n; i++){
+            for(size_t j = 0; j < i; j++){
+                if(chain[h].allocations(i) == chain[h].allocations(j)){
+                    triplets_list.push_back( Eigen::Triplet<double>(i,j,1.0) );
+                }
+            }
+        }
+        Eigen::SparseMatrix<double> dissim(n, n);
+        dissim.setZero();
+        dissim.setFromTriplets(triplets_list.begin(), triplets_list.end());
+        all_diss.push_back(dissim);
+        tot_diss += dissim;
+    }
+    // Average over iterations
+    tot_diss = tot_diss / n_iter;
+
+    // Compute Frobenius norm error of all iterations
+    for(size_t h = 0; h < n_iter; h++){
+        errors(h) = ( tot_diss-all_diss[h] ).norm();
+    }
+
+    // Find iteration with the least error
+    std::ptrdiff_t i;
+    unsigned int min_err = errors.minCoeff(&i);
+    best_clust = chain[i];
+    std::cout << "Optimal clustering: at iteration " << i << " with " <<
+        best_clust.uniquevalues_size() << " clusters" << std::endl;
+    // Update flag
+    clustering_was_computed = true;
+
+    return i;
+}
+
+
 //! \param filename Name of file to write to
 template<template <class> class Hierarchy, class Hypers, class Mixture>
 void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(

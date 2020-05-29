@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <Eigen/Dense>
+#include <Eigen/SparseCore> // TODO
 #include <stan/math/prim/fun.hpp>
 #include <stan/math/prim/prob.hpp>
 
@@ -141,6 +142,8 @@ public:
         BaseCollector* const collector);
     //! Estimates the clustering structure of the data via LS minimization
     virtual unsigned int cluster_estimate(BaseCollector* collector);
+
+    virtual unsigned int cluster_estimate2(BaseCollector* collector); // TODO
     //! Writes unique values of each datum in csv form
     void write_clustering_to_file(const std::string &filename =
         "csv/clust_best.csv") const;
