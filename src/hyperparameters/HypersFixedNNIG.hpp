@@ -34,10 +34,10 @@ public:
     }
 
     // GETTERS AND SETTERS
-    const double get_mu0(){return mu0;}
-    const double get_alpha0(){return alpha0;}
-    const double get_beta0(){return beta0;}
-    const double get_lambda(){return lambda;}
+    double get_mu0() const {return mu0;}
+    double get_alpha0() const {return alpha0;}
+    double get_beta0() const {return beta0;}
+    double get_lambda() const {return lambda;}
     void set_mu0(const double mu0_){mu0 = mu0_;}
     void set_alpha0(const double alpha0_){
         assert(alpha0_ > 0);

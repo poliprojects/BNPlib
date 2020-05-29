@@ -62,7 +62,7 @@ public:
     //! Returns the whole chain in form of a deque of States
     virtual std::deque<State> get_chain() = 0;
 
-    const unsigned int get_size() {return size;}
+    unsigned int get_size() const {return size;}
 };
 
 

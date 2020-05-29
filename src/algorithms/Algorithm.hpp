@@ -91,19 +91,19 @@ protected:
     //! Returns the values of an algo iteration as a Protobuf object
     State get_state_as_proto(unsigned int iter);
     //! Turns a single unique value from Protobuf object form into a matrix
-    const Eigen::MatrixXd proto_param_to_matrix(const Param &par);
+    Eigen::MatrixXd proto_param_to_matrix(const Param &par) const;
     //! Computes marginal contribution of a given iteration & cluster
     virtual Eigen::VectorXd density_marginal_component(
         Hierarchy<Hypers> &temp_hier) = 0;
 
     // ALGORITHM FUNCTIONS
-    virtual const void print_startup_message() = 0;
+    virtual void print_startup_message() const = 0;
     virtual void initialize() = 0;
     virtual void sample_allocations() = 0;
     virtual void sample_unique_values() = 0;
     virtual void sample_weights() = 0;
     virtual void update_hypers() = 0;
-    virtual const void print_ending_message();
+    virtual void print_ending_message() const;
     //! Saves the current iteration's state in Protobuf form to a collector
     void save_state(BaseCollector* collector, unsigned int iter){
         collector->collect( get_state_as_proto(iter) );
@@ -142,11 +142,11 @@ public:
     //! Estimates the clustering structure of the data via LS minimization
     virtual unsigned int cluster_estimate(BaseCollector* collector);
     //! Writes unique values of each datum in csv form
-    const void write_clustering_to_file(const std::string &filename =
-        "csv/clust_best.csv");
+    void write_clustering_to_file(const std::string &filename =
+        "csv/clust_best.csv") const;
     //! Writes grid and density evaluation on it in csv form
-    const void write_density_to_file(const std::string &filename =
-        "csv/density.csv");
+    void write_density_to_file(const std::string &filename =
+        "csv/density.csv") const;
 
     // DESTRUCTOR AND CONSTRUCTORS
     virtual ~Algorithm() = default;
@@ -187,10 +187,10 @@ public:
     }
 
     // GETTERS AND SETTERS
-    const unsigned int get_maxiter(){return maxiter;}
-    const unsigned int get_burnin(){return burnin;}
-    const unsigned int get_init_num_clusters(){return init_num_clusters;}
-    const std::pair< Eigen::MatrixXd, Eigen::VectorXd > get_density(){
+    unsigned int get_maxiter() const {return maxiter;}
+    unsigned int get_burnin() const {return burnin;}
+    unsigned int get_init_num_clusters() const {return init_num_clusters;}
+    std::pair< Eigen::MatrixXd, Eigen::VectorXd > get_density() const {
         if(!density_was_computed){
             std::domain_error("Error calling get_density(): not computed yet");
         }

@@ -28,8 +28,8 @@ public:
     //! \param card Cardinality of the cluster
     //! \param n    Total number of data points
     //! \return     Probability value
-    virtual const double mass_existing_cluster(const unsigned int card,
-        const unsigned int n) = 0;
+    virtual double mass_existing_cluster(const unsigned int card,
+        const unsigned int n) const = 0;
 
 
     //! Mass probability for choosing a newly created cluster
@@ -37,8 +37,8 @@ public:
     //! \param n_clust Number of clusters
     //! \param n       Total number of data points
     //! \return        Probability value
-    virtual const double mass_new_cluster(const unsigned int n_clust,
-        const unsigned int n) = 0;
+    virtual double mass_new_cluster(const unsigned int n_clust,
+        const unsigned int n) const = 0;
 };
 
 

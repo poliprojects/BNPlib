@@ -43,7 +43,7 @@ protected:
         override;
 
     // ALGORITHM FUNCTIONS
-    const void print_startup_message() override;
+    void print_startup_message() const override;
     void sample_allocations() override;
 
 public:
@@ -71,7 +71,7 @@ public:
         Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, init) {}
 
     // GETTERS AND SETTERS
-    const unsigned int get_n_aux(){return n_aux;}
+    unsigned int get_n_aux() const {return n_aux;}
     void set_n_aux(const unsigned int n_aux_){n_aux = n_aux_;}
 
 };

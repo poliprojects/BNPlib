@@ -43,7 +43,7 @@ protected:
 
 public:
     //! Returns true if the hierarchy models multivariate data
-    virtual const bool is_multivariate() = 0;
+    virtual bool is_multivariate() const = 0;
 
     // DESTRUCTOR AND CONSTRUCTORS
     virtual ~HierarchyBase() = default;
@@ -62,8 +62,8 @@ public:
     virtual void sample_given_data(const Eigen::MatrixXd &data) = 0;
 
     // GETTERS AND SETTERS
-    const std::vector<Eigen::MatrixXd> get_state() {return state;}
-    const std::shared_ptr<Hypers> get_hypers() {return hypers;}
+    std::vector<Eigen::MatrixXd> get_state() const {return state;}
+    std::shared_ptr<Hypers> get_hypers() const {return hypers;}
     //! \param state_ State value to set
     //! \param check  If true, a state validity check occurs after assignment
     virtual void set_state(const std::vector<Eigen::MatrixXd> &state_,

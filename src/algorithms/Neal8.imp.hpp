@@ -21,7 +21,7 @@ Eigen::VectorXd Neal8<Hierarchy, Hypers, Mixture>::density_marginal_component(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal8<Hierarchy, Hypers, Mixture>::print_startup_message(){
+void Neal8<Hierarchy, Hypers, Mixture>::print_startup_message() const {
     std::cout << "Running Neal8 algorithm (with m=" << n_aux <<
         " auxiliary blocks)..." << std::endl;
 }

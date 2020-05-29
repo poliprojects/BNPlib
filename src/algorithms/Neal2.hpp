@@ -41,7 +41,7 @@ protected:
         override;
 
     // ALGORITHM FUNCTIONS
-    const void print_startup_message() override;
+    void print_startup_message() const override;
     void initialize() override;
     void sample_allocations() override;
     void sample_unique_values() override;

@@ -47,10 +47,10 @@ public:
         }
 
     // GETTERS AND SETTERS
-    const EigenRowVec get_mu0(){return mu0;}
-    const double get_lambda(){return lambda;}
-    const Eigen::MatrixXd get_tau0(){return tau0;}
-    const double get_nu(){return nu;}
+    EigenRowVec get_mu0() const {return mu0;}
+    double get_lambda() const {return lambda;}
+    Eigen::MatrixXd get_tau0() const {return tau0;}
+    double get_nu() const {return nu;}
     void set_mu0(const EigenRowVec &mu0_){
         assert(mu0_.size() == mu0.size());
         mu0 = mu0_;

@@ -15,7 +15,7 @@ Eigen::VectorXd Neal2<Hierarchy, Hypers, Mixture>::density_marginal_component(
 
 
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-const void Neal2<Hierarchy, Hypers, Mixture>::print_startup_message(){
+void Neal2<Hierarchy, Hypers, Mixture>::print_startup_message() const {
     std::cout << "Running Neal2 algorithm..." << std::endl;
 }
 
