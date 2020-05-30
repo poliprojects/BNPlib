@@ -49,8 +49,9 @@ IMPLEMENTAZIONE
 
 STILE
 * Fix BNP models in algorithms and hierarchies
-* grep -R "[^ ] $" src/*; spazi; a capo; etc
+* grep "[^ ] $" -PR src/*; grep "^ +$" -PR src/*; spazi; a capo; etc
 * Make Python files appear in the docs
+* Remove - newlines in doc
 
 
 VARI
