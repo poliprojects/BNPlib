@@ -1,12 +1,9 @@
 TODO LIST
 
 
-<<<<<<< HEAD
+
 ELENA
-=======
-ELENA:
-* cardinalità rand-index
->>>>>>> 6a75c35558779d7909abdd725835716bf81dbba5
+
 * factory / dataless
 * README usando solo bash/install.sh
 * tests
