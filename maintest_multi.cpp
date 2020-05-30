@@ -89,8 +89,8 @@ int main(int argc, char *argv[]){
     std::string algo = argv[2];
     auto sampler = algofactory.create_object(algo, hy, mix, data);
     (*sampler).set_rng_seed(20200229);
-    (*sampler).set_maxiter(5000);
-    (*sampler).set_burnin(500);
+    (*sampler).set_maxiter(1000);
+    (*sampler).set_burnin(100);
 
 
     // =========================================================================

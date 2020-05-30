@@ -58,9 +58,9 @@ class Algorithm{
 protected:
     // METHOD PARAMETERS
     //! Iterations of the algorithm
-    unsigned int maxiter = 10000;
+    unsigned int maxiter = 1000;
     //! Number of burn-in iterations, which will be discarded
-    unsigned int burnin  =  1000;
+    unsigned int burnin = 100;
 
     // DATA AND VALUES CONTAINERS
     //! Matrix of row-vectorial data points

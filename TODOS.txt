@@ -12,7 +12,6 @@ ELENA:
 
 BRUNO:
 * factory and mixture / etc
-* maxtier = 1000 and burn = 100 everywhere
 Stile:
 * Fix BNP models in algorithms and hierarchies
 * grep "[^ ] $" -PR src/*; grep "^ +$" -PR src/*; spazi; a capo; etc
