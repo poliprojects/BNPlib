@@ -153,7 +153,6 @@ public:
 
     // DESTRUCTOR AND CONSTRUCTORS
     virtual ~Algorithm() = default;
-    Algorithm() = default;
     //! \param hypers_  Hyperparameters object for the model
     //! \param mixture_ Mixture object for the model
     //! \param data_    Matrix of row-vectorial data points

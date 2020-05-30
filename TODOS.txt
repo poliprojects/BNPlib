@@ -1,7 +1,7 @@
 TODO LIST
 
 
-ELENA
+ELENA:
 * cardinalità rand-index
 * factory / dataless
 * contour plot: matplotib.contour(x,y,z,...)
@@ -12,7 +12,6 @@ ELENA
 
 BRUNO:
 * factory and mixture / etc
-* useless default constructors in classes
 * Rename: output -> chain_state
 * Move .proto file -> to root
 * maxtier = 1000 and burn = 100 everywhere
