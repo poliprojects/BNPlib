@@ -1,3 +1,7 @@
+##
+# @package MyModule Module documentation
+#
+
 from google.protobuf.internal.encoder import _VarintBytes
 from google.protobuf.internal.decoder import _DecodeVarint32
 import output_pb2
@@ -14,7 +18,7 @@ import bnplibpy
 
 
 def deserialize(collfile = "collector.recordio"):
-    """Reads collector from file and returns it as a list of Protobuf objects.
+    """! Reads collector from file and returns it as a list of Protobuf objects
 
     collfile is the name of the saved file collector. All Protobuf messages in
     the returned list are instances of the custom State class, that is, they
