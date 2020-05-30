@@ -9,7 +9,7 @@ namespace NNWDir {
     using HypersType = HypersFixedNNW;
     using MixtureType = DirichletMixture;
     template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
-    
+
     using BuilderDL = std::function< std::unique_ptr<Algorithm<HierarchyType,
         HypersType, MixtureType>>(HypersType, MixtureType)>;
 }
@@ -49,9 +49,8 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType>::Instance();
-    
-    
-	if (!algoFactory.check_existence(algo)){    
+
+	if (!algoFactory.check_existence(algo)){
         BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){
             return std::make_unique< Neal2<HierarchyType, HypersType,
                     MixtureType> >(hy, mix);
@@ -64,8 +63,7 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
         algoFactory.add_builder("neal2_dataless", neal2builder_dataless);
         algoFactory.add_builder("neal8_dataless", neal8builder_dataless);
     }
-    
-    
+
     // Create algorithm
     auto sampler = algoFactory.create_object(algo, hy, mix);
 

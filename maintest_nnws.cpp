@@ -8,9 +8,10 @@
 
 //! Static main program to test different implementations of the NNW hierarchy.
 
-//! This file uses the chrono library to test the efficiency of different func-
-//! tions. You can change the classes used for the model through the aliases
+//! This file uses the chrono library to test the efficiency of different
+//! functions. You can change the classes used for the model through the aliases
 //! below.
+
 using HypersType = HypersFixedNNW;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;

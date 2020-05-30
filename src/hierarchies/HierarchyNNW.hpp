@@ -9,17 +9,17 @@
 //! This class represents a hierarchy, i.e. a cluster, whose multivariate data
 //! are distributed according to a multinomial normal likelihood, the parameters
 //! of which have a Normal-Wishart centering distribution. That is:
-//!           phi = (mu,tau)   (state)
-//! f(x_i|mu,tau) = N(mu,tau)  (data likelihood)
-//!      (mu,tau) ~ G          (unique values distribution)
-//!             G ~ MM         (mixture model)
-//!            G0 = N-W        (centering distribution)
+//!           phi = (mu,tau)   (state);
+//! f(x_i|mu,tau) = N(mu,tau)  (data likelihood);
+//!      (mu,tau) ~ G          (unique values distribution);
+//!             G ~ MM         (mixture model);
+//!            G0 = N-W        (centering distribution).
 //! state[0] = mu is called location, and state[1] = tau is called precision.
 //! The state's hyperparameters, contained in the Hypers object, are (mu0,
-//! lambda, tau0, nu), which are respectively vector, scalar, matrix, and sca-
-//! lar. Note that this hierarchy is conjugate, thus the marginal and the poste-
-//! rior distribution are available in closed form and Neal's algorithm 2 may be
-//! used with it.
+//! lambda, tau0, nu), which are respectively vector, scalar, matrix, and
+//! scalar. Note that this hierarchy is conjugate, thus the marginal and the
+//! posterior distribution are available in closed form and Neal's algorithm 2
+//! may be used with it.
 
 //! \param Hypers Name of the hyperparameters class
 

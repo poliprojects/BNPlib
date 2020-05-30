@@ -9,15 +9,15 @@
 //! This class implements Neal's Gibbs sampling algorithm 8 that generates a
 //! Markov chain on the clustering of the provided data.
 //!
-//! It is a generalization of Neal's algorithm 2 which works for any hierarchi-
-//! cal model, even non-conjugate ones, unlike its predecessor. The main diffe-
-//! rence is the presence of a fixed number of additional unique values, called
-//! the auxiliary blocks, which are constantly updated and from which new clus-
-//! ters choose their unique values. They offset the lack of conjugacy of the
-//! model by allowing an estimate of the (uncomputable) marginal density via a
-//! weighted mean on these new blocks. Other than this and some minor adjust-
-//! ments in the allocation sampling phase to circumvent non-conjugacy, it is
-//! the same as Neal's algorithm 2.
+//! It is a generalization of Neal's algorithm 2 which works for any
+//! hierarchical model, even non-conjugate ones, unlike its predecessor. The
+//! main difference is the presence of a fixed number of additional unique
+//! values, called the auxiliary blocks, which are constantly updated and from
+//! which new clusters choose their unique values. They offset the lack of
+//! conjugacy of the model by allowing an estimate of the (uncomputable)
+//! marginal density via a weighted mean on these new blocks. Other than this
+//! and some minor adjustments in the allocation sampling phase to circumvent
+//! non-conjugacy, it is the same as Neal's algorithm 2.
 
 //! \param Hierarchy Name of the hierarchy template class
 //! \param Hypers    Name of the hyperparameters class

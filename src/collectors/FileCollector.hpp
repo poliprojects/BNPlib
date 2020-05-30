@@ -7,12 +7,12 @@
 //! Class for a collector that writes its content to a file.
 
 //! This is a type of collector that writes each state passed to it to a binary
-//! file. Unlike the memory collector, the contents of this collector are perma-
-//! nent, because every state collected by it remains ever after the termination
-//! of the main that created it, in Protobuf form, in the corresponding file.
-//! This approach is mandatory, for instance, if different main programs are
-//! used both to run the algorithm and the estimates. Therefore, a file collec-
-//! tor has both a reading and a writing mode.
+//! file. Unlike the memory collector, the contents of this collector are
+//! permanent, because every state collected by it remains ever after the
+//! termination of the main that created it, in Protobuf form, in the
+//! corresponding file. This approach is mandatory, for instance, if different
+//! main programs are used both to run the algorithm and the estimates.
+//! Therefore, a file collector has both a reading and a writing mode.
 
 class FileCollector: public BaseCollector {
 protected:
