@@ -1,15 +1,28 @@
 TODO LIST
 
 
-CHANGELOG
-* Sistemata faccenda totalmass
-* Creata classe BaseMixture
-* Aggiunta cluster_estimate2() che usa le Sparse Matrix
-* Rimosso colltype dall'interfaccia Python (tanto ha senso usare solo il file
-  collector)
-* Aggiunto n_aux all'interfaccia Python
-* Di conseguenza, aggiunto set_n_aux() anche alla classe base Algorithm per
-  ragioni di polimorfismo (in quella classe la funzione non fa nulla)
+ELENA
+* cardinalità rand-index
+* factory / dataless
+* contour plot: matplotib.contour(x,y,z,...)
+* README usando solo bash/install.sh
+* tests
+* time con cluster_estimate vs cluster_estimate2
+
+
+BRUNO:
+* factory and mixture / etc
+* useless default constructors in classes
+* Rename: output -> chain_state
+* Move .proto file -> to root
+* maxtier = 1000 and burn = 100 everywhere
+Stile:
+* Fix BNP models in algorithms and hierarchies
+* grep "[^ ] $" -PR src/*; grep "^ +$" -PR src/*; spazi; a capo; etc
+* Make Python files appear in the docs
+* Remove - newlines in doc
+* Redo callgrind and time stuff (optimization)
+* End doxygen docs
 
 
 TESTS
@@ -35,31 +48,8 @@ TESTS
   la densità dovrebbe venire bene uguale)
 
 
-IMPLEMENTAZIONE
-* row vs column data
-* useless default constructors in classes
-* NNIG has status sig or sig^2?
-* dataless (see e.g. console.py)
-* Test cluster_estimate() vs cluster_estimate2()
-* Rename some files (output) and functions
-* Move .proto files?
-* (?) plot Python: highest posterior density intervals (credible intervals),
-  arviz (library), contour plot
-
-
-STILE
-* Fix BNP models in algorithms and hierarchies
-* grep "[^ ] $" -PR src/*; grep "^ +$" -PR src/*; spazi; a capo; etc
-* Make Python files appear in the docs
-* Remove - newlines in doc
-
-
 VARI
-* Redo callgrind and time stuff (optimization)
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
-* README (Virtual Machine etc)
-* Ens doxygen docs
-
 
 
 REPORT
@@ -79,6 +69,15 @@ REPORT
   i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto: 
   di default usa uno slice sampler che non è molto efficiente, selezionate il
   sampler marginale ('MAR') e matchate gli iperparametri.
+
+
+REPORT ELENA
+* nuova parte collectors
+* nuova parte Factory
+
+
+REPORT BRUNO
+* nuova parte Python
 
 
 LIBRERIA (?)

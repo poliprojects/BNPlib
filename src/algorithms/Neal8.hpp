@@ -52,7 +52,7 @@ public:
     Neal8() = default;
     //! \param hypers_  Hyperparameters object for the model
     //! \param mixture_ Mixture object for the model
-    //! \param data_    Matrix of column-vectorial data points
+    //! \param data_    Matrix of row-vectorial data points
     //! \param init     Prescribed n. of clusters for the algorithm initializ.
     Neal8(const Hypers &hypers_, const Mixture &mixture_,
         const Eigen::MatrixXd &data_, const unsigned int init = 0) :
