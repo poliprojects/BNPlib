@@ -9,7 +9,7 @@ totalmass = 1
 algo = "neal2"
 algoDL = ''.join((algo, '_dataless'))
 rng = 20200229
-maxit = 100
+maxit = 200
 burn = 10
 n_aux = 3
 only = "all"
@@ -32,6 +32,8 @@ for i in c:
     imgfileclust = ''.join(("src/python/test_res/clust", str(i), ".pdf"))
     imgfilechain = ''.join(("src/python/test_res/chain", str(i), ".pdf"))
     imgfiledens  = ''.join(("src/python/test_res/dens",  str(i), ".pdf"))
+    mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
+    mu0 = np.mean(mat)
     bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile,
         algo, collfile, rng, maxit, burn, n_aux)
 
