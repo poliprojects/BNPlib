@@ -22,14 +22,17 @@ for i in c:
     imgfileclust = ''.join(("src/python/test_res/clust", str(i), ".pdf"))
     imgfilechain = ''.join(("src/python/test_res/chain", str(i), ".pdf"))
     imgfiledens  = ''.join(("src/python/test_res/dens",  str(i), ".pdf"))
-    mu0 = empirical_mean(datafile)
+    imgfilecontour  = ''.join(("src/python/test_res/dens_contour",  str(i), ".pdf"))
+    mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
+    mu0 = np.mean(mat, axis=0)
     nu = d[i-5]+3
     tau0 = (1/nu) * np.identity(d[i-5])
     bnplibpy.run_NNW_Dir(mu0, lambda_,tau0, nu, totalmass, datafile, algo,
         collfile, rng, maxit, burn, n_aux)
     chain_histogram(collfile, imgfilechain)
     grid = get_grid(d[i-5])
-    bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid[0],
+    bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid,
         algoDL, collfile, densfile, clustfile, only)
     plot_clust_cards(clustfile, imgfileclust)
     plot_density(densfile, imgfiledens)
+    plot_density_contour(densfile,imgfilecontour)

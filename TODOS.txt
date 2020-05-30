@@ -1,10 +1,10 @@
 TODO LIST
 
 
-ELENA:
-* cardinalità rand-index
+
+ELENA
+
 * factory / dataless
-* contour plot: matplotib.contour(x,y,z,...)
 * README usando solo bash/install.sh
 * tests
 * time con cluster_estimate vs cluster_estimate2

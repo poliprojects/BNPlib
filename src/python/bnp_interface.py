@@ -36,14 +36,14 @@ def deserialize(collfile = "collector.recordio"):
             read_metric = output_pb2.State()
             read_metric.ParseFromString(msg_buf)
             d.append(read_metric)
-    return[d] # TODO why []?
+    return d # TODO why []?
 
 
 def get_grid(d):
     """TODO docstring.
 
     TODO docstring but longer."""
-    uni_g = np.arange(-5, +5.1, 0.5)
+    uni_g = np.arange(-7, +7.1, 0.5)
     arr = [uni_g for y in range(d)]
     mesh = np.meshgrid(*arr)
     nrows = len(mesh[0].flat)
@@ -52,15 +52,7 @@ def get_grid(d):
     for i in range(0,d):
         grid[:,i] = mesh[i].flat
 
-    return[grid]
-
-
-def empirical_mean(datafile):
-    """TODO docstring.
-
-    TODO docstring but longer."""
-    mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
-    return[np.mean(mat, axis=0)]
+    return grid
 
 
 def chain_histogram(collfile = "collector.recordio",
@@ -75,7 +67,7 @@ def chain_histogram(collfile = "collector.recordio",
     figure = plt.figure()
     num_clusters = []
 
-    for i in d[0]:
+    for i in d:
         num_clusters.append(len(i.uniquevalues))
 
     plt.hist(num_clusters)
@@ -108,7 +100,31 @@ def plot_density(densfile = "src/python/density.csv",
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
 
+def plot_density_contour(densfile = "src/python/density.csv",
+    imgfile = "src/python/density_contour.pdf"):
+    """Reads a 2D or 3D density from a csv file and plots it.
 
+    densfile is the file from which the density will be read. Such file must
+    consist of 3 to 4 columns, the last of which is the density value and the
+    remaining ones are the coordinates of the points of evaluation of that va-
+    lue. Then, a 2D or 3D plot is produced and saved to the imgfile file. If the
+    dimension is not 2 or 3, this function does nothing."""
+    mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
+
+    cols = mat.shape[1]
+    if cols != 3:
+        print("Error: density file must have 3 columns to be plotted")
+        return
+    figure = plt.figure()
+    #ax = figure.add_subplot(111)
+    x = np.arange(-7, +7.1, 0.5)
+    xx, yy = np.meshgrid(x, x)
+    z = mat[:,2].reshape(xx.shape)
+    plt.contourf(xx, yy, z)
+    plt.savefig(imgfile)
+    print("Successfully saved plot to", imgfile)
+    
+    
 def plot_clust_cards(clustfile = "src/python/clust.csv",
     imgfile = "src/python/clust.pdf"):
     """Reads a clustering structure from a csv file and plots the cardinalities.
@@ -147,9 +163,20 @@ def print_clust_rand_indx(clustfile = "src/python/clust.csv",
     TODO docstring but longer."""
     mat_pred = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     mat_true = np.loadtxt(open(trueclustfile, 'rb'), delimiter=',')
-    values = np.unique(mat_pred[:,1])
+
+    clusters, tot_counts = np.unique(mat_pred[:,0].astype(int), return_counts=True)
+    greater_counts=sorted(tot_counts,reverse=True)[0:len(np.unique(mat_true))]
+    greater_clust =clusters[ np.where(np.in1d(tot_counts, greater_counts))[0]]
+    
+    v1=np.unique(mat_pred[np.where(np.in1d(mat_pred[:,0], greater_clust))[0],1])
+    v2=np.array([item for item in np.unique(mat_pred[:,1]) if item not in v1])
+    values=np.concatenate((v1,v2))
+
+
     new_indx = np.arange(len(values))
+
     for i in range(0, mat_pred.shape[0]):
         mat_pred[i,0] = new_indx[ np.where(values == mat_pred[i,1]) ]
+
     print("Rand index score:", rand_index_score(mat_pred[:,0].astype(int),
         mat_true.astype(int)))
