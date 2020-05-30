@@ -14,9 +14,9 @@ LDLIBS = $(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb \
 
 
 EXE = maintest_uni
-SRCS_OUTPUT = src/collectors/output.pb.cc
+SRCS_PROTO = src/collectors/chain_state.pb.cc
 SRCS = src/collectors/FileCollector.cpp src/collectors/MemoryCollector.cpp
-LIB_OBJS = $(subst .cpp,.o, $(SRCS)) $(subst .cc,.o, $(SRCS_OUTPUT))
+LIB_OBJS = $(subst .cpp,.o, $(SRCS)) $(subst .cc,.o, $(SRCS_PROTO))
 OBJS = $(EXE).o $(LIB_OBJS)
 
 .PHONY: all clean distclean

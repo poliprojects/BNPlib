@@ -5,7 +5,7 @@
 #include <string>
 #include <deque>
 #include <vector>
-#include "output.pb.h"
+#include "chain_state.pb.h"
 
 #include <stdio.h>
 #include <fcntl.h>

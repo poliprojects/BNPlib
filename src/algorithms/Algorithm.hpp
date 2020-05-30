@@ -12,7 +12,7 @@
 #include <stan/math/prim/fun.hpp>
 #include <stan/math/prim/prob.hpp>
 
-#include "../collectors/output.pb.h"
+#include "../collectors/chain_state.pb.h"
 #include "../collectors/FileCollector.hpp"
 #include "../collectors/MemoryCollector.hpp"
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 
-cd src/api
-../../lib/protobuf/src/protoc -I=. --cpp_out=. output.proto
-# TODO protoc for Python
+lib/protobuf/src/protoc    --cpp_out=src/collectors chain_state.proto
+lib/protobuf/src/protoc --python_out=src/python     chain_state.proto

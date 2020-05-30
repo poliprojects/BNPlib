@@ -12,8 +12,6 @@ ELENA:
 
 BRUNO:
 * factory and mixture / etc
-* Rename: output -> chain_state
-* Move .proto file -> to root
 * maxtier = 1000 and burn = 100 everywhere
 Stile:
 * Fix BNP models in algorithms and hierarchies
