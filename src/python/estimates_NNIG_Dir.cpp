@@ -9,15 +9,11 @@ namespace NNIGDir {
     using HypersType = HypersFixedNNIG;
     using MixtureType = DirichletMixture;
     template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
-<<<<<<< HEAD
+
     
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
-=======
 
-    using BuilderDL = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType, MixtureType)>;
->>>>>>> b2f6ea5298246a0b562f2f2da546c91b96e647ed
 }
 
 //! Clustering and density estimates for an NNIG + Dirichlet mixture model.
@@ -49,13 +45,10 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
     // Build model components
     HypersType hy(mu0, lambda_, alpha0, beta0);
     MixtureType mix(totalmass);
-<<<<<<< HEAD
+
     Eigen::VectorXd data;
     
-    
-=======
-
->>>>>>> b2f6ea5298246a0b562f2f2da546c91b96e647ed
+   
     // Load algorithm factory
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
@@ -77,12 +70,8 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
         algoFactory.add_builder("neal2",neal2builder);
         algoFactory.add_builder("neal8",neal8builder);
     }
-<<<<<<< HEAD
-    
-    
-=======
 
->>>>>>> b2f6ea5298246a0b562f2f2da546c91b96e647ed
+
     // Create algorithm
     auto sampler = algoFactory.create_object(algo, hy, mix, data);
 

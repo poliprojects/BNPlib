@@ -9,15 +9,11 @@ namespace NNWDir {
     using HypersType = HypersFixedNNW;
     using MixtureType = DirichletMixture;
     template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
-<<<<<<< HEAD
+
     
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::MatrixXd)>;
-=======
 
-    using BuilderDL = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType, MixtureType)>;
->>>>>>> b2f6ea5298246a0b562f2f2da546c91b96e647ed
 }
 
 //! Clustering and density estimates for an NNW + Dirichlet mixture model.
@@ -55,26 +51,18 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     // Load algorithm factory
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
-<<<<<<< HEAD
         MixtureType,Eigen::MatrixXd>::Instance();
     
     
+
     if (!algoFactory.check_existence(algo)){
-    
+
         Builder neal2builder = [](HypersType hy, MixtureType mix,
             Eigen::MatrixXd data){
             return std::make_unique< Neal2<HierarchyType,HypersType,
                     MixtureType> >(hy, mix, data);
-=======
-        MixtureType>::Instance();
-
-	if (!algoFactory.check_existence(algo)){
-        BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){
-            return std::make_unique< Neal2<HierarchyType, HypersType,
-                    MixtureType> >(hy, mix);
->>>>>>> b2f6ea5298246a0b562f2f2da546c91b96e647ed
             };
-        
+
         Builder neal8builder = [](HypersType hy, MixtureType mix,
             Eigen::MatrixXd data){
             return std::make_unique< Neal8<HierarchyType,HypersType,
@@ -84,11 +72,7 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
         algoFactory.add_builder("neal2",neal2builder);
         algoFactory.add_builder("neal8",neal8builder);
     }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> b2f6ea5298246a0b562f2f2da546c91b96e647ed
     // Create algorithm
     auto sampler = algoFactory.create_object(algo, hy, mix, data);
 
