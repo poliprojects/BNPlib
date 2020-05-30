@@ -43,24 +43,28 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
     // Build model components
     HypersType hy(mu0, lambda_, alpha0, beta0);
     MixtureType mix(totalmass);
+    
 
     // Load algorithm factory
-    BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){
-        return std::make_unique< Neal2<HierarchyType, HypersType,
-                MixtureType> >(hy, mix);
-        };
-    BuilderDL neal8builder_dataless = [](HypersType hy, MixtureType mix){
-        return std::make_unique< Neal8<HierarchyType, HypersType,
-                MixtureType> >(hy, mix);
-        };
-
+    
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType>::Instance();
 
-    algoFactory.add_builder("neal2_dataless", neal2builder_dataless);
-    algoFactory.add_builder("neal8_dataless", neal8builder_dataless);
+    if (!algoFactory.check_existence(algo)){
+        BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){
+            return std::make_unique< Neal2<HierarchyType, HypersType,
+                    MixtureType> >(hy, mix);
+            };
+        BuilderDL neal8builder_dataless = [](HypersType hy, MixtureType mix){
+            return std::make_unique< Neal8<HierarchyType, HypersType,
+                    MixtureType> >(hy, mix);
+            };
 
+        algoFactory.add_builder("neal2_dataless", neal2builder_dataless);
+        algoFactory.add_builder("neal8_dataless", neal8builder_dataless);
+    }
+    
     // Create algorithm
     auto sampler = algoFactory.create_object(algo, hy, mix);
 

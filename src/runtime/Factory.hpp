@@ -121,7 +121,17 @@ public:
         return tmp;
     }
 
-};
 
+
+
+    bool check_existence(std::string s) const {
+        bool exist=true;
+        if ( storage.find(s) == storage.end() ) {
+            exist=false;
+        }
+        return exist;
+    }
+
+};
 
 #endif // FACTORY_HPP

@@ -47,25 +47,28 @@ int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
     Eigen::VectorXd data = read_eigen_matrix(datafile);
 
     // Load algorithm factory
-    Builder neal2builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
-        return std::make_unique< Neal2<HierarchyType,HypersType,
-                MixtureType> >(hy, mix, data);
-        };
-    
-    Builder neal8builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
-        return std::make_unique< Neal8<HierarchyType,HypersType,
-                MixtureType> >(hy, mix, data);
-        };
-
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType>::Instance();
+    
+    if (!algoFactory.check_existence(algo)){
+        Builder neal2builder = [](HypersType hy, MixtureType mix,
+            Eigen::VectorXd data){
+            return std::make_unique< Neal2<HierarchyType,HypersType,
+                    MixtureType> >(hy, mix, data);
+            };
+        
+        Builder neal8builder = [](HypersType hy, MixtureType mix,
+            Eigen::VectorXd data){
+            return std::make_unique< Neal8<HierarchyType,HypersType,
+                    MixtureType> >(hy, mix, data);
+            };
 
-    algoFactory.add_builder("neal2",neal2builder);
-    algoFactory.add_builder("neal8",neal8builder);
-
+        algoFactory.add_builder("neal2",neal2builder);
+        algoFactory.add_builder("neal8",neal8builder);
+    }
+    
+    
     // Create algorithm and set algorithm parameters
     auto sampler = algoFactory.create_object(algo, hy, mix, data);
 

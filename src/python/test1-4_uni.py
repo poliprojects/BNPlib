@@ -9,8 +9,8 @@ totalmass = 1
 algo = "neal2"
 algoDL = ''.join((algo, '_dataless'))
 rng = 20200229
-maxit = 1000
-burn = 100
+maxit = 100
+burn = 10
 n_aux = 3
 only = "all"
 
