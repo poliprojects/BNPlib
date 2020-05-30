@@ -51,10 +51,8 @@ def get_grid(d):
 
     for i in range(0,d):
         grid[:,i] = mesh[i].flat
-        
+
     return grid
-
-
 
 
 def chain_histogram(collfile = "collector.recordio",
@@ -68,8 +66,8 @@ def chain_histogram(collfile = "collector.recordio",
     d = deserialize(collfile)
     figure = plt.figure()
     num_clusters = []
-    
-    for i in d:  
+
+    for i in d:
         num_clusters.append(len(i.uniquevalues))
 
     plt.hist(num_clusters)
@@ -83,9 +81,9 @@ def plot_density(densfile = "src/python/density.csv",
 
     densfile is the file from which the density will be read. Such file must
     consist of 3 to 4 columns, the last of which is the density value and the
-    remaining ones are the coordinates of the points of evaluation of that va-
-    lue. Then, a 2D or 3D plot is produced and saved to the imgfile file. If the
-    dimension is not 2 or 3, this function does nothing."""
+    remaining ones are the coordinates of the points of evaluation of that
+    value. Then, a 2D or 3D plot is produced and saved to the imgfile file. If
+    the dimension is neither 2 nor 3, this function does nothing."""
     mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
 
     cols = mat.shape[1]
@@ -141,7 +139,7 @@ def plot_clust_cards(clustfile = "src/python/clust.csv",
     plt.hist(mat[:,0])
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
-    
+
 
 def rand_index_score(clusters, classes):
     """TODO docstring.

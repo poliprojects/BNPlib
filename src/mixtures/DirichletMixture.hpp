@@ -6,13 +6,13 @@
 
 //! Class that represents the Dirichlet process mixture model.
 
-//! This class represents a particular mixture model for iterative BNP algo-
-//! rithms, called the Dirichlet process. It represents the distribution of a
-//! random probability measure that fulfills a certain property involving the
-//! Dirichlet distribution. In terms of the algorithms, it translates to a mix-
-//! ture that assigns a weight M, called the total mass parameter, to the crea-
-//! tion of a new cluster, and weights of already existing clusters are propor-
-//! tional to their cardinalities.
+//! This class represents a particular mixture model for iterative BNP
+//! algorithms, called the Dirichlet process. It represents the distribution of
+//! a random probability measure that fulfills a certain property involving the
+//! Dirichlet distribution. In terms of the algorithms, it translates to a
+//! mixture that assigns a weight M, called the total mass parameter, to the
+//! creation of a new cluster, and weights of already existing clusters are
+//! proportional to their cardinalities.
 
 class DirichletMixture : public BaseMixture {
 protected:

@@ -6,7 +6,7 @@ CXXFLAGS += -fPIC -fopenmp -D_REENTRANT -O3 -msse2 -funroll-loops \
 	-ftree-vectorize -I$(STAN_ROOT_DIR) -I$(EIGEN_DIR) \
 	-I$(STAN_ROOT_DIR)/lib/boost_1.72.0/ \
 	-I$(STAN_ROOT_DIR)/lib/sundials_4.1.0/include \
-	-I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include 
+	-I$(STAN_ROOT_DIR)/lib/tbb_2019_U8/include
 
 LDFLAGS += -O3 -D_REENTRANT -fopenmp
 LDLIBS = $(shell pkg-config --libs protobuf) -L$(STAN_ROOT_DIR)/lib/tbb \

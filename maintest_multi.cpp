@@ -9,6 +9,7 @@
 //! Static main program to test an univariate hierarchy.
 
 //! You can change the classes used for the model through the aliases below.
+
 using HypersType = HypersFixedNNW;
 using MixtureType = DirichletMixture;
 template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;

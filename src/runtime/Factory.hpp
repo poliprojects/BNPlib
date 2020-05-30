@@ -15,17 +15,17 @@
 
 //! An object factory allows to choose one of several derived objects from a
 //! single abstract base class at runtime. This type of class is implemented as
-//! a singleton and stores functions that build such objects, called the buil-
-//! ders, which can be called at need at runtime, based on identifiers of the
-//! specific objects. The storage must first be filled with the appropriate
+//! a singleton and stores functions that build such objects, called the
+//! builders, which can be called at need at runtime, based on identifiers of
+//! the specific objects. The storage must first be filled with the appropriate
 //! builders, which can be as simple as a function returning a smart pointer to
-//! a new instance. This can be done in a main file or in an appropriate func-
-//! tion. This factory is templatized as a variadic template, that allows pas-
-//! sing any number of parameters of any type to the contructors of the objects.
+//! a new instance. This can be done in a main file or in an appropriate
+//! function. This factory is templatized as a variadic template, that allows
+//! passing any number of parameters of any type to the contructors of the
+//! objects.
 
 //! \param AbstractProduct Class name for the abstract base object
-//! \param Args...         Generic collection of parameters to pass to the ob-
-//!                        jects' consturctors
+//! \param Args...         Collection of parameters for the objects constructors
 
 template<class AbstractProduct, typename... Args>
 class Factory{

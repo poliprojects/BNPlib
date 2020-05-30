@@ -12,11 +12,8 @@ ELENA
 
 BRUNO:
 * factory and mixture / etc
-Stile:
-* Fix BNP models in algorithms and hierarchies
-* grep "[^ ] $" -PR src/*; grep "^ +$" -PR src/*; spazi; a capo; etc
+* grep "[^ ] $" -PR src/*;  grep "^ +$" -PR src/*;  (spazi/a capo)
 * Make Python files appear in the docs
-* Remove - newlines in doc
 * Redo callgrind and time stuff (optimization)
 * End doxygen docs
 
@@ -62,7 +59,7 @@ REPORT
 * spiegare le flag di efficienza: -march=native -O3 -msse2 -funroll-loops
   -ftree-vectorize
 * confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
-  i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto: 
+  i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto:
   di default usa uno slice sampler che non è molto efficiente, selezionate il
   sampler marginale ('MAR') e matchate gli iperparametri.
 
