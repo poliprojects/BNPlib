@@ -1,7 +1,12 @@
 TODO LIST
 
 
+<<<<<<< HEAD
 ELENA
+=======
+ELENA:
+* cardinalità rand-index
+>>>>>>> 6a75c35558779d7909abdd725835716bf81dbba5
 * factory / dataless
 * README usando solo bash/install.sh
 * tests
@@ -10,10 +15,6 @@ ELENA
 
 BRUNO:
 * factory and mixture / etc
-* useless default constructors in classes
-* Rename: output -> chain_state
-* Move .proto file -> to root
-* maxtier = 1000 and burn = 100 everywhere
 Stile:
 * Fix BNP models in algorithms and hierarchies
 * grep "[^ ] $" -PR src/*; grep "^ +$" -PR src/*; spazi; a capo; etc

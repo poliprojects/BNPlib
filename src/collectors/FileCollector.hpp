@@ -50,7 +50,6 @@ public:
             close(infd);
         }
     }
-    FileCollector() = default;
     FileCollector(const std::string &filename_) : filename(filename_){}
     //! Initializes collector
     void start() override;

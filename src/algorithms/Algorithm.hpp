@@ -12,7 +12,7 @@
 #include <stan/math/prim/fun.hpp>
 #include <stan/math/prim/prob.hpp>
 
-#include "../collectors/output.pb.h"
+#include "../collectors/chain_state.pb.h"
 #include "../collectors/FileCollector.hpp"
 #include "../collectors/MemoryCollector.hpp"
 
@@ -58,9 +58,9 @@ class Algorithm{
 protected:
     // METHOD PARAMETERS
     //! Iterations of the algorithm
-    unsigned int maxiter = 10000;
+    unsigned int maxiter = 1000;
     //! Number of burn-in iterations, which will be discarded
-    unsigned int burnin  =  1000;
+    unsigned int burnin = 100;
 
     // DATA AND VALUES CONTAINERS
     //! Matrix of row-vectorial data points
@@ -153,7 +153,6 @@ public:
 
     // DESTRUCTOR AND CONSTRUCTORS
     virtual ~Algorithm() = default;
-    Algorithm() = default;
     //! \param hypers_  Hyperparameters object for the model
     //! \param mixture_ Mixture object for the model
     //! \param data_    Matrix of row-vectorial data points

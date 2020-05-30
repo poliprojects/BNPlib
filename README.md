@@ -4,10 +4,8 @@
 * Download: ```git clone https://github.com/poliprojects/BNPlib.git```
 * Install libraries: ```bash/install_libs.sh```
 * Compile library: ```make```
-* TODO (other scripts?)
-* Compile a .proto file with protoc: first ```cd src/collectors``` then run:
-  ```../../lib/protobuf/src/protoc -I=. --python_out=. output.proto```
-* same with Python (TODO)
+* Compile a .proto file with protoc to produce the classes needed (not
+  necessary, files are already there): ```bash/produce_protos.sh```
 
 ### Documentation
 * TODO

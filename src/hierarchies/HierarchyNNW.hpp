@@ -55,7 +55,6 @@ public:
 
     // DESTRUCTOR AND CONSTRUCTORS
     ~HierarchyNNW() = default;
-    HierarchyNNW() = default;
     HierarchyNNW(std::shared_ptr<Hypers> hypers_) {
         hypers = hypers_;
         unsigned int dim = hypers->get_mu0().size();
