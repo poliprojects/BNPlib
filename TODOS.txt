@@ -41,23 +41,24 @@ IMPLEMENTAZIONE
 * NNIG has status sig or sig^2?
 * dataless (see e.g. console.py)
 * Test cluster_estimate() vs cluster_estimate2()
+* Rename some files (output) and functions
+* Move .proto files?
+* (?) plot Python: highest posterior density intervals (credible intervals),
+  arviz (library), contour plot
 
 
 STILE
 * Fix BNP models in algorithms and hierarchies
-* Rename some files (output) and functions (draw, sample)
-* Move .proto files?
 * grep -R "[^ ] $" src/*; spazi; a capo; etc
+* Make Python files appear in the docs
 
 
 VARI
-* Make Python files appear in the docs
 * Redo callgrind and time stuff (optimization)
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
 * README (Virtual Machine etc)
-* Doxygen docs for Python folder
-* (?) plot Python: highest posterior density intervals (credible intervals),
-  arviz (library), contour plot
+* Ens doxygen docs
+
 
 
 REPORT
