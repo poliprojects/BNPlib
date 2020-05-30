@@ -49,7 +49,7 @@ int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
     // Load algorithm factory
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
-        MixtureType>::Instance();
+        MixtureType,Eigen::VectorXd>::Instance();
     
     if (!algoFactory.check_existence(algo)){
         Builder neal2builder = [](HypersType hy, MixtureType mix,

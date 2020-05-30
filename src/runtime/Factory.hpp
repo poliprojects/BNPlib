@@ -31,11 +31,12 @@ template<class AbstractProduct, typename... Args>
 class Factory{
 private:
     using Identifier = std::string;
-    using EstimatesBuilder = std::function< std::unique_ptr<AbstractProduct>(
+    //using EstimatesBuilder = std::function< std::unique_ptr<AbstractProduct>(
+      //  Args...)>;
+    //using RunBuilder = std::function< std::unique_ptr<AbstractProduct>(
+      //  Args..., Eigen::MatrixXd)>;
+    using Builder = std::function< std::unique_ptr<AbstractProduct>(
         Args...)>;
-    using RunBuilder = std::function< std::unique_ptr<AbstractProduct>(
-        Args..., Eigen::MatrixXd)>;
-    using Builder = boost::variant<RunBuilder, EstimatesBuilder >;
 
     //! Storage for algorithm builders
     std::map<Identifier, Builder> storage;
@@ -66,35 +67,17 @@ public:
     //! \param data Eigen matrix to pass to the constructors
     //! \return     An unique pointer to the created object
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args, const Eigen::MatrixXd &data) const { // TODO
+        Args... args) const { // TODO
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
         }
         else{
-            return boost::get<RunBuilder>(f->second)(
-                std::forward<Args>(args)..., data);
+            return f->second(std::forward<Args>(args)...);
         }
     }
 
 
-    //! Creates a specific object based on an identifier
-
-    //! \param name Identifier for the object
-    //! \param args Collection of any number of parameters
-    //! \param data Eigen matrix to pass to the constructors
-    //! \return     An unique pointer to the created object
-    std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args) const {
-        auto f = storage.find(name);
-        if(f == storage.end()){
-            throw std::invalid_argument("Error: factory identifier not found");
-        }
-        else{
-            return boost::get<EstimatesBuilder>(f->second)(
-                std::forward<Args>(args)...);
-        }
-    }
 
 
     //! Adds a builder function to the storage

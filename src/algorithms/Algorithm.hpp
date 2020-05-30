@@ -167,6 +167,9 @@ public:
                     "correctly, but all data rows other than the first" <<
                     "one will be ignored" << std::endl;
             }
+            if(data.rows()==0){
+                init_num_clusters = 1;            
+            }
             if(init_num_clusters == 0){
                 // If not provided, standard initializ.: one datum per cluster
                 std::cout << "Warning: initial number of clusters will be " <<
@@ -178,15 +181,7 @@ public:
                 unique_values.push_back(hierarchy);
             }
     }
-    //! \param hypers_  Hyperparameters object for the model
-    //! \param mixture_ Mixture object for the model
-    //! \param init     Prescribed n. of clusters for the algorithm initializ.
-    Algorithm(const Hypers &hypers_, const Mixture &mixture_,
-         const unsigned int init = 0) :
-        mixture(mixture_), init_num_clusters(init) {
-        Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
-        unique_values.push_back(hierarchy);
-    }
+
 
     // GETTERS AND SETTERS
     unsigned int get_maxiter() const {return maxiter;}

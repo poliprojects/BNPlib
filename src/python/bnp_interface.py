@@ -4,7 +4,7 @@
 
 from google.protobuf.internal.encoder import _VarintBytes
 from google.protobuf.internal.decoder import _DecodeVarint32
-import output_pb2
+import chain_state_pb2
 
 import csv, os, sys
 import matplotlib.pyplot as plt
@@ -33,10 +33,10 @@ def deserialize(collfile = "collector.recordio"):
             n = new_pos
             msg_buf = buf[n:n+msg_len]
             n += msg_len
-            read_metric = output_pb2.State()
+            read_metric = chain_state_pb2.State()
             read_metric.ParseFromString(msg_buf)
             d.append(read_metric)
-    return d # TODO why []?
+    return d 
 
 
 def get_grid(d):

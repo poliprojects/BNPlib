@@ -81,7 +81,7 @@ int main(int argc, char *argv[]){
 
     auto &algofactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
-        MixtureType>::Instance();
+        MixtureType,Eigen::VectorXd>::Instance();
 
     algofactory.add_builder("neal2", neal2builder);
     algofactory.add_builder("neal8", neal8builder);

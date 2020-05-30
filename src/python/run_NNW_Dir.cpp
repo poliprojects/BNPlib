@@ -51,7 +51,7 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     // Load algorithm factory
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
-        MixtureType>::Instance();
+        MixtureType,Eigen::MatrixXd>::Instance();
         
     if (!algoFactory.check_existence(algo)){
     
