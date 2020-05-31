@@ -3,7 +3,7 @@
 #include <string>
 
 #include "../../includes.hpp"
-
+#include <chrono>
 
 namespace NNIGDir {
     using HypersType = HypersFixedNNIG;
@@ -84,6 +84,7 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
         (*sampler).write_density_to_file(densfile);
     }
     if(only != "dens"){
+    	
         unsigned int i_cap = (*sampler).cluster_estimate2(coll);
         (*sampler).write_clustering_to_file(clustfile);
     }

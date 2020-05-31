@@ -1,0 +1,38 @@
+TEST UNI
+500 MAXITER
+100 BURN-IN
+
+Starting test 1
+Warning: initial number of clusters will be set equal to the data size (200)
+Optimal clustering: at iteration 83 with 2 clusters
+cluster2 time: 20470583
+Optimal clustering: at iteration 83 with 2 clusters
+cluster time: 19492008
+Rand index score: 1.0
+
+Starting test 2
+Warning: initial number of clusters will be set equal to the data size (1000)
+Optimal clustering: at iteration 280 with 3 clusters
+cluster2 time: 822026474
+Optimal clustering: at iteration 280 with 3 clusters
+cluster time: 558320674
+Rand index score: 0.9982002002002002
+
+Starting test 3
+Warning: initial number of clusters will be set equal to the data size (200)
+Optimal clustering: at iteration 99 with 6 clusters
+cluster2 time: 17258565
+Optimal clustering: at iteration 99 with 6 clusters
+cluster time: 17921749
+Rand index score: 0.8377889447236181
+
+Starting test 4
+Warning: initial number of clusters will be set equal to the data size (400)
+Optimal clustering: at iteration 19 with 4 clusters
+cluster2 time: 74140588
+Optimal clustering: at iteration 19 with 4 clusters
+cluster time: 82134977
+Rand index score: 0.9950250626566416
+
+
+

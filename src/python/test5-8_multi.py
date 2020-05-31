@@ -5,8 +5,8 @@ lambda_ = 0.2
 totalmass = 1
 algo = "neal2"
 rng = 20200229
-maxit = 1000
-burn = 100
+maxit = 200
+burn = 10
 n_aux = 3
 only = "all"
 

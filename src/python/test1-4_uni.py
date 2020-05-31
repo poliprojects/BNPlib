@@ -8,8 +8,8 @@ beta0 = 2.0
 totalmass = 1
 algo = "neal2"
 rng = 20200229
-maxit = 200
-burn = 10
+maxit = 500
+burn = 100
 n_aux = 3
 only = "all"
 
@@ -19,7 +19,7 @@ grid = np.arange(-5, +5.1, 0.5)
 #grid4 = "TODO"
 # or linspace
 
-c = [2]
+c = [1,2,3,4]
 for i in c:
     print("Starting test", i)
 

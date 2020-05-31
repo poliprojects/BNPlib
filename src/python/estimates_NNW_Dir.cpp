@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <chrono>
 #include "../../includes.hpp"
 
 
@@ -85,8 +85,10 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
         (*sampler).write_density_to_file(densfile);
     }
     if(only != "dens"){
-        unsigned int i_cap = (*sampler).cluster_estimate(coll);
+        
+        unsigned int i_cap = (*sampler).cluster_estimate2(coll);
         (*sampler).write_clustering_to_file(clustfile);
+ 
     }
 
     std::cout << "End of estimates_NNW_Dir.cpp" << std::endl;
