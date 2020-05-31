@@ -3,7 +3,6 @@ TODO LIST
 
 
 ELENA
-
 * factory / dataless
 * README usando solo bash/install.sh
 * tests
