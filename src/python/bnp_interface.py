@@ -116,7 +116,7 @@ def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf"):
         return
     figure = plt.figure()
     #ax = figure.add_subplot(111)
-    x = np.arange(min(mat[:,0]), max(mat[:,0]), 0.5)
+    x = np.arange(min(mat[:,0]), max(mat[:,0])+0.1, 0.5)
     xx, yy = np.meshgrid(x, x)
     z = mat[:,2].reshape(xx.shape)
     plt.contourf(xx, yy, z)
