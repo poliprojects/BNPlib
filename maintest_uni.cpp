@@ -67,7 +67,7 @@ int main(int argc, char *argv[]){
     // LOAD ALGORITHM FACTORY
     // =========================================================================
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+        HypersType, MixtureType>>(HypersType, MixtureType, Eigen::VectorXd) >;
 
     Builder neal2builder = [](HypersType hy, MixtureType mix,
         Eigen::VectorXd data){
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
 
     auto &algofactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
-        MixtureType,Eigen::VectorXd>::Instance();
+        MixtureType, Eigen::VectorXd>::Instance();
 
     algofactory.add_builder("neal2", neal2builder);
     algofactory.add_builder("neal8", neal8builder);
@@ -104,9 +104,13 @@ int main(int argc, char *argv[]){
     BaseCollector *coll;
     std::string colltype = argv[3];
     if(colltype == "file"){
-        std::string filename = "collector.recordio";
+        std::string filename = "collector_uni.recordio";
         if(argc > 4){
             filename = argv[4];
+        }
+        else {
+            std::cout << "Warning: default name " << filename <<
+                " will be used for file collector" << std::endl;
         }
         coll = new FileCollector(filename);
     }
@@ -118,6 +122,7 @@ int main(int argc, char *argv[]){
             << std::endl;
         return 1;
     }
+
 
     // =========================================================================
     // RUN SAMPLER

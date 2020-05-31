@@ -14,6 +14,8 @@ namespace NNWDir {
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::MatrixXd)>;
 }
 
+//! \file
+
 //! Runs algorithm for an NNW + Dirichlet mixture model.
 
 //! The Markov chain produced by the algorithm will be saved to a collector. A
@@ -34,7 +36,7 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     const double lambda_, const Eigen::MatrixXd &tau0, const double nu,
     const double totalmass,
     const std::string &datafile, const std::string &algo,
-    const std::string &collfile = "collector.recordio",
+    const std::string &collfile,
     const unsigned int rng = 0, const unsigned int maxit = 0,
     const unsigned int burn = 0, const unsigned int n_aux = 0){
 
@@ -52,8 +54,6 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType,Eigen::MatrixXd>::Instance();
- 
-
 
     if (!algoFactory.check_existence(algo)){
 
@@ -69,10 +69,9 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
                     MixtureType> >(hy, mix, data);
             };
 
-        algoFactory.add_builder("neal2",neal2builder);
-        algoFactory.add_builder("neal8",neal8builder);
+        algoFactory.add_builder("neal2", neal2builder);
+        algoFactory.add_builder("neal8", neal8builder);
     }
-
 
     // Create algorithm and set algorithm parameters
     auto sampler = algoFactory.create_object(algo, hy, mix, data);

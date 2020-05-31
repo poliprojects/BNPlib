@@ -10,11 +10,12 @@ namespace NNWDir {
     using MixtureType = DirichletMixture;
     template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
 
-    
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::MatrixXd)>;
 
 }
+
+//! \file
 
 //! Clustering and density estimates for an NNW + Dirichlet mixture model.
 
@@ -35,10 +36,8 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     const double lambda_, const Eigen::MatrixXd &tau0, const double nu,
     const double totalmass,
     const Eigen::MatrixXd &grid, const std::string &algo,
-    const std::string &collfile = "collector_multi.recordio",
-    const std::string &densfile = "src/python/density_multi.csv",
-    const std::string &clustfile = "src/python/clust_multi.csv",
-    const std::string &only = ""){
+    const std::string &collfile, const std::string &densfile,
+    const std::string &clustfile, const std::string &only = "all"){
 
     std::cout << "Running estimates_NNW_Dir.cpp" << std::endl;
     using namespace NNWDir;
@@ -47,15 +46,13 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     HypersType hy(mu0, lambda_, tau0, nu);
     MixtureType mix(totalmass);
     Eigen::MatrixXd data;
-    
+
     // Load algorithm factory
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType,Eigen::MatrixXd>::Instance();
-    
-    
 
-    if (!algoFactory.check_existence(algo)){
+    if(!algoFactory.check_existence(algo)){
 
         Builder neal2builder = [](HypersType hy, MixtureType mix,
             Eigen::MatrixXd data){
@@ -69,8 +66,8 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
                     MixtureType> >(hy, mix, data);
             };
 
-        algoFactory.add_builder("neal2",neal2builder);
-        algoFactory.add_builder("neal8",neal8builder);
+        algoFactory.add_builder("neal2", neal2builder);
+        algoFactory.add_builder("neal8", neal8builder);
     }
 
     // Create algorithm

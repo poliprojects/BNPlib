@@ -4,7 +4,6 @@
 #include <fstream>
 #include <math.h>
 #include <random>
-#include <tuple>
 #include <vector>
 
 #include <Eigen/Dense>
@@ -161,13 +160,14 @@ public:
         const Eigen::MatrixXd &data_, const unsigned int init = 0) :
         mixture(mixture_), data(data_), init_num_clusters(init) {
         Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
+
             if(hierarchy.is_multivariate() == false && data.cols() > 1){
                 std::cout << "Warning: multivariate data supplied to " <<
                     "univariate hierarchy. The algorithm will run " <<
                     "correctly, but all data rows other than the first" <<
                     "one will be ignored" << std::endl;
             }
-            if(data.rows()==0){
+            if(data.rows() == 0){
                 init_num_clusters = 1;            
             }
             if(init_num_clusters == 0){
@@ -177,6 +177,8 @@ public:
                     std::endl;
                 init_num_clusters = data.rows();
             }
+
+            // Initialize hierarchies for starting clusters
             for(size_t i = 0; i < init_num_clusters; i++){
                 unique_values.push_back(hierarchy);
             }

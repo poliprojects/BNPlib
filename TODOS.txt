@@ -3,7 +3,6 @@ TODO LIST
 
 
 ELENA
-
 * factory / dataless
 * README usando solo bash/install.sh
 * tests
@@ -11,9 +10,7 @@ ELENA
 
 
 BRUNO:
-* factory and mixture / etc
 * grep "[^ ] $" -PR src/*;  grep "^ +$" -PR src/*;  (spazi/a capo)
-* Make Python files appear in the docs
 * Redo callgrind and time stuff (optimization)
 * End doxygen docs
 
@@ -58,6 +55,12 @@ REPORT
   l'identità
 * spiegare le flag di efficienza: -march=native -O3 -msse2 -funroll-loops
   -ftree-vectorize
+* hierarchies, mixtures, etc a runtime:
+** visto che templatizziamo sull'abstract product, usare Factory diverse è
+   possibile
+** purtroppo i template params di hierarchy devono essere noti a compile time
+** bisognerebbe scrivere tutte le possibili combinazioni; possibile con il
+   numero di oggetti attuale, ma se aumentassero non scalerebbe bene
 * confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
   i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto:
   di default usa uno slice sampler che non è molto efficiente, selezionate il

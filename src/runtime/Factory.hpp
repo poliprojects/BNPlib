@@ -1,14 +1,10 @@
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
-#include <map>
-#include <vector>
-#include <memory>
 #include <functional>
-
-#include <boost/variant.hpp>
-#include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
 #include <iostream>
+#include <map>
+#include <memory>
+#include <vector>
 
 
 //! Generic object factory for an abstract product.
@@ -31,10 +27,6 @@ template<class AbstractProduct, typename... Args>
 class Factory{
 private:
     using Identifier = std::string;
-    //using EstimatesBuilder = std::function< std::unique_ptr<AbstractProduct>(
-      //  Args...)>;
-    //using RunBuilder = std::function< std::unique_ptr<AbstractProduct>(
-      //  Args..., Eigen::MatrixXd)>;
     using Builder = std::function< std::unique_ptr<AbstractProduct>(
         Args...)>;
 
@@ -78,8 +70,6 @@ public:
     }
 
 
-
-
     //! Adds a builder function to the storage
 
     //! \param name    Identifier to associate the builder with
@@ -105,16 +95,12 @@ public:
     }
 
 
+    //! Checks whether the given algorithm is already in the storage
 
-
-    bool check_existence(std::string s) const {
-        bool exist=true;
-        if ( storage.find(s) == storage.end() ) {
-            exist=false;
-        }
-        return exist;
+    //! \param algo Id for the algorithm to check
+    bool check_existence(const Identifier &algo) const {
+        return !( storage.find(algo) == storage.end() );
     }
-
 };
 
 #endif // FACTORY_HPP

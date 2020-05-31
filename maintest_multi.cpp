@@ -6,7 +6,7 @@
 
 //! \file
 
-//! Static main program to test an univariate hierarchy.
+//! Static main program to test a multivariate hierarchy.
 
 //! You can change the classes used for the model through the aliases below.
 
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]){
     // LOAD ALGORITHM FACTORY
     // =========================================================================
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType, MixtureType, Eigen::MatrixXd)>;
+        HypersType, MixtureType>>(HypersType, MixtureType, Eigen::MatrixXd) >;
 
     Builder neal2builder = [](HypersType hy, MixtureType mix,
         Eigen::MatrixXd data){
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]){
 
     auto &algofactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
-        MixtureType,Eigen::MatrixXd>::Instance();
+        MixtureType, Eigen::MatrixXd>::Instance();
 
     algofactory.add_builder("neal2", neal2builder);
     algofactory.add_builder("neal8", neal8builder);
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
     BaseCollector *coll;
     std::string colltype = argv[3];
     if(colltype == "file"){
-        std::string filename = "collector.recordio";
+        std::string filename = "collector_multi.recordio";
         if(argc > 4){
             filename = argv[4];
         }

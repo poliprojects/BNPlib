@@ -10,11 +10,12 @@ namespace NNIGDir {
     using MixtureType = DirichletMixture;
     template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
-    
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
 
 }
+
+//! \file
 
 //! Clustering and density estimates for an NNIG + Dirichlet mixture model.
 
@@ -34,10 +35,8 @@ namespace NNIGDir {
 int estimates_NNIG_Dir(const double mu0, const double lambda_,
 	const double alpha0, const double beta0, const double totalmass,
     const Eigen::VectorXd &grid, const std::string &algo,
-    const std::string &collfile = "collector.recordio",
-    const std::string &densfile = "src/python/density.csv",
-    const std::string &clustfile = "src/python/clust.csv",
-    const std::string &only = ""){
+    const std::string &collfile, const std::string &densfile,
+    const std::string &clustfile, const std::string &only = "all"){
 
     std::cout << "Running estimates_NNIG_Dir.cpp" << std::endl;
     using namespace NNIGDir;
@@ -45,32 +44,30 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
     // Build model components
     HypersType hy(mu0, lambda_, alpha0, beta0);
     MixtureType mix(totalmass);
-
     Eigen::VectorXd data;
-    
-   
+
     // Load algorithm factory
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType,Eigen::VectorXd>::Instance();
 
-      if (!algoFactory.check_existence(algo)){
+    if(!algoFactory.check_existence(algo)){
+
         Builder neal2builder = [](HypersType hy, MixtureType mix,
             Eigen::VectorXd data){
             return std::make_unique< Neal2<HierarchyType,HypersType,
                     MixtureType> >(hy, mix, data);
             };
-        
+
         Builder neal8builder = [](HypersType hy, MixtureType mix,
             Eigen::VectorXd data){
             return std::make_unique< Neal8<HierarchyType,HypersType,
                     MixtureType> >(hy, mix, data);
             };
 
-        algoFactory.add_builder("neal2",neal2builder);
-        algoFactory.add_builder("neal8",neal8builder);
+        algoFactory.add_builder("neal2", neal2builder);
+        algoFactory.add_builder("neal8", neal8builder);
     }
-
 
     // Create algorithm
     auto sampler = algoFactory.create_object(algo, hy, mix, data);

@@ -4,6 +4,7 @@
 
 #include "../../includes.hpp"
 
+
 namespace NNIGDir {
     using HypersType = HypersFixedNNIG;
     using MixtureType = DirichletMixture;
@@ -12,6 +13,8 @@ namespace NNIGDir {
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
 }
+
+//! \file
 
 //! Runs algorithm for an NNIG + Dirichlet mixture model.
 
@@ -32,7 +35,7 @@ namespace NNIGDir {
 int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
 	const double beta0, const double totalmass,
     const std::string &datafile, const std::string &algo,
-    const std::string &collfile = "collector.recordio",
+    const std::string &collfile,
     const unsigned int rng = 0, const unsigned int maxit = 0,
     const unsigned int burn = 0, const unsigned int n_aux = 0){
 
@@ -51,9 +54,8 @@ int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType,Eigen::VectorXd>::Instance();
 
-
-
     if (!algoFactory.check_existence(algo)){
+
         Builder neal2builder = [](HypersType hy, MixtureType mix,
             Eigen::VectorXd data){
             return std::make_unique< Neal2<HierarchyType,HypersType,
@@ -66,8 +68,8 @@ int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
                     MixtureType> >(hy, mix, data);
             };
 
-        algoFactory.add_builder("neal2",neal2builder);
-        algoFactory.add_builder("neal8",neal8builder);
+        algoFactory.add_builder("neal2", neal2builder);
+        algoFactory.add_builder("neal8", neal8builder);
     }
 
     // Create algorithm and set algorithm parameters
