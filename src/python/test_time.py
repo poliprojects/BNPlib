@@ -49,3 +49,14 @@ for i in c:
         #print_clust_rand_indx(clustfile, trueclustfile)
 
     print("The end")
+<<<<<<< HEAD
+    
+mat = np.loadtxt(open("src/python/test_uni.csv", 'rb'), delimiter=',')
+times= np.zeros((len(c), 2))
+for j in range(0,4):
+    times[j,0]=np.mean(mat[j*100:(j+1)*100,0])
+    times[j,1]=np.mean(mat[j*100:(j+1)*100,1])
+print("cluster2 cluster")
+print(times)
+=======
+>>>>>>> 286e2cc572fc8af711c28dad58c796de26ef7d79

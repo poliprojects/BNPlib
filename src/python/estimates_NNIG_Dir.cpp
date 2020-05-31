@@ -83,8 +83,10 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
     if(only != "dens"){
         // TODO:
         std::ofstream myfile;
-        myfile.open("src/python/test_uni.csv");
-        std::chrono::time_point<std::chrono::steady_clock> start, end;
+        myfile.open ("src/python/test_uni.csv",std::ios_base::app);
+    	std::chrono::time_point<std::chrono::steady_clock> start, end;
+
+
         using shakes = std::chrono::duration<int, std::ratio<1, 100000000>>;
         start = std::chrono::steady_clock::now();
         unsigned int i2_cap = (*sampler).cluster_estimate2(coll);
