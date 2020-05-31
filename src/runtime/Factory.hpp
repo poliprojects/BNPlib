@@ -122,16 +122,12 @@ public:
     }
 
 
+    //! Checks whether the given algorithm is already in the storage
 
-
-    bool check_existence(std::string s) const {
-        bool exist=true;
-        if ( storage.find(s) == storage.end() ) {
-            exist=false;
-        }
-        return exist;
+    //! \param algo Id for the algorithm to check
+    bool check_existence(const Identifier &algo) const {
+        return !( storage.find(algo) == storage.end() );
     }
-
 };
 
 #endif // FACTORY_HPP
