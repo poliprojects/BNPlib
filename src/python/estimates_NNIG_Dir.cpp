@@ -44,7 +44,6 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
     // Build model components
     HypersType hy(mu0, lambda_, alpha0, beta0);
     MixtureType mix(totalmass);
-
     Eigen::VectorXd data;
 
     // Load algorithm factory
@@ -52,7 +51,8 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType,Eigen::VectorXd>::Instance();
 
-      if(!algoFactory.check_existence(algo)){
+    if(!algoFactory.check_existence(algo)){
+
         Builder neal2builder = [](HypersType hy, MixtureType mix,
             Eigen::VectorXd data){
             return std::make_unique< Neal2<HierarchyType,HypersType,
@@ -65,10 +65,9 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
                     MixtureType> >(hy, mix, data);
             };
 
-        algoFactory.add_builder("neal2",neal2builder);
-        algoFactory.add_builder("neal8",neal8builder);
+        algoFactory.add_builder("neal2", neal2builder);
+        algoFactory.add_builder("neal8", neal8builder);
     }
-
 
     // Create algorithm
     auto sampler = algoFactory.create_object(algo, hy, mix, data);

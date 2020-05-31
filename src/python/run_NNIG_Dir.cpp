@@ -4,6 +4,7 @@
 
 #include "../../includes.hpp"
 
+
 namespace NNIGDir {
     using HypersType = HypersFixedNNIG;
     using MixtureType = DirichletMixture;
@@ -51,9 +52,8 @@ int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType,Eigen::VectorXd>::Instance();
 
-
-
     if (!algoFactory.check_existence(algo)){
+
         Builder neal2builder = [](HypersType hy, MixtureType mix,
             Eigen::VectorXd data){
             return std::make_unique< Neal2<HierarchyType,HypersType,
@@ -66,8 +66,8 @@ int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
                     MixtureType> >(hy, mix, data);
             };
 
-        algoFactory.add_builder("neal2",neal2builder);
-        algoFactory.add_builder("neal8",neal8builder);
+        algoFactory.add_builder("neal2", neal2builder);
+        algoFactory.add_builder("neal8", neal8builder);
     }
 
     // Create algorithm and set algorithm parameters

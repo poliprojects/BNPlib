@@ -29,7 +29,6 @@ bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
 
 chain_histogram(collfile, imgfilechain)
 
-algo = ''.join((algo, '_dataless'))
 bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
     collfile, densfile, clustfile, only)
 
