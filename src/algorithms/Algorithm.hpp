@@ -4,7 +4,6 @@
 #include <fstream>
 #include <math.h>
 #include <random>
-#include <tuple>
 #include <vector>
 
 #include <Eigen/Dense>

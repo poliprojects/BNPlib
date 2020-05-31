@@ -10,6 +10,7 @@
 
 ## Usage examples
 * ```./maintest_uni csv/data_uni.csv neal2 memory```
+* ```./maintest_multi csv/data_multi_2cl.csv neal2 memory```
 
 ## Code instructions (TODO?)
 * Change number of total iterations (default 10000) and burn-in iterations

@@ -1,19 +1,18 @@
 #ifndef BASECOLLECTOR_HPP
 #define BASECOLLECTOR_HPP
 
+#include <deque>
 #include <fstream>
 #include <string>
-#include <deque>
 #include <vector>
-#include "chain_state.pb.h"
-
-#include <stdio.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <unistd.h>
 
 #include <google/protobuf/text_format.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/util/delimited_message_util.h>
+#include "chain_state.pb.h"
 
 
 //! Abstract base class for a collector that contains a chain in Protobuf form
