@@ -67,7 +67,7 @@ int main(int argc, char *argv[]){
     // LOAD ALGORITHM FACTORY
     // =========================================================================
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+        HypersType, MixtureType>>(HypersType, MixtureType, Eigen::VectorXd) >;
 
     Builder neal2builder = [](HypersType hy, MixtureType mix,
         Eigen::VectorXd data){
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
 
     auto &algofactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
-        MixtureType,Eigen::VectorXd>::Instance();
+        MixtureType, Eigen::VectorXd>::Instance();
 
     algofactory.add_builder("neal2", neal2builder);
     algofactory.add_builder("neal8", neal8builder);

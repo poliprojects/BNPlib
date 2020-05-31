@@ -1,14 +1,10 @@
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
-#include <map>
-#include <vector>
-#include <memory>
 #include <functional>
-
-#include <boost/variant.hpp>
-#include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
 #include <iostream>
+#include <map>
+#include <memory>
+#include <vector>
 
 
 //! Generic object factory for an abstract product.
@@ -31,10 +27,6 @@ template<class AbstractProduct, typename... Args>
 class Factory{
 private:
     using Identifier = std::string;
-    //using EstimatesBuilder = std::function< std::unique_ptr<AbstractProduct>(
-      //  Args...)>;
-    //using RunBuilder = std::function< std::unique_ptr<AbstractProduct>(
-      //  Args..., Eigen::MatrixXd)>;
     using Builder = std::function< std::unique_ptr<AbstractProduct>(
         Args...)>;
 
@@ -76,8 +68,6 @@ public:
             return f->second(std::forward<Args>(args)...);
         }
     }
-
-
 
 
     //! Adds a builder function to the storage
