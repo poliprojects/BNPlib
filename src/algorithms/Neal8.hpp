@@ -62,12 +62,7 @@ public:
             aux_unique_values.push_back(this->unique_values[0]);
         }
     }
-    //! \param hypers_  Hyperparameters object for the model
-    //! \param mixture_ Mixture object for the model
-    //! \param init     Prescribed n. of clusters for the algorithm initializ.
-    Neal8(const Hypers &hypers_, const Mixture &mixture_,
-        const unsigned int init = 0) :
-        Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, init) {}
+
 
     // GETTERS AND SETTERS
     unsigned int get_n_aux() const {return n_aux;}

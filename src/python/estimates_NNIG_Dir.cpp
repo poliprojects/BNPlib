@@ -10,8 +10,10 @@ namespace NNIGDir {
     using MixtureType = DirichletMixture;
     template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
-    using BuilderDL = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType, MixtureType)>;
+    
+    using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
+        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
+
 }
 
 //! Clustering and density estimates for an NNIG + Dirichlet mixture model.
@@ -44,27 +46,34 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
     HypersType hy(mu0, lambda_, alpha0, beta0);
     MixtureType mix(totalmass);
 
+    Eigen::VectorXd data;
+    
+   
     // Load algorithm factory
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
-        MixtureType>::Instance();
+        MixtureType,Eigen::VectorXd>::Instance();
 
-    if (!algoFactory.check_existence(algo)){
-        BuilderDL neal2builder_dataless = [](HypersType hy, MixtureType mix){
-            return std::make_unique< Neal2<HierarchyType, HypersType,
-                    MixtureType> >(hy, mix);
+      if (!algoFactory.check_existence(algo)){
+        Builder neal2builder = [](HypersType hy, MixtureType mix,
+            Eigen::VectorXd data){
+            return std::make_unique< Neal2<HierarchyType,HypersType,
+                    MixtureType> >(hy, mix, data);
             };
-        BuilderDL neal8builder_dataless = [](HypersType hy, MixtureType mix){
-            return std::make_unique< Neal8<HierarchyType, HypersType,
-                    MixtureType> >(hy, mix);
+        
+        Builder neal8builder = [](HypersType hy, MixtureType mix,
+            Eigen::VectorXd data){
+            return std::make_unique< Neal8<HierarchyType,HypersType,
+                    MixtureType> >(hy, mix, data);
             };
 
-        algoFactory.add_builder("neal2_dataless", neal2builder_dataless);
-        algoFactory.add_builder("neal8_dataless", neal8builder_dataless);
+        algoFactory.add_builder("neal2",neal2builder);
+        algoFactory.add_builder("neal8",neal8builder);
     }
 
+
     // Create algorithm
-    auto sampler = algoFactory.create_object(algo, hy, mix);
+    auto sampler = algoFactory.create_object(algo, hy, mix, data);
 
     // Create file collector
     BaseCollector *coll = new FileCollector(collfile);

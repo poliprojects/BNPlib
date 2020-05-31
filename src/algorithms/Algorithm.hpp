@@ -22,29 +22,28 @@
 //! This template class implements a generic algorithm that generates a Markov
 //! chain on the clustering of the provided data.
 //!
-//! An algorithm that inherits from this abstract class will have multiple
-//! iterations of the same step. Steps are further split into substeps, each of
+//! An algorithm that inherits from this abstract class will have multiple iter-
+//! ations of the same step. Steps are further split into substeps, each of
 //! which updates specific values of the state of the Markov chain, which is
 //! composed of the allocations vector and the unique values vector (see below).
-//! This is known as a Gibbs sampling structure, where a set of values is
-//! updated according to a conditional distribution given all other values.
+//! This is known as a Gibbs sampling structure, where a set of values is upda-
+//! ted according to a conditional distribution given all other values.
 //! The underlying model for the data is assumed to be a so-called hierarchical
 //! model, where each datum is independently drawn from a common likelihood
 //! function, whose parameters are specific to each unit and are iid generated
 //! from a random probability measure, called the mixture. Different data points
 //! may have the same parameters as each other, and thus a clustering structure
 //! on data emerges, with each cluster being identified by its own parameters,
-//! called unique values. These will often be generated from the centering
-//! distribution, which is the expected value of the mixture, or from its
-//! posterior update. The allocation of a datum is instead the label that
-//! indicates the cluster it is currently assigned to. The probability
-//! distribution for data from each cluster is called a hierarchy and it can
-//! have its own hyperparameters, either random themselves or fixed. The model
-//! therefore is:
-//!   x_i ~ f(x_i|phi_(c_i))  (data likelihood);
-//! phi_c ~ G                 (unique values distribution);
-//!     G ~ MM                (mixture model);
-//!  E[G] = G0                (centering distribution),
+//! called unique values. These will often be generated from the centering dis-
+//! tribution, which is the expected value of the mixture, or from its posterior
+//! update. The allocation of a datum is instead the label that indicates the
+//! cluster it is currently assigned to. The probability distribution for data
+//! from each cluster is called a hierarchy and it can have its own hyperparame-
+//! ters, either random themselves or fixed. The model therefore is:
+//!   x_i ~ f(x_i|phi_(c_i))  (data likelihood)
+//! phi_c ~ G                 (unique values distribution)
+//!     G ~ MM                (mixture model)
+//!  E[G] = G0                (centering distribution)
 //! where c_i is the allocation of the i-th datum.
 //!
 //! This class is templatized over the types of the elements of this model: the
@@ -168,6 +167,9 @@ public:
                     "correctly, but all data rows other than the first" <<
                     "one will be ignored" << std::endl;
             }
+            if(data.rows()==0){
+                init_num_clusters = 1;            
+            }
             if(init_num_clusters == 0){
                 // If not provided, standard initializ.: one datum per cluster
                 std::cout << "Warning: initial number of clusters will be " <<
@@ -179,15 +181,7 @@ public:
                 unique_values.push_back(hierarchy);
             }
     }
-    //! \param hypers_  Hyperparameters object for the model
-    //! \param mixture_ Mixture object for the model
-    //! \param init     Prescribed n. of clusters for the algorithm initializ.
-    Algorithm(const Hypers &hypers_, const Mixture &mixture_,
-         const unsigned int init = 0) :
-        mixture(mixture_), init_num_clusters(init) {
-        Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
-        unique_values.push_back(hierarchy);
-    }
+
 
     // GETTERS AND SETTERS
     unsigned int get_maxiter() const {return maxiter;}

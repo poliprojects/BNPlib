@@ -4,7 +4,6 @@ from bnp_interface import *
 lambda_ = 0.2
 totalmass = 1
 algo = "neal2"
-algoDL = ''.join((algo, '_dataless'))
 rng = 20200229
 maxit = 1000
 burn = 100
@@ -32,8 +31,8 @@ for i in c:
         collfile, rng, maxit, burn, n_aux)
     chain_histogram(collfile, imgfilechain)
     grid = get_grid(d[i-5])
-    bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid, algoDL,
-        collfile, densfile, clustfile, only)
+    bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid, algo,
+    	collfile, densfile, clustfile, only)
     plot_clust_cards(clustfile, imgfileclust)
     plot_density_points(densfile, imgfiledens)
     plot_density_contour(densfile, imgfilecontour)

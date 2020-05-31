@@ -15,27 +15,28 @@
 
 //! An object factory allows to choose one of several derived objects from a
 //! single abstract base class at runtime. This type of class is implemented as
-//! a singleton and stores functions that build such objects, called the
-//! builders, which can be called at need at runtime, based on identifiers of
-//! the specific objects. The storage must first be filled with the appropriate
+//! a singleton and stores functions that build such objects, called the buil-
+//! ders, which can be called at need at runtime, based on identifiers of the
+//! specific objects. The storage must first be filled with the appropriate
 //! builders, which can be as simple as a function returning a smart pointer to
-//! a new instance. This can be done in a main file or in an appropriate
-//! function. This factory is templatized as a variadic template, that allows
-//! passing any number of parameters of any type to the contructors of the
-//! objects.
+//! a new instance. This can be done in a main file or in an appropriate func-
+//! tion. This factory is templatized as a variadic template, that allows pas-
+//! sing any number of parameters of any type to the contructors of the objects.
 
 //! \param AbstractProduct Class name for the abstract base object
-//! \param Args...         Collection of parameters for the objects constructors
+//! \param Args...         Generic collection of parameters to pass to the ob-
+//!                        jects' consturctors
 
 template<class AbstractProduct, typename... Args>
 class Factory{
 private:
     using Identifier = std::string;
-    using EstimatesBuilder = std::function< std::unique_ptr<AbstractProduct>(
+    //using EstimatesBuilder = std::function< std::unique_ptr<AbstractProduct>(
+      //  Args...)>;
+    //using RunBuilder = std::function< std::unique_ptr<AbstractProduct>(
+      //  Args..., Eigen::MatrixXd)>;
+    using Builder = std::function< std::unique_ptr<AbstractProduct>(
         Args...)>;
-    using RunBuilder = std::function< std::unique_ptr<AbstractProduct>(
-        Args..., Eigen::MatrixXd)>;
-    using Builder = boost::variant<RunBuilder, EstimatesBuilder >;
 
     //! Storage for algorithm builders
     std::map<Identifier, Builder> storage;
@@ -66,35 +67,17 @@ public:
     //! \param data Eigen matrix to pass to the constructors
     //! \return     An unique pointer to the created object
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args, const Eigen::MatrixXd &data) const { // TODO
+        Args... args) const { // TODO
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
         }
         else{
-            return boost::get<RunBuilder>(f->second)(
-                std::forward<Args>(args)..., data);
+            return f->second(std::forward<Args>(args)...);
         }
     }
 
 
-    //! Creates a specific object based on an identifier
-
-    //! \param name Identifier for the object
-    //! \param args Collection of any number of parameters
-    //! \param data Eigen matrix to pass to the constructors
-    //! \return     An unique pointer to the created object
-    std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args) const {
-        auto f = storage.find(name);
-        if(f == storage.end()){
-            throw std::invalid_argument("Error: factory identifier not found");
-        }
-        else{
-            return boost::get<EstimatesBuilder>(f->second)(
-                std::forward<Args>(args)...);
-        }
-    }
 
 
     //! Adds a builder function to the storage
