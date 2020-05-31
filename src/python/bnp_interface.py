@@ -1,5 +1,6 @@
 ##
-# @package MyModule Module documentation
+# @file
+# File documentation
 #
 
 from google.protobuf.internal.encoder import _VarintBytes
@@ -40,7 +41,7 @@ def deserialize(collfile):
 
 
 def get_grid(d):
-    """TODO docstring.
+    """! TODO docstring.
 
     TODO docstring but longer."""
     uni_g = np.arange(-7, +7.1, 0.5)
@@ -56,7 +57,7 @@ def get_grid(d):
 
 
 def chain_histogram(collfile, imgfile = "src/python/chain.pdf"):
-    """Prints an histogram of the number of clusters for different iterations.
+    """! Prints an histogram of the number of clusters for different iterations.
 
     collfile is the name of the saved file collector. After deserialization, for
     each State object (i.e. for every iteration of the algorithm) the number of
@@ -75,7 +76,7 @@ def chain_histogram(collfile, imgfile = "src/python/chain.pdf"):
 
 
 def plot_density_points(densfile, imgfile = "src/python/dens_points.pdf"):
-    """Reads a 1D or 2D density from a csv file and plots it point-by-point.
+    """! Reads a 1D or 2D density from a csv file and plots it point-by-point.
 
     densfile is the file from which the density will be read. Such file must
     consist of 2 to 3 columns, the last of which is the density value and the
@@ -100,7 +101,7 @@ def plot_density_points(densfile, imgfile = "src/python/dens_points.pdf"):
 
 
 def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf"):
-    """Reads a 2D density from a csv file and plots countour lines for it.
+    """! Reads a 2D density from a csv file and plots countour lines for it.
 
     densfile is the file from which the density will be read. Such file must
     consist of 3 columns, the last of which is the density value while the first
@@ -124,7 +125,7 @@ def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf"):
 
 
 def plot_clust_cards(clustfile, imgfile = "src/python/clust.pdf"):
-    """Reads a clustering structure from a csv file and plots the cardinalities.
+    """! Reads a data clustering from a csv file and plots the cardinalities.
 
     clustfile is the file from which the clustering will be read. This function
     reads the first column of the file and interprets it as the numeric labels
@@ -139,7 +140,7 @@ def plot_clust_cards(clustfile, imgfile = "src/python/clust.pdf"):
 
 
 def rand_index_score(clusters, classes):
-    """TODO docstring.
+    """! TODO docstring.
 
     TODO docstring but longer."""
     tp_plus_fp = comb(np.bincount(clusters), 2).sum()
@@ -154,7 +155,7 @@ def rand_index_score(clusters, classes):
 
 
 def print_clust_rand_indx(clustfile, trueclustfile):
-    """TODO docstring.
+    """! TODO docstring.
 
     TODO docstring but longer."""
     mat_pred = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
