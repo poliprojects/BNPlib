@@ -43,7 +43,7 @@ for i in c:
         algoDL, collfile, densfile, clustfile, only)
 
     plot_clust_cards(clustfile, imgfileclust)
-    plot_density(densfile, imgfiledens)
+    plot_density_points(densfile, imgfiledens)
     trueclustfile = ''.join(("csv/test/true_clust", str(i), ".csv"))
     print_clust_rand_indx(clustfile, trueclustfile)
 
