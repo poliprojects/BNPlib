@@ -15,6 +15,8 @@ namespace NNIGDir {
 
 }
 
+//! \file
+
 //! Clustering and density estimates for an NNIG + Dirichlet mixture model.
 
 //! The Markov chain from which the estimates will be produced is contained in
@@ -33,10 +35,8 @@ namespace NNIGDir {
 int estimates_NNIG_Dir(const double mu0, const double lambda_,
 	const double alpha0, const double beta0, const double totalmass,
     const Eigen::VectorXd &grid, const std::string &algo,
-    const std::string &collfile = "collector.recordio",
-    const std::string &densfile = "src/python/density.csv",
-    const std::string &clustfile = "src/python/clust.csv",
-    const std::string &only = ""){
+    const std::string &collfile, const std::string &densfile,
+    const std::string &clustfile, const std::string &only = "all"){
 
     std::cout << "Running estimates_NNIG_Dir.cpp" << std::endl;
     using namespace NNIGDir;

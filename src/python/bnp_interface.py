@@ -17,7 +17,7 @@ sys.path.insert(0, LIBPATH)
 import bnplibpy
 
 
-def deserialize(collfile = "collector.recordio"):
+def deserialize(collfile):
     """! Reads collector from file and returns it as a list of Protobuf objects
 
     collfile is the name of the saved file collector. All Protobuf messages in
@@ -55,8 +55,7 @@ def get_grid(d):
     return grid
 
 
-def chain_histogram(collfile = "collector.recordio",
-    imgfile = "src/python/chain.pdf"):
+def chain_histogram(collfile, imgfile = "src/python/chain.pdf"):
     """Prints an histogram of the number of clusters for different iterations.
 
     collfile is the name of the saved file collector. After deserialization, for
@@ -75,8 +74,7 @@ def chain_histogram(collfile = "collector.recordio",
     print("Successfully saved plot to", imgfile)
 
 
-def plot_density_points(densfile = "src/python/density.csv",
-    imgfile = "src/python/density.pdf"):
+def plot_density_points(densfile, imgfile = "src/python/dens_points.pdf"):
     """Reads a 1D or 2D density from a csv file and plots it point-by-point.
 
     densfile is the file from which the density will be read. Such file must
@@ -101,8 +99,7 @@ def plot_density_points(densfile = "src/python/density.csv",
     print("Successfully saved plot to", imgfile)
 
 
-def plot_density_contour(densfile = "src/python/density.csv",
-    imgfile = "src/python/density_contour.pdf"):
+def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf"):
     """Reads a 2D density from a csv file and plots countour lines for it.
 
     densfile is the file from which the density will be read. Such file must
@@ -126,8 +123,7 @@ def plot_density_contour(densfile = "src/python/density.csv",
     print("Successfully saved plot to", imgfile)
 
 
-def plot_clust_cards(clustfile = "src/python/clust.csv",
-    imgfile = "src/python/clust.pdf"):
+def plot_clust_cards(clustfile, imgfile = "src/python/clust.pdf"):
     """Reads a clustering structure from a csv file and plots the cardinalities.
 
     clustfile is the file from which the clustering will be read. This function
@@ -157,8 +153,7 @@ def rand_index_score(clusters, classes):
     return (tp + tn) / (tp + fp + fn + tn)
 
 
-def print_clust_rand_indx(clustfile = "src/python/clust.csv",
-    trueclustfile = "src/csv/test/true_clust.csv"):
+def print_clust_rand_indx(clustfile, trueclustfile):
     """TODO docstring.
 
     TODO docstring but longer."""

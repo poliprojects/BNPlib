@@ -7,6 +7,8 @@
 #include "estimates_NNIG_Dir.cpp"
 #include "estimates_NNW_Dir.cpp"
 
+//! \file
+
 //! Builds the Python version of the library.
 
 PYBIND11_MODULE(bnplibpy, m)

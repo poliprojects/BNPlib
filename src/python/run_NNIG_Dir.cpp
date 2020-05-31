@@ -14,6 +14,8 @@ namespace NNIGDir {
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
 }
 
+//! \file
+
 //! Runs algorithm for an NNIG + Dirichlet mixture model.
 
 //! The Markov chain produced by the algorithm will be saved to a collector. A
@@ -33,7 +35,7 @@ namespace NNIGDir {
 int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
 	const double beta0, const double totalmass,
     const std::string &datafile, const std::string &algo,
-    const std::string &collfile = "collector.recordio",
+    const std::string &collfile,
     const unsigned int rng = 0, const unsigned int maxit = 0,
     const unsigned int burn = 0, const unsigned int n_aux = 0){
 

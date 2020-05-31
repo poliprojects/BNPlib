@@ -15,6 +15,8 @@ namespace NNWDir {
 
 }
 
+//! \file
+
 //! Clustering and density estimates for an NNW + Dirichlet mixture model.
 
 //! The Markov chain from which the estimates will be produced is contained in
@@ -34,10 +36,8 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     const double lambda_, const Eigen::MatrixXd &tau0, const double nu,
     const double totalmass,
     const Eigen::MatrixXd &grid, const std::string &algo,
-    const std::string &collfile = "collector_multi.recordio",
-    const std::string &densfile = "src/python/density_multi.csv",
-    const std::string &clustfile = "src/python/clust_multi.csv",
-    const std::string &only = ""){
+    const std::string &collfile, const std::string &densfile,
+    const std::string &clustfile, const std::string &only = "all"){
 
     std::cout << "Running estimates_NNW_Dir.cpp" << std::endl;
     using namespace NNWDir;
