@@ -104,9 +104,13 @@ int main(int argc, char *argv[]){
     BaseCollector *coll;
     std::string colltype = argv[3];
     if(colltype == "file"){
-        std::string filename = "collector.recordio";
+        std::string filename = "collector_uni.recordio";
         if(argc > 4){
             filename = argv[4];
+        }
+        else {
+            std::cout << "Warning: default name " << filename <<
+                " will be used for file collector" << std::endl;
         }
         coll = new FileCollector(filename);
     }
@@ -118,6 +122,7 @@ int main(int argc, char *argv[]){
             << std::endl;
         return 1;
     }
+
 
     // =========================================================================
     // RUN SAMPLER

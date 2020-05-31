@@ -6,7 +6,7 @@
 
 //! \file
 
-//! Static main program to test an univariate hierarchy.
+//! Static main program to test a multivariate hierarchy.
 
 //! You can change the classes used for the model through the aliases below.
 
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
     BaseCollector *coll;
     std::string colltype = argv[3];
     if(colltype == "file"){
-        std::string filename = "collector.recordio";
+        std::string filename = "collector_multi.recordio";
         if(argc > 4){
             filename = argv[4];
         }
