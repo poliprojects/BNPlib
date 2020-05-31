@@ -10,7 +10,6 @@ namespace NNIGDir {
     using MixtureType = DirichletMixture;
     template <class HypersType> using HierarchyType = HierarchyNNIG<HypersType>;
 
-    
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
         HypersType, MixtureType>>(HypersType,MixtureType, Eigen::VectorXd)>;
 
@@ -47,20 +46,19 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
     MixtureType mix(totalmass);
 
     Eigen::VectorXd data;
-    
-   
+
     // Load algorithm factory
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType,Eigen::VectorXd>::Instance();
 
-      if (!algoFactory.check_existence(algo)){
+      if(!algoFactory.check_existence(algo)){
         Builder neal2builder = [](HypersType hy, MixtureType mix,
             Eigen::VectorXd data){
             return std::make_unique< Neal2<HierarchyType,HypersType,
                     MixtureType> >(hy, mix, data);
             };
-        
+
         Builder neal8builder = [](HypersType hy, MixtureType mix,
             Eigen::VectorXd data){
             return std::make_unique< Neal8<HierarchyType,HypersType,
