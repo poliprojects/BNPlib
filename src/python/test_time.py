@@ -7,6 +7,7 @@ alpha0 = 2.0
 beta0 = 2.0
 totalmass = 1
 algo = "neal2"
+init = 0
 rng = 20200229
 maxit = 500
 burn = 100
@@ -35,7 +36,7 @@ for i in c:
         mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
         mu0 = np.mean(mat)
         bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile,
-            algo, collfile, rng, maxit, burn, n_aux)
+            algo, collfile, init, rng, maxit, burn, n_aux)
 
         #chain_histogram(collfile, imgfilechain)
 
@@ -48,6 +49,7 @@ for i in c:
         #print_clust_rand_indx(clustfile, trueclustfile)
 
     print("The end")
+<<<<<<< HEAD
     
 mat = np.loadtxt(open("src/python/test_uni.csv", 'rb'), delimiter=',')
 times= np.zeros((len(c), 2))
@@ -56,3 +58,5 @@ for j in range(0,4):
     times[j,1]=np.mean(mat[j*100:(j+1)*100,1])
 print("cluster2 cluster")
 print(times)
+=======
+>>>>>>> 286e2cc572fc8af711c28dad58c796de26ef7d79

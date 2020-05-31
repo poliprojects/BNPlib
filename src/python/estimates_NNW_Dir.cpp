@@ -17,7 +17,7 @@ namespace NNWDir {
 
 //! \file
 
-//! Clustering and density estimates for an NNW + Dirichlet mixture model.
+//! Cluster and density estimates for an NNW + Dirichlet mixture model.
 
 //! The Markov chain from which the estimates will be produced is contained in
 //! a file collector whose filename is given. A user can opt to run only the
@@ -82,10 +82,8 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
         (*sampler).write_density_to_file(densfile);
     }
     if(only != "dens"){
-        
         unsigned int i_cap = (*sampler).cluster_estimate2(coll);
         (*sampler).write_clustering_to_file(clustfile);
- 
     }
 
     std::cout << "End of estimates_NNW_Dir.cpp" << std::endl;

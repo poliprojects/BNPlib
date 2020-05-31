@@ -59,7 +59,7 @@ public:
     //! \param data Eigen matrix to pass to the constructors
     //! \return     An unique pointer to the created object
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
-        Args... args) const { // TODO
+        Args... args) const {
         auto f = storage.find(name);
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
