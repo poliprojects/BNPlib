@@ -30,7 +30,7 @@ for i in c:
     bnplibpy.run_NNW_Dir(mu0, lambda_,tau0, nu, totalmass, datafile, algo,
         collfile, rng, maxit, burn, n_aux)
     chain_histogram(collfile, imgfilechain)
-    grid = get_grid(d[i-5])
+    grid = get_grid(-7,7.1,d[i-5])
     bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid, algo,
     	collfile, densfile, clustfile, only)
     plot_clust_cards(clustfile, imgfileclust)

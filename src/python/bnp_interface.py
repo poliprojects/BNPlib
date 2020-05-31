@@ -40,11 +40,11 @@ def deserialize(collfile):
     return d
 
 
-def get_grid(d):
+def get_grid(a,b,d):
     """! TODO docstring.
 
     TODO docstring but longer."""
-    uni_g = np.arange(-7, +7.1, 0.5)
+    uni_g = np.arange(a, b, 0.5)
     arr = [uni_g for y in range(d)]
     mesh = np.meshgrid(*arr)
     nrows = len(mesh[0].flat)
@@ -116,7 +116,7 @@ def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf"):
         return
     figure = plt.figure()
     #ax = figure.add_subplot(111)
-    x = np.arange(-7, +7.1, 0.5)
+    x = np.arange(min(mat[:,0]), max(mat[:,0]), 0.5)
     xx, yy = np.meshgrid(x, x)
     z = mat[:,2].reshape(xx.shape)
     plt.contourf(xx, yy, z)
