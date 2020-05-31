@@ -1,8 +1,7 @@
 TODO LIST
 
 
-
-ELENA
+ELENA:
 * factory / dataless
 * README usando solo bash/install.sh
 * tests

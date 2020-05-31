@@ -49,5 +49,3 @@ for i in c:
         #print_clust_rand_indx(clustfile, trueclustfile)
 
     print("The end")
-    
-
