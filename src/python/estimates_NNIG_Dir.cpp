@@ -17,7 +17,7 @@ namespace NNIGDir {
 
 //! \file
 
-//! Clustering and density estimates for an NNIG + Dirichlet mixture model.
+//! Cluster and density estimates for an NNIG + Dirichlet mixture model.
 
 //! The Markov chain from which the estimates will be produced is contained in
 //! a file collector whose filename is given. A user can opt to run only the

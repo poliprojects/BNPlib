@@ -27,6 +27,7 @@ namespace NNWDir {
 //! \param datafile           csv file from which the model data is read
 //! \param algo               Name of the algorithm used
 //! \param collfile           Name of file collector to which save the chain
+//! \param init               Initial number of clusters
 //! \param rng                RNG seed for the algorithm
 //! \param maxit              Number of iterations of the algorithm
 //! \param burn               Number of burn-in (discarded) iterations
@@ -37,8 +38,9 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     const double totalmass,
     const std::string &datafile, const std::string &algo,
     const std::string &collfile,
-    const unsigned int rng = 0, const unsigned int maxit = 0,
-    const unsigned int burn = 0, const unsigned int n_aux = 0){
+    const unsigned int init = 0, const unsigned int rng = 0,
+    const unsigned int maxit = 0, const unsigned int burn = 0,
+    const unsigned int n_aux = 0){
 
     std::cout << "Running run_NNW_Dir.cpp" << std::endl;
     using namespace NNWDir;

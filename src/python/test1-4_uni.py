@@ -7,6 +7,7 @@ alpha0 = 2.0
 beta0 = 2.0
 totalmass = 1
 algo = "neal2"
+init = 0
 rng = 20200229
 maxit = 500
 burn = 100
@@ -34,7 +35,7 @@ for i in c:
     mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
     mu0 = np.mean(mat)
     bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile,
-        algo, collfile, rng, maxit, burn, n_aux)
+        algo, collfile, init, rng, maxit, burn, n_aux)
 
     chain_histogram(collfile, imgfilechain)
 

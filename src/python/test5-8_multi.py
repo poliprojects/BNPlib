@@ -4,6 +4,7 @@ from bnp_interface import *
 lambda_ = 0.2
 totalmass = 1
 algo = "neal2"
+init = 0
 rng = 20200229
 maxit = 200
 burn = 10
@@ -28,7 +29,7 @@ for i in c:
     nu = d[i-5]+3
     tau0 = (1/nu) * np.identity(d[i-5])
     bnplibpy.run_NNW_Dir(mu0, lambda_,tau0, nu, totalmass, datafile, algo,
-        collfile, rng, maxit, burn, n_aux)
+        collfile, init, rng, maxit, burn, n_aux)
     chain_histogram(collfile, imgfilechain)
     grid = get_grid(-7,7.1,d[i-5])
     bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid, algo,
