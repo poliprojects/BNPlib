@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
 
     double totalmass = 1.0;
     //std::cout << "Insert total mass value:" << std::endl;
-    //std::cin >> totalmass; //1.0
+    //std::cin >> totalmass;
     MixtureType mix(totalmass);
 
 
