@@ -3,10 +3,12 @@ TODO LIST
 
 BRUNO:
 * Redo callgrind and time stuff (optimization)
+* grep "[^ ] $" -PR src/*;  grep "^ +$" -PR src/*;  (spazi/a capo)
+* Check all algorithm/hierarchy/mixture combinations, csv files, etc
 
 
 VARI
-* Check all algorithm/hierarchy/mixture combinations, csv files, etc
+* re-run VM
 
 
 REPORT ELENA
@@ -45,6 +47,7 @@ REPORT GENERICHE
 * calcoli reserve cluster_estimate(): se k cluster uguali, serve un reserve di
   k*((n/k choose 2) - n) = .. = n^2/2k - n/2 - nk -> n^2/4 buon upper bound
   (matrice distrutta alla fine di ogni passo del for)
+* problemi memoria
 * tests:
 ** Univariati:
 1) y_i ~ 0.5 N(-3, 1) + 0.5 N(3, 1), i=1,... 200

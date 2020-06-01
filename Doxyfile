@@ -879,7 +879,9 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = lib
+EXCLUDE                = lib src/collectors/chain_state.pb.cc
+EXCLUDE               += lib src/collectors/chain_state.pb.h
+EXCLUDE               += lib src/python/chain_state_pb2.py
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
