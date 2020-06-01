@@ -57,7 +57,7 @@ int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType,Eigen::VectorXd>::Instance();
 
-    if (!algoFactory.check_existence(algo)){
+    if(!algoFactory.check_existence(algo)){
 
         Builder neal2builder = [](HypersType hy, MixtureType mix,
             Eigen::VectorXd data){

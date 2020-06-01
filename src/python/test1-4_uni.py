@@ -45,6 +45,6 @@ for i in c:
     plot_clust_cards(clustfile, imgfileclust)
     plot_density_points(densfile, imgfiledens)
     trueclustfile = ''.join(("csv/test/true_clust", str(i), ".csv"))
-    print_clust_rand_indx(clustfile, trueclustfile)
+    print_clust_rand_index(clustfile, trueclustfile)
 
 print("The end")

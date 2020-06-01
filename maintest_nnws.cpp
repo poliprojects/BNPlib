@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
     // =========================================================================
     // SET MODEL PARAMETERS
     // =========================================================================
-    Eigen::Matrix<double,1,5> mu0; for(int i = 0; i < 5; i++) mu0[i] = 5.5;
+    Eigen::Matrix<double,1,5> mu0; for(size_t i = 0; i < 5; i++) mu0[i] = 5.5;
     double lambda = 0.2;
     double nu = 5.0;
     Eigen::MatrixXd tau0 = (1/nu) * Eigen::Matrix<double, 5, 5>::Identity();

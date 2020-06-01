@@ -114,9 +114,10 @@ void Algorithm<Hierarchy, Hypers, Mixture>::eval_density(
 }
 
 
-
+//! \param coll Collector containing the algorithm chain
+//! \return     Index of the iteration containing the best estimate
 template<template <class> class Hierarchy, class Hypers, class Mixture>
-unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate( 
+unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
     BaseCollector* coll){
     // Read chain from collector
     std::deque<State> chain = coll->get_chain();
@@ -131,9 +132,9 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
 
     // Loop over iterations
     for(size_t h = 0; h < n_iter; h++){
-        // Compoute dissimilarity matrix
+        // Find and all nonzero entries of the dissimilarity matrix
         std::vector< Eigen::Triplet<double> > triplets_list;
-        triplets_list.reserve(n*n/2);
+        triplets_list.reserve(n*n/4);
         for(size_t i = 0; i < n; i++){
             for(size_t j = 0; j < i; j++){
                 if(chain[h].allocations(i) == chain[h].allocations(j)){
@@ -141,6 +142,7 @@ unsigned int Algorithm<Hierarchy, Hypers, Mixture>::cluster_estimate(
                 }
             }
         }
+        // Build dissimilarity matrix and update total dissimilarity
         Eigen::SparseMatrix<double> dissim(n, n);
         dissim.setZero();
         dissim.setFromTriplets(triplets_list.begin(), triplets_list.end());

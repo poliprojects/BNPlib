@@ -1,6 +1,6 @@
 ##
 # @file
-# File documentation
+# Tools for interfacing the C++ BNPlib library and Python
 #
 
 from google.protobuf.internal.encoder import _VarintBytes
@@ -41,22 +41,18 @@ def deserialize(collfile):
 
 
 def get_grid(a,b,d):
-    """! Return a d-dimensional grid.
-    
+    """! Returns a d-dimensional grid cube for the interval [a,b).
 
-	Given the extrema a and b, it builds a one-dimensional array uni_g with step 0.5.
-	np.meshgrid returns coordinate matrices from coordinate vectors uni_g1, uni_g2,…, uni_gd.
-    In the returned grid every matrix is collapsed into one dimension."""
-    
+	Given the extrema a and b, it creates a one-dimensional array with step 0.5,
+	then builds coordinate matrices from the single d coordinate vectors, and
+    returns a grid where every matrix is collapsed into one dimension."""
     uni_g = np.arange(a, b, 0.5)
     arr = [uni_g for y in range(d)]
     mesh = np.meshgrid(*arr)
     nrows = len(mesh[0].flat)
     grid = np.zeros((nrows, d))
-
     for i in range(0,d):
         grid[:,i] = mesh[i].flat
-
     return grid
 
 
@@ -70,10 +66,8 @@ def chain_histogram(collfile, imgfile = "src/python/chain.pdf"):
     d = deserialize(collfile)
     figure = plt.figure()
     num_clusters = []
-
     for i in d:
         num_clusters.append(len(i.uniquevalues))
-
     plt.hist(num_clusters)
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
@@ -88,7 +82,6 @@ def plot_density_points(densfile, imgfile = "src/python/dens_points.pdf"):
     that value. Then, a 2D or 3D plot is produced and saved to the imgfile file.
     If instead the columns are neither 2 nor 3, a plot is not produced."""
     mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
-
     cols = mat.shape[1]
     if cols not in (2,3):
         print("Error: density file must have 2-3 columns to be plotted")
@@ -113,13 +106,11 @@ def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf"):
     2D plot is produced and saved to the imgfile file. If instead the columns
     are not 3, a plot is not produced."""
     mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
-
     cols = mat.shape[1]
     if cols != 3:
         print("Error: density file must have 3 columns to be plotted")
         return
     figure = plt.figure()
-    #ax = figure.add_subplot(111)
     x = np.arange(min(mat[:,0]), max(mat[:,0])+0.1, 0.5)
     xx, yy = np.meshgrid(x, x)
     z = mat[:,2].reshape(xx.shape)
@@ -144,14 +135,13 @@ def plot_clust_cards(clustfile, imgfile = "src/python/clust.pdf"):
 
 
 def rand_index_score(clusters, classes):
-    """! Compute the Rand index score between the predicted clustering and the true clustering.
+    """! Computes the Rand index score between predicted and true clustering.
 
-    In input are passed the predicted clustering "clusters" and the true clustering "classes".
-    Defining tp the number of true positives, tn the number of true negatives, fp the number of
-    false positives, and fn is the number of false negatives, the Rand index is a measure of
-    the percentage of correct decisions made by the algorithm computed as sum of tp and tn over
-    sum of tp, fp, fn and tn."""
-    
+    The inputs are 2 lists of labels; clusters, the predicted clustering, and
+    classes, the true clustering. After counting all true/false positives/
+    negatives, the Rand index is returned, which is a measure of the percentage
+    of correct decisions made by the algorithm, computed as the empirical
+    proportion of the correctly classified points."""
     tp_plus_fp = comb(np.bincount(clusters), 2).sum()
     tp_plus_fn = comb(np.bincount(classes), 2).sum()
     A = np.c_[(clusters, classes)]
@@ -163,25 +153,32 @@ def rand_index_score(clusters, classes):
     return (tp + tn) / (tp + fp + fn + tn)
 
 
-def print_clust_rand_indx(clustfile, trueclustfile):
-    """! Print the Rand index score between the predicted clustering predicted and the true clustering.
-    
-    clustfile is the file from which the predicted clustering will be read. trueclustfile
-    is the file from which the true clustering will be read. This function relabels the 
-    first k clusters in terms of numerosity, where k is the number of true clusters. Relabeling
-    is done in ascending order of the first unique value, the mean, as was done in true clustering.
-    Then the Rand index score is computed using the function rand_inde_score."""
-    
+def print_clust_rand_index(clustfile, trueclustfile):
+    """! Computes the Rand index score between predicted and true clustering.
+
+    clustfile and trueclustfile are the file names from which the predicted and
+    the true clusterings, respectively, will be read. The cluster labels must be
+    in the first column of the csv files, and clustfile must also contain the
+    unique values that characterize the clusters. This function finds the k most
+    numerous predicted clusters, where k is the number of true clusters, and
+    relabels them. Relabeling is done in ascending order with respect to the
+    first unique value (which is the cluster mean in most cases), assuming that
+    the true clustering file is sorted in the same way. Then, the Rand index
+    score is computed and printed using the function. Please note that this
+    index is usually computed when the number of clusters is known a priori and
+    fixed, and choosing only the biggest k clusters as significant (while
+    misclassifying all other points) is an approximation; a useful approximation
+    nonetheless."""
     mat_pred = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     mat_true = np.loadtxt(open(trueclustfile, 'rb'), delimiter=',')
 
     clusters, tot_counts = np.unique(mat_pred[:,0].astype(int),
         return_counts=True)
-    greater_counts = sorted(tot_counts, reverse=True)[0:len(np.unique(
+    biggest_counts = sorted(tot_counts, reverse=True)[0:len(np.unique(
         mat_true))]
-    greater_clust = clusters[ np.where(np.in1d(tot_counts, greater_counts))[0]]
+    biggest_clust = clusters[ np.where(np.in1d(tot_counts, biggest_counts))[0]]
 
-    v1 = np.unique(mat_pred[np.where(np.in1d(mat_pred[:,0],greater_clust))[0],
+    v1 = np.unique(mat_pred[np.where(np.in1d(mat_pred[:,0],biggest_clust))[0],
         1])
     v2 = np.array([item for item in np.unique(mat_pred[:,1]) if item not in v1])
     values = np.concatenate((v1,v2))

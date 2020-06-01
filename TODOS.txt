@@ -13,6 +13,7 @@ BRUNO:
 * grep "[^ ] $" -PR src/*;  grep "^ +$" -PR src/*;  (spazi/a capo)
 * Redo callgrind and time stuff (optimization)
 * End doxygen docs
+* Remove begin and end print messages?
 
 
 TESTS
@@ -65,6 +66,9 @@ REPORT
   i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto:
   di default usa uno slice sampler che non è molto efficiente, selezionate il
   sampler marginale ('MAR') e matchate gli iperparametri.
+* calcoli reserve cluster_estimate(): se k cluster uguali, serve un reserve di
+  k*((n/k choose 2) - n) = .. = n^2/2k - n/2 - nk -> n^2/4 buon upper bound
+  (matrice distrutta alla fine di ogni passo del for)
 
 
 REPORT ELENA

@@ -57,7 +57,7 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
         MixtureType,Eigen::MatrixXd>::Instance();
 
-    if (!algoFactory.check_existence(algo)){
+    if(!algoFactory.check_existence(algo)){
 
         Builder neal2builder = [](HypersType hy, MixtureType mix,
             Eigen::MatrixXd data){

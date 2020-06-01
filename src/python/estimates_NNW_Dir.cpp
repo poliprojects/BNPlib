@@ -81,8 +81,7 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
         (*sampler).write_density_to_file(densfile);
     }
     if(only != "dens"){
-	
-        unsigned int i2_cap = (*sampler).cluster_estimate(coll);
+        unsigned int i_cap = (*sampler).cluster_estimate(coll);
         (*sampler).write_clustering_to_file(clustfile);
     }
 

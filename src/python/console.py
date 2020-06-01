@@ -14,8 +14,7 @@ maxit = 5000
 burn = 500
 n_aux = 3
 
-g = [0.5*_ for _ in range(20)]
-grid = np.array(g)
+grid = np.arange(0, 10, 0.5)
 
 collfile = "collector.recordio"
 densfile = "src/python/dens.csv"
@@ -35,10 +34,3 @@ bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
 
 plot_clust_cards(clustfile, imgfileclust)
 plot_density_points(densfile, imgfiledens)
-
-# TODO:
-# g = np.arange(-5, +5, 0.5)
-# grid = np.repeat(g,2).T
-# matr = np.linspace(np.repeat(0, 2), np.repeat(10, 2), 10)
-# z = np.identity(10)
-# print(z)
