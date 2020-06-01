@@ -13,7 +13,7 @@ n_aux = 3
 only = "dens"
 
 dim = [2,5,10,20]
-tests = [5,6,7,8] # TODO
+tests = [5,6,7,8]
 
 for t in tests:
     print("Starting test", t)
