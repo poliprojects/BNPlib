@@ -14,6 +14,7 @@ only = "all"
 
 dim = [2,5]
 #dim = [2,5,10,20]
+nn = [50,5]
 tests = [5,6]
 
 for t in tests:
@@ -40,7 +41,7 @@ for t in tests:
 
     chain_histogram(collfile, imgfilechain)
 
-    grid = get_multidim_grid(-7, 7.1, dim[t-5], 10)
+    grid = get_multidim_grid(-7, 7.1, dim[t-5], nn[t-5])
 
     bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid, algo,
     	collfile, densfile, clustfile, only)
