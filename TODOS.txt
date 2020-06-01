@@ -1,13 +1,9 @@
 TODO LIST
 
 
-BRUNO:
-* Redo callgrind and time stuff (optimization)
-* grep "[^ ] $" -PR src/*;  grep "^ +$" -PR src/*;  (spazi/a capo)
-* Check all algorithm/hierarchy/mixture combinations, csv files, etc
-
-
-VARI
+VARIE:
+* R/test1-6.R
+* PitYor
 * re-run VM
 
 
@@ -67,6 +63,8 @@ REPORT GENERICHE
      seconda tutti +3) all'aumentare della dimensione (d=2, 5, 10, 20)
      per dimensioni sopra il 10 non dovrebbe più funzionare granchè...
 * plot delle densità stimate e densità vere
+* data_5d + Neal8 errore -> varianza alta non simmetrica (curse of dim.)
+** non ci possiamo fare nienteee
 * riportate rand-index della partizione stimata (solo per dimensione 1 e 2,
   dovrebbe venire sempre alto tranne magari l'esempio con la t e SkewNormal, ma
   la densità dovrebbe venire bene uguale)
