@@ -40,13 +40,13 @@ def deserialize(collfile):
     return d
 
 
-def get_grid(a,b,d):
-    """! Returns a d-dimensional grid cube for the interval [a,b).
+def get_multidim_grid(a, b, d, h=0.1):
+    """! Returns a d-dimensional grid cube for the interval [a,b) with step h.
 
-	Given the extrema a and b, it creates a one-dimensional array with step 0.5,
+	Given the extrema a and b, it creates a one-dimensional array with step h,
 	then builds coordinate matrices from the single d coordinate vectors, and
     returns a grid where every matrix is collapsed into one dimension."""
-    uni_g = np.arange(a, b, 0.5)
+    uni_g = np.arange(a, b, h)
     arr = [uni_g for y in range(d)]
     mesh = np.meshgrid(*arr)
     nrows = len(mesh[0].flat)

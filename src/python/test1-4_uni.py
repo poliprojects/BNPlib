@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from bnp_interface import *
 
-mu0 = 0.0
+# Initialize parameters
 lambda_ = 0.1
 alpha0 = 2.0
 beta0 = 2.0
@@ -12,39 +12,44 @@ rng = 20200229
 maxit = 500
 burn = 100
 n_aux = 3
-only = "all"
+only = "dens"
 
-grid = np.arange(-5, +5.1, 0.5)
-#grid2 = np.arange(-7, +7, 0.5)
-#grid3 = np.arange(-4, +4, 0.5)
-#grid4 = "TODO"
-# or linspace
+# Build grid for density evaluation
+grids = []
+grids.append( np.arange(-5, +5.1, 0.1) ) # for test 1
+grids.append( np.arange(-7, +7.1, 0.1) ) # for test 2
+grids.append( np.arange(-4, +4.1, 0.1) ) # for test 3
+grids.append( np.arange(-7, +7.1, 0.1) ) # for test 4
 
-c = [1,2,3,4]
-for i in c:
-    print("Starting test", i)
+tests = [1,2,3,4]
+
+for t in tests:
+    print("Starting test", t)
 
     # Write file names
-    datafile  = ''.join(("csv/test/data", str(i), ".csv"))
-    collfile  = ''.join(("collector", str(i), ".recordio"))
-    densfile  = ''.join(("src/python/test_res/dens",  str(i), ".csv"))
-    clustfile = ''.join(("src/python/test_res/clust", str(i), ".csv"))
-    imgfileclust = ''.join(("src/python/test_res/clust", str(i), ".pdf"))
-    imgfilechain = ''.join(("src/python/test_res/chain", str(i), ".pdf"))
-    imgfiledens  = ''.join(("src/python/test_res/dens",  str(i), ".pdf"))
+    datafile  = ''.join(("csv/test/data", str(t), ".csv"))
+    collfile  = ''.join(("collector", str(t), ".recordio"))
+    densfile      = ''.join(("src/python/test_res/dens",  str(t), ".csv"))
+    clustfile     = ''.join(("src/python/test_res/clust", str(t), ".csv"))
+    #imgfileclust = ''.join(("src/python/test_res/clust", str(t), ".pdf"))
+    imgfilechain  = ''.join(("src/python/test_res/chain", str(t), ".pdf"))
+    imgfiledens   = ''.join(("src/python/test_res/dens",  str(t), ".pdf"))
+
+    # Initialize more parameters
     mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
     mu0 = np.mean(mat)
+
     bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile,
         algo, collfile, init, rng, maxit, burn, n_aux)
 
     chain_histogram(collfile, imgfilechain)
 
-    bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid,
-        algo, collfile, densfile, clustfile, only)
+    bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass,
+    	grids[t-1], algo, collfile, densfile, clustfile, only)
 
-    plot_clust_cards(clustfile, imgfileclust)
+    #plot_clust_cards(clustfile, imgfileclust)
     plot_density_points(densfile, imgfiledens)
-    trueclustfile = ''.join(("csv/test/true_clust", str(i), ".csv"))
-    print_clust_rand_index(clustfile, trueclustfile)
+    #trueclustfile = ''.join(("csv/test/true_clust", str(t), ".csv"))
+    #print_clust_rand_index(clustfile, trueclustfile)
 
-print("The end")
+    print()
