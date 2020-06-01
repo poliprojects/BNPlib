@@ -2,10 +2,10 @@
 #include <pybind11/eigen.h>
 
 #include "../../includes.hpp"
-#include "run_NNIG_Dir.cpp"
-#include "run_NNW_Dir.cpp"
-#include "estimates_NNIG_Dir.cpp"
-#include "estimates_NNW_Dir.cpp"
+#include "cpp_export/run_NNIG_Dir.cpp"
+#include "cpp_export/run_NNW_Dir.cpp"
+#include "cpp_export/estimates_NNIG_Dir.cpp"
+#include "cpp_export/estimates_NNW_Dir.cpp"
 
 //! \file
 
