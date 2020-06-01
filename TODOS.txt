@@ -34,6 +34,7 @@ REPORT GENERICHE
   l'identità
 * spiegare le flag di efficienza: -march=native -O3 -msse2 -funroll-loops
   -ftree-vectorize
+* natura oscillante dell'algoritmo, convergente solo in media
 * hierarchies, mixtures, etc a runtime:
 ** visto che templatizziamo sull'abstract product, usare Factory diverse è
    possibile
