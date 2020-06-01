@@ -12,7 +12,7 @@ n_aux = 3
 only = "all"
 
 d = [2,5,10,20]
-c = [5] # TODO per plot
+c = [6] # TODO per plot
 for i in c:
     print("Starting test", i)
     datafile  = ''.join(("csv/test/data", str(i), ".csv"))

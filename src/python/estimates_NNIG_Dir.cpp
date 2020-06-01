@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <chrono>
 #include "../../includes.hpp"
 
 
@@ -81,29 +80,8 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
         (*sampler).write_density_to_file(densfile);
     }
     if(only != "dens"){
-        // TODO:
-        std::ofstream myfile;
-        myfile.open ("src/python/test_uni.csv",std::ios_base::app);
-    	std::chrono::time_point<std::chrono::steady_clock> start, end;
 
-
-        using shakes = std::chrono::duration<int, std::ratio<1, 100000000>>;
-        start = std::chrono::steady_clock::now();
-        unsigned int i2_cap = (*sampler).cluster_estimate2(coll);
-        end = std::chrono::steady_clock::now();
-        long unsigned int time = std::chrono::duration_cast<shakes>(
-            end-start).count();
-
-        myfile << time << ",";
-
-        start = std::chrono::steady_clock::now();
-        unsigned int i_cap = (*sampler).cluster_estimate(coll);
-        end = std::chrono::steady_clock::now();
-        time = std::chrono::duration_cast<shakes>(
-            end-start).count();
-        myfile << time << std::endl;
-
-        myfile.close();
+        unsigned int i2_cap = (*sampler).cluster_estimate(coll);
         (*sampler).write_clustering_to_file(clustfile);
     }
 

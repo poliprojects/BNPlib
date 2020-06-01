@@ -41,9 +41,13 @@ def deserialize(collfile):
 
 
 def get_grid(a,b,d):
-    """! TODO docstring.
+    """! Return a d-dimensional grid.
+    
 
-    TODO docstring but longer."""
+	Given the extrema a and b, it builds a one-dimensional array uni_g with step 0.5.
+	np.meshgrid returns coordinate matrices from coordinate vectors uni_g1, uni_g2,…, uni_gd.
+    In the returned grid every matrix is collapsed into one dimension."""
+    
     uni_g = np.arange(a, b, 0.5)
     arr = [uni_g for y in range(d)]
     mesh = np.meshgrid(*arr)
@@ -140,9 +144,14 @@ def plot_clust_cards(clustfile, imgfile = "src/python/clust.pdf"):
 
 
 def rand_index_score(clusters, classes):
-    """! TODO docstring.
+    """! Compute the Rand index score between the predicted clustering and the true clustering.
 
-    TODO docstring but longer."""
+    In input are passed the predicted clustering "clusters" and the true clustering "classes".
+    Defining tp the number of true positives, tn the number of true negatives, fp the number of
+    false positives, and fn is the number of false negatives, the Rand index is a measure of
+    the percentage of correct decisions made by the algorithm computed as sum of tp and tn over
+    sum of tp, fp, fn and tn."""
+    
     tp_plus_fp = comb(np.bincount(clusters), 2).sum()
     tp_plus_fn = comb(np.bincount(classes), 2).sum()
     A = np.c_[(clusters, classes)]
@@ -155,9 +164,14 @@ def rand_index_score(clusters, classes):
 
 
 def print_clust_rand_indx(clustfile, trueclustfile):
-    """! TODO docstring.
-
-    TODO docstring but longer."""
+    """! Print the Rand index score between the predicted clustering predicted and the true clustering.
+    
+    clustfile is the file from which the predicted clustering will be read. trueclustfile
+    is the file from which the true clustering will be read. This function relabels the 
+    first k clusters in terms of numerosity, where k is the number of true clusters. Relabeling
+    is done in ascending order of the first unique value, the mean, as was done in true clustering.
+    Then the Rand index score is computed using the function rand_inde_score."""
+    
     mat_pred = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     mat_true = np.loadtxt(open(trueclustfile, 'rb'), delimiter=',')
 
