@@ -10,10 +10,11 @@ rng = 20200229
 maxit = 200
 burn = 10
 n_aux = 3
-only = "dens"
+only = "all"
 
-dim = [2,5,10,20]
-tests = [5,6,7,8]
+dim = [2,5]
+#dim = [2,5,10,20]
+tests = [5,6]
 
 for t in tests:
     print("Starting test", t)
@@ -23,7 +24,7 @@ for t in tests:
     collfile  = ''.join(("collector", str(t), ".recordio"))
     densfile      = ''.join(("src/python/test_res/dens",  str(t), ".csv"))
     clustfile     = ''.join(("src/python/test_res/clust", str(t), ".csv"))
-    #imgfileclust = ''.join(("src/python/test_res/clust", str(t), ".pdf"))
+    imgfileclust  = ''.join(("src/python/test_res/clust", str(t), ".pdf"))
     imgfilechain  = ''.join(("src/python/test_res/chain", str(t), ".pdf"))
     imgfiledens   = ''.join(("src/python/test_res/dens",  str(t), ".pdf"))
     imgfilecont   = ''.join(("src/python/test_res/cont",  str(t), ".pdf"))
@@ -44,8 +45,8 @@ for t in tests:
     bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid, algo,
     	collfile, densfile, clustfile, only)
 
-    #plot_clust_cards(clustfile, imgfileclust)
-    #plot_density_points(densfile, imgfiledens)
+    plot_clust_cards(clustfile, imgfileclust)
+    plot_density_points(densfile, imgfiledens)
     plot_density_contour(densfile, imgfilecont)
 
     print()

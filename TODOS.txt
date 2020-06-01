@@ -1,52 +1,29 @@
 TODO LIST
 
 
-ELENA:
-* factory / dataless
-* README usando solo bash/install.sh
-* tests
-* time con cluster_estimate vs cluster_estimate2
-* docstring delle funzioni rimanenti in bnp_interface
-
-
 BRUNO:
 * grep "[^ ] $" -PR src/*;  grep "^ +$" -PR src/*;  (spazi/a capo)
 * Redo callgrind and time stuff (optimization)
-* End doxygen docs
-* Remove begin and end print messages?
-
-
-TESTS
-* Univariati:
-1) y_i ~ 0.5 N(-3, 1) + 0.5 N(3, 1), i=1,... 200
-   mu_0 = 0.0
-   lambda = 0.1 (o 10, dipende dalla parametrizzazione)
-   a, b = 2 (parametri della inv-gamma)
-2) y_i ~ 0.9 N(-5, 1) + 0.1 N(5, 1), i=1,... 1000
-   stessi parametri di prima
-3) y_i ~ 0.3 N(-2, 0.8^2) + 0.3 N(0, 0.8^2) + 0.4 N(2, 1) i=1,... 200
-4) y_i ~ 0.5 t(5, -5, 1 ) + 0.5 SkewNormal(2, -5, 1) i=1,... 400
-   (per generare questi dati guardate il pacchetto python Scipy)
-
-* Multivariati:
-5) y_i ~ 0.5 N((-3, -3), I) + 0.5 N((3, 3), I) i=1, ... 400
-6-8) dati come prima (media della prima componente mistura tutti -3, e della
-     seconda tutti +3) all'aumentare della dimensione (d=2, 5, 10, 20)
-     per dimensioni sopra il 10 non dovrebbe più funzionare granchè...
-* plot delle densità stimate e densità vere
-* riportate rand-index della partizione stimata (solo per dimensione 1 e 2,
-  dovrebbe venire sempre alto tranne magari l'esempio con la t e SkewNormal, ma
-  la densità dovrebbe venire bene uguale)
 
 
 VARI
 * Check all algorithm/hierarchy/mixture combinations, csv files, etc
 
 
-REPORT
+REPORT ELENA
+* nuova parte collectors
+* nuova parte Factory
+
+
+REPORT BRUNO
+* nuova parte Python
+
+
+REPORT GENERICHE
 * in inglese
 * Introduzione bayes
 ** Polya urn: infinite variabili latenti
+* librerie usate
 * parametri non nel costruttore solitamente sono lasciati in default
 * a way to erase and add clusters more efficiently, e.g. with map
 * storing cardinalities > recomputing them at each iteration
@@ -69,15 +46,30 @@ REPORT
 * calcoli reserve cluster_estimate(): se k cluster uguali, serve un reserve di
   k*((n/k choose 2) - n) = .. = n^2/2k - n/2 - nk -> n^2/4 buon upper bound
   (matrice distrutta alla fine di ogni passo del for)
+* tests:
+** Univariati:
+1) y_i ~ 0.5 N(-3, 1) + 0.5 N(3, 1), i=1,... 200
+   mu_0 = 0.0
+   lambda = 0.1 (o 10, dipende dalla parametrizzazione)
+   a, b = 2 (parametri della inv-gamma)
+2) y_i ~ 0.9 N(-5, 1) + 0.1 N(5, 1), i=1,... 1000
+   stessi parametri di prima
+3) y_i ~ 0.3 N(-2, 0.8^2) + 0.3 N(0, 0.8^2) + 0.4 N(2, 1) i=1,... 200
+4) y_i ~ 0.5 t(5, -5, 1 ) + 0.5 SkewNormal(2, -5, 1) i=1,... 400
+   (per generare questi dati guardate il pacchetto python Scipy)
+** Multivariati:
+5) y_i ~ 0.5 N((-3, -3), I) + 0.5 N((3, 3), I) i=1, ... 400
+6-8) dati come prima (media della prima componente mistura tutti -3, e della
+     seconda tutti +3) all'aumentare della dimensione (d=2, 5, 10, 20)
+     per dimensioni sopra il 10 non dovrebbe più funzionare granchè...
+* plot delle densità stimate e densità vere
+* riportate rand-index della partizione stimata (solo per dimensione 1 e 2,
+  dovrebbe venire sempre alto tranne magari l'esempio con la t e SkewNormal, ma
+  la densità dovrebbe venire bene uguale)
 
 
-REPORT ELENA
-* nuova parte collectors
-* nuova parte Factory
 
 
-REPORT BRUNO
-* nuova parte Python
 
 
 LIBRERIA (?)

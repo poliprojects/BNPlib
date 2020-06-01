@@ -12,7 +12,7 @@ rng = 20200229
 maxit = 500
 burn = 100
 n_aux = 3
-only = "dens"
+only = "all"
 
 # Build grid for density evaluation
 grids = []
@@ -31,9 +31,10 @@ for t in tests:
     collfile  = ''.join(("collector", str(t), ".recordio"))
     densfile      = ''.join(("src/python/test_res/dens",  str(t), ".csv"))
     clustfile     = ''.join(("src/python/test_res/clust", str(t), ".csv"))
-    #imgfileclust = ''.join(("src/python/test_res/clust", str(t), ".pdf"))
+    imgfileclust  = ''.join(("src/python/test_res/clust", str(t), ".pdf"))
     imgfilechain  = ''.join(("src/python/test_res/chain", str(t), ".pdf"))
     imgfiledens   = ''.join(("src/python/test_res/dens",  str(t), ".pdf"))
+    trueclustfile = ''.join(("csv/test/true_clust", str(t), ".csv"))
 
     # Initialize more parameters
     mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
@@ -47,9 +48,8 @@ for t in tests:
     bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass,
     	grids[t-1], algo, collfile, densfile, clustfile, only)
 
-    #plot_clust_cards(clustfile, imgfileclust)
+    plot_clust_cards(clustfile, imgfileclust)
     plot_density_points(densfile, imgfiledens)
-    #trueclustfile = ''.join(("csv/test/true_clust", str(t), ".csv"))
-    #print_clust_rand_index(clustfile, trueclustfile)
+    print_clust_rand_index(clustfile, trueclustfile)
 
     print()
