@@ -39,13 +39,13 @@ for t in tests:
 
     chain_histogram(collfile, imgfilechain)
 
-    grid = get_multidim_grid(-7, 7.1, dim[t-5], 0.1)
+    grid = get_multidim_grid(-7, 7.1, dim[t-5], 10)
 
     bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid, algo,
     	collfile, densfile, clustfile, only)
 
     #plot_clust_cards(clustfile, imgfileclust)
-    plot_density_points(densfile, imgfiledens)
+    #plot_density_points(densfile, imgfiledens)
     plot_density_contour(densfile, imgfilecont)
 
     print()
