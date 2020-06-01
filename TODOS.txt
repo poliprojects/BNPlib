@@ -6,6 +6,7 @@ ELENA:
 * README usando solo bash/install.sh
 * tests
 * time con cluster_estimate vs cluster_estimate2
+* docstring delle funzioni rimanenti in bnp_interface
 
 
 BRUNO:
