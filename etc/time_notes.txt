@@ -1,0 +1,112 @@
+# DIFFERENT LIKELIHOODS AND OPTIMIZATION FLAGS
+## STANDARD
+Running maintest_nnws.cpp
+Warning: initial number of clusters will be set equal to the data size (10)
+Running Neal2 algorithm...
+Done
+Algo time: 39615848
+Successfully wrote density to csv/dens_5d.csv
+Dens time: 10353269
+End of maintest_nnws.cpp
+
+## STAN LIKELIHOOD
+Running maintest_nnws.cpp
+Warning: initial number of clusters will be set equal to the data size (10)
+Running Neal2 algorithm...
+Done
+Algo time: 47700683
+Successfully wrote density to csv/dens_5d.csv
+Dens time: 14317337
+End of maintest_nnws.cpp
+
+## SENZA OPTIMIZATION FLAGS
+Running maintest_nnws.cpp
+Warning: initial number of clusters will be set equal to the data size (10)
+Running Neal2 algorithm...
+Done
+Algo time: 521762512
+Successfully wrote density to csv/dens_5d.csv
+Dens time: 182770170
+End of maintest_nnws.cpp
+
+
+# DATA_5D E GRID_5D QUINTUPLICATI
+## STANDARD
+Running maintest_nnws.cpp
+Warning: initial number of clusters will be set equal to the data size (50)
+Running Neal2 algorithm...
+Done
+Algo time: 159416794
+Successfully wrote density to csv/dens_5d.csv
+Dens time: 34636242
+End of maintest_nnws.cpp
+
+## STAN LIKELIHOOD
+Running maintest_nnws.cpp
+Warning: initial number of clusters will be set equal to the data size (50)
+Running Neal2 algorithm...
+Done
+Algo time: 201133336
+Successfully wrote density to csv/dens_5d.csv
+Dens time: 52574701
+End of maintest_nnws.cpp
+
+
+
+
+
+# DIFFERENT CLUSTERING TYPES
+MAXITER 500
+BURN-IN 100
+steady_clock
+cluster2 = with sparse matrices
+cluster  = with dense  matrices
+
+UNI: TEST 1-4
+cluster2 cluster
+[[4.51696840e+07 4.15315598e+07]
+ [1.18633301e+09 9.17060859e+08]
+ [2.91540577e+07 3.00693867e+07]
+ [1.27339513e+08 1.22764857e+08]]
+
+MULTI: TEST 5-6
+cluster2 cluster
+[[1.50049441e+08 1.37240555e+08]
+ [1.28818714e+08 1.16328396e+08]
+
+
+
+
+
+# CALLGRIND + KCACHEGRIND
+## STANDARD
+Tools used: valgrind --tool=callgrind main, then KCacheGrind app
+Uni:
+* run() <40%, eval_density() 20%, cluster_estimate() >40%
+* As for run(), almost all time spent in step() (-> collecting is irrelevant),
+  more specifically in sample_allocations() (33%)
+* like() takes a total of 20% across run() and eval_density()
+  times
+Multi:
+* run() <10%, eval_density() amost 90%
+* cluster_estimate() has become irrelevant
+* As for run(), sample_allocations() takes 5%
+* eval_marg() >60%, presumably due to matrix inversion and Student's t
+  evaluation, both of which require expensive Cholesky decompositions
+* like() is the same order of magnitude as before (27%)
+* since estimate algorithms have not changed, this means like() is optimized
+  enough for it to withstand the jump to the multidim case better than the
+  other functions
+
+## WITHOUT OPTIMIZATION FLAGS
+Uni:
+* run() >40%, eval_density() <30%, cluster_estimate() 30% -> evenly distributed
+* As for run(), almost all time spent in step() (-> collecting is irrelevant),
+  with sample_allocations() being the main component at almost 40%
+* like() takes a total of >30% and 6M calls across run() and eval_density()
+  times
+Multi:
+* run() 58%, eval_density() 40%
+* cluster_estimate() same
+* eval_marg() >50%, rest is the same
+* like() has become only 17%
