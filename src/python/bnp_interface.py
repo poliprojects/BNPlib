@@ -41,11 +41,12 @@ def deserialize(collfile):
 
 
 def get_multidim_grid(a, b, d, n=10):
-    """! Returns a d-dimensional grid from intervals [a,b] with n different sample points for each direction.
+    """! Builds a d-dimensional grid from intervals [a,b], each divided into n.
 
-	Given the extrema a and b, it creates a one-dimensional array with n sample points,
-	then builds coordinate matrices from the single d coordinate vectors, and
-    returns a grid where every matrix is collapsed into one dimension."""
+	Given the extrema a and b, this function creates a one-dimensional array
+	with n sample points, then builds coordinate matrices from the single d
+	coordinate vectors, and returns a hypercubic grid where every matrix is
+	collapsed into one dimension."""
     uni_g = np.linspace(a, b, n)
     arr = [uni_g for y in range(d)]
     mesh = np.meshgrid(*arr)
@@ -111,7 +112,7 @@ def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf"):
         print("Error: density file must have 3 columns to be plotted")
         return
     figure = plt.figure()
-    n=np.floor(np.sqrt(mat[:,0].shape[0]))
+    n = np.floor(np.sqrt(mat[:,0].shape[0]))
     x = np.linspace(min(mat[:,0]), max(mat[:,0]), n.astype(int))
     xx, yy = np.meshgrid(x, x)
     z = mat[:,2].reshape(xx.shape)
