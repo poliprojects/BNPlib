@@ -37,7 +37,7 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
     const std::string &collfile, const std::string &densfile,
     const std::string &clustfile, const std::string &only = "all"){
 
-    std::cout << "Running estimates_NNIG_Dir.cpp" << std::endl;
+    std::cout << "Running estimates_NNIG_Dir()" << std::endl;
     using namespace NNIGDir;
 
     // Build model components
@@ -84,6 +84,6 @@ int estimates_NNIG_Dir(const double mu0, const double lambda_,
         (*sampler).write_clustering_to_file(clustfile);
     }
 
-    std::cout << "End of estimates_NNIG_Dir.cpp" << std::endl;
+    std::cout << "End of estimates_NNIG_Dir()" << std::endl;
     return 0;
 }

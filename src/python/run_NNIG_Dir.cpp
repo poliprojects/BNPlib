@@ -42,7 +42,7 @@ int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
     const unsigned int maxit = 0, const unsigned int burn = 0,
     const unsigned int n_aux = 0){
 
-    std::cout << "Running run_NNIG_Dir.cpp" << std::endl;
+    std::cout << "Running run_NNIG_Dir()" << std::endl;
     using namespace NNIGDir;
 
     // Build model components
@@ -89,6 +89,6 @@ int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
     // Run algorithm
     (*sampler).run(coll);
 
-    std::cout << "End of run_NNIG_Dir.cpp" << std::endl;
+    std::cout << "End of run_NNIG_Dir()" << std::endl;
     return 0;
 }

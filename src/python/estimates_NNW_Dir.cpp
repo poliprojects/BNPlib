@@ -38,7 +38,7 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     const std::string &collfile, const std::string &densfile,
     const std::string &clustfile, const std::string &only = "all"){
 
-    std::cout << "Running estimates_NNW_Dir.cpp" << std::endl;
+    std::cout << "Running estimates_NNW_Dir()" << std::endl;
     using namespace NNWDir;
 
     // Build model components
@@ -85,6 +85,6 @@ int estimates_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
         (*sampler).write_clustering_to_file(clustfile);
     }
 
-    std::cout << "End of estimates_NNW_Dir.cpp" << std::endl;
+    std::cout << "End of estimates_NNW_Dir()" << std::endl;
     return 0;
 }
