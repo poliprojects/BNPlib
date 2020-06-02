@@ -76,6 +76,14 @@ cluster2 cluster
 
 
 
+RAND-INDEX SCORE TEST 1-4
+MAXITER 500
+BURN-IN 100
+Test 1: Rand index score: 1.0
+Test 2: Rand index score: 0.9982002002002002
+Test 3: Rand index score: 0.8377889447236181
+Test 4: Rand index score: 0.9950250626566416
+
 
 
 # CALLGRIND + KCACHEGRIND
