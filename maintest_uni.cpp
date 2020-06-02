@@ -43,6 +43,7 @@ int main(int argc, char *argv[]){
     // =========================================================================
     std::string datafile = argv[1];
     Eigen::VectorXd data = read_eigen_matrix(datafile);
+    unsigned int init = 0; // initial number of clusters
     Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_uni.csv");
 
 
@@ -93,7 +94,7 @@ int main(int argc, char *argv[]){
     // CREATE ALGORITHM AND SET ALGORITHM PARAMETERS
     // =========================================================================
     std::string algo = argv[2];
-    auto sampler = algofactory.create_object(algo, hy, mix, data, 3);
+    auto sampler = algofactory.create_object(algo, hy, mix, data, init);
     (*sampler).set_rng_seed(20200229);
     (*sampler).set_maxiter(1000);
     (*sampler).set_burnin(100);
