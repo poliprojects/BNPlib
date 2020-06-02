@@ -37,7 +37,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::initialize(){
     // Randomly allocate all remaining data, and update cardinalities
     for(size_t j = this->init_num_clusters; j < data.rows(); j++){
         unsigned int clust = distro(generator);
-        allocations[j] = clust;
+        allocations.push_back(clust);
         cardinalities[clust] += 1;
     }
 }

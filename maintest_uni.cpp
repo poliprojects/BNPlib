@@ -67,22 +67,23 @@ int main(int argc, char *argv[]){
     // LOAD ALGORITHM FACTORY
     // =========================================================================
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType, MixtureType, Eigen::VectorXd) >;
+        HypersType, MixtureType>>(HypersType, MixtureType, Eigen::VectorXd,
+        unsigned int) >;
 
     Builder neal2builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
+        Eigen::VectorXd data, unsigned int init){
         return std::make_unique< Neal2<HierarchyType, HypersType,
-                MixtureType> >(hy, mix, data);
+                MixtureType> >(hy, mix, data, init);
         };
     Builder neal8builder = [](HypersType hy, MixtureType mix,
-        Eigen::VectorXd data){
+        Eigen::VectorXd data, unsigned int init){
         return std::make_unique< Neal8<HierarchyType, HypersType,
-                MixtureType> >(hy, mix, data);
+                MixtureType> >(hy, mix, data, init);
         };
 
     auto &algofactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
-        MixtureType, Eigen::VectorXd>::Instance();
+        MixtureType, Eigen::VectorXd, unsigned int>::Instance();
 
     algofactory.add_builder("neal2", neal2builder);
     algofactory.add_builder("neal8", neal8builder);
@@ -92,7 +93,7 @@ int main(int argc, char *argv[]){
     // CREATE ALGORITHM AND SET ALGORITHM PARAMETERS
     // =========================================================================
     std::string algo = argv[2];
-    auto sampler = algofactory.create_object(algo, hy, mix, data);
+    auto sampler = algofactory.create_object(algo, hy, mix, data, 3);
     (*sampler).set_rng_seed(20200229);
     (*sampler).set_maxiter(1000);
     (*sampler).set_burnin(100);

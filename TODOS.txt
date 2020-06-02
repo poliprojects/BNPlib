@@ -2,8 +2,8 @@ TODO LIST
 
 
 VARIE:
-* R/test1-6.R
-* PitYor
+* init_num_clust tries
+* PitYor tries
 * re-run VM
 
 
