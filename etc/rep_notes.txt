@@ -1,0 +1,61 @@
+REPORT ELENA
+* nuova parte collectors
+* nuova parte Factory
+
+
+REPORT BRUNO
+* nuova parte Python
+
+
+REPORT GENERICHE
+* in inglese
+* Introduzione bayes
+** Polya urn: infinite variabili latenti
+* librerie usate
+* parametri non nel costruttore solitamente sono lasciati in default
+* hyperparameters per la NNW: lambda piccolo (permette libertà), mu0 media
+  empirica, nu = dim.dati + 3, sigma0 = tale che la sua media (nu * tau0) sia
+  l'identità
+* natura oscillante dell'algoritmo, convergente solo in media
+* hierarchies, mixtures, etc a runtime:
+** visto che templatizziamo sull'abstract product, usare Factory diverse è
+   possibile
+** purtroppo i template params di hierarchy devono essere noti a compile time
+** bisognerebbe scrivere tutte le possibili combinazioni; possibile con il
+   numero di oggetti attuale, ma se aumentassero non scalerebbe bene
+* problemi memoria
+* Ottimizzazione:
+** valgrind --tool=callgrind ./maintest_uni csv/data_uni.csv neal2 memory
+** spiegare flags: -march=native -O3 -msse2 -funroll-loops -ftree-vectorize
+** a way to erase and add clusters more efficiently, e.g. with map
+** storing cardinalities > recomputing them at each iteration
+** set_state flag efficienza
+** calcoli reserve cluster_estimate(): se k cluster uguali, serve un reserve di
+  k*((n/k choose 2) - n) = .. = n^2/2k - n/2 - nk -> n^2/4 buon upper bound
+  (matrice distrutta alla fine di ogni passo del for)
+* confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
+  i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto:
+  di default usa uno slice sampler che non è molto efficiente, selezionate il
+  sampler marginale ('MAR') e matchate gli iperparametri
+* tests:
+** Univariati:
+1) y_i ~ 0.5 N(-3, 1) + 0.5 N(3, 1), i=1,... 200
+   mu_0 = 0.0
+   lambda = 0.1 (o 10, dipende dalla parametrizzazione)
+   a, b = 2 (parametri della inv-gamma)
+2) y_i ~ 0.9 N(-5, 1) + 0.1 N(5, 1), i=1,... 1000
+   stessi parametri di prima
+3) y_i ~ 0.3 N(-2, 0.8^2) + 0.3 N(0, 0.8^2) + 0.4 N(2, 1) i=1,... 200
+4) y_i ~ 0.5 t(5, -5, 1 ) + 0.5 SkewNormal(2, -5, 1) i=1,... 400
+   (per generare questi dati guardate il pacchetto python Scipy)
+** Multivariati:
+5) y_i ~ 0.5 N((-3, -3), I) + 0.5 N((3, 3), I) i=1, ... 400
+6-8) dati come prima (media della prima componente mistura tutti -3, e della
+     seconda tutti +3) all'aumentare della dimensione (d=2, 5, 10, 20)
+     per dimensioni sopra il 10 non dovrebbe più funzionare granchè...
+* plot delle densità stimate e densità vere
+* data_5d + Neal8 errore -> varianza alta non simmetrica (curse of dim.)
+** non ci possiamo fare nienteee
+* riportate rand-index della partizione stimata (solo per dimensione 1 e 2,
+  dovrebbe venire sempre alto tranne magari l'esempio con la t e SkewNormal, ma
+  la densità dovrebbe venire bene uguale)

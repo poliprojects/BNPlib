@@ -76,7 +76,7 @@ cluster2 cluster
 
 
 
-RAND-INDEX SCORE TEST 1-4
+# RAND-INDEX SCORE TEST 1-4
 MAXITER 500
 BURN-IN 100
 Test 1: Rand index score: 1.0
