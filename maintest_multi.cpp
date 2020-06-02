@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
     // =========================================================================
     std::string datafile = argv[1];
     Eigen::MatrixXd data = read_eigen_matrix(datafile);
-    unsigned int init = 0; // initial number of clusters
+    unsigned int init = 2; // initial number of clusters
     Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_multi.csv");
 
 

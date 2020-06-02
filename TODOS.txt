@@ -2,10 +2,7 @@ TODO LIST
 
 
 VARIE:
-* init_num_clust tries
-* PitYor tries
 * re-run VM
-* tabs
 * histogram
 
 
