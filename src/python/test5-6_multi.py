@@ -44,7 +44,7 @@ for t in tests:
     grid = get_multidim_grid(-7, 7.1, dim[t-5], nn[t-5])
 
     bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid, algo,
-    	collfile, densfile, clustfile, only)
+        collfile, densfile, clustfile, only)
 
     plot_clust_cards(clustfile, imgfileclust)
     plot_density_points(densfile, imgfiledens)

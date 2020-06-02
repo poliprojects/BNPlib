@@ -64,7 +64,7 @@ public:
         if(f == storage.end()){
             throw std::invalid_argument("Error: factory identifier not found");
         }
-        else{
+        else {
             return f->second(std::forward<Args>(args)...);
         }
     }

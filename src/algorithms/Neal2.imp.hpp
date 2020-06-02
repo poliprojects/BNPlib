@@ -100,7 +100,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 cardinalities[c_new] += 1;
             }
 
-            else{ // Case 2: datum moves from a singleton to an old cluster
+            else { // Case 2: datum moves from a singleton to an old cluster
                 unique_values.erase( unique_values.begin() + allocations[i] );
                 unsigned int c_old = allocations[i];
                 allocations[i] = c_new;
@@ -115,7 +115,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
             }
         }
 
-        else{ // if singleton == 0
+        else { // if singleton == 0
             if(c_new == n_clust){
                 // Case 3: datum moves from a non-singleton to a new cluster
                 Hierarchy<Hypers> new_unique( unique_values[0].get_hypers() );
@@ -126,7 +126,7 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 cardinalities.push_back(1);
             }
 
-            else{ // Case 4: datum moves from a non-singleton to an old cluster
+            else { // Case 4: datum moves from a non-singleton to an old cluster
                 allocations[i] = c_new;
                 cardinalities[c_new] += 1;
             }

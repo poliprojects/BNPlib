@@ -90,7 +90,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
                     aux_unique_values[c_new-n_clust].get_state(), false );
                 cardinalities[ allocations[i] ] += 1;
             }
-            else{  // Case 2: datum moves from a singleton to an old cluster
+            else {  // Case 2: datum moves from a singleton to an old cluster
                 unique_values.erase( unique_values.begin() + allocations[i] );
                 unsigned int c_old = allocations[i];
                 allocations[i] = c_new;
@@ -105,7 +105,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
             } // end of else
         } // end of if(singleton == 1)
 
-        else{ // if singleton == 0
+        else { // if singleton == 0
             if(c_new >= n_clust){
                 // Case 3: datum moves from a non-singleton to a new cluster
                 // Copy one of the auxiliary block as the new cluster
@@ -113,7 +113,7 @@ void Neal8<Hierarchy, Hypers, Mixture>::sample_allocations(){
                 cardinalities.push_back(1);
                 allocations[i] = n_clust;
             }
-            else{ // Case 4: datum moves from a non-singleton to an old cluster
+            else { // Case 4: datum moves from a non-singleton to an old cluster
                 allocations[i] = c_new;
                 cardinalities[c_new] += 1;
             }

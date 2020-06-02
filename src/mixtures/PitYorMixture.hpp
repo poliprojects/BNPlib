@@ -39,10 +39,12 @@ public:
     //! \return     Probability value
     double mass_existing_cluster(const unsigned int card, const unsigned int n)
         const override {
-        if(card==0)
-        	return 0;
-        else
-        	return (card-discount)/(n+strength);
+        if(card == 0){
+            return 0;
+        }
+        else {
+            return (card-discount)/(n+strength);
+        }
     }
 
 

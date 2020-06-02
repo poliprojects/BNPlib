@@ -200,7 +200,7 @@ void Algorithm<Hierarchy, Hypers, Mixture>::write_clustering_to_file(
                         j == best_clust.uniquevalues(ci).params_size()-1){
                         file << temp_param(k,z);
                     }
-                    else{
+                    else {
                         file << temp_param(k,z) << ",";
                     }
                 }

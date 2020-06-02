@@ -46,7 +46,7 @@ for t in tests:
     chain_histogram(collfile, imgfilechain)
 
     bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass,
-    	grids[t-1], algo, collfile, densfile, clustfile, only)
+        grids[t-1], algo, collfile, densfile, clustfile, only)
 
     plot_clust_cards(clustfile, imgfileclust)
     plot_density_points(densfile, imgfiledens)

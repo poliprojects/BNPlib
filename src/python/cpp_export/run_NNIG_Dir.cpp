@@ -34,7 +34,7 @@ namespace NNIGDir {
 //! \param n_aux                If algo="neal8", number of auxiliary blocks used
 
 int run_NNIG_Dir(const double mu0, const double lambda_, const double alpha0,
-	const double beta0,
+    const double beta0,
     const double totalmass,
     const std::string &datafile, const std::string &algo,
     const std::string &collfile,

@@ -11,7 +11,7 @@
 
 //! Returns an Eigen Matrix after reading it from a file.
 Eigen::MatrixXd read_eigen_matrix(const std::string &filename) {
-	// Initialize objects
+    // Initialize objects
     unsigned int cols = 0, rows = 0;
     double buffer[MAXBUFSIZE];
     std::ifstream istr(filename);
@@ -28,7 +28,7 @@ Eigen::MatrixXd read_eigen_matrix(const std::string &filename) {
         unsigned int temp = 0;
         std::stringstream stream(line);
         while(!stream.eof()){
-        	// Place read values into the buffer array
+            // Place read values into the buffer array
             stream >> buffer[ cols*rows + temp++ ];
         }
         if(temp == 0){

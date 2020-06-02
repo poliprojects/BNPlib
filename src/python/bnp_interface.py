@@ -43,10 +43,10 @@ def deserialize(collfile):
 def get_multidim_grid(a, b, d, n=10):
     """! Builds a d-dimensional grid from intervals [a,b], each divided into n.
 
-	Given the extrema a and b, this function creates a one-dimensional array
-	with n sample points, then builds coordinate matrices from the single d
-	coordinate vectors, and returns a hypercubic grid where every matrix is
-	collapsed into one dimension."""
+    Given the extrema a and b, this function creates a one-dimensional array
+    with n sample points, then builds coordinate matrices from the single d
+    coordinate vectors, and returns a hypercubic grid where every matrix is
+    collapsed into one dimension."""
     uni_g = np.linspace(a, b, n)
     arr = [uni_g for y in range(d)]
     mesh = np.meshgrid(*arr)
