@@ -8,7 +8,7 @@ beta0 = 2.0
 totalmass = 1.0
 datafile = "csv/data_uni.csv"
 algo = "neal2"
-init = 0
+init = 3
 rng = 20200229
 maxit = 5000
 burn = 500
@@ -34,3 +34,5 @@ bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
 
 plot_clust_cards(clustfile, imgfileclust)
 plot_density_points(densfile, imgfiledens)
+
+print("The end")

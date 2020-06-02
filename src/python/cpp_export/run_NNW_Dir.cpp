@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
 #include "../../includes.hpp"
 
 
@@ -11,7 +10,8 @@ namespace NNWDir {
     template <class HypersType> using HierarchyType = HierarchyNNW<HypersType>;
 
     using Builder = std::function< std::unique_ptr<Algorithm<HierarchyType,
-        HypersType, MixtureType>>(HypersType,MixtureType, Eigen::MatrixXd)>;
+        HypersType, MixtureType>>(HypersType, MixtureType, Eigen::MatrixXd,
+        unsigned int)>;
 }
 
 //! \file
@@ -55,20 +55,20 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     // Load algorithm factory
     auto &algoFactory = Factory<
         Algorithm<HierarchyType, HypersType, MixtureType>, HypersType,
-        MixtureType,Eigen::MatrixXd>::Instance();
+        MixtureType, Eigen::MatrixXd, unsigned int>::Instance();
 
     if(!algoFactory.check_existence(algo)){
 
         Builder neal2builder = [](HypersType hy, MixtureType mix,
-            Eigen::MatrixXd data){
-            return std::make_unique< Neal2<HierarchyType,HypersType,
-                    MixtureType> >(hy, mix, data);
+            Eigen::MatrixXd data, unsigned int init){
+            return std::make_unique< Neal2<HierarchyType, HypersType,
+                    MixtureType> >(hy, mix, data, init);
             };
 
         Builder neal8builder = [](HypersType hy, MixtureType mix,
-            Eigen::MatrixXd data){
-            return std::make_unique< Neal8<HierarchyType,HypersType,
-                    MixtureType> >(hy, mix, data);
+            Eigen::MatrixXd data, unsigned int init){
+            return std::make_unique< Neal8<HierarchyType, HypersType,
+                    MixtureType> >(hy, mix, data, init);
             };
 
         algoFactory.add_builder("neal2", neal2builder);
@@ -76,7 +76,7 @@ int run_NNW_Dir(const Eigen::Matrix<double, 1, Eigen::Dynamic> &mu0,
     }
 
     // Create algorithm and set algorithm parameters
-    auto sampler = algoFactory.create_object(algo, hy, mix, data);
+    auto sampler = algoFactory.create_object(algo, hy, mix, data, init);
 
     if(rng != 0)   (*sampler).set_rng_seed(rng);
     if(maxit != 0) (*sampler).set_maxiter(maxit);
