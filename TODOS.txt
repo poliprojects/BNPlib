@@ -3,7 +3,7 @@ TODO LIST
 
 VARIE:
 * re-run VM
-* histogram
+* histogram x-axis
 
 
 REPORT ELENA
