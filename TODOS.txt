@@ -1,3 +1,0 @@
-VARIE:
-* re-run VM
-* histogram x-axis

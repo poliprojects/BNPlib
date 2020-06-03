@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
+
+
 from sklearn.metrics.cluster import adjusted_rand_score
 
 LIBPATH = ''.join((os.path.dirname(os.path.realpath(__file__)), "/../.."))
@@ -70,7 +72,10 @@ def chain_histogram(collfile, imgfile = "src/python/chain.pdf"):
     num_clusters = []
     for i in d:
         num_clusters.append(len(i.uniquevalues))
-    plt.hist(num_clusters)
+
+    hist,bin_edges=np.histogram(num_clusters, bins=range(min(num_clusters),max(num_clusters)+2))
+    plt.bar(bin_edges[:-1],hist)
+    plt.xticks(bin_edges[:-1])
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
 
@@ -132,7 +137,10 @@ def plot_clust_cards(clustfile, imgfile = "src/python/clust.pdf"):
     and saved to the imgfile file."""
     mat = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     figure = plt.figure()
-    plt.hist(mat[:,0])
+    clusters=mat[:,0].astype(int)
+    hist,bin_edges=np.histogram(clusters, bins=range(min(clusters),max(clusters)+2))
+    plt.bar(bin_edges[:-1],hist)
+    plt.xticks(bin_edges[:-1])
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
 
