@@ -11,7 +11,8 @@ import csv, os, sys
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
-from scipy.special import comb
+
+from sklearn.metrics.cluster import adjusted_rand_score
 
 LIBPATH = ''.join((os.path.dirname(os.path.realpath(__file__)), "/../.."))
 sys.path.insert(0, LIBPATH)
@@ -136,59 +137,19 @@ def plot_clust_cards(clustfile, imgfile = "src/python/clust.pdf"):
     print("Successfully saved plot to", imgfile)
 
 
-def rand_index_score(clusters, classes):
-    """! Computes the Rand index score between predicted and true clustering.
-
-    The inputs are 2 lists of labels; clusters, the predicted clustering, and
-    classes, the true clustering. After counting all true/false positives/
-    negatives, the Rand index is returned, which is a measure of the percentage
-    of correct decisions made by the algorithm, computed as the empirical
-    proportion of the correctly classified points."""
-    tp_plus_fp = comb(np.bincount(clusters), 2).sum()
-    tp_plus_fn = comb(np.bincount(classes), 2).sum()
-    A = np.c_[(clusters, classes)]
-    tp = sum( comb(np.bincount(A[A[:, 0] == i, 1]), 2).sum()
-        for i in set(clusters) )
-    fp = tp_plus_fp - tp
-    fn = tp_plus_fn - tp
-    tn = comb(len(A), 2) - tp - fp - fn
-    return (tp + tn) / (tp + fp + fn + tn)
 
 
 def print_clust_rand_index(clustfile, trueclustfile):
-    """! Computes the Rand index score between predicted and true clustering.
+    """! Computes the Adjusted Rand index score between predicted and true clustering.
 
     clustfile and trueclustfile are the file names from which the predicted and
     the true clusterings, respectively, will be read. The cluster labels must be
-    in the first column of the csv files, and clustfile must also contain the
-    unique values that characterize the clusters. This function finds the k most
-    numerous predicted clusters, where k is the number of true clusters, and
-    relabels them. Relabeling is done in ascending order with respect to the
-    first unique value (which is the cluster mean in most cases), assuming that
-    the true clustering file is sorted in the same way. Then, the Rand index
-    score is computed and printed using the function. Please note that this
-    index is usually computed when the number of clusters is known a priori and
-    fixed, and choosing only the biggest k clusters as significant (while
-    misclassifying all other points) is an approximation; a useful approximation
-    nonetheless."""
+    in the first column of the csv files. The Adjusted Rand index
+    score is computed and printed using the function."""
+    
     mat_pred = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     mat_true = np.loadtxt(open(trueclustfile, 'rb'), delimiter=',')
 
-    clusters, tot_counts = np.unique(mat_pred[:,0].astype(int),
-        return_counts=True)
-    biggest_counts = sorted(tot_counts, reverse=True)[0:len(np.unique(
-        mat_true))]
-    biggest_clust = clusters[ np.where(np.in1d(tot_counts, biggest_counts))[0]]
 
-    v1 = np.unique(mat_pred[np.where(np.in1d(mat_pred[:,0],biggest_clust))[0],
-        1])
-    v2 = np.array([item for item in np.unique(mat_pred[:,1]) if item not in v1])
-    values = np.concatenate((v1,v2))
-
-    new_indx = np.arange(len(values))
-
-    for i in range(0, mat_pred.shape[0]):
-        mat_pred[i,0] = new_indx[ np.where(values == mat_pred[i,1]) ]
-
-    print("Rand index score:", rand_index_score(mat_pred[:,0].astype(int),
+    print("Rand index score:", adjusted_rand_score(mat_pred[:,0].astype(int),
         mat_true.astype(int)))
