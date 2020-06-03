@@ -80,9 +80,10 @@ cluster2 cluster
 MAXITER 500
 BURN-IN 100
 Test 1: Rand index score: 1.0
-Test 2: Rand index score: 0.9982002002002002
-Test 3: Rand index score: 0.8377889447236181
-Test 4: Rand index score: 0.9950250626566416
+Test 2: Rand index score: 0.9939315228831436
+Test 3: Rand index score: 0.6300893720919519
+Test 4: Rand index score: 0.9900498146844491
+
 
 
 
