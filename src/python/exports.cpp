@@ -13,8 +13,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(bnplibpy, m)
-{
+PYBIND11_MODULE(bnplibpy, m){
     m.doc() = "Nonparametric library for cluster and density estimation";
 
     m.def("run_NNIG_Dir", &run_NNIG_Dir,
