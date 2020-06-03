@@ -11,9 +11,6 @@ import csv, os, sys
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
-
-
-
 from sklearn.metrics.cluster import adjusted_rand_score
 
 LIBPATH = ''.join((os.path.dirname(os.path.realpath(__file__)), "/../.."))
@@ -73,8 +70,9 @@ def chain_histogram(collfile, imgfile = "src/python/chain.pdf"):
     for i in d:
         num_clusters.append(len(i.uniquevalues))
 
-    hist,bin_edges=np.histogram(num_clusters, bins=range(min(num_clusters),max(num_clusters)+2))
-    plt.bar(bin_edges[:-1],hist)
+    hist, bin_edges = np.histogram( num_clusters,
+        bins=range(min(num_clusters), max(num_clusters)+2) )
+    plt.bar(bin_edges[:-1], hist)
     plt.xticks(bin_edges[:-1])
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
@@ -137,27 +135,25 @@ def plot_clust_cards(clustfile, imgfile = "src/python/clust.pdf"):
     and saved to the imgfile file."""
     mat = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     figure = plt.figure()
-    clusters=mat[:,0].astype(int)
-    hist,bin_edges=np.histogram(clusters, bins=range(min(clusters),max(clusters)+2))
-    plt.bar(bin_edges[:-1],hist)
+    clusters = mat[:,0].astype(int)
+    hist, bin_edges = np.histogram( clusters,
+        bins=range(min(clusters), max(clusters)+2) )
+    plt.bar(bin_edges[:-1], hist)
     plt.xticks(bin_edges[:-1])
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
 
 
-
-
-def print_clust_rand_index(clustfile, trueclustfile):
-    """! Computes the Adjusted Rand index score between predicted and true clustering.
+def clust_rand_score(clustfile, trueclustfile):
+    """! Returns the adjusted Rand score between predicted and true clustering.
 
     clustfile and trueclustfile are the file names from which the predicted and
     the true clusterings, respectively, will be read. The cluster labels must be
-    in the first column of the csv files. The Adjusted Rand index
-    score is computed and printed using the function."""
-    
+    in the first column of the csv files. Then, this function computes and
+    returns the adjusted Rand score of the predicted clustering, which is a
+    measure of the proportion of correct decisions made by the clustering
+    algorithm."""
     mat_pred = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     mat_true = np.loadtxt(open(trueclustfile, 'rb'), delimiter=',')
-
-
-    print("Rand index score:", adjusted_rand_score(mat_pred[:,0].astype(int),
-        mat_true.astype(int)))
+    score = adjusted_rand_score(mat_pred[:,0].astype(int), mat_true.astype(int))
+    return score

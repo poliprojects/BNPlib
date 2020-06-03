@@ -50,6 +50,6 @@ for t in tests:
 
     plot_clust_cards(clustfile, imgfileclust)
     plot_density_points(densfile, imgfiledens)
-    print_clust_rand_index(clustfile, trueclustfile)
+    print("Adjusted Rand score:", clust_rand_score(clustfile,trueclustfile))
 
     print()

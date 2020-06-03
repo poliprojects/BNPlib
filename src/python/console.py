@@ -14,7 +14,7 @@ maxit = 5000
 burn = 500
 n_aux = 3
 
-grid = np.arange(0, 10, 0.5)
+grid = np.arange(0, 10, 0.1)
 
 collfile = "collector.recordio"
 densfile = "src/python/dens.csv"
