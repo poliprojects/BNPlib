@@ -1,6 +1,58 @@
-\part{???}
+\chapter{Python interface}
 
-\chapter{???}
+\section{Creating the interface}
+A Python interface was implemented for easier usage and testing with respect to C++.
+The files are located in the \verb|src/python| folder.
+This interface is made possible by two main pieces of software: the \verb|pybind11| Python package, and again the Protocol Buffers library.
+\verb|pybind11| allows transporting of C++ objects into a C++ library that can be read as if it were a Python library.
+In particular, the \verb|cpp_exports| subfolder contains several source files each containing a function that fulfills a specific role.
+This allows the user to be able to run the algorithm and execute the estimate at different points in time, since these two actions are completely independent -- this is actually the main reason for why a \verb|FileCollector| was implemented in the first place.
+Such independence is possible because after using the run unit, the Markov chain is automatically saved to a \verb|FileCollector|, which can then be read and deserialized thanks to the Python interface of the \verb|protobuf| library.
+More specifically, the \verb|chain_state.proto| file that was used to generate the \verb|State| class in C++ is also used to generate the same exact class in a Python file, again by running the Protobuf compiler \verb|protoc|; the created file is called \verb|chain_state_pb2.py|.
+All these units are included into the \verb|exports.cpp| file, in which the macro \verb|PYBIND_MODULE| is invoked to create the Python version of the library by passing the created function objects by reference:
+\begin{verbatim}
+PYBIND11_MODULE(bnplibpy, m){
+    m.doc() = "Nonparametric library for cluster and density
+        estimation";
+    m.def("run_NNIG_Dir", &run_NNIG_Dir);
+    ...
+}
+\end{verbatim}
+(Note that the units included in the library must have a fixed hierarchy and mixture, since the choice at runtime for these objects is not available yet, as previously noted.)
+The library is then compiled into a shared \verb|.so| C++ library by calling the \verb|Makefile| rule, \verb|pybind_generate|.
+After the library is created, one can simply \verb|import bnplibpy| in any Python script after adding its file path to the \verb|PYTHONPATH| environment variable.
 
-\section{Python interface}
-Knows knows test test
+\section{Using the interface}
+In particular, a Python interface file, \verb|bnp_interface.py| was created to automatically import the library and implement several useful tools:
+\begin{itemize}
+	\item \verb|get_multidim_grid()| creates an hypercube grid of arbitrary side, dimension and step, which is useful for evaluating a higher-dimension density estimate;
+	\item \verb|deserialize()| exploits the aforementioned common interface provided by Protobuf to read a Markov chain from a \verb|FileCollector| given its name and turn it into a list of \verb|State| objects;
+	\item \verb|chain_barplot()| loops over the Markov chain unpacked by \verb|deserialize()| and produces a barplot which shows the distribution of the number of clusters over all saved iterations of the chain;
+	\item \verb|plot_density_points()| and \verb|plot_density_contour()| both take a density evaluation file as input and plots them if possible, i.e. if the given density has the correct dimensions: 1D and 2D for the former, which is a regular function graph, and 2D for the latter, which is a map of the estimated contour lines of the function;
+	\item \verb|plot_clust_cards()| takes a clustering \verb|.csv| file as input, most likely the best clustering computed and stored via the \verb|cluster_estimate()| method of the \verb|Algorithm| class, and plots the cardinalities of clusters inside it;
+	\item \verb|clust_rand_score()| computes the so-called \emph{adjusted Rand score} between a given predicted clustering and true clustering. This score is a value in $[0,1]$ that represents a measure of the proportion of correct decisions made by the clustering algorithm with respect to the true clustering.
+\end{itemize}
+The user can then call each of these tools and the ones in \verb|bnplibpy| at will in their scripts.
+For instance, one may want to run the algorithm and get the Markov chain, visualize the distribution of clusters via \verb|chain_barplot()|, then compute the estimates; or maybe di all 3 at the same times.
+A typical Python script that uses this library looks as follows (extracted from \verb|console.py|):
+\begin{verbatim}
+from bnp_interface import *
+
+# Initialize parameters
+mu0 = 5.0
+lambda_ = 0.1
+...
+
+# Write file names
+datafile = "csv/data_uni.csv"
+collfile = "collector.recordio"
+...
+
+# Run algorithms, estimates, and plots
+bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
+    collfile, init, rng, maxit, burn, n_aux)
+chain_barplot(collfile, imgfilechain)
+bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
+collfile, densfile, clustfile, only)
+plot_clust_cards(clustfile, imgfileclust)
+\end{verbatim}
