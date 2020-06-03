@@ -39,7 +39,7 @@ for t in tests:
     bnplibpy.run_NNW_Dir(mu0, lambda_,tau0, nu, totalmass, datafile, algo,
         collfile, init, rng, maxit, burn, n_aux)
 
-    chain_histogram(collfile, imgfilechain)
+    chain_barplot(collfile, imgfilechain)
 
     grid = get_multidim_grid(-7, 7.1, dim[t-5], nn[t-5])
 

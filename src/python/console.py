@@ -27,7 +27,7 @@ only = "all"
 bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile, algo,
     collfile, init, rng, maxit, burn, n_aux)
 
-chain_histogram(collfile, imgfilechain)
+chain_barplot(collfile, imgfilechain)
 
 bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, grid, algo,
     collfile, densfile, clustfile, only)

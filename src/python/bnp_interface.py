@@ -57,12 +57,12 @@ def get_multidim_grid(a, b, d, n=10):
     return grid
 
 
-def chain_histogram(collfile, imgfile = "src/python/chain.pdf"):
-    """! Prints an histogram of the number of clusters for different iterations.
+def chain_barplot(collfile, imgfile = "src/python/chain.pdf"):
+    """! Prints a barplot of the number of clusters for different iterations.
 
     collfile is the name of the saved file collector. After deserialization, for
     each State object (i.e. for every iteration of the algorithm) the number of
-    clusters at that time is counted and plotted in an histogram, which is then
+    clusters at that time is counted and plotted in a barplot, which is then
     saved to the imgfile file."""
     d = deserialize(collfile)
     figure = plt.figure()
@@ -73,6 +73,9 @@ def chain_histogram(collfile, imgfile = "src/python/chain.pdf"):
     hist, bin_edges = np.histogram( num_clusters,
         bins=range(min(num_clusters), max(num_clusters)+2) )
     plt.bar(bin_edges[:-1], hist)
+    plt.title("Frequency of number of clusters over iterations")
+    plt.xlabel("Number of clusters")
+    plt.ylabel("Absolute frequency")
     plt.xticks(bin_edges[:-1])
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
@@ -98,6 +101,7 @@ def plot_density_points(densfile, imgfile = "src/python/dens_points.pdf"):
     else: # if cols == 3
         ax = figure.add_subplot(111, projection='3d')
         ax.scatter(mat[:,0], mat[:,1], mat[:,2])
+    plt.title("Estimated density graph")
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
 
@@ -121,6 +125,7 @@ def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf"):
     xx, yy = np.meshgrid(x, x)
     z = mat[:,2].reshape(xx.shape)
     plt.contourf(xx, yy, z)
+    plt.title("Estimated density contour")
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
 
@@ -131,8 +136,8 @@ def plot_clust_cards(clustfile, imgfile = "src/python/clust.pdf"):
     clustfile is the file from which the clustering will be read. This function
     reads the first column of the file and interprets it as the numeric labels
     of the clusters the data points belong to, with each for being a different
-    datum. An histogram of the cardinalities of these clusters is then produced
-    and saved to the imgfile file."""
+    datum. A barplot of the cardinalities of these clusters is then produced and
+    saved to the imgfile file."""
     mat = np.loadtxt(open(clustfile, 'rb'), delimiter=',')
     figure = plt.figure()
     clusters = mat[:,0].astype(int)
@@ -140,6 +145,9 @@ def plot_clust_cards(clustfile, imgfile = "src/python/clust.pdf"):
         bins=range(min(clusters), max(clusters)+2) )
     plt.bar(bin_edges[:-1], hist)
     plt.xticks(bin_edges[:-1])
+    plt.title("Cardinalities of clustering")
+    plt.xlabel("Cluster label")
+    plt.ylabel("Cardinality")
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
 
