@@ -18,6 +18,23 @@ sys.path.insert(0, LIBPATH)
 import bnplibpy
 
 
+def get_multidim_grid(a, b, d, n=10):
+    """! Builds a d-dimensional grid from intervals [a,b], each divided into n.
+
+    Given the extrema a and b, this function creates a one-dimensional array
+    with n sample points, then builds coordinate matrices from the single d
+    coordinate vectors, and returns a hypercubic grid where every matrix is
+    collapsed into one dimension."""
+    uni_g = np.linspace(a, b, n)
+    arr = [uni_g for y in range(d)]
+    mesh = np.meshgrid(*arr)
+    nrows = len(mesh[0].flat)
+    grid = np.zeros((nrows, d))
+    for i in range(0,d):
+        grid[:,i] = mesh[i].flat
+    return grid
+
+
 def deserialize(collfile):
     """! Reads collector from file and returns it as a list of Protobuf objects
 
@@ -38,23 +55,6 @@ def deserialize(collfile):
             read_metric.ParseFromString(msg_buf)
             d.append(read_metric)
     return d
-
-
-def get_multidim_grid(a, b, d, n=10):
-    """! Builds a d-dimensional grid from intervals [a,b], each divided into n.
-
-    Given the extrema a and b, this function creates a one-dimensional array
-    with n sample points, then builds coordinate matrices from the single d
-    coordinate vectors, and returns a hypercubic grid where every matrix is
-    collapsed into one dimension."""
-    uni_g = np.linspace(a, b, n)
-    arr = [uni_g for y in range(d)]
-    mesh = np.meshgrid(*arr)
-    nrows = len(mesh[0].flat)
-    grid = np.zeros((nrows, d))
-    for i in range(0,d):
-        grid[:,i] = mesh[i].flat
-    return grid
 
 
 def chain_barplot(collfile, imgfile = "src/python/chain.pdf"):
