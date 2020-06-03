@@ -36,6 +36,7 @@ for t in tests:
     nu = dim[t-5] + 3
     tau0 = (1/nu) * np.identity(dim[t-5])
 
+    # Run algorithms, estimates, and plots
     bnplibpy.run_NNW_Dir(mu0, lambda_,tau0, nu, totalmass, datafile, algo,
         collfile, init, rng, maxit, burn, n_aux)
 

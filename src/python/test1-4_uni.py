@@ -40,6 +40,7 @@ for t in tests:
     mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
     mu0 = np.mean(mat)
 
+    # Run algorithms, estimates, and plots
     bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile,
         algo, collfile, init, rng, maxit, burn, n_aux)
 
