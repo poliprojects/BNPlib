@@ -1,0 +1,126 @@
+\chapter{Implementation}
+As far as code implementation goes, the aforementioned algorithms all share the following structure:
+\begin{verbatim}
+void step(){
+    sample_allocations();
+    sample_unique_values();
+}
+
+void run(){
+    initialize();
+    unsigned int iter = 0;
+    while(iter < maxiter){
+        step();
+        if(iter >= burnin){
+            save_iteration(iter);
+        }
+        iter++;
+    }
+}
+\end{verbatim}
+In particular, the blocked Gibbs algorithm has an additional phase in \verb|step()|, \verb|sample_weights()|. Moreover, as discussed in chapter \ref{algo}, all the algorithms can be generalized including further Gibbs sampling steps to update the hyperparameters of $G_0$ or the total mass parameter $M$.
+Each implemented algorithm will be discussed in detail in its own section.
+As for the general structure of an algorithm class, a template approach was chosen, to allow the use of several layers of complexity based on the needs of the user:
+\begin{verbatim}
+template<template <class> class Hierarchy, class Hypers,
+         class Mixture> class Algorithm
+\end{verbatim}
+That is, \verb|Hierarchy<>|, \verb|Hypers|, and \verb|Mixture| are not actual implemented classes, but rather proxy names for classes which will be received as \emph{parameters} by the algorithm class.
+These classes must have a \emph{common interface} in order for them to be passed as parameters, as explained in the following section.
+An example with actual class names, as found in the \verb|main.cpp| file, is:
+\begin{verbatim}
+Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8;
+\end{verbatim}
+As a final introductory note, probability distributions and random sampling were handled through the \verb|Stan| library, whilst the popular \verb|Eigen| library was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code.
+
+\section{Auxiliary classes}
+First of all, we must briefly describe the auxiliary classes that are used as parameters for the algorithms:
+\begin{itemize}
+	\item The \verb|Mixture| classes contain all information about the mixing part of the DPM model, namely the total mass parameter and its prior distribution, if any.
+	We implemented the \verb|SimpleMixture| class, which represents a fixed total mass parameter without any prior on it, and contains the \verb|totalmass| member as well as a getter and a setter (\verb|get_totalmass()|, \verb|set_totalmass()|).
+	\item The \verb|Hypers| classes contain all information about the hyperparameters of the hierarchy, including their values (if fixed) or their prior distributions (if not).
+	We implemented the \verb|HypersFixedNNIG| class, which contains the four fixed parameters \verb|mu0|, \verb|lambda|, \verb|alpha0|, and \verb|beta0| of the Normal-NIG hierarchical model, and their respective getters and setters.
+	\item The \verb|Hierarchy<Hypers>| classes are template classes themselves and accept any \verb|Hypers| class as template parameter.
+	A \verb|Hierarchy<>| class contains a vector \verb|state| which stores the current values of the likelihood parameters, as well as a pointer to a \verb|Hypers| object -- this is why \verb|Hypers| is required as a parameter for \verb|Hierarchy<>|.
+	A pointer is chosen instead of an actual object, since multiple \verb|Hierarchy<>| objects will be created and stored by the algorithms; the \verb|state|s of these objects will of course share the same prior, and with a pointer to \verb|Hypers| the updating of the prior will only happen once rather than one time per object.
+	A \verb|Hierarchy<>| class also contains functions to:
+	\begin{itemize}
+		\item evaluate the marginal distribution (provided it is known in closed form) and the log-likelihood in a given set of points, given the current \verb|state|;
+		\item compute the posterior parameters with respect to a given set of observations;
+		\item generate new values for the \verb|state| both according to its prior and to its posterior distribution;
+		\item get and set class members, as with the other classes.
+	\end{itemize}
+	In particular, we implemented the \verb|HierarchyNNIG| class, which represents the Normal-NIG model described in section \ref{nnig}.
+	The \verb|state| holds the values for $\boldsymbol\phi = (\mu,\sigma)$.
+\end{itemize}
+Any class representing any type of hierarchy or parameters can be built as long as it possesses the above interface, which is required for their use in the implemented algorithms. \\
+We will be now first examining the \verb|Neal8| class as an example.
+
+\section{\texttt{Neal8} algorithm}
+Relying on the algorithm described in section \ref{neal8}, we proceed to describe our implementation of it.
+Aside from the usual getters and setters, as well as constructors, the \verb|Neal8| class contains the following members:
+\begin{verbatim}
+unsigned int n_aux;
+unsigned int maxiter;
+unsigned int burnin;
+unsigned int num_clusters;
+std::mt19937 rng; // random number generating engine
+\end{verbatim}
+These are the parameters of the method, and are rather self-explanatory.
+Their values are initialized either via the constructors or the setters.
+If \verb|num_clusters| is not provided, it will be automatically set equal to the number of data points, thus starting the algorithm with one datum per cluster. \\
+The data and values containers were implemented as follows:
+\begin{verbatim}
+std::vector<double> data;
+std::vector<unsigned int> allocations;
+std::vector<Hierarchy<Hypers>> unique_values;
+std::vector<Hierarchy<Hypers>> aux_unique_values;
+Mixture mixture;
+\end{verbatim}
+The algorithm will keep track of the labels representing assignments to clusters via the \verb|allocations| vector.
+For instance, if one has \verb|allocations[5] = 2|, it means that datum number 5 is associated to cluster number 2.
+Note that indexing for both data and clusters starts at zero, so this actually means that we have the sixth datum being assigned to the third cluster. \\
+The containers for the unique values $\boldsymbol\phi$ hold objects of type \verb|Hierarchy<>| because each $\boldsymbol\phi$ is associated to a cluster, which is in fact a small hierarchy that can have its own hyperprior in the general case.
+The same reasoning goes for \verb|aux_unique_values|, the $m$ auxiliary blocks, from which the algorithm may draw in order to generate new clusters. \\
+As for the members used for running the algorithm:
+\begin{verbatim}
+void initialize();
+void sample_allocations();
+void sample_unique_values();
+void step(){
+    sample_allocations();
+    sample_unique_values();
+}
+void save_iteration(unsigned int iter);
+void run();
+\end{verbatim}
+Aside from \verb|run()|, whose code was shown at the beginning of this section, we shall briefly describe the implementation of these functions:
+\begin{itemize}
+	\item \verb|initialize()| creates \verb|num_clusters| clusters and randomly assigns each datum to one of them, while making sure that each cluster contains at least one.
+	This assignment is done through changing \verb|allocations| components, as explained earlier.
+	\item In \verb|sample_allocations()|, a loop is performed over all observations $i=1:n$.
+	A vector \verb|card| is first filled, with \verb|card[j]| being the cardinality of cluster $j$.
+	The algorithm mandates that \verb|data[i]| be moved to another cluster; thus, if the current cluster is a singleton, its $\boldsymbol\phi$ values are transferred to the first auxiliary block.
+	Then, each auxiliary block (except the first one if the above case occurred) generates new $\boldsymbol\phi$ values via the hierarchy's \verb|draw()| function.
+	Now a new cluster, that is, new $\boldsymbol\phi$ values, for \verb|data[i]| needs to be drawn.
+	A vector \verb|probas| with \verb|n_unique+n_aux| components is filled with the probabilities of each $\boldsymbol\phi$ being extracted, in line with (\ref{neal8prob}).
+	Computations involve, among other things, the \verb|card| vector, the likelihood \verb|like()| evaluated in \verb|data[i]|, and the total mass parameter.
+	Then, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|.
+	Finally, four different cases of updating \verb|unique_values| and \verb|card| are handled separately, depending on whether the old cluster was a singleton or not, and whether an auxiliary block or an already existing cluster was chosen as the new cluster for \verb|data[i]|.
+	This is done because depending on the case, clusters are either unchanged, increased by one, decreased by one, or moved around.
+	\item In \verb|sample_unique_values()|, for each cluster $j$, their $\boldsymbol\phi$ values are updated through the \verb|sample_given_data()| function, which takes as argument the vector \verb|curr_data| of data points which belong to cluster $j$.
+	Since we only keep track of clusters via their labels in \verb|allocations|, we do not have a vector of actual data points stored for each cluster.
+	Thus we must fill, before the loop on $j$, a matrix \verb|clust_idxs| whose column $k$ contains the index of data points belonging to cluster $k$.
+	\verb|clust_idxs| is then used in the $j$ loop to fill \verb|curr_data| with the actual data points of cluster $j$.
+	\item \verb|save_iteration| will be examined in the next section.
+\end{itemize}
+
+\section{\texttt{Neal2} algorithm}
+The structure of the \verb|Neal2| class is similar to the one of \verb|Neal8| described above.
+The only relevant differences are the obvious lack of \verb|aux_unique_values| and most of the \verb|sample_allocations()| phase.
+As discussed in section \ref{neal2}, this algorithm exploits conjugacy, thus this function requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is provided in closed form.
+In our case, a Normal-NIG specialization for the \verb|Neal2| template class was implemented.
+In \verb|sample_allocations()|, a loop is performed over observations $i$ and the \verb|card| vector is built, just as before.
+The \verb|probas| vector of weights for the new allocation value is computed, according to the probabilities (\ref{probasneal2}), by also using the marginal density in \verb|data[i]|, which is known to be a Student's $t$ as mentioned in section \ref{nnig}.
+After the new \verb|allocations[i]| is drawn according to \verb|probas|, four cases are handled separately as before, depending on whether the old cluster was a singleton and whether \verb|data[i]| is assigned to a new cluster.
+Indeed, in such a case, a new $\boldsymbol\phi$ value for it must be generated, and this must be handled differently by the code if an old singleton cluster was just destroyed (as the new cluster must take its former place).
