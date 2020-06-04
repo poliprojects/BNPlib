@@ -56,7 +56,6 @@ public:
 
     //! \param name Identifier for the object
     //! \param args Collection of any number of parameters
-    //! \param data Eigen matrix to pass to the constructors
     //! \return     An unique pointer to the created object
     std::unique_ptr<AbstractProduct> create_object(const Identifier &name,
         Args... args) const {
