@@ -13,7 +13,7 @@ The MemoryCollector, unlike the FileCollector, does not write chain states anywh
 Instead, the contents of a Filecollector are permanent, because every state collected by it remains ever after the termination of the main that created it, in Protobuf form, in the corresponding file. This approach is mandatory, for instance, if different main programs are used to run the algorithm and the estimates. 
 Sharing the two a common interface we implemented an abstract base class, BaseCollector and two derived classes: FileCollector and MemoryCollector.
 Below are shown the structures of the classes:
-\\\\
+\\\\ VERB CLASSES
 
 
 The base class has as protected members the current size of the chain, which is updated during the run by increasing by one for each performed  iteration, and the curr\_iter, a cursor useful for reading the chain, when this is done state by state.
@@ -24,8 +24,11 @@ Two alternatives are possible for reading: using the get\_chain() method that re
 
 \section{Use in run function: writing-mode}
 In the main program, a DerivedCollector, chosen runtime, is instantiated before running the algorithm and a BaseCollector pointer points to the Derived Collector object.
-Then the Collector pointer is passed to the run() method and before the first step(), through the pointer, the Collector method start() is called, a function useful in case of FileCollector that initializes the collector for writing. Then, at the end of each iteration, the public function collect() is called which takes in input a Protobuf object related to the current state and writes it to the collector. At the end of all iterations, the Collector public method finish() is called, a function useful in the case of FileCollector to end the collector writing.
+Then the BaseCollector pointer is passed to the run() method and through the pointer are accessed the three methods for the writing: start(), collect() and finish().
 
+\\VERB RUN
+
+We'll see now the writing procedure specifically for each collector.
 
 \subsection{FileCollector}
 
