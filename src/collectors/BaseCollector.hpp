@@ -34,6 +34,7 @@ protected:
     unsigned int curr_iter = -1;
 
     //! Reads the next state, based on the curr_iter curson
+    //! \return The requested state in protobuf-object form
     virtual State next_state() = 0;
 
 public:
@@ -47,6 +48,7 @@ public:
     virtual void finish() = 0;
 
     //! Reads the next state and advances the cursor by 1
+    //! \return The requested state in protobuf-object form
     State get_next_state(){
         curr_iter++;
         if(curr_iter >= size){
