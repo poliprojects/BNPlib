@@ -1,36 +1,7 @@
 \part{Applications}
 
 \chapter{Applications}
-These algorithms can also be used for two useful practical purposes: \emph{cluster estimation} and \emph{density estimation}.
-Both processes, however, require the whole chain to be saved, that is, at each iteration the current values of states and allocations must be stored in some data structure.
-For this purpose, we used the Protocol Buffers library, which needs a short introduction. \\
-Protocol Buffers, or \verb|protobuf| for short, was developed by Google and allows automatic generation of data-storing C++ classes by defining a class skeleton in a \verb|.proto| file.
-This also allows easy interfacing with other programming languages such as R and Python. \\
-We built our template as follows:
-\begin{verbatim}
-message UniqueValues {
-    repeated double params = 1;
-}
-message IterationOutput {
-    repeated int32 allocations = 1;
-    repeated UniqueValues phi = 2;
-}
-message ChainOutput {
-    repeated IterationOutput state = 1;
-}
-\end{verbatim}
-Here \verb|message| and \verb|repeated| are the \verb|protobuf| equivalent of classes and vectors respectively, while the numbers 1 and 2 just act as identifiers for the fields in the messages.
-After generating the corresponding C++ classes via the \verb|protoc| compiler, we were able to add the following members to the \verb|Neal8| and \verb|Neal2| classes:
-\begin{verbatim}
-ChainOutput chain;
-IterationOutput best_clust;
-std::pair< std::vector<double>, Eigen::VectorXd > density;
-\end{verbatim}
-For each iteration after the burn-in phase, the \verb|save_iteration()| function saves all state values of the current iteration into the \verb|chain| pseudo-vector in the appropriate structure.
-On the other hand, \verb|best_clust| represents the state of a single iteration, and it is the object where the result of the clustering analysis will be saved.
-The \verb|density| object shares a similar purpose for the density estimation part, albeit not actually generated via \verb|protobuf|.
-It will be filled with a grid of points in which the density will be evaluated, and the evaluations of the density themselves. \\
-We will be explaining in thorough detail these two useful applications in the next lines.
+
 
 \section{Cluster estimation}
 Suppose we wish to estimate the real clustering of the data, assuming the DPM model holds true.

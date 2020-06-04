@@ -1,13 +1,38 @@
 \chapter{Collectors}
 
-Once a BNP algorithm is run, one may be interested, as mentioned above, in an estimate of the density given a grid of points or in an identification of a partition through the clustering obtained in the algorithm, which we call best clustering, i.e. the one that optimizes the binder loss function. In any case we need to be able to retrieve the information of each iteration of the algorithm, such as allocations and unique values, which characterize the state of the chain. In order to do it without saving the entire chain of states as a member of the Algoritmh class we have implemented the collectors classes. 
-A collector is therefore a class outside the algorithm class meant to store the state of a Markov chain at all iterations, in order to be able to use the states chain after the algorithm run, for density and clustering estimates. 
+Once a BNP algorithm is run, one may be interested, as mentioned above, in an estimate of the density given a grid of points or in an identification of a partition through the clustering obtained in the algorithm, which we call best clustering, i.e. the one that optimizes the binder loss function. In any case we need to be able to retrieve the information of each iteration of the algorithm, such as allocations and unique values, which characterize the state of the chain, which must be stored in some data structure.
+For this purpose, we used the Protocol Buffers library, which needs a short introduction. \\
+Protocol Buffers, or \verb|protobuf| for short, was developed by Google and allows automatic generation of data-storing C++ classes by defining a class skeleton in a \verb|.proto| file.
+This also allows easy interfacing with other programming languages such as R and Python. \\
+We built our template as follows:
+\begin{verbatim}
+message Par_Col {
+    repeated double elems = 1;
+}
 
-At the end of each iteration of the algorithm allocations and unique values of the current state are stored in classes built via the Google Protocol Buffers library, also known as Protobuf. The protobuf-object of the state is then stored in a collector.
+message Param {
+    repeated Par_Col par_cols = 1;
+}
+
+message UniqueValues {
+    repeated Param params = 1;
+}
+
+message State {
+    repeated int32 allocations = 1;
+    repeated UniqueValues uniquevalues = 2;
+}
+\end{verbatim}
+Here \verb|message| and \verb|repeated| are the \verb|protobuf| equivalent of classes and vectors respectively, while the numbers 1 and 2 just act as identifiers for the fields in the messages.
+The corresponding C++ classes are generated via the \verb|protoc| compiler.
+
+
+In order to use the states chain after the algorithm run, for density and clustering estimates, without saving the entire chain of State-objects as a member of the Algoritmh class we have implemented the collectors classes. 
+A collector is therefore a class outside the algorithm class meant to store the state of the Markov chain at all iterations as State-object.
 
 
 We have implemented two types of collector that we called FileCollector and MemoryCollector.
-The first saves the protobuf-objects related to the chain states on binary files while the second saves them on a deque.
+The first saves the State-objects on binary files while the second saves them on a deque.
 
 The MemoryCollector, unlike the FileCollector, does not write chain states anywhere and all information contained in it is destroyed when the main that created it is terminated. It is therefore useful in situation in which writing to a file is not needed, for instance in a main program that both runs the algorithm and computes the estimates.
 Instead, the contents of a Filecollector are permanent, because every state collected by it remains ever after the termination of the main that created it, in Protobuf form, in the corresponding file. This approach is mandatory, for instance, if different main programs are used to run the algorithm and the estimates. 
@@ -20,38 +45,34 @@ The base class has as protected members the current size of the chain, which is 
 
 Among the public methods useful functions for writing the chain are: the start() function, to initialize the collector, the collect() function to write the single state of the chain in the collector and finish() to close the collector for writing. 
 
-Two alternatives are possible for reading: using the get\_chain() method that returns the entire chain of states in protobuf-objects deque format or the get\_next\_state method that returns one state at a time, increasing the curr\_iter cursor by 1 to keep track of the current position. In case the second method is used, since the whole chain is not available, the get\_state method is implemented, which returns the state of a specific iteration, useful for instance in the cluster\_estimate function once it’s  identified the state of the chain corresponding to the best\_clustering.
+Two alternatives are possible for reading: using the get\_chain() method that returns the entire chain of states in protobuf-objects deque format or the get\_next\_state method that returns one state at a time, increasing the curr\_iter cursor by 1 to keep track of the current position. In case the second method is used, since the whole chain is not available, the get\_state method is implemented, which returns the state of a specific iteration, useful for instance in the clustering estimation function, which we'll discuss later, where a specific state of the chain is searched, i.e. the one that optimizes the binder loss function.
 
 \section{Use in run function: writing-mode}
 In the main program, a DerivedCollector, chosen runtime, is instantiated before running the algorithm and a BaseCollector pointer points to the Derived Collector object.
 Then the BaseCollector pointer is passed to the run() method and through the pointer are accessed the three methods for the writing: start(), collect() and finish().
 
-\\VERB RUN
 
-We'll see now the writing procedure specifically for each collector.
+VERB RUN
+
+We'll see now the writing procedure specifically for each collector. 
 
 \subsection{FileCollector}
 
-In the specific case of FileCollector we pass the filename string to the constructor  indicating the file name where the chain will be saved, while the other protected members are initialized by default. In the run() is then initially called the public method of the FileCollector start(), where through the function open() an open file description that refers to the file is created and a file descriptor that refers to that open file description is returned, which we save in the protected member outfd. Then we pass the unix file descriptor to FileOutputStream() which creates a stream that writes to the given Unix file descriptor and initialize the protected member fout as pointer to the created stream.
-After each iteration is then called the public function of the FileCollector collect() that takes in input the current state in Protobuf object format and through SerializeDelimitedToZeroCopyStream () is written on file and the size member is increased by one.
-
-At the end of all iterations the public FileCollector finish() method is called, in witch the close() function closes the file descriptor, e FileOutputStream::Close() flushes any buffers and closes the underlying file.
+In the specific case of FileCollector we pass the filename string to the constructor indicating the file name where the chain will be saved, while the other protected members are initialized by default. In the run() is then initially called the public method of the FileCollector start(), where is created an open file description that refers to the file and subsequently a stream that writes to the Unix file descriptor. After each iteration is then called the public function of the FileCollector collect() that takes in input the current state in Protobuf object format and write it on file. At the end of all iterations the public FileCollector finish() method closes the file descriptor and the underlying file. 
 
 \subsection{MemoryCollector}
-In the case a Memorycollector is used, as before the collector-object is constructed in the main program that is pointed by a pointer to BaseCollector. In this case the default constructor is called.  The start and finish methods of a MemoryCollector do nothing while the collect method, called at the end of each iteration, inserts in the deque the protobuf object related to the current state and increases the size by one.
+In the case a Memorycollector is used, as before the collector-object is constructed in the main program and it is pointed by a pointer to BaseCollector. In this case the default constructor is called. The start and finish methods of a MemoryCollector do nothing while the collect method, called at the end of each iteration, inserts in the deque the protobuf object related to the current state.
 
 \section{Use in estimates functions: reading-mode}
-Once the BNP algorithm run is completed, we proceed with density and clustering estimates. For both estimates it is necessary, as said before, to know the whole chain of states, so the BaseCollector pointer is passed as input in both the functions. Within the estimates functions we decided to call get\_chain , the collectors public methos that returns the whole chain in deque form. In the case of MemoryCollector is simply returned the  protected member chain, while in the case of FileCollector the chain is read from file state by state with google::protobuf::util::ParseDelimitedFromZeroCopyStream( ): each state is converted back into protobuf format and saved in the deque.
+Once the BNP algorithm run is completed, we proceed with density and clustering estimates. For both estimates it is necessary, as said before, to know the whole chain of states, so the BaseCollector pointer is passed as input in the estimates functions. Within the estimates functions we decided to call get chain , the collectors public method that returns the whole chain in deque form. In the case of MemoryCollector is simply returned the protected member chain, while in the case of FileCollector the chain is read from file state by state, converted back into protobuf format and saved in the deque.
 
 \subsection{Alternative of reading}
 
 A possible alternative to reading the chain could be to read status by status directly in the estimates functions when necessary, without saving the whole chain inside the function. 
-With such an implementation, in the for loop of the estimates functions that runs the iterations, the get\_next\_state() Collectors method mentioned above,  could be called for each iteration, in which the cursor curr\_iter, initialized to $-1$, is increased by one and the get\_next protected method, specific for each Derived Collector, returns the state relative to the current iteration. 
-In the case of Memory collector get\_next simply returns the element of the deque relative to the current position up to size $-1$, when the curr\_iter is re-initialized for a possible recall by one of the estimates functions.
-
-In the case of FileCollector, at the first iteration the file is opened for reading, the chain status is read and converted back to Protobuf-object form, while for the other iterations the reading of the file continues from the position of the previous iteration. When the curr\_iter is equal to size$-1$the curr\_iter is reset to $-1$ and the file is closed for reading.
+With such an implementation, in the estimates functions, the get\_next\_state() Collectors method mentioned above, could be called for each iteration, where the get\_next protected method, specific for each Derived Collector, returns the state relative to the current iteration. 
+In case of Memory collector get\_next simply returns the element of the deque relative to the current position, while in case of FileCollector, at the first iteration the file is opened for reading, the chain status is read and converted back to Protobuf-object form, while for the other iterations the reading of the file continues from the position of the previous iteration.
 
 When the estimates functions are executed in the same main program where the algorithm is run, the collectors contain the size information, corresponding to the number of iterations saved on the chain. 
 If the estimates are made in a different main program, situation where the FileCollector is needed, the size information is lost with the destruction of the object created in the main program where the run() is executed. Therefore, it might be a plausible option to also save the size to file to easily recover it when needed. 
 
-In addition, in cluster\_estimate(),  once the dissimilarity matrices have been calculated by reading the whole chain state by state, and the iteration related to the best\_clustering, i.e. the one that optimizes the binder loss function, is identified, the corresponding state must be retrieved and in the case of FileCollectors it is therefore necessary to re-read the file up to this iteration with get\_state(). get\_state() can be improved by saving the number of bytes corresponding to the individual protobuf-object and thus be able to recover a specific state without reading previous iterations. For sake of simplicity we have opted for a reading of the whole chain, leaving in the collectors classes the functions get\_next\_state, get\_next and get\_state for a possible extension.
+In addition, in clustering estimation the dissimilarity matrices could be calculated by reading the whole chain state by state, while, once the iteration of the best clustering is found, the corresponding state must be retrieved and in the case of FileCollectors it is therefore necessary to re-read the file up to this iteration with get\_state(). get\_state() can be improved by saving the number of bytes corresponding to the individual protobuf-object and thus be able to recover a specific state without reading previous iterations. For sake of simplicity we have opted for a reading of the whole chain, leaving in the collectors classes the functions get\_next\_state, get\_next and get\_state for a possible extension.
