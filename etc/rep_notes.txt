@@ -1,10 +1,14 @@
 REPORT ELENA
-* nuova parte collectors
-* nuova parte Factory
+* collectors (review)
+* Factory
+* aux classes
+* algo, base + derived
 
 
 REPORT BRUNO
-* nuova parte Python
+* intro bayes
+* estimate theory
+* performance
 
 
 REPORT GENERICHE
