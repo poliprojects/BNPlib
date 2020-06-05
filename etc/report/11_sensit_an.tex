@@ -1,3 +1,5 @@
+\part{Results}
+
 \chapter{Results}
 Our clustering analysis was conducted on $n=100$ observations, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(7,1)$, which were saved in the \verb|data.csv| file.
 We chose the prior parameters for the Normal-NIG model (\ref{nnig}) as follows: $\mu_0 = 5, \lambda_0 = 1, \alpha_0 = 2, \beta_0 = 2$.
@@ -11,7 +13,7 @@ After running the algorithm as described above with total mass $M=0.25$, we find
 \begin{figure}[h]
 	\centering
 	\begin{minipage}{0.5\textwidth}
-		\includegraphics[scale=0.35]{etc/cardinalities_thinned.pdf} % TODO ???
+		\includegraphics[scale=0.35]{etc/cardinalities_thinned.pdf}
 	\end{minipage}%
 	\begin{minipage}{0.5\textwidth}
 		\includegraphics[scale=0.35]{etc/densities_iters.pdf}
