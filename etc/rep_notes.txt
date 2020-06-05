@@ -13,8 +13,6 @@ REPORT BRUNO
 
 REPORT GENERICHE
 * in inglese
-* Introduzione bayes
-** Polya urn: infinite variabili latenti
 * librerie usate
 * parametri non nel costruttore solitamente sono lasciati in default
 * hyperparameters per la NNW: lambda piccolo (permette libertà), mu0 media
