@@ -1,63 +1,67 @@
 \chapter{Applications}
-
+%TODO everything
 
 \section{Cluster estimation}
-Suppose we wish to estimate the real clustering of the data, assuming the DPM model holds true.
-A first rough estimate is the \emph{final clustering}, that is, the state values corresponding to the last iteration of the algorithm.
+%Suppose we wish to estimate the real clustering of the data, assuming the DPM model holds true.
+%A first rough estimate is the \emph{final clustering}, that is, the state values corresponding to the last iteration of the algorithm.
 This estimate does not require an appropriate function to be implemented, since the state values are already available in \verb|allocations| and \verb|unique_values| after the algorithm is \verb|run()|.
-However, due to the oscillating behavior of the clusters (as we shall see later on), the last clustering may not be the optimal one.
-Instead, we chose to implement a \emph{least square} estimate in the following function:
+However, due to the oscillating behavior of the clusters (as we shall see later on), the last clustering may not be the optimal one. \\
+%Instead, we chose to implement a \emph{least square} estimate
+in the following function:
 \begin{verbatim}
 unsigned int cluster_estimate();
 \end{verbatim}
 This function exploits the \verb|chain| pseudo-vector, in which states of all iterations of the algorithm were saved via \verb|save_iteration()| (of course, only after the burn-in phase) and the \verb|protobuf| library.
 This function loops over all \verb|IterationOutput| objects in \verb|chain|, finds the iteration at which the best clustering occurred, saves the whole object into the \verb|best_clust| class member, and returns the iteration number of this best clustering.
-As briefly touched upon earlier, the best clustering is found via the minimization of the squared posterior \emph{Binder's loss function}.
-An equivalent approach (see \cite{beep} lecture on BNP clustering) is computing the so-called \emph{dissimilarity matrix} for each iteration, computing its sample mean over all iterations, and finding the iteration that is the closest to the mean with respect to the \emph{Frobenius norm}. 
-More specifically, for each iteration $k$, the dissimilarity matrix $D^{(k)}$ is a symmetric, binary $n$-by-$n$ matrix (where $n$ is the number of available observations) whose entries $D^{(k)}_{ij}$ are $1$ if datum $i$ and $j$ are placed in the same cluster at iteration $k$ and $0$ otherwise.
-After each $D^{(k)}$ and the sample mean $\bar{D} = \frac{1}{K} \sum_k D^{(k)}$ are computed, where $K$ is the number of iterations (not counting the ones in the burn-in phase), the best clustering $\hat{k}$ is found by minimizing the Frobenius norm of the difference with $\bar{D}$:
-$$
-\hat{k} = \argmin_k \left\lVert D^{(k)} - \bar D \right\rVert_F^2 = \argmin_k \sum_{i,j} \left( D^{(k)}_{ij} - \bar{D}_{ij} \right)^2.
-$$
+As briefly touched upon earlier, the best clustering is found via \\
+%the minimization of the squared posterior \emph{Binder's loss function}.
+%An equivalent approach (see \cite{beep} lecture on BNP clustering) is computing the so-called \emph{dissimilarity matrix} for each iteration, computing its sample mean over all iterations, and finding the iteration that is the closest to the mean with respect to the \emph{Frobenius norm}. 
+%More specifically, for each iteration $k$, the dissimilarity matrix $D^{(k)}$ is a symmetric, binary $n$-by-$n$ matrix (where $n$ is the number of available observations) whose entries $D^{(k)}_{ij}$ are $1$ if datum $i$ and $j$ are placed in the same cluster at iteration $k$ and $0$ otherwise.
+%After each $D^{(k)}$ and the sample mean $\bar{D} = \frac{1}{K} \sum_k D^{(k)}$ are computed, where $K$ is the number of iterations (not counting the ones in the burn-in phase), the best clustering $\hat{k}$ is found by minimizing the Frobenius norm of the difference with $\bar{D}$:
+%$$
+%\hat{k} = \argmin_k \left\lVert D^{(k)} - \bar D \right\rVert_F^2 = \argmin_k \sum_{i,j} \left( D^{(k)}_{ij} - \bar{D}_{ij} \right)^2.
+%$$
 By virtue of the involved matrices being symmetric, the latter summation can be computed over all $i<j$ instead of all $i,j$ for efficiency. \\
-The convergence in mean of the algorithm grants the correctness of this least square estimate, at it is the closest available approximation to the mean dissimilarity matrix.
+%The convergence in mean of the algorithm grants the correctness of this least square estimate, at it is the closest available approximation to the mean dissimilarity matrix.
 
 \section{Density estimation} \label{dens-estim}
-One other important application of clustering algorithms is the estimation of the density according to which the data points are distributed.
-This is done differently in both the \verb|Neal2| and \verb|Neal8| algorithms, as the former can exploit the conjugacy of the hierarchical model.
+%The other important application of clustering algorithms is the estimation of the density according to which the data points are distributed.
+%This is done slightly differently in both the \verb|Neal2| and \verb|Neal8| algorithms, as the former can exploit the conjugacy of the hierarchical model.
 In either case, the following function was implemented:
 \begin{verbatim}
 void eval_density(const std::vector<double> grid);
 \end{verbatim}
 It accepts a grid of points in which the density will be evaluated.
 This grid is stored in the \verb|density| member object, as well as the computed evaluations themselves in form of a vector from the \verb|Eigen| library.
-Just like for the cluster estimate, the computation will access all iterations stored in the \verb|chain| pseudo-vector.
-In both \verb|Neal8| and \verb|Neal2|, a loop is performed over the iterations $k$.
-Suppose this iterations has $J$ clusters, that is, $j=0:J-1$.
+%Just like for the cluster estimate, the computation will access all iterations
+stored in the \verb|chain| pseudo-vector.
+%In both \verb|Neal8| and \verb|Neal2|,
+a loop is performed over the iterations $k$.
+%Suppose this iteration has $J$ clusters, that is, $j=0:J-1$.
 The \verb|card| vector is once again computed, where $\texttt{card[j]} = n^{(k)}_j$ is the cardinality of cluster $j$.
-Then, for each point $x$ in \verb|grid|, we compute the local estimate of the density, that is, only taking iteration $k$ into account:
-\begin{equation}\label{localdens}
-	\begin{aligned}
-	\hat f^{(k)}(x) \ = \ \sum_j \frac{n^{(k)}_j}{M+n} f\left(x | \boldsymbol{\phi}^{(k)}_j\right) \ + \ \frac{M}{M+n} m(x)
-	\end{aligned}
-\end{equation}
-That is, the local estimate is a weighted mean of the likelihood given the unique values $\boldsymbol{\phi}^{(k)}_j$ of cluster $j$ and the marginal distribution $m(x)$, taken from the appropriate function in the \verb|Hierarchy<>| class.
-The weights of the clusters are proportional to their size $n^{(k)}_j$, while the ``virtual'' cluster of the marginal counts as having size $M$, the total mass parameter ($n$ is the total number of observations, as per usual).
-The marginal distribution is only known under the conjugacy assumption in the \verb|Neal2| algorithm.
-In particular, for a Normal-NIG model $m(x)$ is a Student's $t$ as explained in section \ref{nnig}.
-In the \verb|Neal8| algorithm, $m(x)$ is not available in closed form, and thus it is replaced in the above formula by the following approximation:
-\begin{equation}\label{margneal8}
-	\begin{aligned}
-		\hat m(x) = \frac{1}{m} \sum_{h=0}^{m-1}  f\left(x | \boldsymbol{\phi}_h\right)
-	\end{aligned}
-\end{equation}
-where we use $m$ unique values, that is, one for each of the $m = \verb|n_aux|$ auxiliary blocks of the algorithm, drawn from the base measure: $\boldsymbol{\phi}_{h} \overset{\text{iid}}{\sim} G_0, \ h=0:m-1$. \\
-Finally, the \emph{empirical density} is computed as the mean over all $K$ iterations:
-$$
-\hat f(x) = \frac{1}{K} \sum_k \hat f^{(k)}(x)
-$$
+%Then, for each point $x$ in \verb|grid|, we compute the local estimate of the density, which is built only taking iteration $k$ into account:
+%\begin{equation}\label{localdens}
+%	\begin{aligned}
+%	\hat f^{(k)}(x) \ = \ \sum_j \frac{n^{(k)}_j}{M+n} f\left(x | \boldsymbol{\phi}^{(k)}_j\right) \ + \ \frac{M}{M+n} m(x)
+%	\end{aligned}
+%\end{equation}
+%That is, the local estimate is a weighted mean of the likelihood given the unique values $\boldsymbol{\phi}^{(k)}_j$ of cluster $j$ and the marginal distribution $m(x)$,
+taken from the appropriate function in the \verb|Hierarchy<>| class.
+%The weights of the clusters are proportional to their size $n^{(k)}_j$, while the ``virtual'' cluster of the marginal counts as having size $M$, the total mass parameter ($n$ is the total number of observations, as per usual).
+%The marginal distribution is only known under the conjugacy assumption in the \verb|Neal2| algorithm.
+%In particular, for a Normal-NIG model $m(x)$ is a Student's $t$ as explained in section \ref{nnig}.
+%In the \verb|Neal8| algorithm, $m(x)$ is not available in closed form, and thus it is replaced in the above formula by the following approximation:
+%\begin{equation}\label{margneal8}
+%	\begin{aligned}
+%		\hat m(x) = \frac{1}{m} \sum_{h=0}^{m-1}  f\left(x | \boldsymbol{\phi}_h\right)
+%	\end{aligned}
+%\end{equation}
+%where we use $m$ unique values, that is, one for each of the $m$ auxiliary blocks of the algorithm,
+%drawn from the base measure: $\boldsymbol{\phi}_{h} \overset{\text{iid}}{\sim} G_0, \ h=0:m-1$. \\
+%Finally, the \emph{empirical density} is computed as the mean over all $K$ iterations:
+%$$\hat f(x) = \frac{1}{K} \sum_k \hat f^{(k)}(x)$$
 and saved into the \verb|density| object.
-Again, this estimate approaches the true posterior density of the data thanks to the convergence in mean of the chain.
+%Again, this estimate approaches the true posterior density of the data thanks to the convergence in mean of the chain.
 
 \section{Saving estimates to files}
 We also implemented the following functions in each \verb|Algorithm| class, which save data from the class into text files in order to ease exportation to other programs or computers:

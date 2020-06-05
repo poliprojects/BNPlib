@@ -4,37 +4,38 @@
 This report presents the development of a C++ library containing Markov chain sampling algorithms for two major goals: estimation of the density and clustering analysis of a given set of data points.
 In a Bayesian nonparametric setting, we focused on the Dirichlet process, one of the most widely used priors due to its flexibility and computational ease, and its extensions.
 Hereafter, we will assume that the underlying model for the given data points is a Dirichlet process mixture model, which is an enhancement of the simpler Dirichlet model.
-We shall now briefly describe these models and their relevant properties.
 (For a more detailed discussion of the nonparametric models, as well as references for all theoretical details included in this section, see \cite{book} chapter 1 and 2.)
-TODO
 
 
 \section{A quick introduction to Bayesian statistics}
 Bayesian statistics is a branch of mathematics with goals similar to regular statistics, which also holds the more accurate name of \emph{frequentist statistics}.
-In both theories, data points $x$ are considered as realizations of random variables, often iid -- independent and identically distributed, with their distribution having one or more fixed and unknown parameters $\theta$, such as mean and variance in the Gaussian cases.
+In both theories, data points $y$ are considered as realizations of random variables, often iid -- independent and identically distributed, with their distribution having one or more fixed and unknown parameters $\theta$, such as mean and variance in the Gaussian cases.
 However, the frequentist approach is heavily focused on data and on pure information that can be extracted from it, for instance via estimates based on some form of sample mean.
 By contrast, the Bayesian approach brings the data scientist's prior knowledge about the data into the picture; such knowledge is assumed to be approximately true, and the data is used to give it refinements and updates.
-In a formal Bayesian setting, this prior knowledge takes on the form of a distribution $\pi(\theta)$ on the parameters of the data, called \emph{prior distribution}, or prior for short.
+In a formal Bayesian setting, this prior knowledge takes on the form of a distribution $p(\theta)$ on the parameters of the data, called \emph{prior distribution}, or prior for short.
 This is a crucial difference with respect to frequentist statistics, where parameters $\theta$ are unknown but assumed to be fixed, whilst in the Bayesian environment they are treated as \emph{random variables} for all intents and purposes.
 This explains a major advantage of the Bayesian theory: it is naturally suited for non-pointwise estimates, mainly in the form of parameter distributions or their summary statistics, and therefore these are much easier to obtain than in the frequentist counterpart.
-After taking the given data points into consideration, the parameter estimate provided by the prior is updated into the so-called \emph{posterior distribution} $\pi(\theta|x)$, or posterior for short, for the parameters.
+After taking the given data points into consideration, the parameter estimate provided by the prior is updated into the so-called \emph{posterior distribution} $p(\theta|y)$, or posterior for short, for the parameters.
 The conditioning symbol indicates that the actual values of the realizations are used for a new better estimate of the parameters.
-Similarly, since data are now distributed according to the random $\theta$, we use the notation $f(x|\theta)$ for the data distribution, which in this context is called \emph{likelihood}. \\
+Similarly, since data are now distributed according to the random $\theta$, we use the notation $f(y|\theta)$ for the data distribution, which in this context is called \emph{likelihood}. \\
 One can easily see that Bayesian statistics makes heavy use of conditional probabilities; so much so, in fact, that its very name is based off of the generalization of a well-known result for conditional probabilities, the \emph{Bayes theorem}.
-In particular, this theorem states that, given $x_1, \dots, x_n$ iid random variables with joint likelihood $f(x|\theta) = f(x_1, \dots, x_n | \theta)$ and parameters with prior $\pi(\theta)$, the posterior for $\theta$ is given by
-$$ \pi(\theta|x) = \frac{\pi(\theta) f(x|\theta)}{\int \pi(\theta) f(x|\theta) \, \dx} =
-\frac{\pi(\theta) f(x|\theta)}{m(x)} \propto \pi(\theta) f(x|\theta).
+In particular, this theorem states that, given $y_1, \dots, y_n$ iid random variables with joint likelihood $f(y|\theta) = f(y_1, \dots, y_n | \theta)$ and parameters with prior $p(\theta)$, the posterior for $\theta$ is given by
+$$ p(\theta|y) = \frac{p(\theta) f(y|\theta)}{\int p(\theta) f(y|\theta) \, \dy} =
+\frac{p(\theta) f(y|\theta)}{m(y)} \propto p(\theta) f(y|\theta).
 $$
-The denominator $m(x) = \int \pi(\theta) f(x|\theta) \, \dx$ is the \emph{marginal distribution} of data $x$, that is, its overall distribution without the knowledge of its parameters $\theta$.
+The denominator $m(y) = \int p(\theta) f(y|\theta) \, \dy$ is the \emph{marginal distribution} of data $y$, that is, its overall distribution without the knowledge of its parameters $\theta$.
 It is often treated as an unimportant normalization constant, since it does not contain $\theta$, and therefore one often uses the last equality, which highlights the posterior's dependence on both the prior and the likelihood. \\
+A coveted property for a Bayesian model is \emph{conjugacy}, that is to say that both the prior and the posterior distribution have the same form, e.g. they are both Gaussian distributions (most likely their parameters would both be different).
+This property, or lack thereof, can make the difference between a posterior distribution being extremely easy to compute, and being flat out impossible to compute in closed form.
+We shall see some examples of conjugate models later on in this section. \\
 Finally, note that a Bayesian model may still employ frequentist tools to better incorporate data information into the prior; the most common example of this is setting the mean of the prior distribution as the sample mean of the given data.
 
-\subsection{Advanced models}
+\subsection{Advanced models} %TODO blargh
 One is also allowed to use a more layered model, in which the parameters of the prior distribution, called \emph{hyperparameters}, also have prior distributions on them -- these are called \emph{hyperpriors}.
 The result is as follows:
 \begin{align*}
-	x_1, \dots, x_n | \theta, \lambda &\iidsim f(x|\theta, \lambda) \\ %TODO
-	\theta | \lambda &\sim \pi(\theta|\lambda) \\
+	y_1, \dots, y_n | \theta, \lambda &\iidsim f(y|\theta, \lambda) \\ %TODO can you remove lambda?
+	\theta | \lambda &\sim p(\theta|\lambda) \\
 	\lambda &\sim \Pi(\lambda)
 \end{align*}
 In fact, one can add as many layers as needed, adding priors to other priors' parameters, although one hyperprior like in the above model is generally considered enough to handle the complexity of most problems.
@@ -46,15 +47,13 @@ such a likelihood is an example of \emph{random probability measure}.
 
 \section{Dirichlet process model}
 Let $M>0$, and let $G_0$ be a probability measure defined on the state space $S$.
-A Dirichlet process with parameters $M$ and $G_0$, noted as $DP(M,G_0)$, is a random probability measure $G$ defined on $S$ which assigns probability $G(B)$ to every set $B$ such that for each finite partition ${B_1,\dots,B_k}$ of $S$, the joint distribution of the  vector $(G(B_1),\dots,G(B_k))$ is the Dirichlet distribution
-\footnote{
-The Dirichlet distribution is a $k$-dimensional generalization of the Bernoulli distribution: given $\alpha_1,\dots,\alpha_k > 0$, we say that $[x_1,\dots,x_k] \sim Dir(\alpha_1, \dots, \alpha_k)$ if $f(x_1,\dots,x_k) = \frac{1}{B(\alpha_1, \dots, \alpha_k)} \prod_{i=1}^k x_i^{\alpha_i-1}$ with $B(\alpha_1, \dots, \alpha_k)$ being the $k$-dimensional Beta function that acts as a normalization constant.
+A Dirichlet process with parameters $M$ and $G_0$, noted as $DP(M G_0)$, is a random probability measure $G$ defined on $S$ which assigns probability $G(B)$ to every set $B$ such that for each finite partition ${B_1,\dots,B_k}$ of $S$, the joint distribution of the  vector $(G(B_1),\dots,G(B_k))$ is the Dirichlet distribution\footnote{
+The Dirichlet distribution is a $k$-dimensional generalization of the Bernoulli distribution: given $\alpha_1,\dots,\alpha_k > 0$, we say that $[y_1,\dots,y_k] \sim Dir(\alpha_1, \dots, \alpha_k)$ if $f(y_1,\dots,y_k) = \frac{1}{B(\alpha_1, \dots, \alpha_k)} \prod_{i=1}^k y_i^{\alpha_i-1}$ with $B(\alpha_1, \dots, \alpha_k)$ being the $k$-dimensional Beta function that acts as a normalization constant.
 It has support in the $k-1$-dimensional simplex.
 }
 with parameters $(MG_0(B_1),\dots,MG_0(B_k))$.
-The value $M$ is called the \emph{total mass} or precision parameter, $G_0$ is the centering measure, and the product $MG_0$ is the base measure of the DP. \\
-Having observed the independent and identically distributed sample $\{y_1,\dots,y_n\}$ \\*
-$\subseteq \RR$, the basic DP model takes the following form:
+The value $M$ is called the \emph{total mass} or precision parameter, $G_0$ is the \emph{centering measure}, and the product $MG_0$ is the base measure of the DP. \\
+Having observed the iid sample $\{y_1,\dots,y_n\} \subseteq \RR$, the basic DP model takes the following form:
 \begin{equation}
 	\begin{aligned}
 	y_i | G &\iidsim G, \quad i=1,\dots,n \\
@@ -62,7 +61,7 @@ $\subseteq \RR$, the basic DP model takes the following form:
 	\end{aligned}
 \end{equation}
 A key property is that the DP is conjugate with respect to iid sampling, so that the posterior base distribution is a weighted average of the prior base distribution $G_0$ and the empirical distribution of the data, with the weights controlled by $M$:
-\begin{align}
+\begin{align}\label{dp-posterior}
 	G | y_1,\dots,y_n \sim DP\left(M G_0 + \sum_{i=1}^n \delta_{y_i}\right).
 \end{align}
 Moreover, the marginal distribution for the data will be the product of the sequence of increasing conditionals:
@@ -70,9 +69,19 @@ Moreover, the marginal distribution for the data will be the product of the sequ
 	p(y_1,\dots,y_n)= p(y_1)\prod\limits_{i=2}^{n} p(y_i|y_1,\dots,y_{i-1}),
 \end{align*}
 with $y_1 \sim G_0$ and the conditional for $i=2,3,\dots$ being the following:
-\begin{align*}
-	p(y_i|y_1,\dots,y_{i-1})= \frac{1}{M+i-1}\sum_{h=1}^{n-1} \delta_{y_h}(y_i) +\frac{M}{M+i-1} G_0(y_i).
-\end{align*}
+\begin{equation}
+	\begin{aligned}
+		p(y_i|y_1,\dots,y_{i-1}) =
+		\frac{1}{M+i-1}\sum_{h=1}^{n-1} \delta_{y_h}(y_i) + \frac{M}{M+i-1} G_0(y_i).
+	\end{aligned}
+\end{equation}
+The common pattern in both the above expression of the conditional and in the one for the posterior in (\ref{dp-posterior}) is that the centering measure $G_0$ is always given a weight proportional to $M$ (up to the normalizing constant $M+i-1$ in the former), whilst for the single points $y_i$, or the delta distribution centered in them, the weight is 1 for each datum, or $k$ if it has appeared $k$ times.
+This is the heart of the so-called \emph{Polya's urn} representation model: the probability of a new value being equal to the ones before it is proportional to the number of times this value has appeared in the past, while the probability of the value being generated anew from $G_0$ is proportional to $M$.
+Therefore, the more a value appears, the more likely it is for it to appear again in the future; instead, the total mass acts as the  ``cardinality'' of the action ``draw a new value''.
+This is equivalent to having an urn which contains balls of different colors; each time a ball of a certain color is extracted, the ball is placed back into the urn alongside another new ball of the same color.
+Furthermore, there's a chance proportional to $M$ that instead of extracting a ball from the urn, a ball of a random color, not necessarily one that is already present in the urn, is created and placed into the urn.
+This urn will become relevant in the creation of the sampling algorithms implemented in this library. 
+\\
 Another important property is the discrete nature of the random probability measure $G$.
 Because of this, we can always write $G$ as a weighted sum of point masses.
 A useful consequence of this property is its stick-breaking representation, i.e. $G$ can be written as:
