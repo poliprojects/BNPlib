@@ -19,8 +19,9 @@ main*
 # Output files
 Rplots.pdf
 
-# Python cache
+# Python and R cache
 src/python/__pycache__/*
+.Rhistory
 
 # Callgrind output files
 callgrind*
