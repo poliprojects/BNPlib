@@ -1,4 +1,9 @@
 \chapter{Factory}
 
-\section{}
-
+For a runtime choice of the BNP algorithm we implemented the Factory class. In general,  an object factory allows to choose one of several derived objects from a single abstract base class at runtime. This type of class is implemented as a singleton and stores functions that build such objects, called the builders, which can be called at need at runtime, based on identifiers of the specific objects.
+The storage, a private member of the factory class, is therefore an Identifier-Builder map where the identifier is a string associated with the builder function.
+ The storage must first be filled with the appropriate builders, which can be as simple as a function returning a smart pointer to a new instance. This can be done in a main file or in an appropriate function.
+The constructors of BNP algorithms take different parameters in input, so we chose to templatized the factory with a variadic template, that allows passing any number of parameters of any type to the constructors of the objects. 
+We decided to use the factory class for a runtime choice of the BNP algorithm. The abstract product is therefore one of two derived algorithms, neal2 or neal8, defined with specific hierarchy, mixture, and hyperparameters classes. Having base classes for hierarchy, mixture and hyperparameters, it would be possible to choose also these classes runtime, but it would require to add to the factory storage all possible combinations of algorithms, hierarchies, mixtures and hyperparameters.
+At the moment it is therefore runtime the only choice of the BNP algorithm.
+In the following section we will talk about the python interface, for a more friendly and versatile use of the code. Thanks to the factory the user can choose directly from the python console the desired algorithm.
