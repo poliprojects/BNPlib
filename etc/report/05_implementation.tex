@@ -1,39 +1,48 @@
 \chapter{Implementation}
 
+The algorithms studied and discussed in the theoretical section all share the same structure, so we decided to build an abstract template class for a generic Gibbs sampling iterative BNP algorithm with the following methods:
 
-As far as code implementation goes, the aforementioned algorithms all share the following structure:
 \begin{verbatim}
+
 void step(){
     sample_allocations();
     sample_unique_values();
+    sample_weights();
+    update_hypers();
 }
 
-void run(){
+void run(BaseCollector* collector){
     initialize();
     unsigned int iter = 0;
+    collector->start();
     while(iter < maxiter){
         step();
         if(iter >= burnin){
-            save_iteration(iter);
+          save_state(collector, iter);
         }
         iter++;
     }
-}
+    collector->finish();
+    }
+    
 \end{verbatim}
-In particular, the blocked Gibbs algorithm has an additional phase in \verb|step()|, \verb|sample_weights()|. Moreover, as discussed in chapter \ref{algo}, all the algorithms can be generalized including further Gibbs sampling steps to update the hyperparameters of $G_0$ or the total mass parameter $M$.
+
+The BNP algorithm generates a Markov chain on the clustering of the provided data running multiple iterations of the same step.
+Steps are further split into substeps, each of which updates specific values of the state of the Markov chain, which is composed of the allocations vector and the unique values vector.
+
+
+In particular, among the studied algoritmhs, only the blocked Gibbs algorithm exploits the \verb|sample_weights()| function. Moreover, \verb|update_hypers()| has an effect  when the hyperparameters are not fixed.
+
+
 Each implemented algorithm will be discussed in detail in its own section.
 As for the general structure of an algorithm class, a template approach was chosen, to allow the use of several layers of complexity based on the needs of the user:
 \begin{verbatim}
 template<template <class> class Hierarchy, class Hypers,
          class Mixture> class Algorithm
 \end{verbatim}
-That is, \verb|Hierarchy<>|, \verb|Hypers|, and \verb|Mixture| are not actual implemented classes, but rather proxy names for classes which will be received as \emph{parameters} by the algorithm class.
-These classes must have a \emph{common interface} in order for them to be passed as parameters, as explained in the following section.
-An example with actual class names, as found in the \verb|main.cpp| file, is:
-\begin{verbatim}
-Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8;
-\end{verbatim}
-As a final introductory note, probability distributions and random sampling were handled through the \verb|Stan| library, whilst the popular \verb|Eigen| library was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code.
+That is, \verb|Hierarchy|, \verb|Hypers|, and \verb|Mixture| are not actual implemented classes, but rather proxy names for classes which will be received as \emph{parameters} by the algorithm class, which we discussed in the previous section.
+
+
 \section{\texttt{Neal8} algorithm}
 Relying on the algorithm described in section \ref{neal8}, we proceed to describe our implementation of it.
 Aside from the usual getters and setters, as well as constructors, the \verb|Neal8| class contains the following members:
