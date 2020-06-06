@@ -1,4 +1,6 @@
 \chapter{Implementation}
+
+
 As far as code implementation goes, the aforementioned algorithms all share the following structure:
 \begin{verbatim}
 void step(){
@@ -32,30 +34,6 @@ An example with actual class names, as found in the \verb|main.cpp| file, is:
 Neal8<NNIGHierarchy, HypersFixed, SimpleMixture> sampler8;
 \end{verbatim}
 As a final introductory note, probability distributions and random sampling were handled through the \verb|Stan| library, whilst the popular \verb|Eigen| library was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code.
-
-\section{Auxiliary classes}
-First of all, we must briefly describe the auxiliary classes that are used as parameters for the algorithms:
-\begin{itemize}
-	\item The \verb|Mixture| classes contain all information about the mixing part of the DPM model, namely the total mass parameter and its prior distribution, if any.
-	We implemented the \verb|SimpleMixture| class, which represents a fixed total mass parameter without any prior on it, and contains the \verb|totalmass| member as well as a getter and a setter (\verb|get_totalmass()|, \verb|set_totalmass()|).
-	\item The \verb|Hypers| classes contain all information about the hyperparameters of the hierarchy, including their values (if fixed) or their prior distributions (if not).
-	We implemented the \verb|HypersFixedNNIG| class, which contains the four fixed parameters \verb|mu0|, \verb|lambda|, \verb|alpha0|, and \verb|beta0| of the Normal-NIG hierarchical model, and their respective getters and setters.
-	\item The \verb|Hierarchy<Hypers>| classes are template classes themselves and accept any \verb|Hypers| class as template parameter.
-	A \verb|Hierarchy<>| class contains a vector \verb|state| which stores the current values of the likelihood parameters, as well as a pointer to a \verb|Hypers| object -- this is why \verb|Hypers| is required as a parameter for \verb|Hierarchy<>|.
-	A pointer is chosen instead of an actual object, since multiple \verb|Hierarchy<>| objects will be created and stored by the algorithms; the \verb|state|s of these objects will of course share the same prior, and with a pointer to \verb|Hypers| the updating of the prior will only happen once rather than one time per object.
-	A \verb|Hierarchy<>| class also contains functions to:
-	\begin{itemize}
-		\item evaluate the marginal distribution (provided it is known in closed form) and the log-likelihood in a given set of points, given the current \verb|state|;
-		\item compute the posterior parameters with respect to a given set of observations;
-		\item generate new values for the \verb|state| both according to its prior and to its posterior distribution;
-		\item get and set class members, as with the other classes.
-	\end{itemize}
-	In particular, we implemented the \verb|HierarchyNNIG| class, which represents the Normal-NIG model described in section \ref{nnig}.
-	The \verb|state| holds the values for $\boldsymbol\phi = (\mu,\sigma)$.
-\end{itemize}
-Any class representing any type of hierarchy or parameters can be built as long as it possesses the above interface, which is required for their use in the implemented algorithms. \\
-We will be now first examining the \verb|Neal8| class as an example.
-
 \section{\texttt{Neal8} algorithm}
 Relying on the algorithm described in section \ref{neal8}, we proceed to describe our implementation of it.
 Aside from the usual getters and setters, as well as constructors, the \verb|Neal8| class contains the following members:

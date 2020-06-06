@@ -37,9 +37,6 @@ The first saves the State-objects on binary files while the second saves them on
 The MemoryCollector, unlike the FileCollector, does not write chain states anywhere and all information contained in it is destroyed when the main that created it is terminated. It is therefore useful in situation in which writing to a file is not needed, for instance in a main program that both runs the algorithm and computes the estimates.
 Instead, the contents of a Filecollector are permanent, because every state collected by it remains ever after the termination of the main that created it, in Protobuf form, in the corresponding file. This approach is mandatory, for instance, if different main programs are used to run the algorithm and the estimates. 
 Sharing the two a common interface we implemented an abstract base class, BaseCollector and two derived classes: FileCollector and MemoryCollector.
-Below are shown the structures of the classes:
-\\\\ VERB CLASSES
-
 
 The base class has as protected members the current size of the chain, which is updated during the run by increasing by one for each performed  iteration, and the curr\_iter, a cursor useful for reading the chain, when this is done state by state.
 
@@ -50,9 +47,6 @@ Two alternatives are possible for reading: using the get\_chain() method that re
 \section{Use in run function: writing-mode}
 In the main program, a DerivedCollector, chosen runtime, is instantiated before running the algorithm and a BaseCollector pointer points to the Derived Collector object.
 Then the BaseCollector pointer is passed to the run() method and through the pointer are accessed the three methods for the writing: start(), collect() and finish().
-
-
-VERB RUN
 
 We'll see now the writing procedure specifically for each collector. 
 

@@ -1,4 +1,40 @@
 \part{Implementation}
 
 \chapter{Hierarchy classes}
-TODO
+First of all, we must describe the auxiliary classes that are used as parameters for the algorithms:
+\begin{itemize}
+	\item The \verb|BaseMixture| class, contain all information about the mixing part of the BNP algorithm, namely the way of weighing the insertion of data in old clusters vs the creation of new clusters. The class has methods that provide mass probabilities for the two aforementioned events. We implemented the \verb|BaseMixture| class as an abstract class, and two derived classes: the \verb|DirichletMixture| and the \verb|PitYorMixture|. The derived classes have its own parameters and could be extended by adding prior distributions on these.
+
+	\item The \verb|Hypers| classes contain all information about the hyperparameters of the hierarchy, including their values (if fixed) or their prior distributions (if not). We implemented the \verb|HypersFixedNNIG| class, which contains fixed hyperparameters for an NNIG hierarchy, and the \verb|HypersFixedNNW| class for an NNW hierarchy. Both classes provide setters and getters for parameters with validity checks for the inserted values.
+	
+	\item The \verb|HierarchyBase<Hypers>| class is an abstract template class that accept any \verb|Hypers| class as template parameter.
+	
+	
+This template class represents a hierarchy object in a generic iterative BNP
+algorithm, that is, a single set of unique values with their own prior
+distribution attached to it. These values are part of the Markov chain's
+state chain which develops as the iterations of the algorithm increase, updating them providing the data related to the specific hierarchy and their prior distribution.
+They are simply referred to as the state of the hierarchy. 
+
+The class stores the current unique values in the protected member \verb|state|, a vector of parameter matrices.
+Since the prior distribution for the state is often the same across multiple
+different hierarchies, the hyperparameters object is accessed via a shared
+pointer, stored as protected member, and this is why \verb|Hypers| is required as a template parameter for the class. 
+
+	A \verb|BaseHierarchy<Hypers>| class also contains methods to:
+	\begin{itemize}
+		\item evaluate the marginal distribution (provided it is known in closed form) and the log-likelihood in a given set of points, given the current \verb|state|;
+		\item compute the posterior parameters with respect to a given set of observations;
+		\item generate new values for the \verb|state| both according to its prior and to its posterior distribution;
+		\item get and set class members, as with the other classes.
+	\end{itemize}
+
+
+The hierarchy classes we implemented that inherits from this class are the \verb|HierarchyNNIG| class, which represents the Normal Normal-InverseGamma hierarchy for univariate data, and the \verb|HierarchyNNW| class, which represents the Normal Normal-Wishart hierarchy for multivariate data.
+
+In particular the \verb|state| in the \verb|HierarchyNNIG| class holds the values for $\boldsymbol\phi = (\mu,\sigma)$, i.e.  location and scale, while the \verb|HierarchyNNW| class stores $\boldsymbol\phi = (\mathbf{\mu},\mathbf{\Lambda})$, i.e. location and precison parameters.
+Note that both hierarchies implemented are conjugate, thus marginals and
+posterior distributions are available in closed form and Neal2 algorithm may be used.
+	
+	
+\end{itemize}
