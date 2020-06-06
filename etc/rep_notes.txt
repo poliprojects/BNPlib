@@ -12,6 +12,7 @@ REPORT BRUNO
 REPORT GENERICHE
 * in aux classes: briefly introduce the Pitman-Yor process PY(d,\theta)
 * librerie usate
+* template library
 * parametri non nel costruttore solitamente sono lasciati in default
 * hyperparameters per la NNW: lambda piccolo (permette libertà), mu0 media
   empirica, nu = dim.dati + 3, sigma0 = tale che la sua media (nu * tau0) sia
@@ -24,8 +25,6 @@ REPORT GENERICHE
    numero di oggetti attuale, ma se aumentassero non scalerebbe bene
 * problemi memoria
 * Ottimizzazione:
-** valgrind --tool=callgrind ./maintest_uni csv/data_uni.csv neal2 memory
-** spiegare flags: -march=native -O3 -msse2 -funroll-loops -ftree-vectorize
 ** a way to erase and add clusters more efficiently, e.g. with map
 ** storing cardinalities > recomputing them at each iteration
 ** set_state flag efficienza
