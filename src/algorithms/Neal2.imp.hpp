@@ -71,9 +71,9 @@ void Neal2<Hierarchy, Hypers, Mixture>::sample_allocations(){
             // Probability of being assigned to an already existing cluster
             probas(k) = this->mixture.mass_existing_cluster(
                 cardinalities[k], n-1) * unique_values[k].like(datum)(0);
-            if(singleton == 1 && k == i){
+            if(singleton == 1 && k == allocations[i]){
                 // Probability of being assigned to a newly generated cluster
-                probas(i) = this->mixture.mass_new_cluster(n_clust, n-1) *
+                probas(allocations[i]) = this->mixture.mass_new_cluster(n_clust, n-1) *
                     unique_values[0].eval_marg(datum)(0);
             }
             tot += probas(k);
