@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
     // =========================================================================
     // READ DATA AND GRID FROM FILE
     // =========================================================================
-    Eigen::MatrixXd data = read_eigen_matrix("csv/data_5d_500.csv");
+    Eigen::MatrixXd data = read_eigen_matrix("csv/data_5d_200.csv");
     Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_5d.csv");
 
 
