@@ -8,10 +8,36 @@ template<template <class> class Hierarchy, class Hypers,
 \end{verbatim}
 That is, \verb|Hierarchy|, \verb|Hypers|, and \verb|Mixture| are not actual implemented classes, but rather proxy names for classes which will be received as \emph{parameters} by the algorithm class, which we discussed in the previous section.
 
-In the class are saved the method parameters: number of iterations of the algorithm and number of burn-in iterations, which will be discarded. The user can decide and modify with the relative setters. By default the number of iterations is initialized to 1000 while the number of burn-in iterations is initialized to 100, values that we have assessed as sufficient for a good approximation after performing several tests. In addition, belong to the class the matrix of row-vectorial data points, given as input to the class constructor by the user, and the number of clusters for the algorithm initialization, which if not specified is set equal to the number of data.
-Among the protected members of the algorithm are also added:
-a vector \textbf{cardinalities}, in which the cardinalities of the clusters are saved, a vector \textbf{allocations} that contains the allocations for each data, i.e. label of the cluster it belongs to, and a vector of Hierarchy objects \textbf{unique\_values}, which identify the clusters and in which the corresponding unique values are stored.
-The three vectors just described, initialized with null values and empty Hierarchy objects, are modified when the algorithm is run.
+
+
+The \verb|Algorithm| class contains the following members:
+\begin{verbatim}
+unsigned int maxiter;
+unsigned int burnin;
+std::mt19937 rng; // random number generating engine
+\end{verbatim}
+These are the parameters of the method, and are rather self-explanatory.
+Their values are initialized either via the constructors or the setters.
+By default the number of iterations is initialized to 1000 while the number of burn-in iterations is initialized to 100, values that we have assessed as sufficient for a good approximation after performing several tests.
+
+The data and values containers were implemented as follows:
+\begin{verbatim}
+Eigen::MatrixXd data;
+unsigned int num_clusters;
+std::vector<unsigned int> cardinalities;
+std::vector<unsigned int> allocations;
+std::vector<Hierarchy<Hypers>> unique_values;
+Mixture mixture;
+\end{verbatim}
+
+The matrix of row-vectorial data points is given as input to the class constructor by the user, as well as the number of clusters for the algorithm initialization. If it is not provided, it will be automatically set equal to the number of data points, thus starting the algorithm with one datum per cluster.
+
+The algorithm will keep track of the labels representing assignments to clusters via the \verb|allocations| vector.
+For instance, if one has \verb|allocations[5] = 2|, it means that datum number 5 is associated to cluster number 2.
+Note that indexing for both data and clusters starts at zero, so this actually means that we have the sixth datum being assigned to the third cluster. 
+In \verb|cardinalities| the cardinalities of the clusters are stored, while \verb|unique_values| is a vector of Hierarchy objects, which identify the clusters and in which the corresponding unique values are stored in the \verb|state|.
+
+The three vectors just described, initialized with null values and empty Hierarchy objects, are filled with proper values when the algorithm is run.
 The run() method, which is inherited from all derived classes, sharing the same general structure, is as follows:
 
 \begin{verbatim}
@@ -40,11 +66,15 @@ void run(BaseCollector* collector){
 \end{verbatim}
 
 The BNP algorithm generates a Markov chain on the clustering of the provided data running multiple iterations of the same step.
-Steps are further split into substeps, each of which updates specific values of the state of the Markov chain, which is composed of the allocations vector and the unique values vector. Substeps are then overridden in the specific derived classes.
 
+\verb|initialize()| creates \verb|num_clusters| clusters and randomly assigns each datum to one of them, while making sure that each cluster contains at least one.
+	This assignment is done through changing \verb|allocations| components, as explained earlier.
+
+Steps are further split into substeps, each of which updates specific values of the state of the Markov chain, which is composed of the allocations vector and the unique values vector. Substeps are then overridden in the specific derived classes.
 
 In particular, among the studied algoritmhs, only the blocked Gibbs algorithm exploits the \verb|sample_weights()| function. Moreover, \verb|update_hypers()| has an effect  when the hyperparameters are not fixed.
 
+The collector input and \verb|start|, \verb|save_state| and \verb|finish| functions concern the saving of the chain states, which we will discuss later in the Collectors section.
 
 \section{\texttt{Neal8} algorithm}
 Relying on the algorithm described in section \ref{neal8}, we proceed to describe our implementation of it.
