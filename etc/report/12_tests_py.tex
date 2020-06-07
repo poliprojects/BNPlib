@@ -1,2 +1,23 @@
 \chapter{Python tests}
-TODO
+TODO \\
+MAXITER 500, BURN-IN 100 \\
+Univariati: \\
+1) $y_i ~ 0.5 N(-3, 1) + 0.5 N(3, 1), i=1,... 200$ \\
+$mu_0$ = 0.0 \\
+lambda = 0.1 \\
+a, b = 2 \\
+Test 1: Rand index score: 1.0 \\
+2) $y_i ~ 0.9 N(-5, 1) + 0.1 N(5, 1), i=1,... 1000$ \\
+stessi parametri di prima \\
+Test 2: Rand index score: 0.9879166470544726 \\
+3) $y_i ~ 0.3 N(-2, 0.8^2) + 0.3 N(0, 0.8^2) + 0.4 N(2, 1) i=1,... 200$ \\
+Test 3: Rand index score: 0.6656213747405262 \\
+4) $y_i ~ 0.5 t(5, -5, 1 ) + 0.5 SkewNormal(2, -5, 1) i=1,... 400$ \\
+Test 4: Rand index score: 0.9900498146844491 \\
+Multivariati: \\
+5) $y_i ~ 0.5 N((-3, -3), I) + 0.5 N((3, 3), I) i=1, ... 400$ \\
+Test 5: Rand index score: 1.0 \\
+6-8) dati come prima, all'aumentare della dimensione (d=5, 10, 20) \\
+Test 6: Rand index score: 1.0
+
+% TODO tutti i plot delle densità stimate e densità vere

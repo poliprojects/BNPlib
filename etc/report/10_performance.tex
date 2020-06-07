@@ -3,7 +3,7 @@ In this chapter, we will justify some choices that we made in the code that incr
 In the process, we will show and analyze the output of some optimization tools we used in order to test the performance of this library, as well as some of the aforementioned choices.
 
 
-\section{Compiler flags}
+\section{Compiler flags} \label{opt-flags}
 When calling the \verb|g++| complier from the \verb|Makefile|, we used the following optimization flags, which instruct the compiler to maximize the code efficiency:
 \begin{verbatim}
 -march=native -O3 -msse2 -funroll-loops -ftree-vectorize
@@ -89,27 +89,37 @@ valgrind --tool=callgrind ./maintest_uni csv/data_uni.csv neal2 memory
 valgrind --tool=callgrind ./maintest_multi csv/data_multi.csv neal2 memory
 \end{verbatim}
 \begin{figure}[h]
-	\centering
-		\includegraphics[scale=0.35]{etc/kcg_uni.png}
-		%\captionsetup{labelformat=empty}
-		%\caption{}
+	%\centering
+	\hspace{-50pt}
+	\includegraphics[scale=0.35]{etc/kcg_uni.png}
+	%\captionsetup{labelformat=empty}
+	%\caption{}
 \end{figure}
 The output of the univariate case produced the above dependence graph. %TODO check it is still above
 The percentage inside the square is the proportion of the total time spent in that particular function across all calls to it.
 The number followed by x tells instead the number of times that function was called. \\
 We are first interested in the partitioning of the computation time between the different methods.
 We note that \verb|run()| has slightly less than 40\% of the total time, while \verb|eval_density()| has around 20\%, and \verb|cluster_estimate()| slightly more than 40\%.
-As for the lower-level operations in \verb|run()|, almost all time spent in \verb|step()| (-> collecting is irrelevant),
-more specifically in \verb|sample_allocations()| (33\%)
-* \verb|like()| takes a total of 20\% across \verb|run()| and \verb|eval_density()|
-times
+As for the lower-level operations in \verb|run()|, almost all the time is spent in \verb|step()|, more specifically in \verb|sample_allocations()| (33\%).
+This also means that the cost of collecting the states into the \verb|MemoryCollector| is irrelevant.
+Moreover, \verb|like()| is the most significant low-level utility function in the library, taking a total of 20\% of the total time across both \verb|run()| and \verb|eval_density()|. \\
 
-
+Let us now compare these results with the multivariate case, as shown in the next page. %TODO check it still is in the next page
+As for the general composition, \verb|run()| has now become less than 10\% of the total, with \verb|sample_allocations()| taking roughly half of that amount, while the \verb|eval_density()| part reaches almost 90\%.
+This is to be expected since nearly all of the time is spent likelihood and marginal computation, which is much harder in 2D than in the univariate case due to the introduction of matrix algebra.
+We can also note that as a side effect of the growth of the density estimation part, the percentage of time spent in \verb|cluster_estimate()| is now irrelevant, which makes sense since the computational costs of building a dissimilarity matrix is almost identical in all dimensions.
+The most costly part of the density estimation is the unoptimized \verb|eval_marg()| (more than 60\%), presumably due to the presence of matrix inversions and Student's t evaluations, both of which require expensive Cholesky decompositions.
 \begin{figure}[h]
-		\includegraphics[scale=0.35]{etc/kcg_multi.png}
-		%\captionsetup{labelformat=empty}
-		%\caption{}
+	\hspace{-60pt}
+	\includegraphics[scale=0.45]{etc/kcg_multi.png}
+	%\captionsetup{labelformat=empty}
+	%\caption{}
 \end{figure}
+On the contrary, we note that the usage of \verb|like()| is in the same order of magnitude as before (27\%).
+Since the estimate algorithm is the same as before, this means that \verb|like()| is optimized enough for it to withstand the jump to the multidimensional case better than the other functions. \\
+As for a final comparison with the case lacking the compiler flags described in section (\ref{opt-flags}), the optimization mainly impacts the multivariate case, with \verb|run()| being the main recipient, going from a whopping 58\% to the already mentioned 10\%.
+In the univariate case, everything evenly benefits from the speedup, with the only relevant difference being for \verb|like()| which goes from over 30\% to 20\%.
+
 
 
 \section{Limits}
