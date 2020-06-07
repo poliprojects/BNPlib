@@ -30,6 +30,7 @@ for t in tests:
     imgfiledens   = ''.join(("src/python/test_res/dens",  str(t), ".pdf"))
     imgfilecont   = ''.join(("src/python/test_res/cont",  str(t), ".pdf"))
     trueclustfile = ''.join(("csv/test/true_clust", str(t), ".csv"))
+
     # Initialize more parameters
     mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
     mu0 = np.mean(mat, axis=0)
@@ -47,9 +48,9 @@ for t in tests:
     bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid, algo,
         collfile, densfile, clustfile, only)
 
-    print("Adjusted Rand score:", clust_rand_score(clustfile,trueclustfile))
     plot_clust_cards(clustfile, imgfileclust)
     plot_density_points(densfile, imgfiledens)
     plot_density_contour(densfile, imgfilecont)
+    print("Adjusted Rand score:", clust_rand_score(clustfile,trueclustfile))
 
     print()
