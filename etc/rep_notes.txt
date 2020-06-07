@@ -10,27 +10,22 @@ REPORT BRUNO
 
 
 REPORT GENERICHE
-* in aux classes: briefly introduce the Pitman-Yor process PY(d,\theta)
-* librerie usate
 * template library
-* parametri non nel costruttore solitamente sono lasciati in default
+* librerie usate
+* in aux classes:
+** briefly introduce the Pitman-Yor process PY(d,\theta)
+** parametri non nel costruttore solitamente sono lasciati in default
+** set_state flag
 * hyperparameters per la NNW: lambda piccolo (permette libertà), mu0 media
   empirica, nu = dim.dati + 3, sigma0 = tale che la sua media (nu * tau0) sia
   l'identità
 * hierarchies, mixtures, etc a runtime:
 ** visto che templatizziamo sull'abstract product, usare Factory diverse è
-   possibile
-** purtroppo i template params di hierarchy devono essere noti a compile time
-** bisognerebbe scrivere tutte le possibili combinazioni; possibile con il
-   numero di oggetti attuale, ma se aumentassero non scalerebbe bene
+   possibile; purtroppo i template params di hierarchy devono essere noti a
+   compile time; bisognerebbe scrivere tutte le possibili combinazioni;
+   possibile con il numero di oggetti attuale, ma se aumentassero non scalerebbe
+   bene
 * problemi memoria
-* Ottimizzazione:
-** a way to erase and add clusters more efficiently, e.g. with map
-** storing cardinalities > recomputing them at each iteration
-** set_state flag efficienza
-** calcoli reserve cluster_estimate(): se k cluster uguali, serve un reserve di
-  k*((n/k choose 2) - n) = .. = n^2/2k - n/2 - nk -> n^2/4 buon upper bound
-  (matrice distrutta alla fine di ogni passo del for)
 * confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
   i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto:
   di default usa uno slice sampler che non è molto efficiente, selezionate il
