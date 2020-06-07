@@ -50,4 +50,7 @@ for(i in seq(length(d))){
   	rmvnorm(200, rep(3,d[i]),  diag(d[i])) )
   write.table( test, paste("csv/test/data", i+4, ".csv", sep=""), row.names = F,
   	col.names = F )
+  true_clust = c(rep(0,200), rep(1,200))
+  write.table(true_clust, paste("csv/test/true_clust", i+4, ".csv", sep="") , row.names = F,
+              col.names = F)
 }

@@ -7,8 +7,8 @@ totalmass = 1
 algo = "neal2"
 init = 0
 rng = 20200229
-maxit = 200
-burn = 10
+maxit = 500
+burn = 100
 n_aux = 3
 only = "all"
 
@@ -29,7 +29,7 @@ for t in tests:
     imgfilechain  = ''.join(("src/python/test_res/chain", str(t), ".pdf"))
     imgfiledens   = ''.join(("src/python/test_res/dens",  str(t), ".pdf"))
     imgfilecont   = ''.join(("src/python/test_res/cont",  str(t), ".pdf"))
-
+    trueclustfile = ''.join(("csv/test/true_clust", str(t), ".csv"))
     # Initialize more parameters
     mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
     mu0 = np.mean(mat, axis=0)
@@ -47,6 +47,7 @@ for t in tests:
     bnplibpy.estimates_NNW_Dir(mu0, lambda_, tau0, nu, totalmass, grid, algo,
         collfile, densfile, clustfile, only)
 
+    print("Adjusted Rand score:", clust_rand_score(clustfile,trueclustfile))
     plot_clust_cards(clustfile, imgfileclust)
     plot_density_points(densfile, imgfiledens)
     plot_density_contour(densfile, imgfilecont)
