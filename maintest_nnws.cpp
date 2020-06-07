@@ -23,14 +23,14 @@ int main(int argc, char *argv[]){
     // =========================================================================
     // READ DATA AND GRID FROM FILE
     // =========================================================================
-    Eigen::MatrixXd data = read_eigen_matrix("csv/data_5d.csv");
+    Eigen::MatrixXd data = read_eigen_matrix("csv/data_5d_500.csv");
     Eigen::MatrixXd grid = read_eigen_matrix("csv/grid_5d.csv");
 
 
     // =========================================================================
     // SET MODEL PARAMETERS
     // =========================================================================
-    Eigen::Matrix<double,1,5> mu0; for(size_t i = 0; i < 5; i++) mu0[i] = 5.5;
+    Eigen::Matrix<double,1,5> mu0; for(size_t i = 0; i < 5; i++) mu0[i] = 0.0;
     double lambda = 0.2;
     double nu = 5.0;
     Eigen::MatrixXd tau0 = (1/nu) * Eigen::Matrix<double, 5, 5>::Identity();
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]){
     start = std::chrono::system_clock::now();
     sampler.run(coll);
     end = std::chrono::system_clock::now();
-    long unsigned int time = std::chrono::duration_cast<shakes>(
+    long long unsigned int time = std::chrono::duration_cast<shakes>(
         end-start).count();
     std::cout << "Algo time: " << time << std::endl;
 
