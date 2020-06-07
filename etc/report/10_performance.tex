@@ -62,7 +62,27 @@ This may be a way to erase and add clusters more efficiently.
 Testing this assumption would be very difficult, since it would require implementing all data structures from scratch; nonetheless we think that using vectorial structures is more efficient for everything else, and therefore the correct choice.
 
 \section{In the \texttt{Hierarchy} classes}
-% NNW Stan likelihood, also with 5x data TODO
+It was mentioned earlier that our custom implementation of the data likelihood in \verb|HierarchyNNW| was more efficient than the one provided by the Stan library.
+We ran some tests, again in \verb|maintest_nnws.cpp|, to quantify the time saved, using the same 5-dimensional dataset as before.
+Note that the \verb|like()| function is used not only in density estimation, but also in the allocation sampling phase of the algorithm, thus it affects \verb|run()| as well.
+We include the average results:
+\begin{center}
+	\begin{tabular}{r|r|r|r}
+		& \verb|run()| & \verb|eval_density()| & total \\ \hline
+		   Stan & 47700683 & 14317337 & 62018020 \\
+		 custom & 39615848 & 10353269 & 49969117 \\
+		speedup &    1.20x &    1.38x &    1.25x
+	\end{tabular}
+\end{center}
+By using TODO times as many data, the results are similar:
+\begin{center}
+	\begin{tabular}{r|r|r|r}
+		& \verb|run()| & \verb|eval_density()| & total \\ \hline
+		   Stan & TODO & TODO & 253708037 \\
+		 custom & TODO & TODO & 194053036 \\
+		speedup &     TODOx &    TODOx &     TODOx
+	\end{tabular}
+\end{center}
 
 
 
