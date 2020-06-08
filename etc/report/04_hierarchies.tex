@@ -7,11 +7,7 @@ First of all, we must describe the auxiliary classes that are used as parameters
 
 	\item The \verb|Hypers| classes contain all information about the hyperparameters of the hierarchy, including their values (if fixed) or their prior distributions (if not). We implemented the \verb|HypersFixedNNIG| class, which contains fixed hyperparameters for an NNIG hierarchy, and the \verb|HypersFixedNNW| class for an NNW hierarchy. Both classes provide setters and getters for parameters with validity checks for the inserted values.
 	
-	\item The \verb|HierarchyBase<Hypers>| class is an abstract template class that accept any \verb|Hypers| class as template parameter.
-	
-	
-This template class represents a hierarchy object in a generic iterative BNP
-algorithm, that is, a single set of unique values with their own prior
+	\item The abstract template class \verb|HierarchyBase<Hypers>| represents a hierarchy object in a generic iterative BNP algorithm, that is, a single set of unique values with their own prior
 distribution attached to it. These values are part of the Markov chain's
 state chain which develops as the iterations of the algorithm increase, updating them providing the data related to the specific hierarchy and their prior distribution.
 They are simply referred to as the state of the hierarchy. 
