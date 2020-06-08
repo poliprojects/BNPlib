@@ -47,7 +47,7 @@ public:
         hypers = hypers_;
         state = std::vector<Eigen::MatrixXd>(2,Eigen::MatrixXd(1,1));
         state[0](0,0) = hypers->get_mu0();
-        state[1](0,0) = 1;
+        state[1](0,0) = sqrt(hypers->get_beta0()/(hypers->get_alpha0()-1));
     }
 
     // EVALUATION FUNCTIONS
