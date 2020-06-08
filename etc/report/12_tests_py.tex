@@ -1,23 +1,35 @@
 \chapter{Python tests}
-TODO \\
-MAXITER 500, BURN-IN 100 \\
-Univariati: \\
-1) $y_i ~ 0.5 N(-3, 1) + 0.5 N(3, 1), i=1,... 200$ \\
-$mu_0$ = 0.0 \\
-lambda = 0.1 \\
-a, b = 2 \\
-Test 1: Rand index score: 1.0 \\
-2) $y_i ~ 0.9 N(-5, 1) + 0.1 N(5, 1), i=1,... 1000$ \\
-stessi parametri di prima \\
-Test 2: Rand index score: 0.9879166470544726 \\
-3) $y_i ~ 0.3 N(-2, 0.8^2) + 0.3 N(0, 0.8^2) + 0.4 N(2, 1) i=1,... 200$ \\
-Test 3: Rand index score: 0.6656213747405262 \\
-4) $y_i ~ 0.5 t(5, -5, 1 ) + 0.5 SkewNormal(2, -5, 1) i=1,... 400$ \\
-Test 4: Rand index score: 0.9900498146844491 \\
-Multivariati: \\
-5) $y_i ~ 0.5 N((-3, -3), I) + 0.5 N((3, 3), I) i=1, ... 400$ \\
-Test 5: Rand index score: 1.0 \\
-6-8) dati come prima, all'aumentare della dimensione (d=5, 10, 20) \\
-Test 6: Rand index score: 1.0
+We implemented 8 tests in Python using data coming from different distributions and mixtures to assess the predicting power of the estimates of the library.
+All 8 of them were run with the following settings:
+\begin{itemize}
+	\item \verb|Neal2| algorithm with 500 iterations, of which 100 for the burn-in phase
+	\item Dirichlet process with total mass $m=1$
+	\item NNIG hierarchy for the univariate tests and the NNW hierarchy for the multivariate ones
+	\item Hyperparameters for all NNIG hierarchies: $\mu_0 = 0.0$, $\lambda = 0.1$, $\alpha = 2$, $\beta = 2$
+	\item Hyperparameters for all $d$-dimensional NNW hierarchies: $\mu_0$ is the sample mean of the data, $\lambda = 0.2$, $\nu = d + 3$, $\tau_0 = \frac{1}{\nu} I_d$ (multiple of identity matrix).
+\end{itemize}
+Data were iid generated through the use of an R script.
+Below are listed the first 4 univariate tests alongside their respective sample size and the process from which the data was produced:
+\begin{center}
+	\begin{tabular}{r|r|l}
+		test & $n$ & process \\ \hline
+		1 &  200 & $y \sim 0.5 \, \Nc(-3, 1) + 0.5 \, \Nc(3, 1)$ \\
+		2 & 1000 & $y \sim 0.9 \, \Nc(-5, 1) + 0.1 \, \Nc(5, 1)$ \\
+		3 &  200 & $y \sim 0.3 \, \Nc(-2, 0.8^2) + 0.3 \, \Nc(0, 0.8^2) + 0.4 \, \Nc(2, 1)$ \\
+		4 &  400 & $y \sim 0.5 \, t(5, -5, 1 ) + 0.5 \, SkewNormal(2, -5, 1)$
+	\end{tabular}
+\end{center}
+The Skew Normal TODO \\
+Tests 5 through 8 use multivariate data of increasing dimension $d = 2,5,10,20$; the sample size for each of them is $n=400$ and is generated from
+$$y \sim 0.5 \, \Nc(-3 \cdot 1_d, I_d) + 0.5 \, \Nc(3 \cdot 1_d, I_d)$$
+where $1_d$ is the $d$-dimensional unit vector and $I_d$ the $d$-dimensional identity matrix. \\
+TODO tests 7 and 8 \\
+TODO tutti i plot delle densità stimate e densità vere \\
+TODO explanation on Rand score \\
+Test 1: Adjusted Rand score: 1.0 \\
+Test 2: Adjusted Rand score: 0.9879166470544726 \\
+Test 3: Adjusted Rand score: 0.6656213747405262 \\
+Test 4: Adjusted Rand score: 0.9900498146844491 \\
+Test 5: Adjusted Rand score: 1.0 \\
+Test 6: Adjusted Rand score: 1.0
 
-% TODO tutti i plot delle densità stimate e densità vere

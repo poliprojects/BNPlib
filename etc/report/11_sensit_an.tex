@@ -1,12 +1,12 @@
 \part{Results}
 
-\chapter{Results}
-Our clustering analysis was conducted on $n=100$ observations, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(7,1)$, which were saved in the \verb|data.csv| file.
+\chapter{Sensitivity analysis}
+TODO
+This clustering analysis was conducted on $n=100$ observations, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(7,1)$.
 We chose the prior parameters for the Normal-NIG model (\ref{nnig}) as follows: $\mu_0 = 5, \lambda_0 = 1, \alpha_0 = 2, \beta_0 = 2$.
 The \verb|Neal8| algorithm with $m=3$ auxiliary blocks was run for 20000 iterations, and the first 5000 were discarded as burn-in, for a total of $K=15000$ valid iterations.
 We will keep these parameters values fixed unless explicitly stated. \\
 The following test data were all saved to \verb|.csv| files and used for the realization of plots with the \verb|ggplot2| R package.
-All scripts and data sheets are available in the GitHub repository of our library.
 
 \section{Oscillations}
 After running the algorithm as described above with total mass $M=0.25$, we find that the obtained best clusterings (again, in the lest square sense) and local density estimates are highly fluctuating over the iterations of the algorithm:
