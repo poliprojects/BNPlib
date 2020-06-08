@@ -1,4 +1,4 @@
-\chapter{Estimates}
+\chapter{Estimates} \label{chap-esimates-1}
 We recall that the aim of these algorithms is to build estimates for both the actual clustering structure of the data and its probability distribution.
 Here we shall explain how we achieve such estimates.
 \section{Cluster estimation}
@@ -14,6 +14,7 @@ After each $D^{(k)}$ and the sample mean $\bar{D} = \frac{1}{K} \sum_k D^{(k)}$ 
 $$
 \hat{k} = \argmin_k \left\lVert D^{(k)} - \bar D \right\rVert_F^2 = \argmin_k \sum_{i,j} \left( D^{(k)}_{ij} - \bar{D}_{ij} \right)^2.
 $$
+Note that by virtue of the involved matrices being symmetric, the minimization of the latter summation is equivalent to the one computed only for those entries $(i,j)$ such that $i<j$.
 One can prove that the described algorithms \emph{converge in mean}, but not in the single iterations.
 That is, the last iterations of the algorithm have no higher probability than the first ones of being the ``best'' cluster estimate; in fact, the algorithm has quite the \emph{oscillating behaviour} in its single-iteration estimates, starting with the number of clusters at each iteration, as we will see in the last part of the report.
 Instead, it is the mean of all dissimilarity matrices that converges to the ``best'' clustering structure: the more iterations are run, the better the approximation provided by the mean becomes.
