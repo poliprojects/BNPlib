@@ -16,10 +16,10 @@ only = "all"
 
 # Build grid for density evaluation
 grids = []
-grids.append( np.arange(-5, +5.1, 0.1) ) # for test 1
-grids.append( np.arange(-7, +7.1, 0.1) ) # for test 2
-grids.append( np.arange(-4, +4.1, 0.1) ) # for test 3
-grids.append( np.arange(-7, +7.1, 0.1) ) # for test 4
+grids.append( np.arange(-7, +7.1, 0.1) ) # for test 1
+grids.append( np.arange(-10, +10.1, 0.1) ) # for test 2
+grids.append( np.arange(-6, +6.1, 0.1) ) # for test 3
+grids.append( np.arange(-10, +10.1, 0.1) ) # for test 4
 
 tests = [1,2,3,4]
 
