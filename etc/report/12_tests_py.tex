@@ -16,7 +16,7 @@ Below are listed the first 4 univariate tests alongside their respective sample 
 		1 &  200 & $y \sim 0.5 \, \Nc(-3, 1) + 0.5 \, \Nc(3, 1)$ \\
 		2 & 1000 & $y \sim 0.9 \, \Nc(-5, 1) + 0.1 \, \Nc(5, 1)$ \\
 		3 &  200 & $y \sim 0.3 \, \Nc(-2, 0.8^2) + 0.3 \, \Nc(0, 0.8^2) + 0.4 \, \Nc(2, 1)$ \\
-		4 &  400 & $y \sim 0.5 \, t_5(-5, 1 ) + 0.5 \, SkewNormal(5, 1, 2)$
+		4 &  400 & $y \sim 0.5 \, t_5(-5, 1 ) + 0.5 \, \text{SkewNormal}(5, 1, 2)$
 	\end{tabular}
 \end{center}
 Test number 4 uses a mixture of the Student's $t$ distribution ($\nu=5$ degrees of freedom, location $\mu=-5$, scale $\sigma^2 = 1$) and the skew normal distribution (location $\mu=5$, scale $\sigma^2=1$, shape $\alpha=2$). \footnote{Their p.d.f. are as follows ($\phi(t) = (2\pi)^{-1/2} \exp\{-t^2/2\}$ is the standard $\Nc(0,1)$ p.d.f.):

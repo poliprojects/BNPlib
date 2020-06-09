@@ -42,7 +42,8 @@ In fact, one can add as many layers as needed, adding priors to other priors' pa
 These are called \emph{hierarchical models}. \\
 Another kind of advanced Bayesian structure is the so-called \emph{nonparametric model}, in which the entire likelihood is assumed to be random.
 This means that there are infinitely many points which are randomly generated, that is, we have an infinite-dimensional parameter -- with a prior distribution for it, of course:
-such a likelihood is an example of \emph{random probability measure}.
+such a likelihood is an example of \emph{random probability measure}. \\
+In the next pages, we will see some examples of elements composing these models, which can be divided into two classes: the \emph{mixture} component and the \emph{hierarchy} component.
 
 
 \section{Dirichlet process model}
@@ -127,8 +128,8 @@ Defining  $\boldsymbol c= (c_1,\dots,c_n)$ the \emph{allocation} parameters to t
 \end{equation}
 where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the clusters and each $\boldsymbol\theta_i$ is characterized by the latent cluster $c_i$ and the corresponding parameters $\boldsymbol\phi_{c_i}$.
 
-\subsection{Normal Normal-InverseGamma model} \label{nnig}
-A very common choice for the DPM model (\ref{dpm-1}) is the Normal Normal-InverseGamma (Normal-NIG) model, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. That is, letting $\boldsymbol\theta=(\mu,\sigma)$, we have:
+\section{Normal Normal-InverseGamma hierarchy} \label{nnig}
+A very common choice for the DPM model (\ref{dpm-1}) is the Normal Normal-InverseGamma (NNIG) hierarchy, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. That is, letting $\boldsymbol\theta=(\mu,\sigma)$, we have:
 \begin{equation}
 	\begin{aligned}
 		f(y|\boldsymbol\theta)&=N(y| \mu ,\sigma^2),  \\
@@ -158,3 +159,17 @@ with:
 $$
 \mu_n=\frac{\lambda_0 \mu_0 \bar{y} + n}{\lambda_0 + n}, \quad \alpha_n= \alpha_0 + \frac{n}{2}, \quad \beta_n= \beta_0 + \frac{1}{2}\sum_{i=1}^{n} (y_i-\bar{y})^2 + \frac{\lambda_0 n(\bar{y}-\mu_0)^2}{2(\lambda_0 + n)}.
 $$
+
+\section{Normal Normal-Wishart hierarchy} \label{nnw}
+The multivariate extension of the above hierarchy is the Normal Normal-Wishart (NNW) model:
+\begin{equation}
+	\begin{aligned}
+		f(\textbf y|\boldsymbol\theta) &= N(\textbf y | \boldsymbol\mu ,T^{-1}), \\
+		G_0(\boldsymbol\theta|\boldsymbol \mu_0, \lambda, T_0, \nu)
+		&= N\left(\mu | \boldsymbol\mu_0, (\lambda T)^{-1}\right) \times \text{Wish}(T|T_0, \nu).
+	\end{aligned}
+\end{equation}
+In this case $\boldsymbol\theta=(\boldsymbol\mu, T)$.
+Note that the scale is parametrized in a different way compared to univariate case, with the second unique value being the precision matrix $T = \Sigma^{-1}$, the inverse of the covariance matrix.
+As such, the Wishart distribution, which is a generalization of the Gamma for higher dimensions, is used instead of its inverse counterpart. TODO formulas? \\
+This hierarchy has similar properties to the NNIG case, namely conjugacy and a marginal distribution with the form of a multivariate Student's $t$.
