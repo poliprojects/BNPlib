@@ -48,11 +48,7 @@ In the next pages, we will see some examples of elements composing these models,
 
 \section{Dirichlet process model}
 Let $M>0$, and let $G_0$ be a probability measure defined on the state space $S$.
-A Dirichlet process with parameters $M$ and $G_0$, noted as $DP(M G_0)$, is a random probability measure $G$ defined on $S$ which assigns probability $G(B)$ to every set $B$ such that for each finite partition ${B_1,\dots,B_k}$ of $S$, the joint distribution of the  vector $(G(B_1),\dots,G(B_k))$ is the Dirichlet distribution\footnote{
-The Dirichlet distribution is a $k$-dimensional generalization of the Bernoulli distribution: given $\alpha_1,\dots,\alpha_k > 0$, we say that $[y_1,\dots,y_k] \sim Dir(\alpha_1, \dots, \alpha_k)$ if $f(y_1,\dots,y_k) = \frac{1}{B(\alpha_1, \dots, \alpha_k)} \prod_{i=1}^k y_i^{\alpha_i-1}$ with $B(\alpha_1, \dots, \alpha_k)$ being the $k$-dimensional Beta function that acts as a normalization constant.
-It has support in the $k-1$-dimensional simplex.
-}
-with parameters $(MG_0(B_1),\dots,MG_0(B_k))$.
+A Dirichlet process with parameters $M$ and $G_0$, noted as $DP(M G_0)$, is a random probability measure $G$ defined on $S$ which assigns probability $G(B)$ to every set $B$ such that for each finite partition ${B_1,\dots,B_k}$ of $S$, the joint distribution of the  vector $(G(B_1),\dots,G(B_k))$ is the Dirichlet distribution with parameters $(MG_0(B_1),\dots,MG_0(B_k))$.
 The value $M$ is called the \emph{total mass} or precision parameter, $G_0$ is the \emph{centering measure}, and the product $MG_0$ is the base measure of the DP. \\
 Having observed the iid sample $\{y_1,\dots,y_n\} \subseteq \RR$, the basic DP model takes the following form:
 \begin{equation}\label{dpm}
@@ -131,7 +127,9 @@ Defining  $\boldsymbol c= (c_1,\dots,c_n)$ the \emph{allocation} parameters to t
 where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the clusters and each $\boldsymbol\theta_i$ is characterized by the latent cluster $c_i$ and the corresponding parameters $\boldsymbol\phi_{c_i}$.
 
 \section{Normal Normal-InverseGamma hierarchy} \label{nnig}
-A very common choice for the DPM model (\ref{dpm-1}) is the Normal Normal-InverseGamma (NNIG) hierarchy, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$. That is, letting $\boldsymbol\theta=(\mu,\sigma)$, we have:
+A very common choice for the DPM model (\ref{dpm-1}) is the Normal Normal-InverseGamma (NNIG) hierarchy, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$.
+The InverseGamma is the distribution of a random variable $Y$ such that $Y^{-1}$ follows a Gamma distribution.
+That is, letting $\boldsymbol\theta=(\mu,\sigma)$, we have:
 \begin{equation}
 	\begin{aligned}
 		f(y|\boldsymbol\theta)&=N(y| \mu ,\sigma^2),  \\
@@ -173,5 +171,5 @@ The multivariate extension of the above hierarchy is the Normal Normal-Wishart (
 \end{equation}
 In this case $\boldsymbol\theta=(\boldsymbol\mu, T)$.
 Note that the scale is parametrized in a different way compared to univariate case, with the second unique value being the precision matrix $T = \Sigma^{-1}$, the inverse of the covariance matrix.
-As such, the Wishart distribution, which is a generalization of the Gamma for higher dimensions, is used instead of its inverse counterpart. TODO formulas? \\
+As such, the Wishart distribution is used instead of its inverse counterpart. \\
 This hierarchy has similar properties to the NNIG case, namely conjugacy and a marginal distribution with the form of a multivariate Student's $t$.

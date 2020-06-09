@@ -1,0 +1,21 @@
+\part{Appendix}
+\chapter{Distributions}
+We include here all supports and probability density functions (p.d.f.) for the distributions mentioned in the report, in order of appearance:
+\begin{itemize}
+	\item Dirichlet distribution $\text{Dir}(\alpha_1, \dots, \alpha_k)$: a $k$-dimensional generalization of the Bernoulli distribution, given $\alpha_1,\dots,\alpha_k > 0$.
+	It has support in the $k-1$-dimensional simplex.
+	Its probability density function (p.d.f.) is
+	$$f(\textbf x) = \frac{1}{B(\alpha_1, \dots, \alpha_k)} \prod_{i=1}^k x_i^{\alpha_i-1}$$
+	with $B(\alpha_1, \dots, \alpha_k)$ being the $k$-dimensional Beta function that acts as a normalization constant.
+	\item Gamma distribution $\text{Gamma}(\alpha,\beta)$: given $\alpha,\beta > 0$.
+	It has support over all positive values, which is ideal for variances.
+	Its p.d.f. is
+	$$f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} \exp\{-\beta x\}$$
+	with $\Gamma(\alpha)$ being the Euler-Gamma function.
+	\item Wishart distribution $\text{Wish}(T_0, \nu)$: a $k$-dimensional generalization of the Gamma distribution.
+	It has support over all matrices $X \in \RR^{k \times k}$ that are positive semi-definite.
+	Its p.d.f. is
+	$$f(X) = \frac{ (\det(X))^{(\nu-k-1)/2} \, \exp\{-\frac{1}{2} \text{tr}(T_0^{-1} X)\} }{ 2^{\nu k/2} \, (\det(X))^{\nu/2} \, \Gamma_k(\nu/2) } $$
+	with $\Gamma_k(\alpha)$ being the $k$-dimensional Gamma function.
+	\item Student's $t$ TODO (also others?)
+\end{itemize}
