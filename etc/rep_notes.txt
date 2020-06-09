@@ -1,8 +1,4 @@
-REPORT ELENA
-* collectors (review)
-* Factory
-* aux classes
-* algo, base + derived
+
 
 
 REPORT GENERICHE

@@ -2,11 +2,12 @@
 from bnp_interface import *
 
 # Initialize parameters
+mu0 = 0
 lambda_ = 0.1
 alpha0 = 2.0
 beta0 = 2.0
 totalmass = 1
-algo = "neal8"
+algo = "neal2"
 init = 0
 rng = 20200229
 maxit = 500
@@ -36,9 +37,7 @@ for t in tests:
     imgfiledens   = ''.join(("src/python/test_res/dens",  str(t), ".pdf"))
     trueclustfile = ''.join(("csv/test/true_clust", str(t), ".csv"))
 
-    # Initialize more parameters
-    mat = np.loadtxt(open(datafile, 'rb'), delimiter=' ')
-    mu0 = np.mean(mat)
+
 
     # Run algorithms, estimates, and plots
     bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile,
