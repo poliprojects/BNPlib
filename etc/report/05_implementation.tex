@@ -1,11 +1,11 @@
-\chapter{Implementation}
+\chapter{Algorithm classes}
 
 The algorithms studied and discussed in the theoretical section all share the same structure, so we decided to build an abstract class for a generic Gibbs sampling iterative BNP algorithm, the \verb|Algorithm| class:
 \begin{verbatim}
 template<template <class> class Hierarchy, class Hypers,
          class Mixture> class Algorithm
 \end{verbatim}
-A template approach was used, to allow the use of the algorithm with all the combinations of \verb|Hierarchy|, \verb|Hypers|, and \verb|Mixture| classes, which we discussed in the previous section.
+A template approach was used, to allow the use of the algorithm with all the combinations of \verb|Hierarchy|, \verb|Hypers|, and \verb|Mixture| classes, which were discussed in the previous section.
 
 
 
@@ -79,7 +79,7 @@ We have implemented in particular the neal2 and neal8 derived algorithms, leavin
 
 
 
-\section{\texttt{Neal2} algorithm}
+\section{\texttt{Neal2}}
 
 As discussed in section \ref{neal2}, this algorithm exploits conjugacy, thus the class requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is provided in closed form.
 In our case, the Normal-NIG and Normal-NW specializations for the \verb|Neal2| template class were implemented.
@@ -105,7 +105,7 @@ The \verb|Neal2| class implements the substeps of the \verb|run| in the followin
 \end{itemize}
 
 
-\section{\texttt{Neal8} algorithm}
+\section{\texttt{Neal8}}
 
 Being Neal's algorithm 8 a generalization of Neal's algorithm 2 which works for any hierarchical model, even non-conjugate ones, it adds adjustments in the allocation sampling phase to circumvent non-conjugacy.
 However, the unique values sampling phase remains unchanged. For this reason \verb|Neal8| is built as a derived class from \verb|Neal2|.

@@ -1,4 +1,4 @@
-\chapter{Factory}
+\section{Algorithm factory}
 For a runtime choice of the BNP algorithm we implemented the Factory class.
 An object factory allows to choose one of several derived objects from a single abstract base class at runtime.  This type of class is implemented as a singleton and stores functions that build such objects, called the builders, which can be called at need at runtime, based on identifiers of the specific objects. The storage, a private member of the factory class, is therefore an Identifier-Builder map where the identifier is a string associated with the builder function.
  The storage must first be filled with the appropriate builders, which can be as simple as a function returning a smart pointer to a new instance. This can be done in a main file or in an appropriate function.
