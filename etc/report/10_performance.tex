@@ -125,7 +125,7 @@ In the univariate case, everything evenly benefits from the speedup, with the on
 \section{Limits}
 Despite the optimizations in the \verb|cluster_estimate()| function, the storing of a number of large matrices still requires a considerable amount of memory.
 In general, the Protobuf structures also become overwhelmingly large if the data dimension increases.
-For these reasons, we were not able to run Python tests 7 and 8, which are the equivalent of test 5-6 but in dimensions $d=10$ and $d=20$, on our machines. \\
+For these reasons, we were not able to run the multivariate Python tests (see chapter \ref{chap-py-test}) in higher dimensions such as $d=10$ and $d=20$ on our machines. \\
 Another problem related to large dimensions arises when trying to run the \verb|Neal8| algorithm with 5-dimensional data.
 At one point, the computed covariance matrix in one of the functions of the hierarchy becomes not symmetric.
 Since a covariance/precision matrix must be symmetric and the Stan library implements a check for this property when passing such matrices as arguments to the density functions, the execution stops.

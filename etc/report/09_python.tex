@@ -1,4 +1,4 @@
-\chapter{Python interface}
+\chapter{Python interface} \label{chap-py-int}
 
 \section{Creating the interface}
 A Python interface was implemented for easier usage and testing with respect to C++.
@@ -30,7 +30,7 @@ In particular, a Python interface file, \verb|bnp_interface.py| was created to a
 	\item \verb|chain_barplot()| loops over the Markov chain unpacked by \verb|deserialize()| and produces a barplot which shows the distribution of the number of clusters over all saved iterations of the chain;
 	\item \verb|plot_density_points()| and \verb|plot_density_contour()| both take a density evaluation file as input and plots them if possible, i.e. if the given density has the correct dimensions: 1D and 2D for the former, which is a regular function graph, and 2D for the latter, which is a map of the estimated contour lines of the function;
 	\item \verb|plot_clust_cards()| takes a clustering \verb|.csv| file as input, most likely the best clustering computed and stored via the \verb|cluster_estimate()| method of the \verb|Algorithm| class, and plots the cardinalities of clusters inside it;
-	\item \verb|clust_rand_score()| computes the so-called \emph{adjusted Rand score} between a given predicted clustering and true clustering. This score is a value in $[0,1]$ that represents a measure of the proportion of correct decisions made by the clustering algorithm with respect to the true clustering.
+	\item \verb|clust_rand_score()| computes the so-called \emph{adjusted Rand score} between a given predicted clustering and true clustering. This score is a value in $[0,1]$ that represents a measure of the proportion of correct decisions made by the clustering algorithm with respect to the true clustering: the higher the score, the better the estimation. (TODO explaination/source)
 \end{itemize}
 The user can then call each of these tools and the ones in \verb|bnplibpy| at will in their scripts.
 For instance, one may want to run the algorithm and get the Markov chain, visualize the distribution of clusters via \verb|chain_barplot()|, then compute the estimates; or maybe di all 3 at the same times.
