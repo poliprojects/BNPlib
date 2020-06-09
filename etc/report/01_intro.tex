@@ -54,7 +54,7 @@ It has support in the $k-1$-dimensional simplex.
 with parameters $(MG_0(B_1),\dots,MG_0(B_k))$.
 The value $M$ is called the \emph{total mass} or precision parameter, $G_0$ is the \emph{centering measure}, and the product $MG_0$ is the base measure of the DP. \\
 Having observed the iid sample $\{y_1,\dots,y_n\} \subseteq \RR$, the basic DP model takes the following form:
-\begin{equation}
+\begin{equation}\label{dpm}
 	\begin{aligned}
 	y_i | G &\iidsim G, \quad i=1,\dots,n \\
 	G &\sim DP(MG_0)
@@ -91,7 +91,9 @@ A useful consequence of this property is its stick-breaking representation, i.e.
 with $m_k \iidsim G_0$ for $k\in\mathbb{N}$ and the random weights constructed as $w_k =v_k\prod\limits_{l<k} (1-v_l)$ where $v_k \iidsim Be(1,M)$. \\
 In many applications in which we are interested in a continuous density estimation, this discreteness can represent a limitation.
 Oftentimes a Dirichlet process mixture (DPM) model is used, where the DP random measure is the mixing measure for the parameters of a parametric continuous kernel function.
-
+One can replace the Dirichlet process in (\ref{dpm}) with any almost surely discrete random probability measure, for example a Pitman-Yor process.
+%TODO reference
+The Pitman-Yor process (PY) is a two-parameter extension of the Dirichlet process, parametrized by a discount parameter $0 \leq d \leq 1$, a strength parameter $\theta > -d$, and a base distribution $G_0$. 
 \section{Dirichlet process mixture model}
 Let $\Theta$ be a finite-dimensional parameter space and $G_0$ a probability measure on $\Theta$.
 The Dirichlet process mixture (DPM) model convolves the densities $f(\cdot|\boldsymbol\theta)$ from a parametric family $\Fc = \{f(\cdot|\boldsymbol\theta), \boldsymbol\theta \in \Theta \}$ using the DP as mixture weights.
