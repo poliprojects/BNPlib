@@ -2,14 +2,14 @@
 The \verb|bnplib| library has several possible extensions:
 \begin{itemize}
 	\item New types of \verb|Hypers| classes can be implemented, for example ones containing hyper-priors for some of the parameters if the model.
-	The algorithm must be modified accordingly, for instance by adding extra steps (which are skipped if the hyperparameters are fixed).
+	The algorithm must be modified accordingly, for instance by implementing the currently empty extra step such as \verb|update_hypers()|.
 	Changes depend on the type of parameter for which a prior is used; for example, a prior on the total mass parameter involves different steps than a prior on the parameters of the base measure.
 	For a general outline of the necessary changes, see \cite{neal} section 7.
-	\item Hierarchies other than the Normal-NIG can be created.
+	\item Hierarchies other than the NNIG and NNW can be created.
 	This is enough to run \verb|Neal8| and \verb|Neal2| by passing the class name as parameter, provided that the \verb|Hierarchy| class has the appropriate interface.
-	\item Interfaces with both R and Python can be easily implemented, thanks to the data structures provided by \verb|protobuf| and the already-available libraries \verb|Rcpp| and \verb|pybind| respectively.
-	\item Algorithms can be re-adapted for the use of other mixture models, such as the Pitman-Yor process.
-	\item Conjugacy-dependent algorithms such as \verb|Neal2| can be re-adapted to account for non-conjugacy, for example by using an Hamiltonian Monte Carlo sampler.
+	\item The same goes for other mixtures and algorithm.
+	A good starting point for the latter would be the blocked Gibbs algorithm, which would make use of the \verb|update_weights()| substep.
+	\item Conjugacy-dependent algorithms such as \verb|Neal2| can be further re-adapted to account for non-conjugacy, for example by using an Hamiltonian Monte Carlo sampler.
 	\item Finally, a \emph{full generalization} of the library might be possible.
 	That is, given the distributions of the likelihood, hyperparameters, etc, one might want an algorithm that works for the chosen specific model without needing and explicit implementation for it.
 	This means, among other things, that one has to handle non-conjugacy for the general case.
