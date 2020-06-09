@@ -29,10 +29,10 @@ data5 <- as.matrix(read.csv(file = 'csv/test/data5.csv', header = FALSE, sep=" "
 
 
 # sd=beta/(alfa-1)=2
-prior1 <- dnorm(dens1[,1], mean=mean(data1), sd=sqrt(2))
-prior2<- dnorm(dens2[,1], mean=mean(data2), sd=sqrt(2))
-prior3<- dnorm(dens3[,1], mean=mean(data3), sd=sqrt(2))
-prior4<- dnorm(dens4[,1], mean=mean(data4), sd=sqrt(2))
+prior1 <- dnorm(dens1[,1], mean=0, sd=sqrt(2))
+prior2<- dnorm(dens2[,1], mean=0, sd=sqrt(2))
+prior3<- dnorm(dens3[,1], mean=0, sd=sqrt(2))
+prior4<- dnorm(dens4[,1], mean=0, sd=sqrt(2))
 
 ############################
 #TEST1
@@ -40,13 +40,13 @@ h=hist(data1)
 pdf(file = "R/density_tests/test1.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
                       xlab="data",ylim=c(0,0.4))
-lines(dens1[,1],dens1[,2],  lwd=2)
-lines(dens1[,1],true_dens1,  lwd=2,col="red")
+lines(dens1[,1],dens1[,2],  lwd=3,col="red")
+lines(dens1[,1],true_dens1,  lwd=1)
 lines(dens1[,1],prior1,  lwd=1,col="gray")
 legend("topright", 
-       c("Prior Density","Posterior Density", "True Density"), 
-       lty=c(1, 1, 1), 
-       col=c("gray","black","red"),
+       c("Posterior Density","Prior Density", "True Density"), 
+       lwd=c(3, 1, 1), 
+       col=c("red","gray","black"),
        bty = "n")
 dev.off()
 
@@ -59,13 +59,13 @@ h=hist(data2, breaks=20)
 pdf(file = "R/density_tests/test2.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
                       xlab="data", ylim=c(0,0.4),xlim=c(-10,10))
-lines(dens2[,1],dens2[,2],  lwd=2)
-lines(dens2[,1],true_dens2,  lwd=2,col="red")
+lines(dens2[,1],dens2[,2],  lwd=3,col="red")
+lines(dens2[,1],true_dens2,  lwd=1)
 lines(dens2[,1],prior2,  lwd=1,col="gray")
 legend("topright", 
-       c("Prior Density","Posterior Density", "True Density"), 
-       lty=c(1, 1, 1), 
-       col=c("gray","black","red"),
+       c("Posterior Density","Prior Density", "True Density"), 
+       lwd=c(3, 1, 1), 
+       col=c("red","gray","black"),
        bty = "n")
 dev.off()
 
@@ -77,13 +77,13 @@ h=hist(data3)
 pdf(file = "R/density_tests/test3.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
                       xlab="data",ylim=c(0,0.4), xlim=c(-6,6))
-lines(dens3[,1],dens3[,2],  lwd=2)
-lines(dens3[,1],true_dens3,  lwd=2,col="red")
+lines(dens3[,1],dens3[,2],  lwd=3,col="red")
+lines(dens3[,1],true_dens3,  lwd=1)
 lines(dens3[,1],prior3,  lwd=1,col="gray")
 legend("topright", 
-       c("Prior Density","Posterior Density", "True Density"), 
-       lty=c(1, 1, 1), 
-       col=c("gray","black","red"),
+       c("Posterior Density","Prior Density", "True Density"), 
+       lwd=c(3, 1, 1), 
+       col=c("red","gray","black"),
        bty = "n")
 dev.off()
 
@@ -95,13 +95,13 @@ h=hist(data4, breaks=20)
 pdf(file = "R/density_tests/test4.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
                       xlab="data", ylim=c(0,0.4), xlim=c(-10,10))
-lines(dens4[,1],dens4[,2],  lwd=2)
-lines(dens4[,1],true_dens4,  lwd=2,col="red")
+lines(dens4[,1],dens4[,2],  lwd=3,col="red")
+lines(dens4[,1],true_dens4,  lwd=1)
 lines(dens4[,1],prior4,  lwd=1,col="gray")
 legend("topright", 
-       c("Prior Density","Posterior Density", "True Density"), 
-       lty=c(1, 1, 1), 
-       col=c("gray","black","red"),
+       c("Posterior Density","Prior Density", "True Density"), 
+       lwd=c(3, 1, 1), 
+       col=c("red","gray","black"),
        bty = "n")
 dev.off()
 
