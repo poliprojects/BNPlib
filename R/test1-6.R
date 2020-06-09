@@ -15,7 +15,7 @@ write.table(true_clust2, "csv/test/true_clust2.csv", row.names = F,
     col.names = F)
 
 # Test 3
-test3 = c(rnorm(60, -2, 0.8^2), rnorm(60, 0, 0.8^2), rnorm(80, +2, 1))
+test3 = c(rnorm(60, -2, 0.8), rnorm(60, 0, 0.8), rnorm(80, +2, 1))
 true_clust3 = c(rep(0,60), rep(1,60), rep(2,80))
 write.table(test3, "csv/test/data3.csv", row.names = F, col.names = F)
 write.table(true_clust3, "csv/test/true_clust3.csv", row.names = F,

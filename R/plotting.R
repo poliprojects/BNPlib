@@ -3,6 +3,9 @@ require("VGAM")
 require("metRology")
 require("mvtnorm")
 require("rgl")
+library("plotly")
+library("HistogramTools")
+library("plot3D")
 
 dens1 <- read.csv(file = 'src/python/test_res/dens1.csv', header = FALSE)
 dens2 <- read.csv(file = 'src/python/test_res/dens2.csv', header = FALSE)
@@ -36,7 +39,7 @@ prior4<- dnorm(dens4[,1], mean=mean(data4), sd=sqrt(2))
 h=hist(data1)
 pdf(file = "R/density_tests/test1.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
-                      xlab="data",ylim=c(0,0.25))
+                      xlab="data",ylim=c(0,0.4))
 lines(dens1[,1],dens1[,2],  lwd=2)
 lines(dens1[,1],true_dens1,  lwd=2,col="red")
 lines(dens1[,1],prior1,  lwd=1,col="gray")
@@ -52,10 +55,10 @@ dev.off()
 ############################
 #TEST2
 
-h=hist(data2)
+h=hist(data2, breaks=20)
 pdf(file = "R/density_tests/test2.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
-                      xlab="data")
+                      xlab="data", ylim=c(0,0.4),xlim=c(-10,10))
 lines(dens2[,1],dens2[,2],  lwd=2)
 lines(dens2[,1],true_dens2,  lwd=2,col="red")
 lines(dens2[,1],prior2,  lwd=1,col="gray")
@@ -73,7 +76,7 @@ dev.off()
 h=hist(data3)
 pdf(file = "R/density_tests/test3.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
-                      xlab="data")
+                      xlab="data",ylim=c(0,0.4), xlim=c(-6,6))
 lines(dens3[,1],dens3[,2],  lwd=2)
 lines(dens3[,1],true_dens3,  lwd=2,col="red")
 lines(dens3[,1],prior3,  lwd=1,col="gray")
@@ -88,10 +91,10 @@ dev.off()
 ############################
 #TEST4
 
-h=hist(data4)
+h=hist(data4, breaks=20)
 pdf(file = "R/density_tests/test4.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
-                      xlab="data")
+                      xlab="data", ylim=c(0,0.4), xlim=c(-10,10))
 lines(dens4[,1],dens4[,2],  lwd=2)
 lines(dens4[,1],true_dens4,  lwd=2,col="red")
 lines(dens4[,1],prior4,  lwd=1,col="gray")
@@ -107,19 +110,37 @@ dev.off()
 ############################
 #TEST5
 
-library("HistogramTools")
-library("plot3D")
 
-##  Create cuts:
+# Histogram
 x_c <- cut(data5[,1],50)
 y_c <- cut(data5[,2],50)
-
-##  Calculate joint counts at cut levels:
 z <- table(x_c, y_c)
 
-##  Plot as a 3D histogram:
 x11()
 hist3D(z=z, border="black")
 
-##
-plot3d(dens5)
+
+# Posterior
+grid=seq(-7,7.1, length.out=50)
+
+open3d()
+rgl::plot3d(x = dens5[,1], y = dens5[, 2], z =dens5[, 3], col="blue", xlab = "X1", ylab = "X2", zlab = "Y")
+rgl::surface3d(x=grid, y =grid,
+               z = matrix(dens5[,3], nrow = 50, ncol = 50),
+               col = "green", alpha = 0.25, lit = FALSE)
+
+
+axx <- list(
+        title = "X-data"
+)
+
+axy <- list(
+        title = "Y-data"
+)
+
+axz <- list(
+        title = "Relative Frequency"
+)
+
+p<-plot_ly() %>% add_surface(x = grid, y = grid, z =  matrix(dens5[,3], nrow = 50, ncol = 50)) %>% layout(title = "Posterior Estimate",scene = list(xaxis=axx,yaxis=axy,zaxis=axz))
+        
