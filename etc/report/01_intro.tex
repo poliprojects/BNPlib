@@ -86,11 +86,14 @@ A useful consequence of this property is its stick-breaking representation, i.e.
 	G(\cdot) = \sum_{k=1}^{+\infty} w_k \delta_{m_k} (\cdot),
 \end{align*}
 with $m_k \iidsim G_0$ for $k\in\mathbb{N}$ and the random weights constructed as $w_k =v_k\prod\limits_{l<k} (1-v_l)$ where $v_k \iidsim Be(1,M)$. \\
-In many applications in which we are interested in a continuous density estimation, this discreteness can represent a limitation.
+
+One can replace the Dirichlet process in (\ref{dpm}) with any almost surely discrete random probability measure, for example a Pitman-Yor process (PY).
+The PY process (see \cite{PY}, pp. 855-900) is a two-parameter extension of the Dirichlet process, parametrized by a discount parameter $0 \leq \alpha \leq 1$, a strength parameter $\theta > - \alpha$, and a base distribution $G_0$. 
+Nevertheless, we will use the DP as our working example for the explanations in the next chapters. Developments are similar if another discrete process is used.
+
+In many applications in which we are interested in a continuous density estimation, the discreteness can represent a limitation.
 Oftentimes a Dirichlet process mixture (DPM) model is used, where the DP random measure is the mixing measure for the parameters of a parametric continuous kernel function.
-One can replace the Dirichlet process in (\ref{dpm}) with any almost surely discrete random probability measure, for example a Pitman-Yor process.
-%TODO reference
-The Pitman-Yor process (PY) is a two-parameter extension of the Dirichlet process, parametrized by a discount parameter $0 \leq d \leq 1$, a strength parameter $\theta > -d$, and a base distribution $G_0$. 
+
 \section{Dirichlet process mixture model}
 Let $\Theta$ be a finite-dimensional parameter space and $G_0$ a probability measure on $\Theta$.
 The Dirichlet process mixture (DPM) model convolves the densities $f(\cdot|\boldsymbol\theta)$ from a parametric family $\Fc = \{f(\cdot|\boldsymbol\theta), \boldsymbol\theta \in \Theta \}$ using the DP as mixture weights.
