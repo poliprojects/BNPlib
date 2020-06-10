@@ -1,4 +1,4 @@
-\chapter{Collectors}
+\section{Collectors}
 
 Once a BNP algorithm is run, one may be interested, as mentioned above, in an estimate of the density given a grid of points or in an identification of a partition through the clustering obtained in the algorithm, which we call best clustering, i.e. the one that optimizes the binder loss function. In any case we need to be able to retrieve the information of each iteration of the algorithm, such as allocations and unique values, which characterize the state of the chain, which must be stored in some data structure.
 For this purpose, we used the Protocol Buffers library, which needs a short introduction. \\
@@ -44,20 +44,14 @@ Among the public methods useful functions for writing the chain are: the start()
 
 Two alternatives are possible for reading: using the get\_chain() method that returns the entire chain of states in protobuf-objects deque format or the get\_next\_state method that returns one state at a time, increasing the curr\_iter cursor by 1 to keep track of the current position. In case the second method is used, since the whole chain is not available, the get\_state method is implemented, which returns the state of a specific iteration, useful for instance in the clustering estimation function, which we'll discuss later, where a specific state of the chain is searched, i.e. the one that optimizes the binder loss function.
 
-\section{Use in run function: writing-mode}
+\subsection{Use in run function: writing-mode}
 In the main program, a DerivedCollector, chosen runtime, is instantiated before running the algorithm and a BaseCollector pointer points to the Derived Collector object.
 Then the BaseCollector pointer is passed to the run() method and through the pointer are accessed the three methods for the writing: start(), collect() and finish().
-
-We'll see now the writing procedure specifically for each collector. 
-
-\subsection{FileCollector}
-
-In the specific case of FileCollector we pass the filename string to the constructor indicating the file name where the chain will be saved, while the other protected members are initialized by default. In the run() is then initially called the public method of the FileCollector start(), where is created an open file description that refers to the file and subsequently a stream that writes to the Unix file descriptor. After each iteration is then called the public function of the FileCollector collect() that takes in input the current state in Protobuf object format and write it on file. At the end of all iterations the public FileCollector finish() method closes the file descriptor and the underlying file. 
-
-\subsection{MemoryCollector}
+We shall now see the writing procedure specifically for each collector. \\
+In the specific case of FileCollector we pass the filename string to the constructor indicating the file name where the chain will be saved, while the other protected members are initialized by default. In the run() is then initially called the public method of the FileCollector start(), where is created an open file description that refers to the file and subsequently a stream that writes to the Unix file descriptor. After each iteration is then called the public function of the FileCollector collect() that takes in input the current state in Protobuf object format and write it on file. At the end of all iterations the public FileCollector finish() method closes the file descriptor and the underlying file. \\
 In the case a Memorycollector is used, as before the collector-object is constructed in the main program and it is pointed by a pointer to BaseCollector. In this case the default constructor is called. The start and finish methods of a MemoryCollector do nothing while the collect method, called at the end of each iteration, inserts in the deque the protobuf object related to the current state.
 
-\section{Use in estimates functions: reading-mode}
+\subsection{Use in estimates functions: reading-mode}
 Once the BNP algorithm run is completed, we proceed with density and clustering estimates. For both estimates it is necessary, as said before, to know the whole chain of states, so the BaseCollector pointer is passed as input in the estimates functions. Within the estimates functions we decided to call get chain , the collectors public method that returns the whole chain in deque form. In the case of MemoryCollector is simply returned the protected member chain, while in the case of FileCollector the chain is read from file state by state, converted back into protobuf format and saved in the deque.
 
 \subsection{Alternative of reading}

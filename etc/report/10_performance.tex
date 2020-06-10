@@ -1,7 +1,6 @@
-\chapter{Performance}
+\chapter{Performance and optimization}
 In this chapter, we will justify some choices that we made in the code that increase efficiency.
 In the process, we will show and analyze the output of some optimization tools we used in order to test the performance of this library, as well as some of the aforementioned choices.
-
 
 \section{Compiler flags} \label{opt-flags}
 When calling the \verb|g++| complier from the \verb|Makefile|, we used the following optimization flags, which instruct the compiler to maximize the code efficiency:
@@ -119,7 +118,6 @@ On the contrary, we note that the usage of \verb|like()| is in the same order of
 Since the estimate algorithm is the same as before, this means that \verb|like()| is optimized enough for it to withstand the jump to the multidimensional case better than the other functions. \\
 As for a final comparison with the case lacking the compiler flags described in section (\ref{opt-flags}), the optimization mainly impacts the multivariate case, with \verb|run()| being the main recipient, going from a whopping 58\% to the already mentioned 10\%.
 In the univariate case, everything evenly benefits from the speedup, with the only relevant difference being for \verb|like()| which goes from over 30\% to 20\%.
-
 
 
 \section{Limits}

@@ -1,4 +1,4 @@
-\part{Algorithms}
+%\part{Algorithms}
 
 \chapter{Introduction}
 This report presents the development of a C++ library containing Markov chain sampling algorithms for two major goals: estimation of the density and clustering analysis of a given set of data points.
@@ -189,15 +189,24 @@ The multivariate extension of the above hierarchy is the Normal Normal-Wishart (
 		&= N\left(\mu | \boldsymbol\mu_0, (\lambda T)^{-1}\right) \times \text{Wish}(T|T_0, \nu).
 	\end{aligned}
 \end{equation}
-In this case $\boldsymbol\theta=(\boldsymbol\mu, T)$ and $\textbf y \in \RR^k$.
+In this case $\boldsymbol\theta=(\boldsymbol\mu, T)$ and the data $\textbf y$ is $k$-dimensional.
 Note that the scale is parametrized in a different way compared to univariate case, with the second unique value being the precision matrix $T = \Sigma^{-1}$, the inverse of the covariance matrix.
-As such, the Wishart distribution\footnote{The Wishart distribution $\text{Wish}(T_0, \nu)$ is a $k$-dimensional generalization of the Gamma distribution.
+As such, the Wishart distribution\footnote{The Wishart distribution $\text{Wish}(T_0, \nu)$ is a $k$-dimensional generalization of the Gamma distribution, given $T_0$ positive semi-definite and $\nu > k-1$.
 It has support over all matrices $X \in \RR^{k \times k}$ that are positive semi-definite.
 Its p.d.f. is
 $$f(X) = \frac{ (\det(X))^{(\nu-k-1)/2} \, \exp\{-\frac{1}{2} \text{tr}(T_0^{-1} X)\} }{ 2^{\nu k/2} \, (\det(X))^{\nu/2} \, \Gamma_k(\nu/2) } $$
-with $\Gamma_k(\alpha)$ being the $k$-dimensional Gamma function.} is used instead of its inverse counterpart. \\
-This hierarchy has similar properties to the NNIG case, namely conjugacy and a marginal distribution with the form of a multivariate Student's $t$. \\
-The marginal is:
+with $\Gamma_k(\alpha)$ being the $k$-dimensional Gamma function.} is used instead of its inverse counterpart.
+Our settings for this hierarchy's hyperparameters are as follows:
+\begin{itemize}
+	\item $\boldsymbol\mu_0 = \bar{\textbf y}$: the sample mean is often a good starting point for assessing the distribution of the data;
+	\item $\lambda$ small, e.g. 0.1: being at the denominator of the covariance matrix of the normal, this allows for a large initial variance, which means that the algorithm has more freedom to move where the data dictates right from the start, instead on focusing on a narrow spike which a small variance would produce;
+	\item $\nu = k + 3$ so that the excepted value and median are well-defined;
+	\item $T_0 = \frac{1}{\nu} I_k$, so that the prior expectation of the precision $\EE[T] = \nu T_0$ is the identity matrix (same as picking unitary variance in the monodimensional case).
+\end{itemize}
+Note that the influence of the hyperparameters on the state values is only direct at the very start of the algorithm, and they will become less and less relevant the more data are taken into consideration.
+Provided that the algorithm works as intended, it is not imperative to have good parameters in order to get good results. \\
+This hierarchy has similar properties to the NNIG case, namely conjugacy and a marginal distribution with the form of a multivariate Student's $t$.
+In particular, the marginal is:
 $$ p(\widetilde{\textbf y} | \boldsymbol\mu_0, \lambda, T_0, \nu) = t_{\widetilde\nu} (\widetilde{\textbf y} | \widetilde{\boldsymbol\mu}, \widetilde\Sigma) \qquad
 $$
 with:
@@ -208,7 +217,7 @@ while the posterior distribution is:
 \begin{align*}
 p(\boldsymbol\theta|\textbf y_1,\dots,\textbf y_n,\boldsymbol\mu_0,\lambda, T_0, \nu)=N\left(\boldsymbol\mu | \boldsymbol\mu_n, \frac{1}{\lambda_n}\Sigma\right) \times \text{Wish}(\Sigma|T_n, \nu_n)
 \end{align*}
-with  (again, $\bar{\textbf y}$ is the sample mean):
+with:
 \begin{gather*}
 \boldsymbol\mu_n = \frac{1}{\lambda+n} (\lambda\boldsymbol \mu_0 + n \bar{\textbf y}), \qquad \lambda_n = \lambda + n, \qquad \nu_n = \nu + \frac{n}{2}, \\
 T_n = T_0^{-1} + \frac{1}{2}\sum_{i=1}^{n} (\textbf y_i-\bar{\textbf y})(\textbf y_i-\bar{\textbf y})^T + \frac{\lambda n}{2(\lambda + n)}(\bar{\textbf y}-\boldsymbol\mu_0)(\bar{\textbf y}-\boldsymbol\mu_0)^T.

@@ -1,4 +1,4 @@
-\chapter{Algorithm classes}
+\section{Algorithm classes}
 
 The algorithms studied and discussed in the theoretical section all share the same structure, so we decided to build an abstract class for a generic Gibbs sampling iterative BNP algorithm, the \verb|Algorithm| class:
 \begin{verbatim}
@@ -7,8 +7,6 @@ template<template <class> class Hierarchy, class Hypers,
 \end{verbatim}
 A template approach was used, to allow the use of the algorithm with all the combinations of \verb|Hierarchy|, \verb|Hypers|, and \verb|Mixture| classes, which were discussed in the previous section.
 
-
-
 The \verb|Algorithm| class contains the following members:
 \begin{verbatim}
 unsigned int maxiter;
@@ -16,8 +14,9 @@ unsigned int burnin;
 std::mt19937 rng; // random number generating engine
 \end{verbatim}
 These are the parameters of the method, and are rather self-explanatory.
-Their values are initialized either via the constructors or the setters.
-By default the number of iterations is initialized to 1000 while the number of burn-in iterations is initialized to 100, values that we have assessed as sufficient for a good approximation after performing several tests.
+These integer values, including the RNG seed and the \verb|n_aux| parameter in \verb|Neal8|, are not present in the class constructor since they are usually left with their default values, though they can still be changed through their respective setters.
+If no other values are provided, the number of iterations is initialized to 1000 while the number of burn-in iterations is initialized to 100, values that we have assessed as sufficient for a good approximation after performing several tests.
+TODO constructors
 
 The data and values containers were implemented as follows:
 \begin{verbatim}
@@ -79,7 +78,7 @@ We have implemented in particular the neal2 and neal8 derived algorithms, leavin
 
 
 
-\section{\texttt{Neal2}}
+\subsection{\texttt{Neal2}}
 
 As discussed in section \ref{neal2}, this algorithm exploits conjugacy, thus the class requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is provided in closed form.
 In our case, the Normal-NIG and Normal-NW specializations for the \verb|Neal2| template class were implemented.
@@ -89,8 +88,8 @@ The \verb|Neal2| class implements the substeps of the \verb|run| in the followin
 \begin{itemize}
 
 	\item In \verb|sample_allocations()|, a loop is performed over all observations $i=1:n$.
-	The vector \verb|cardinalities| is first filled, with \verb|cardinalities[j]| being the cardinality of cluster $j$.
-	The algorithm mandates that \verb|datum=data.row(i)| be moved to another cluster;
+	The vector \verb|cardinalities| is filled at first, with \verb|cardinalities[j]| being the cardinality of cluster $j$.
+	Then, the algorithm mandates that \verb|datum = data.row(i)| be moved to another cluster;
 	A vector \verb|probas| with \verb|n_clust| components if \verb|datum| belongs to a cluster that is a singleton, or with \verb|n_clust+1| otherwise, is filled with the probabilities of each $\boldsymbol\phi$ being extracted, in line with (\ref{probasneal2}).
 	Computations involve the \verb|cardinalities| vector, the mass probabilities defined by the \verb|Mixture|, the likelihood \verb|like()| evaluated in \verb|datum| to compute the probability of being assigned to an already existing cluster and \verb|eval_marg()| to compute the probability of being assigned to a newly generated cluster. Then, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|.
 	Finally, four different cases of updating \verb|unique_values| and \verb|cardinalities| are handled separately, depending on whether the old cluster was a singleton or not and whether \verb|datum| is assigned to a new cluster.
@@ -105,7 +104,7 @@ The \verb|Neal2| class implements the substeps of the \verb|run| in the followin
 \end{itemize}
 
 
-\section{\texttt{Neal8}}
+\subsection{\texttt{Neal8}}
 
 Being Neal's algorithm 8 a generalization of Neal's algorithm 2 which works for any hierarchical model, even non-conjugate ones, it adds adjustments in the allocation sampling phase to circumvent non-conjugacy.
 However, the unique values sampling phase remains unchanged. For this reason \verb|Neal8| is built as a derived class from \verb|Neal2|.
@@ -120,4 +119,3 @@ These are related to the auxiliary blocks. In particular the number of auxiliary
 Relying on the algorithm described in section \ref{neal8}, we proceed to describe the implementation of \verb|sample_allocations()|.
 
 As before, a loop is performed over all observations $i=1:n$ and \verb|cardinalities| is filled. Now, if the current cluster is a singleton, its $\boldsymbol\phi$ values are transferred to the first auxiliary block. Then, each auxiliary block (except the first one if the above case occurred) generates new $\boldsymbol\phi$ values via the hierarchy's \verb|draw()| function. Now a new cluster, that is, new $\boldsymbol\phi$ values, for \verb|datum| needs to be drawn. 	A vector \verb|probas| with \verb|n_clust+n_aux| components is filled with the probabilities of each $\boldsymbol\phi$ being extracted, in line with (\ref{neal8prob}). In this case computations involve also the auxiliary components. Then,as in \verb|Neal2|, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|. Finally, four different cases of updating \verb|unique_values| and \verb|cardinalities| are handled separately, depending on whether the old cluster was a singleton or not, and whether an auxiliary block or an already existing cluster was chosen as the new cluster for \verb|datum|.
-

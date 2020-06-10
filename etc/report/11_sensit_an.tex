@@ -1,6 +1,7 @@
-\part{Results}
+%\part{Results}
 
-\chapter{Sensitivity analysis}
+\chapter{Results}
+\section{Sensitivity analysis}
 TODO
 This clustering analysis was conducted on $n=100$ observations, the former 50 of which were iid sampled from a $\Nc(4,1)$ and the latter from a $\Nc(7,1)$.
 We chose the prior parameters for the Normal-NIG model (\ref{nnig}) as follows: $\mu_0 = 5, \lambda_0 = 1, \alpha_0 = 2, \beta_0 = 2$.
@@ -8,7 +9,7 @@ The \verb|Neal8| algorithm with $m=3$ auxiliary blocks was run for 20000 iterati
 We will keep these parameters values fixed unless explicitly stated. \\
 The following test data were all saved to \verb|.csv| files and used for the realization of plots with the \verb|ggplot2| R package.
 
-\section{Oscillations}
+\subsection{Oscillations}
 After running the algorithm as described above with total mass $M=0.25$, we find that the obtained best clusterings (again, in the lest square sense) and local density estimates are highly fluctuating over the iterations of the algorithm:
 \begin{figure}[h]
 	\centering
@@ -26,7 +27,7 @@ We can see that the number of clusters at all iterations varies significantly be
 This is further confirmation of the fact that the single iterations themselves do not converge.
 Instead, as previously discussed, the convergence is in the \emph{mean}, both for the density estimate and for the average dissimilarity matrix which we use to find the best clustering.
 
-\section{Total mass}
+\subsection{Total mass}
 Let us now examine the role of the total mass parameter, $M$.
 We ran the algorithm with several values for $M$ whilst keeping the other parameters unchanged from the ones indicated at the beginning of the section.
 For each $M$, we saved the number of clusters of the best clustering produced by the algorithm, and plotted it against the corresponding $M$:
@@ -55,7 +56,7 @@ As we can see, the total mass $M$ acts as smoothing parameter and, given its str
 
 
 
-\section{Auxiliary blocks}
+\subsection{Auxiliary blocks}
 We shall now try and change the number of auxiliary blocks $m$, and check how this impacts the density estimation.
 For this test, a large total mass $M=10$ was chosen; the reason being that a small $M$ would not allow significant differences as $m$ changes.
 Indeed, $m$ directly influences only the estimate (\ref{margneal8}) of the marginal distribution, that has a weight of $\frac{M}{M+n}$ (as seen in (\ref{localdens})), which is negligible if $M$ is small.
@@ -71,7 +72,7 @@ Note that a larger $m$ gives a better estimate of the marginal, because the samp
 
 
 
-\section{Density components}
+\subsection{Density components}
 We now wish to visualize how the local density is computed at a given sample iteration.
 Let us run again the \verb|Neal8| algorithm with both $M=0.25$ and $m=3$ fixed, and then use the \verb|cluster_estimate()| function to extract the best clustering for the data.
 We find that it is at iteration 2490, which gives 2 clusters.
@@ -98,7 +99,7 @@ Although there are 7 clusters, all weights bar the first two are insignificant, 
 
 
 
-\section{\texttt{Neal2} vs \texttt{Neal8}}
+\subsection{\texttt{Neal2} vs \texttt{Neal8}}
 Finally, we ran the \verb|Neal2| algorithm with the same parameters as \verb|Neal8| (indicated at the beginning of the section) as well as $M=10$ for both.
 Again, a rather large total mass was chosen in order to better highlight the difference in the marginal estimate.
 In fact, in the \verb|Neal2| case, since the marginal distribution is known in closed form, the estimate is more accurate:

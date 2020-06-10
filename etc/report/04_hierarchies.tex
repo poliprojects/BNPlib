@@ -1,6 +1,9 @@
-\part{Implementation}
+%\part{Implementation}
 
-\chapter{Hierarchy classes}
+\chapter{Implementation}
+TODO introduction; template library; libraries
+
+\section{Hierarchy classes}
 First of all, we must describe the auxiliary classes that are used as parameters for the algorithms:
 \begin{itemize}
 	\item The \verb|BaseMixture| class, contain all information about the mixing part of the BNP algorithm, namely the way of weighing the insertion of data in old clusters vs the creation of new clusters. The class has methods that provide mass probabilities for the two aforementioned events. We implemented the \verb|BaseMixture| class as an abstract class, and two derived classes: the \verb|DirichletMixture| and the \verb|PitYorMixture|. The derived classes have its own parameters and could be extended by adding prior distributions on these.
@@ -30,8 +33,8 @@ The hierarchy classes we implemented that inherits from this class are the \verb
 
 In particular the \verb|state| in the \verb|HierarchyNNIG| class holds the values for $\boldsymbol\phi = (\mu,\sigma)$, i.e.  location and scale, while the \verb|HierarchyNNW| class stores $\boldsymbol\phi = (\mathbf{\mu},\mathbf{\Lambda})$, i.e. location and precison parameters.
 Note that both hierarchies implemented are conjugate, thus marginals and
-posterior distributions are available in closed form and Neal2 algorithm may be used.
-	
+posterior distributions are available in closed form and Neal2 algorithm may be used. \\
+TODO \verb|set_state()| with check flag
 	
 \end{itemize}
 
