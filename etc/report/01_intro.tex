@@ -48,7 +48,10 @@ In the next pages, we will see some examples of elements composing these models,
 
 \section{Dirichlet process model}
 Let $M>0$, and let $G_0$ be a probability measure defined on the state space $S$.
-A Dirichlet process with parameters $M$ and $G_0$, noted as $DP(M G_0)$, is a random probability measure $G$ defined on $S$ which assigns probability $G(B)$ to every set $B$ such that for each finite partition ${B_1,\dots,B_k}$ of $S$, the joint distribution of the  vector $(G(B_1),\dots,G(B_k))$ is the Dirichlet distribution with parameters $(MG_0(B_1),\dots,MG_0(B_k))$.
+A Dirichlet process with parameters $M$ and $G_0$, noted as $DP(M G_0)$, is a random probability measure $G$ defined on $S$ which assigns probability $G(B)$ to every set $B$ such that for each finite partition ${B_1,\dots,B_k}$ of $S$, the joint distribution of the  vector $(G(B_1),\dots,G(B_k))$ is the Dirichlet distribution with parameters $(MG_0(B_1),\dots,MG_0(B_k))$.\footnote{The Dirichlet distribution $\text{Dir}(\alpha_1, \dots, \alpha_k)$ is a $k$-dimensional generalization of the Bernoulli distribution, given parameters $\alpha_1,\dots,\alpha_k > 0$.
+It has support in the $k-1$-dimensional simplex and its probability density function (p.d.f.) is
+$$f(\textbf x) = \frac{1}{B(\alpha_1, \dots, \alpha_k)} \prod_{i=1}^k x_i^{\alpha_i-1}$$
+with $B(\alpha_1, \dots, \alpha_k)$ being the $k$-dimensional Beta function that acts as a normalization constant.}
 The value $M$ is called the \emph{total mass} or precision parameter, $G_0$ is the \emph{centering measure}, and the product $MG_0$ is the base measure of the DP. \\
 Having observed the iid sample $\{y_1,\dots,y_n\} \subseteq \RR$, the basic DP model takes the following form:
 \begin{equation}\label{dpm}
@@ -131,7 +134,11 @@ where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the clu
 
 \section{Normal Normal-InverseGamma hierarchy} \label{nnig}
 A very common choice for the DPM model (\ref{dpm-1}) is the Normal Normal-InverseGamma (NNIG) hierarchy, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$.
-The InverseGamma is the distribution of a random variable $Y$ such that $Y^{-1}$ follows a Gamma distribution.
+The InverseGamma is the distribution of a random variable $Y$ such that $Y^{-1}$ follows a Gamma distribution
+\footnote{The Gamma distribution $\text{Gamma}(\alpha,\beta)$ has parameters $\alpha,\beta > 0$, and has support over all positive values, which is ideal for variances or their inverse, the precision.
+Its p.d.f. is
+$$f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} \exp\{-\beta x\}$$
+with $\Gamma(\alpha)$ being the Euler-Gamma function.}.
 That is, letting $\boldsymbol\theta=(\mu,\sigma)$, we have:
 \begin{equation}
 	\begin{aligned}
@@ -141,11 +148,11 @@ That is, letting $\boldsymbol\theta=(\mu,\sigma)$, we have:
 	\end{aligned}
 \end{equation}
 Note that in this model we have a full prior for $\sigma^2$ and instead a prior for $\mu$ that is conditioned on the value of $\sigma^2$.
-Thanks to conjugacy, the predictive distribution for a new observation $\widetilde{y}$ can be computed analytically, finding a Student's $t$ (see \cite{integral} section 3.5):
+Thanks to conjugacy, the predictive distribution for a new observation $\widetilde{y}$ (which coincides with the marginal distribution for a known datum) can be computed analytically, finding a Student's $t$ (see \cite{integral} section 3.5):
 \begin{align*}
 	p(\widetilde{y}|\mu_0,\lambda_0, \alpha_0, \beta_0) =
 	\int_\Theta f(\widetilde{y}|\boldsymbol\theta) \, G_0(\de\boldsymbol\theta) =
-	\text{t}_{\widetilde \nu}\left(\widetilde{y}|\widetilde{\mu},\widetilde{\sigma}\right)
+	t_{\widetilde \nu}\left(\widetilde{y}|\widetilde{\mu},\widetilde{\sigma}^2\right)
 \end{align*}
 where the following parameters are set:
 $$
@@ -153,15 +160,25 @@ $$
 	\widetilde{\mu}=\mu_0, \quad
 	\widetilde{\sigma}^2= \frac{\beta_0(\lambda_0+1)}{\alpha_0 \lambda_0}
 $$
-Moreover, the marginal distribution for a given observation has the same expression. \\
-The posterior distribution is again a Normal-InverseGamma (see \cite{integral} section 3.3):
+We highlight the definition of the Student's $t$ distribution in the general multivariate case, since it will often come up in calculations.
+Given the degrees of freedom $\nu > 0$, the $k$-dimensional location vector $\boldsymbol\mu$, and the $k$-by-$k$, positive semi-definite scale matrix $\Sigma$,
+the $k$-dimensional Student's $t$ distribution $t_\nu(\boldsymbol\mu, \Sigma)$ has the following p.d.f.:
+$$ f(\textbf x) = \frac{\Gamma\left(\frac{\nu+k}{2}\right)}{\Gamma(\nu/2) \sqrt{(\nu\pi)^k \det(\Sigma)}} \left( 
+1+\frac{1}{\nu}(\textbf x - \boldsymbol \mu)^T\Sigma^{-1}(\textbf x - \boldsymbol \mu) \right)^{-(\nu+k)/2}.
+$$
+In the univariate case, the scale parameter is written as $\sigma^2$.
+When no location and scale are provided, it is understood that the symbol $t_\nu$ refers to the one-dimensional case with standard parameters, that is $\mu=0$ and $\sigma^2 = 1$. \\
+Going back to the NNIG hierarchy, the posterior distribution is again a Normal-InverseGamma (see \cite{integral} section 3.3) thanks to conjugacy:
 \begin{align*}
-	p(\boldsymbol\theta|y_1,\dots,y_n,\mu_0,\lambda_0, \alpha_0, \beta_0)=N\left(\mu | \mu_n ,\frac{\sigma^2} {\lambda_0 + n}\right) \times \text{Inv-Gamma}(\sigma^2|\alpha_n, \beta_n )
+	p(\boldsymbol\theta|y_1,\dots,y_n,\mu_0,\lambda_0, \alpha_0, \beta_0)=N\left(\mu | \mu_n ,\frac{\sigma^2} {\lambda_n}\right) \times \text{Inv-Gamma}(\sigma^2|\alpha_n, \beta_n )
 \end{align*}
-with:
-$$
-\mu_n=\frac{\lambda_0 \mu_0 \bar{y} + n}{\lambda_0 + n}, \quad \alpha_n= \alpha_0 + \frac{n}{2}, \quad \beta_n= \beta_0 + \frac{1}{2}\sum_{i=1}^{n} (y_i-\bar{y})^2 + \frac{\lambda_0 n(\bar{y}-\mu_0)^2}{2(\lambda_0 + n)}.
-$$
+with $\bar{y}$ indicating the sample mean of the data and:
+\begin{gather*}
+\mu_n=\frac{\lambda_0 \mu_0 \bar{y} + n}{\lambda_0 + n}, \qquad \lambda_n = \lambda_0 + n, \qquad
+\alpha_n = \alpha_0 + \frac{n}{2}, \\
+\beta_n= \beta_0 + \frac{1}{2}\sum_{i=1}^{n} (y_i-\bar{y})^2 + \frac{\lambda_0 n(\bar{y}-\mu_0)^2}{2(\lambda_0 + n)}.
+\end{gather*}
+
 
 \section{Normal Normal-Wishart hierarchy} \label{nnw}
 The multivariate extension of the above hierarchy is the Normal Normal-Wishart (NNW) model:
@@ -172,7 +189,27 @@ The multivariate extension of the above hierarchy is the Normal Normal-Wishart (
 		&= N\left(\mu | \boldsymbol\mu_0, (\lambda T)^{-1}\right) \times \text{Wish}(T|T_0, \nu).
 	\end{aligned}
 \end{equation}
-In this case $\boldsymbol\theta=(\boldsymbol\mu, T)$.
+In this case $\boldsymbol\theta=(\boldsymbol\mu, T)$ and $\textbf y \in \RR^k$.
 Note that the scale is parametrized in a different way compared to univariate case, with the second unique value being the precision matrix $T = \Sigma^{-1}$, the inverse of the covariance matrix.
-As such, the Wishart distribution is used instead of its inverse counterpart. \\
-This hierarchy has similar properties to the NNIG case, namely conjugacy and a marginal distribution with the form of a multivariate Student's $t$.
+As such, the Wishart distribution\footnote{The Wishart distribution $\text{Wish}(T_0, \nu)$ is a $k$-dimensional generalization of the Gamma distribution.
+It has support over all matrices $X \in \RR^{k \times k}$ that are positive semi-definite.
+Its p.d.f. is
+$$f(X) = \frac{ (\det(X))^{(\nu-k-1)/2} \, \exp\{-\frac{1}{2} \text{tr}(T_0^{-1} X)\} }{ 2^{\nu k/2} \, (\det(X))^{\nu/2} \, \Gamma_k(\nu/2) } $$
+with $\Gamma_k(\alpha)$ being the $k$-dimensional Gamma function.} is used instead of its inverse counterpart. \\
+This hierarchy has similar properties to the NNIG case, namely conjugacy and a marginal distribution with the form of a multivariate Student's $t$. \\
+The marginal is:
+$$ p(\widetilde{\textbf y} | \boldsymbol\mu_0, \lambda, T_0, \nu) = t_{\widetilde\nu} (\widetilde{\textbf y} | \widetilde{\boldsymbol\mu}, \widetilde\Sigma) \qquad
+$$
+with:
+$$ \widetilde{\nu} = 2\nu - k + 1, \qquad \widetilde{\boldsymbol{\mu}} = \boldsymbol{\mu}_0, \qquad
+\widetilde{\Sigma} = T_0^{-1} \left(\nu - \frac{k-1}{2}\right) \frac{\lambda}{\lambda+1}
+$$
+while the posterior distribution is:
+\begin{align*}
+p(\boldsymbol\theta|\textbf y_1,\dots,\textbf y_n,\boldsymbol\mu_0,\lambda, T_0, \nu)=N\left(\boldsymbol\mu | \boldsymbol\mu_n, \frac{1}{\lambda_n}\Sigma\right) \times \text{Wish}(\Sigma|T_n, \nu_n)
+\end{align*}
+with  (again, $\bar{\textbf y}$ is the sample mean):
+\begin{gather*}
+\boldsymbol\mu_n = \frac{1}{\lambda+n} (\lambda\boldsymbol \mu_0 + n \bar{\textbf y}), \qquad \lambda_n = \lambda + n, \qquad \nu_n = \nu + \frac{n}{2}, \\
+T_n = T_0^{-1} + \frac{1}{2}\sum_{i=1}^{n} (\textbf y_i-\bar{\textbf y})(\textbf y_i-\bar{\textbf y})^T + \frac{\lambda n}{2(\lambda + n)}(\bar{\textbf y}-\boldsymbol\mu_0)(\bar{\textbf y}-\boldsymbol\mu_0)^T.
+\end{gather*}
