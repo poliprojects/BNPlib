@@ -81,14 +81,16 @@ def chain_barplot(collfile, imgfile = "src/python/chain.pdf"):
     print("Successfully saved plot to", imgfile)
 
 
-def plot_density_points(densfile, imgfile = "src/python/dens_points.pdf"):
+def plot_density_points(densfile, imgfile = "src/python/dens_points.pdf",
+	title = "Posterior estimate graph"):
     """! Reads a 1D or 2D density from a csv file and plots it point-by-point.
 
     densfile is the file from which the density will be read. Such file must
     consist of 2 to 3 columns, the last of which is the density value and the
     remaining ones are the coordinates of the 1D or 2D points of evaluation of
-    that value. Then, a 2D or 3D plot is produced and saved to the imgfile file.
-    If instead the columns are neither 2 nor 3, a plot is not produced."""
+    that value. Then, a 2D or 3D plot with the given title is produced and saved
+    to the imgfile file. If instead the columns are neither 2 nor 3, a plot is
+    not produced."""
     mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
     cols = mat.shape[1]
     if cols not in (2,3):
@@ -101,19 +103,20 @@ def plot_density_points(densfile, imgfile = "src/python/dens_points.pdf"):
     else: # if cols == 3
         ax = figure.add_subplot(111, projection='3d')
         ax.scatter(mat[:,0], mat[:,1], mat[:,2])
-    plt.title("Estimated density graph")
+    plt.title(title)
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
 
 
-def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf"):
+def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf",
+	title = "Posterior estimate contour"):
     """! Reads a 2D density from a csv file and plots countour lines for it.
 
     densfile is the file from which the density will be read. Such file must
     consist of 3 columns, the last of which is the density value while the first
     2 are the coordinates of the 2D points of evaluation of that value. Then, a
-    2D plot is produced and saved to the imgfile file. If instead the columns
-    are not 3, a plot is not produced."""
+    2D plot with the given title is produced and saved to the imgfile file. If
+    instead the columns are not 3, a plot is not produced."""
     mat = np.loadtxt(open(densfile, 'rb'), delimiter=',')
     cols = mat.shape[1]
     if cols != 3:
@@ -125,7 +128,7 @@ def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf"):
     xx, yy = np.meshgrid(x, x)
     z = mat[:,2].reshape(xx.shape)
     plt.contourf(xx, yy, z)
-    plt.title("Estimated density contour")
+    plt.title(title)
     plt.savefig(imgfile)
     print("Successfully saved plot to", imgfile)
 
