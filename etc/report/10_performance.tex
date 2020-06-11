@@ -44,7 +44,7 @@ Therefore, $\frac{n^2}{4}$ is a good estimate for the number of entries.
 This number is very close to the true amount if the number of clusters is small (e.g. $k=2,3,4$), which it often is. (Note that one could theoretically compute the exact number of nonzero entries of the dissimilarity matrix, but this would require additional computational costs which is not warranted for the size of a single vector.)
 This relatively large amount of reserved space does not significantly impact the overall memory usage, since the \verb|triplets_list| vector is destroyed after each dissimilarity matrix is computed. \\
 The usage of sparse matrices instead of dense ones does not hinder computational time either, since the Eigen library also heavily optimizes computations with sparse objects.
-Nevertheless, an efficiency test was performed, this time using the Python interface, on the already implemented tests 1-6 (TODO?) with 500 algorithm iterations and 100 burn-in ones, using sparse matrices first and then the same operations but with dense matrices.
+Nevertheless, an efficiency test was performed, this time using the Python interface, on the already implemented Python tests 1-6 (see section \label{chap-py-test} for full details) with 500 algorithm iterations and 100 burn-in ones, using sparse matrices first and then the same operations but with dense matrices.
 The results were as follows, again in shakes:
 \begin{center}
 	\begin{tabular}{c|c|c}
