@@ -9,7 +9,7 @@ When calling the \verb|g++| complier from the \verb|Makefile|, we used the follo
 \end{verbatim}
 In order to test their effects, we ran the \verb|maintest_nnws.cpp| test file (which has the standard combination of the \verb|HierarchyNNW<HypersFixedNNW>| plus the \verb|DirichletMixture| class) using $n=10$ 5-dimensional data points and a 7-point grid for the density evaluation, with and without the above flags, while timing both the algorithm execution and the density estimate with the help of the \verb|chrono| library.
 We use $n=10$ because in such a high dimension, even computation times on a handful of points become extremely large and can lead to overflow.
-The obtained average times (in shakes, a metric unit of time equal to 10 nanoseconds) were as follows:
+The obtained average times in shakes (a metric unit of time equal to 10 nanoseconds) were as follows:
 \begin{center}
 	\begin{tabular}{r|r|r|r}
 	              	& \verb|run()| & \verb|eval_density()| & total \\ \hline
