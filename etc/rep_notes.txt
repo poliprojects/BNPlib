@@ -1,6 +1,0 @@
-REPORT
-* in aux classes, briefly introduce the Pitman-Yor process PY(d,\theta)
-* confronto delle performance con il pacchetto R 'BNPMix', per quanto riguarda
-  i tempi computazionali. Attenti a che sampler scegliete in quel pacchetto:
-  di default usa uno slice sampler che non è molto efficiente, selezionate il
-  sampler marginale ('MAR') e matchate gli iperparametri

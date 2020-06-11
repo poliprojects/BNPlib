@@ -1,8 +1,8 @@
 %\part{Algorithms}
 
 \chapter{Introduction}
-This report presents the development of a C++ library containing Markov chain sampling algorithms for two major goals: estimation of the density and clustering analysis of a given set of data points.
-In a Bayesian nonparametric setting, we focused on the Dirichlet process, one of the most widely used priors due to its flexibility and computational ease, and its extensions.
+This report presents the development of a C++ library containing Markov chain sampling algorithms for two major goals: \emph{density estimation} and \emph{clustering analysis} of a given set of data points.
+In a Bayesian nonparametric (BNP) setting, we focused on the Dirichlet process, one of the most widely used priors due to its flexibility and computational ease, and its extensions and generalizations.
 Hereafter, we will assume that the underlying model for the given data points is a Dirichlet process mixture model, which is an enhancement of the simpler Dirichlet model.
 (For a more detailed discussion of the nonparametric models, as well as references for all theoretical details included in this section, see \cite{book} chapter 1 and 2.)
 
@@ -90,14 +90,14 @@ A useful consequence of this property is its stick-breaking representation, i.e.
 \end{align*}
 with $m_k \iidsim G_0$ for $k\in\mathbb{N}$ and the random weights constructed as $w_k =v_k\prod\limits_{l<k} (1-v_l)$ where $v_k \iidsim Be(1,M)$. \\
 
-One can replace the Dirichlet process in (\ref{dpm}) with any almost surely discrete random probability measure, for example a Pitman-Yor process (PY).
-The PY process (see \cite{PY}, pp. 855-900) is a two-parameter extension of the Dirichlet process, parametrized by a discount parameter $0 \leq \alpha \leq 1$, a strength parameter $\theta > - \alpha$, and a base distribution $G_0$. 
-Nevertheless, we will use the DP as our working example for the explanations in the next chapters. Developments are similar if another discrete process is used.
-
-In many applications in which we are interested in a continuous density estimation, the discreteness can represent a limitation.
-Oftentimes a Dirichlet process mixture (DPM) model is used, where the DP random measure is the mixing measure for the parameters of a parametric continuous kernel function.
+One can replace the Dirichlet process in (\ref{dpm}) with any other discrete random probability measure, for example a \emph{Pitman-Yor process}, or PY for short.
+This is a two-parameter extension of the Dirichlet process, characterized by a discount parameter $\alpha \in [0,1]$, a strength parameter $\theta > - \alpha$, and a base distribution $G_0$.
+The Dirichlet process is a particular case of PY when $\alpha=0$. (For more information, see \cite{PY}, pp. 855-900.)
+Nevertheless, we will use the DP as our working example for explanations in the next chapters; theoretical developments are similar if another discrete process is used. \\
 
 \section{Dirichlet process mixture model}
+In many applications in which we are interested in a continuous density estimation, the discreteness can represent a limitation.
+Oftentimes a Dirichlet process mixture (DPM) model is used, where the DP random measure is the mixing measure for the parameters of a parametric continuous kernel function.
 Let $\Theta$ be a finite-dimensional parameter space and $G_0$ a probability measure on $\Theta$.
 The Dirichlet process mixture (DPM) model convolves the densities $f(\cdot|\boldsymbol\theta)$ from a parametric family $\Fc = \{f(\cdot|\boldsymbol\theta), \boldsymbol\theta \in \Theta \}$ using the DP as mixture weights.
 The obtained model has the following form:
@@ -134,8 +134,7 @@ where $\mathbf{p}=(p_1,\dots,p_K)$ represents the mixing proportions for the clu
 
 \section{Normal Normal-InverseGamma hierarchy} \label{nnig}
 A very common choice for the DPM model (\ref{dpm-1}) is the Normal Normal-InverseGamma (NNIG) hierarchy, opting for a Normal kernel and the conjugate Normal-InverseGamma as base measure $G_0$.
-The InverseGamma is the distribution of a random variable $Y$ such that $Y^{-1}$ follows a Gamma distribution
-\footnote{The Gamma distribution $\text{Gamma}(\alpha,\beta)$ has parameters $\alpha,\beta > 0$, and has support over all positive values, which is ideal for variances or their inverse, the precision.
+The InverseGamma is the distribution of a random variable $Y$ such that $Y^{-1}$ follows a Gamma distribution\footnote{The Gamma distribution $\text{Gamma}(\alpha,\beta)$ has parameters $\alpha,\beta > 0$, and has support over all positive values, which is ideal for variances or their inverse, the precision.
 Its p.d.f. is
 $$f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} \exp\{-\beta x\}$$
 with $\Gamma(\alpha)$ being the Euler-Gamma function.}.

@@ -1,9 +1,9 @@
 \chapter{Algorithms} \label{algo}
-For the task of density estimation, we investigated several Markov chain methods to sample from the posterior distribution of a DPM model. \\
+For the task of density estimation, we investigated several Markov chain methods to sample from the posterior distribution of a non-parametric model. \\
 Starting from the hierarchical model (\ref{dpm-1}), a first direct approach is simply drawing values for each $\boldsymbol\theta_i$ from its conditional distribution, given the data and the other $\boldsymbol\theta_j$.
 However, as previously discussed, we have high probability for ties among them which can lead to slow convergence, since the $\boldsymbol\theta_i$ are not updated for more than one observation simultaneously. \\
 For this reason, special attention was paid to the three methods we present in this chapter.
-These are all \emph{Gibbs sampler} methods, that is, each value is updated by drawing from its own conditional distribution given all other values.
+These are all iterative \emph{Gibbs sampler} methods, that is, each value is updated by drawing from its own conditional distribution given all other values, repeating these action several times per run.
 Moreover, these three methods have a common base structure, sharing the two steps for the sampling of the allocations $\mathbf{c}$ and of the unique values $\boldsymbol\phi_c$.
 The set of allocations and unique values at a given iteration constitutes the \emph{state} of that iteration.
 As the state is being updated at each iteration, a \emph{chain} is formed and the mean of the state values eventually reaches convergence, as well as the estimate for the data distribution, as we will see in section \ref{dens-estim}.
@@ -85,7 +85,7 @@ Again, the probabilities of being placed in an already existing cluster or in a 
 Once all the $\boldsymbol\phi_c$ that are no longer associated with any observation are discarded, the algorithm proceeds, for each cluster, with the sampling of $\boldsymbol\phi_c$ from the posterior computed with the observations of the specific cluster, similarly to the \verb|Neal2| algorithm.
 
 \section{Blocked Gibbs}
-Another Gibbs sampling method that is applicable in the considered DPM model is the one proposed by Ishwaran and James (see \cite{james} section 5), where the prior $P$ is assumed to be a finite dimensional stick-breaking measure, allowing the update of whole blocks of parameters.
+Another Gibbs sampling method that is applicable in the considered DPM model is the one proposed by Ishwaran and James (see \cite{james} section 5), where the prior $G$ is assumed to be a finite dimensional stick-breaking measure, allowing the update of whole blocks of parameters.
 A key point of the method is that it does not marginalize over the prior; instead, by grouping more variables together, it samples from their joint distribution conditioned on all other variables.
 This sampler needs to draw from the following conditionals:
 \begin{align}
