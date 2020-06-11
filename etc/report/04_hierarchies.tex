@@ -1,75 +1,70 @@
-%\part{Implementation}
-
 \chapter{Implementation}
-The purpose of BNPlib library is to provide tools to conduct data analysis through the application of the algorithms described above for the construction of the respective Markov chains and the use of these for density and clustering estimations.
+The purpose of this library is to provide tools to conduct data analysis through the application of the algorithms described above for the construction of the respective Markov chains and the use of these for density and clustering estimations.
+A template approach was used, including a set of algorithm classes templatized on the \verb|Hierarchy|, \verb|Hypers|, and \verb|Mixture| classes to allow the use of algorithms with different hierarchies, hyperparameters related to the hierarchy and mixture models. \\
+It currently includes Neal's two algorithms, two Gaussian-based hierarchies (one univariate and one multivariate), and two mixture models. \\
+Unless explicitly stated, the files corresponding to the described objects will be located in the \verb|src| folder and its subfolders.
 
-BNPlib includes a set of algorithm classes, templetized with \verb|Hierarchy|, \verb|Hypers| and \verb|Mixture| classes to allow the use of algorithms with different hierarchies, hyperparameters related to the hierarchy and mixture models.
-
-The library currently contains Neal's two algorithms, Neal2 to be used in case of conjugate priors and Neal8 in case this requirement is missing.
-
-BNPlib depends on other libraries such as:
+\section{Libraries}
+\verb|bnplib| depends on other libraries such as:
 \begin{itemize}
-
-\item \textbf{Stan Math}, a C++ template library for automatic differentiation of any order. It includes a range of built-in functions for probabilistic modeling, linear algebra, and equation solving.
+	\item \emph{Eigen} library, a popular template library for linear algebra, which includes implementations for matrices, vectors, numerical solvers, and related algorithms;
+	\item \emph{Stan Math}, a C++ template library for several math-related tasks; it includes a range of built-in functions for probabilistic modeling, linear algebra, and equation solving.
+	Stan in turn uses the following:
 	\begin{itemize}
-			\item Eigen library, a template library for linear algebra : matrices, vectors, numerical solvers, and related algorithms;
-			\item Boost library that provides support for tasks and structures such as linear algebra, pseudorandom number generation, multithreading, image processing, regular expressions, and unit testing;
-			\item Intel Threading Building Blocks (TBB) library, to write parallel C++ programs that take full advantage of multicore performance;
-			\item Sundials library, a suite of nonlinear and differential/algebraic equation solvers;
+		\item the already-mentioned Eigen library (which is the reason why it was chosen over its main alternative, Armadillo);
+		\item \emph{Boost}, a library that provides support for tasks and structures such as linear algebra, pseudo-random number generation, multithreading, image processing, regular expressions, and unit testing;
+		\item Intel's \emph{Threading Building Blocks} (TBB) library, to write parallel C++ programs that take full advantage of multicore performance;
+		\item \emph{Sundials} library, a suite of nonlinear and differential or algebraic equation solvers.
 	\end{itemize}
-	
-\item \textbf{Eigen} library, required by Stan Math library and exploited to build sparse matrices. 
-
-\item \textbf{Protocol Buffer} library, developed by Google, that provides a fast serialization mechanism for structured data and extensible code generators for different programming languages.
-
+	\item \emph{Protocol Buffer} library, or \verb|protobuf| for short, which was developed by Google and provides a fast serialization mechanism for structured data and extensible code generators for different programming languages.
 \end{itemize}
-Using the Protocol Buffers library it was possible to create a Python interface. For the interface it is needed:
+These libraries exist in the \verb|lib| subfolder. \\
+We also implemented a Python interface for the library, the details of which will be discussed in section \ref{collectors}).
+The following libraries were needed:
 \begin{itemize}
-\item \textbf{pybind11}, a header-only library that exposes C++ types in Python and vice versa.
+	\item \verb|protobuf|, to interface data between C++ and Python;
+	\item \emph{pybind11}, a header-only library that exposes C++ types in Python and vice versa;
+	\item \emph{NumPy}, a popular library which provides high-performance multidimensional array objects, and tools for working with them;
+	\item \emph{SciPy}, another widespread library containing modules for numerical integration, interpolation, optimization, linear algebra, and statistics;
+	\item \emph{Scikit-learn}, a free machine learning library built on top of SciPy;
+	\item \emph{Matplotlib}, for creating plots.
 \end{itemize}
-and for tools implemented in the Python interface file, the followings are required:
+First of all, we shall describe the auxiliary classes that are used as template arguments for the algorithms.
+Probability distributions and random sampling are handled through the \verb|Stan| library, while \verb|Eigen| was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code.
+
+\section{Model classes}
+The \emph{mixture classes} (alias in the algorithm: \verb|Mixture|) contain all information about the mixing part of the BNP algorithm, namely the way of weighing the insertion of data in old clusters with respect to the creation of new clusters.
+They are implemented starting from the abstract class \verb|BaseMixture| which provides the common interface for those objects.
+The class has methods that provide probability masses for the two aforementioned events: \verb|mass_existing_cluster()| and \verb|mass_new_cluster()|.
+We implemented two derived classes from \verb|BaseMixture|: the \verb|DirichletMixture| and the \verb|PitYorMixture|.
+The derived classes have their own parameters (including their respective getters and setters) and could be extended by adding prior distributions on those, for instance by creating further classes that inherit from them. \\
+
+The \emph{hyperparameters classes} (alias: \verb|Hypers|) contain information about the hyperparameters of the hierarchy, including their values (if fixed) or their prior distributions (if not).
+Unlike all other types of classes, these are not based on inheritance from a common abstract base class, since their internal structure is vastly different.
+Moreover, each of them is to be used in conjunction with a single hierarchy class anyway, so there is less need for a inheritance-based implementation.
+We implemented the \verb|HypersFixedNNIG| class, which contains fixed hyperparameters for an NNIG hierarchy, and the \verb|HypersFixedNNW| class for an NNW hierarchy.
+Both classes provide setters and getters for parameters with validity checks for the inserted values. \\
+
+Finally, the \emph{hierarchy classes} (alias: \verb|Hierarchy|) are implemented starting from the abstract template class \verb|HierarchyBase<Hypers>|.
+They represent the form of the hierarchical model in a generic Gibbs sampler BNP algorithm, namely the likelihood of data points, including their parameters, the unique values.
+Since only data points that are in the same cluster as each other share unique values, this means that for each cluster there will be a hierarchy object, that is, a single set of unique values with their own prior distribution attached to it.
+These values are part of the Markov chain's state chain which develops as the iterations of the algorithm increase, updating them providing the data related to the specific hierarchy and their prior distribution.
+These are simply referred to as the \emph{hierarchy state}; they are not the same thing as the \emph{state of the chain}, which is composed of all allocations and unique values across all hierarchy objects.
+A hierarchy class stores the current unique values for the cluster it represents in the member \verb|state|, a vector of parameter matrices.
+Since the prior distribution for the state is often the same across multiple different hierarchies, the hyperparameters object is accessed via a shared pointer, and this is why \verb|Hypers| is required as a template parameter for the class. \\
+The constructor of a hierarchy class contains the shared pointer to create the hyperparameters object with, and initializes the hierarchy state to default values.
+These classes also contains methods to:
 \begin{itemize}
-\item \textbf{NumPy} library, that provides high-performance multidimensional array objects, and tools for working with these arrays;
-\item \textbf{SciPy}, a library containing modules for numerical integration, interpolation, optimization, linear algebra, and statistics;
-\item \textbf{Scikit-learn}, a free machine learning library built on top of SciPy;
-\item \textbf{Matplotlib}, a plotting library;
+	\item evaluate the marginal distribution (in the hierarchies where it is known in closed form) and the likelihood in a given set of points, conditioned on the current \verb|state| values: \verb|eval_marg()| and \verb|like()|;
+	\item compute the posterior parameters with respect to a given set of observations: \verb|sample_given_data()|;
+	\item generate new values for the \verb|state| both according to its prior (\verb|draw()|) and to its posterior (\verb|normal_gamma_update()| or similar) centering distribution;
+	\item getter and setter class members, as with the other classes.
+	The peculiarity of the setter for \verb|state| is that it also accept a boolean flag \verb|check|.
+	If the setter is called with the flag set to \verb|true| (which is also its default value), it mandates the calling of the \verb|check_state_validity()| utility, which is specific for each hierarchy and raises an error if the state values are not valid with respect to their own domain (for instance, a negative value for the variance).
+	This type of check is only done in \verb|set_state()|, and not in the functions that generate new values for the state, since these functions always generate coherent values, which makes any check redundant.
+	This saves some computational time, especially in the multivariate case where an expensive check on the precision matrix must be performed to assess its positive semi-definiteness.
+	For the same reasons, the setter is called with the flag set to \verb|false| also in the algorithm functions (see below).
 \end{itemize}
-
-
-\section{Hierarchy classes}
-First of all, we must describe the auxiliary classes that are used as parameters for the algorithms:
-\begin{itemize}
-	\item The \verb|BaseMixture| class, contain all information about the mixing part of the BNP algorithm, namely the way of weighing the insertion of data in old clusters vs the creation of new clusters. The class has methods that provide mass probabilities for the two aforementioned events. We implemented the \verb|BaseMixture| class as an abstract class, and two derived classes: the \verb|DirichletMixture| and the \verb|PitYorMixture|. The derived classes have its own parameters and could be extended by adding prior distributions on these.
-
-	\item The \verb|Hypers| classes contain all information about the hyperparameters of the hierarchy, including their values (if fixed) or their prior distributions (if not). We implemented the \verb|HypersFixedNNIG| class, which contains fixed hyperparameters for an NNIG hierarchy, and the \verb|HypersFixedNNW| class for an NNW hierarchy. Both classes provide setters and getters for parameters with validity checks for the inserted values.
-	
-	\item The abstract template class \verb|HierarchyBase<Hypers>| represents a hierarchy object in a generic iterative BNP algorithm, that is, a single set of unique values with their own prior
-distribution attached to it. These values are part of the Markov chain's
-state chain which develops as the iterations of the algorithm increase, updating them providing the data related to the specific hierarchy and their prior distribution.
-They are simply referred to as the state of the hierarchy. 
-
-The class stores the current unique values in the protected member \verb|state|, a vector of parameter matrices.
-Since the prior distribution for the state is often the same across multiple
-different hierarchies, the hyperparameters object is accessed via a shared
-pointer, stored as protected member, and this is why \verb|Hypers| is required as a template parameter for the class. 
-
-	A \verb|HierarchyBase<Hypers>| class also contains methods to:
-	\begin{itemize}
-		\item evaluate the marginal distribution (provided it is known in closed form) and the log-likelihood in a given set of points, given the current \verb|state|;
-		\item compute the posterior parameters with respect to a given set of observations;
-		\item generate new values for the \verb|state| both according to its prior and to its posterior distribution;
-		\item get and set class members, as with the other classes.
-	\end{itemize}
-
-
-The hierarchy classes we implemented that inherits from this class are the \verb|HierarchyNNIG| class, which represents the Normal Normal-InverseGamma hierarchy for univariate data, and the \verb|HierarchyNNW| class, which represents the Normal Normal-Wishart hierarchy for multivariate data.
-
-In particular the \verb|state| in the \verb|HierarchyNNIG| class holds the values for $\boldsymbol\phi = (\mu,\sigma)$, i.e.  location and scale, while the \verb|HierarchyNNW| class stores $\boldsymbol\phi = (\boldsymbol\mu,\boldsymbol\Lambda)$, i.e. location and precison parameters.
-The base class, as mentioned, contains the setter for the state, where it’s called \verb|check_state_validity()|, specific for each hierarchy, that raises error if the state values are not valid w.r.t. their own domain.
-The check is done only in \verb|set_state()|, and not in the functions that generate new values for the state, since are called several times during the running of the algorithms and a check is not necessary. TODO
-Note that both hierarchies implemented are conjugate, thus marginals and
-posterior distributions are available in closed form and Neal2 algorithm may be used. \
-	
-\end{itemize}
-
-Probability distributions and random sampling were handled through the \verb|Stan| library, whilst the popular \verb|Eigen| library was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code.
+The derived hierarchy classes are \verb|HierarchyNNIG|, which represents the Normal Normal-InverseGamma hierarchy for univariate data, and \verb|HierarchyNNW|, which represents the Normal Normal-Wishart hierarchy for multivariate data.
+As mentioned in section \ref{nnig} onwards, the \verb|state| in \verb|HierarchyNNIG| holds the values for $\boldsymbol\phi = (\mu,\sigma)$, i.e.  location and scale, while in \verb|HierarchyNNW| one has $\boldsymbol\phi = (\boldsymbol\mu,T)$, i.e. location and precision parameters.
+Recall that both hierarchies are conjugate, thus the Neal2 algorithm may be used with them.

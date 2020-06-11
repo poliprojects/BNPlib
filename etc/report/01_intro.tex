@@ -34,7 +34,7 @@ Finally, note that a Bayesian model may still employ frequentist tools to better
 One is also allowed to use a more layered model, in which the parameters of the prior distribution, called \emph{hyperparameters}, also have prior distributions on them -- these are called \emph{hyperpriors}.
 The result is as follows:
 \begin{align*}
-	y_1, \dots, y_n | \theta, \lambda &\iidsim f(y|\theta, \lambda) \\ %TODO can you remove lambda?
+	y_1, \dots, y_n | \theta, \lambda &\iidsim f(y|\theta, \lambda) \\
 	\theta | \lambda &\sim p(\theta|\lambda) \\
 	\lambda &\sim \Pi(\lambda)
 \end{align*}

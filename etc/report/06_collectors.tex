@@ -1,6 +1,6 @@
-\section{Collectors}
-
-Once a BNP algorithm is run, one may be interested, as mentioned above, in an estimate of the density given a grid of points or in an identification of a partition through the clustering obtained in the algorithm, which we call best clustering, i.e. the one that optimizes the binder loss function. In any case we need to be able to retrieve the information of each iteration of the algorithm, such as allocations and unique values, which characterize the state of the chain, which must be stored in some data structure.
+\section{Collectors}\label{collectors}
+Once a BNP algorithm is run, one may be interested, as mentioned above, in an estimate of the density given a grid of points or in an identification of a partition through the clustering obtained in the algorithm, which we call best clustering, i.e. the one that optimizes the binder loss function.
+In any case we need to be able to retrieve the information of each iteration of the algorithm, such as allocations and unique values, which characterize the state of the chain, which must be stored in some data structure.
 For this purpose, we used the Protocol Buffers library, which needs a short introduction. \\
 Protocol Buffers, or \verb|protobuf| for short, was developed by Google and allows automatic generation of data-storing C++ classes by defining a class skeleton in a \verb|.proto| file.
 This also allows easy interfacing with other programming languages such as R and Python. \\

@@ -5,27 +5,25 @@ The algorithms studied and discussed in the theoretical section all share the sa
 template<template <class> class Hierarchy, class Hypers,
          class Mixture> class Algorithm
 \end{verbatim}
-A template approach was used, to allow the use of the algorithm with all the combinations of \verb|Hierarchy|, \verb|Hypers|, and \verb|Mixture| classes, which were discussed in the previous section.
-
-The \verb|Algorithm| class contains the following members:
-\begin{verbatim}
-unsigned int maxiter;
-unsigned int burnin;
-std::mt19937 rng; // random number generating engine
-\end{verbatim}
-These are the parameters of the method, and are rather self-explanatory.
-These integer values, including the RNG seed and the \verb|n_aux| parameter in \verb|Neal8|, are not present in the class constructor since they are usually left with their default values, though they can still be changed through their respective setters.
-If no other values are provided, the number of iterations is initialized to 1000 while the number of burn-in iterations is initialized to 100, values that we have assessed as sufficient for a good approximation after performing several tests.
-TODO constructors
-
-The data and values containers were implemented as follows:
+The \verb|Algorithm| class contains a number of integer class members:
+\begin{itemize}
+	\item \verb|maxiter|, the cumulative number of algorithm iterations;
+	\item \verb|burnin|, the number of initial iterations in the burn-in phase, which will be discarded;
+	\item \verb|init_num_clusters|: data will be randomly initialized in cluster according to this number, while making sure there is at least one datum per cluster.
+	Default value is equal to the number of data points, that is, one point per cluster;
+\end{itemize}
+These integer values, including the seed for the \verb|rng| object (of type \verb|std::mt19937|, a basic Mersenne Twister random number generator provided by the standard C++ library) and the \verb|n_aux| parameter that indicates the number of auxiliary blocks in \verb|Neal8|, are not present in the class constructor since they are usually left with their default values, though they can still be changed through their respective setters.
+If no other values are provided, \verb|maxiter| is initialized to 1000, \verb|burnin| to 100, and \verb|n_aux| to 3, values that we have assessed as sufficient for a good approximation after performing several tests.
+Note that changing these values after running the algorithm (see below for the \verb|run()| function) has no effect. \\
+The class contains several data and values containers: %TODO arrivato qui
 \begin{verbatim}
 Eigen::MatrixXd data;
-unsigned int num_clusters;
 std::vector<unsigned int> cardinalities;
 std::vector<unsigned int> allocations;
-std::vector<Hierarchy<Hypers>> unique_values;
+std::vector< Hierarchy<Hypers> > unique_values;
+std::pair< Eigen::MatrixXd, Eigen::VectorXd > density;
 Mixture mixture;
+State best_clust;
 \end{verbatim}
 
 The matrix of row-vectorial data points is given as input to the class constructor by the user, as well as the number of clusters for the algorithm initialization. If it is not provided, it will be automatically set equal to the number of data points, thus starting the algorithm with one datum per cluster.
@@ -37,6 +35,8 @@ In \verb|cardinalities| the cardinalities of the clusters are stored, while \ver
 
 The three vectors just described, initialized with null values and empty Hierarchy objects, are filled with proper values when the algorithm is run.
 The run() method, which is inherited from all derived classes, sharing the same general structure, is as follows:
+
+TODO constructors
 
 \begin{verbatim}
 

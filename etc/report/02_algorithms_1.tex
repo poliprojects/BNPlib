@@ -4,6 +4,7 @@ Starting from the hierarchical model (\ref{dpm-1}), a first direct approach is s
 However, as previously discussed, we have high probability for ties among them which can lead to slow convergence, since the $\boldsymbol\theta_i$ are not updated for more than one observation simultaneously. \\
 For this reason, special attention was paid to the three methods we present in this chapter.
 These are all iterative \emph{Gibbs sampler} methods, that is, each value is updated by drawing from its own conditional distribution given all other values, repeating these action several times per run.
+A fixed amount of the initial iterations, known as the \emph{burn-in} phase, will not be counted as part of the state and will be discarded, having the only purpose to allow the method to converge.
 Moreover, these three methods have a common base structure, sharing the two steps for the sampling of the allocations $\mathbf{c}$ and of the unique values $\boldsymbol\phi_c$.
 The set of allocations and unique values at a given iteration constitutes the \emph{state} of that iteration.
 As the state is being updated at each iteration, a \emph{chain} is formed and the mean of the state values eventually reaches convergence, as well as the estimate for the data distribution, as we will see in section \ref{dens-estim}.
