@@ -1,7 +1,22 @@
 %\part{Implementation}
 
 \chapter{Implementation}
-TODO introduction; template library; libraries
+The purpose of BNPlib library is to provide tools to conduct data analysis through the application of the algorithms described above for the construction of the respective Markov chains and the use of these for density and clustering estimations.
+
+BNPlib includes a set of algorithm classes, templetized with \verb|Hierarchy|, \verb|Hypers| and \verb|Mixture| classes to allow the use of algorithms with different hierarchies, hyperparameters related to the hierarchy and mixture models.
+
+The library currently contains Neal's two algorithms, Neal2 to be used in case of conjugate priors and Neal8 in case this requirement is missing.
+
+BNPlib depends on other libraries such as:
+\begin{itemize}
+
+\item \textbf{Stan Math}, a C++ template library for automatic differentiation of any order. It includes a range of built-in functions for probabilistic modeling, linear algebra, and equation solving.
+
+\item \textbf{Eigen}, a C++ template library for linear algebra, required by Stan Math library. 
+
+\item \textbf{Protocol Buffer} library, developed by Google, that provides a fast serialization mechanism for structured data and extensible code generators for different programming languages.
+
+\end{itemize}
 
 \section{Hierarchy classes}
 First of all, we must describe the auxiliary classes that are used as parameters for the algorithms:
@@ -20,7 +35,7 @@ Since the prior distribution for the state is often the same across multiple
 different hierarchies, the hyperparameters object is accessed via a shared
 pointer, stored as protected member, and this is why \verb|Hypers| is required as a template parameter for the class. 
 
-	A \verb|BaseHierarchy<Hypers>| class also contains methods to:
+	A \verb|HierarchyBase<Hypers>| class also contains methods to:
 	\begin{itemize}
 		\item evaluate the marginal distribution (provided it is known in closed form) and the log-likelihood in a given set of points, given the current \verb|state|;
 		\item compute the posterior parameters with respect to a given set of observations;
@@ -32,10 +47,11 @@ pointer, stored as protected member, and this is why \verb|Hypers| is required a
 The hierarchy classes we implemented that inherits from this class are the \verb|HierarchyNNIG| class, which represents the Normal Normal-InverseGamma hierarchy for univariate data, and the \verb|HierarchyNNW| class, which represents the Normal Normal-Wishart hierarchy for multivariate data.
 
 In particular the \verb|state| in the \verb|HierarchyNNIG| class holds the values for $\boldsymbol\phi = (\mu,\sigma)$, i.e.  location and scale, while the \verb|HierarchyNNW| class stores $\boldsymbol\phi = (\mathbf{\mu},\mathbf{\Lambda})$, i.e. location and precison parameters.
+The base class, as mentioned, contains the setter for the state, where it’s called \verb|check_state_validity()|, specific for each hierarchy, that raises error if the state values are not valid w.r.t. their own domain.
+The check is done only in \verb|set_state()|, and not in the functions that generate new values for the state, since are called several times during the running of the algorithms and a check is not necessary. TODO
 Note that both hierarchies implemented are conjugate, thus marginals and
-posterior distributions are available in closed form and Neal2 algorithm may be used. \\
-TODO \verb|set_state()| with check flag
+posterior distributions are available in closed form and Neal2 algorithm may be used. \
 	
 \end{itemize}
 
-As a final introductory note, probability distributions and random sampling were handled through the \verb|Stan| library, whilst the popular \verb|Eigen| library was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code.
+Probability distributions and random sampling were handled through the \verb|Stan| library, whilst the popular \verb|Eigen| library was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code.
