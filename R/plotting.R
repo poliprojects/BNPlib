@@ -39,7 +39,7 @@ prior4<- dnorm(dens4[,1], mean=0, sd=sqrt(2))
 h=hist(data1)
 pdf(file = "R/density_tests/test1.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
-                      xlab="data",ylim=c(0,0.4))
+                      xlab="data", ylab="density",ylim=c(0,0.4))
 lines(dens1[,1],dens1[,2],  lwd=3,col="red")
 lines(dens1[,1],true_dens1,  lwd=1)
 lines(dens1[,1],prior1,  lwd=1,col="gray")
@@ -58,7 +58,7 @@ dev.off()
 h=hist(data2, breaks=20)
 pdf(file = "R/density_tests/test2.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
-                      xlab="data", ylim=c(0,0.4),xlim=c(-10,10))
+                      xlab="data", ylab="density",ylim=c(0,0.4),xlim=c(-10,10))
 lines(dens2[,1],dens2[,2],  lwd=3,col="red")
 lines(dens2[,1],true_dens2,  lwd=1)
 lines(dens2[,1],prior2,  lwd=1,col="gray")
@@ -76,7 +76,7 @@ dev.off()
 h=hist(data3)
 pdf(file = "R/density_tests/test3.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
-                      xlab="data",ylim=c(0,0.4), xlim=c(-6,6))
+                      xlab="data",ylab="density",ylim=c(0,0.4), xlim=c(-6,6))
 lines(dens3[,1],dens3[,2],  lwd=3,col="red")
 lines(dens3[,1],true_dens3,  lwd=1)
 lines(dens3[,1],prior3,  lwd=1,col="gray")
@@ -94,7 +94,7 @@ dev.off()
 h=hist(data4, breaks=20)
 pdf(file = "R/density_tests/test4.pdf", width = 6, height = 6)
 PlotRelativeFrequency(h,main="Posterior Estimate",
-                      xlab="data", ylim=c(0,0.4), xlim=c(-10,10))
+                      xlab="data", ylab="density",ylim=c(0,0.4), xlim=c(-10,10))
 lines(dens4[,1],dens4[,2],  lwd=3,col="red")
 lines(dens4[,1],true_dens4,  lwd=1)
 lines(dens4[,1],prior4,  lwd=1,col="gray")
@@ -114,14 +114,11 @@ dev.off()
 # Histogram
 x_c <- cut(data5[,1],50)
 y_c <- cut(data5[,2],50)
-z <- table(x_c, y_c)
+z <- table(x_c, y_c)/sum(z)
 
-x11()
-hist3D(z=z, border="black")
-
-
-# Posterior
-grid=seq(-7,7.1, length.out=50)
+pdf(file = "R/density_tests/hist5.pdf", width = 7.5, height = 7.5)
+hist3D(z=z, border="black", main="Histogram",xlab="x-data", ylab="y-data", zlab="Relative Frequency")
+dev.off()
 
 open3d()
 rgl::plot3d(x = dens5[,1], y = dens5[, 2], z =dens5[, 3], col="blue", xlab = "X1", ylab = "X2", zlab = "Y")
@@ -130,17 +127,21 @@ rgl::surface3d(x=grid, y =grid,
                col = "green", alpha = 0.25, lit = FALSE)
 
 
+# Posterior Estimate Graph
+
+grid=seq(-7,7.1, length.out=50)
+
 axx <- list(
-        title = "X-data"
+        title = "x-data"
 )
 
 axy <- list(
-        title = "Y-data"
+        title = "y-data"
 )
 
 axz <- list(
-        title = "Relative Frequency"
+        title = "density"
 )
 
-p<-plot_ly() %>% add_surface(x = grid, y = grid, z =  matrix(dens5[,3], nrow = 50, ncol = 50)) %>% layout(title = "Posterior Estimate",scene = list(xaxis=axx,yaxis=axy,zaxis=axz))
+p<-plot_ly() %>% add_surface(x = grid, y = grid, z =  matrix(dens5[,3], nrow = 50, ncol = 50)) %>% layout(title = "Posterior Estimate Graph",scene = list(xaxis=axx,yaxis=axy,zaxis=axz))
         
