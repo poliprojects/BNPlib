@@ -11,12 +11,30 @@ BNPlib depends on other libraries such as:
 \begin{itemize}
 
 \item \textbf{Stan Math}, a C++ template library for automatic differentiation of any order. It includes a range of built-in functions for probabilistic modeling, linear algebra, and equation solving.
-
-\item \textbf{Eigen}, a C++ template library for linear algebra, required by Stan Math library. 
+	\begin{itemize}
+			\item Eigen library, a template library for linear algebra : matrices, vectors, numerical solvers, and related algorithms;
+			\item Boost library that provides support for tasks and structures such as linear algebra, pseudorandom number generation, multithreading, image processing, regular expressions, and unit testing;
+			\item Intel Threading Building Blocks (TBB) library, to write parallel C++ programs that take full advantage of multicore performance;
+			\item Sundials library, a suite of nonlinear and differential/algebraic equation solvers;
+	\end{itemize}
+	
+\item \textbf{Eigen} library, required by Stan Math library and exploited to build sparse matrices. 
 
 \item \textbf{Protocol Buffer} library, developed by Google, that provides a fast serialization mechanism for structured data and extensible code generators for different programming languages.
 
 \end{itemize}
+Using the Protocol Buffers library it was possible to create a Python interface. For the interface it is needed:
+\begin{itemize}
+\item \textbf{pybind11}, a header-only library that exposes C++ types in Python and vice versa.
+\end{itemize}
+and for tools implemented in the Python interface file, the followings are required:
+\begin{itemize}
+\item \textbf{NumPy} library, that provides high-performance multidimensional array objects, and tools for working with these arrays;
+\item \textbf{SciPy}, a library containing modules for numerical integration, interpolation, optimization, linear algebra, and statistics;
+\item \textbf{Scikit-learn}, a free machine learning library built on top of SciPy;
+\item \textbf{Matplotlib}, a plotting library;
+\end{itemize}
+
 
 \section{Hierarchy classes}
 First of all, we must describe the auxiliary classes that are used as parameters for the algorithms:
@@ -46,7 +64,7 @@ pointer, stored as protected member, and this is why \verb|Hypers| is required a
 
 The hierarchy classes we implemented that inherits from this class are the \verb|HierarchyNNIG| class, which represents the Normal Normal-InverseGamma hierarchy for univariate data, and the \verb|HierarchyNNW| class, which represents the Normal Normal-Wishart hierarchy for multivariate data.
 
-In particular the \verb|state| in the \verb|HierarchyNNIG| class holds the values for $\boldsymbol\phi = (\mu,\sigma)$, i.e.  location and scale, while the \verb|HierarchyNNW| class stores $\boldsymbol\phi = (\mathbf{\mu},\mathbf{\Lambda})$, i.e. location and precison parameters.
+In particular the \verb|state| in the \verb|HierarchyNNIG| class holds the values for $\boldsymbol\phi = (\mu,\sigma)$, i.e.  location and scale, while the \verb|HierarchyNNW| class stores $\boldsymbol\phi = (\boldsymbol\mu,\boldsymbol\Lambda)$, i.e. location and precison parameters.
 The base class, as mentioned, contains the setter for the state, where it’s called \verb|check_state_validity()|, specific for each hierarchy, that raises error if the state values are not valid w.r.t. their own domain.
 The check is done only in \verb|set_state()|, and not in the functions that generate new values for the state, since are called several times during the running of the algorithms and a check is not necessary. TODO
 Note that both hierarchies implemented are conjugate, thus marginals and
