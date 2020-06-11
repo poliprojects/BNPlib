@@ -114,17 +114,17 @@ dev.off()
 # Histogram
 x_c <- cut(data5[,1],50)
 y_c <- cut(data5[,2],50)
-z <- table(x_c, y_c)/sum(z)
+z <- table(x_c, y_c)
+z<-z/sum(z)
+x<-seq(min(data5[,1]), max(data5[,1]), length.out = nrow(z))
+y<-seq(min(data5[,2]), max(data5[,2]), length.out = nrow(z))
+
 
 pdf(file = "R/density_tests/hist5.pdf", width = 7.5, height = 7.5)
-hist3D(z=z, border="black", main="Histogram",xlab="x-data", ylab="y-data", zlab="Relative Frequency")
+
+hist3D(x,y,z, main="Histogram of data",xlab="x-data", ylab="y-data",  phi = 20, ltheta = 90, cex.lab=0.8, cex.axis=0.7, cex.sub=0.5,colkey=FALSE, border = "black", ticktype="detailed",zlab="Relative Frequency")
 dev.off()
 
-open3d()
-rgl::plot3d(x = dens5[,1], y = dens5[, 2], z =dens5[, 3], col="blue", xlab = "X1", ylab = "X2", zlab = "Y")
-rgl::surface3d(x=grid, y =grid,
-               z = matrix(dens5[,3], nrow = 50, ncol = 50),
-               col = "green", alpha = 0.25, lit = FALSE)
 
 
 # Posterior Estimate Graph
@@ -140,8 +140,7 @@ axy <- list(
 )
 
 axz <- list(
-        title = "density"
+        title = "density",dtick = 0.01
 )
 
-p<-plot_ly() %>% add_surface(x = grid, y = grid, z =  matrix(dens5[,3], nrow = 50, ncol = 50)) %>% layout(title = "Posterior Estimate Graph",scene = list(xaxis=axx,yaxis=axy,zaxis=axz))
-        
+p<-plot_ly() %>% add_surface(x = grid, y = grid, z =  matrix(dens5[,3], nrow = 50, ncol = 50), showscale=FALSE) %>% layout(title = "Posterior Estimate Graph",scene = list(xaxis=axx,yaxis=axy,zaxis=axz))
