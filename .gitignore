@@ -22,6 +22,7 @@ Rplots.pdf
 # Python and R cache
 src/python/__pycache__/*
 .Rhistory
+.RData
 .Rdata
 
 # Callgrind output files
