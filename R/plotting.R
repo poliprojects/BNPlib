@@ -112,8 +112,8 @@ dev.off()
 
 
 # Histogram
-x_c <- cut(data5[,1],50)
-y_c <- cut(data5[,2],50)
+x_c <- cut(data5[,1],10)
+y_c <- cut(data5[,2],10)
 z <- table(x_c, y_c)
 z<-z/sum(z)
 x<-seq(min(data5[,1]), max(data5[,1]), length.out = nrow(z))
@@ -121,7 +121,6 @@ y<-seq(min(data5[,2]), max(data5[,2]), length.out = nrow(z))
 
 
 pdf(file = "R/density_tests/hist5.pdf", width = 7.5, height = 7.5)
-
 hist3D(x,y,z, main="Histogram of data",xlab="x-data", ylab="y-data",  phi = 20, ltheta = 90, cex.lab=0.8, cex.axis=0.7, cex.sub=0.5,colkey=FALSE, border = "black", ticktype="detailed",zlab="Relative Frequency")
 dev.off()
 
