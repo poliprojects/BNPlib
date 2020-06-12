@@ -10,6 +10,7 @@ The \verb|bnplib| library has several possible extensions:
 	\item The same goes for other mixtures and algorithm.
 	A good starting point for the latter would be the blocked Gibbs algorithm, which would make use of the \verb|update_weights()| substep.
 	\item Conjugacy-dependent algorithms such as \verb|Neal2| can be further re-adapted to account for non-conjugacy, for example by using an Hamiltonian Monte Carlo sampler.
+	\item Code parallelization: in particular the \verb|cluster_estimate| function takes some time to compute the dissimilarity matrices.
 	\item Finally, a \emph{full generalization} of the library might be possible.
 	That is, given the distributions of the likelihood, hyperparameters, etc, one might want an algorithm that works for the chosen specific model without needing and explicit implementation for it.
 	This means, among other things, that one has to handle non-conjugacy for the general case.
