@@ -76,13 +76,13 @@ Recall that both hierarchies are conjugate, thus the Neal2 algorithm may be used
 The algorithms studied and discussed in the theoretical section all share the same structure, so we decided to build an abstract class for a generic Gibbs sampling iterative BNP algorithm, the \verb|Algorithm| class:
 \begin{verbatim}
 template<template <class> class Hierarchy, class Hypers,
-class Mixture> class Algorithm
+    class Mixture> class Algorithm
 \end{verbatim}
 All algorithms of this form can be built as derived classes from this one.
 It is constructed by the following function:
 \begin{verbatim}
 Algorithm(const Hypers &hypers_, const Mixture &mixture_,
-const Eigen::MatrixXd &data_, const unsigned int init = 0);
+    const Eigen::MatrixXd &data_, const unsigned int init = 0);
 \end{verbatim}
 As mentioned, the first argument initializes the passed \verb|Hypers| object through a shared pointer.
 \verb|init| is assigned to the \verb|init_num_clusters| member, which states the number of clusters in the initialization phase of the algorithm.
@@ -113,24 +113,24 @@ The three aforementioned vectors are initialized with null values and empty \ver
 The \verb|run()| method is the same from all derived classes, given that all implemented algorithms share the same general structure:
 \begin{verbatim}
 void step(){
-sample_allocations();
-sample_unique_values();
-sample_weights();
-update_hypers();
+    sample_allocations();
+    sample_unique_values();
+    sample_weights();
+    update_hypers();
 }
 
 void run(BaseCollector* collector){
-initialize();
-unsigned int iter = 0;
-collector->start();
-while(iter < maxiter){
-step();
-if(iter >= burnin){
-save_state(collector, iter);
-}
-iter++;
-}
-collector->finish();
+    initialize();
+    unsigned int iter = 0;
+    collector->start();
+    while(iter < maxiter){
+        step();
+        if(iter >= burnin){
+            save_state(collector, iter);
+        }
+        iter++;
+    }
+    collector->finish();
 }    
 \end{verbatim}
 That is, a Gibbs sampling iterative BNP algorithm generates a Markov chain on the clustering of the provided data running multiple iterations of the same \verb|step()|.
@@ -195,20 +195,20 @@ This also allows easy interfacing with other programming languages such as R and
 We built the template for our collector classes as follows:
 \begin{verbatim}
 message Par_Col {
-repeated double elems = 1;
+    repeated double elems = 1;
 }
 
 message Param {
-repeated Par_Col par_cols = 1;
+    repeated Par_Col par_cols = 1;
 }
 
 message UniqueValues {
-repeated Param params = 1;
+    repeated Param params = 1;
 }
 
 message State {
-repeated int32 allocations = 1;
-repeated UniqueValues uniquevalues = 2;
+    repeated int32 allocations = 1;
+    repeated UniqueValues uniquevalues = 2;
 }
 \end{verbatim}
 Here \verb|message| and \verb|repeated| are the Protobuf equivalent of classes and vectors respectively, while the numbers 1 and 2 just act as identifiers for the fields in the messages.
