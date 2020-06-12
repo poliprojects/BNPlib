@@ -146,7 +146,7 @@ unsigned int n_aux = 3;
 std::vector<Hierarchy<Hypers>> aux_unique_values;
 \end{verbatim}
 These are related to the auxiliary blocks. In particular the number of auxiliary blocks is automatically set equal to 3 with the possibility to change the default value with the corresponding setter.
-Therefore \verb|Neal8| class constructor add the initialization of the auxiliary blocks with empty \verb|Hierarchy| object as for the unique values:
+Therefore \verb|Neal8| class constructor add the initialization of the auxiliary blocks with empty \verb|Hierarchy| objects as for the unique values:
 \begin{verbatim}
 Neal8(const Hypers &hypers_, const Mixture &mixture_,
     const Eigen::MatrixXd &data_, const unsigned int init = 0) :
