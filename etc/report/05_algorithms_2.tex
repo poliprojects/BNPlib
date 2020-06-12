@@ -13,7 +13,8 @@ Algorithm(const Hypers &hypers_, const Mixture &mixture_,
 \end{verbatim}
 As mentioned, the first argument initializes the passed \verb|Hypers| object through a shared pointer.
 \verb|init| is assigned to the \verb|init_num_clusters| member, which states the number of clusters in the initialization phase of the algorithm.
-If a value is not provided, it will be set equal to the data size in the constructor body, therefore placing one object in each cluster. \\
+If a value is not provided, it will be set equal to the data size in the constructor body, therefore placing one object in each cluster.
+Dimensionality checks also take place, in order to verify that all passed objects have coherent dimensions with each other. \\
 The \verb|Algorithm| class contains the integer class members \verb|maxiter|, the cumulative number of algorithm iterations, and \verb|burnin|, the number of initial iterations in the burn-in phase, which will be discarded.
 These integer values, including the seed for the \verb|rng| object (of type \verb|std::mt19937|, a basic Mersenne Twister random number generator provided by the standard C++ library) and the \verb|n_aux| parameter that indicates the number of auxiliary blocks in \verb|Neal8|, are not present in the class constructor since they are usually left with their default values, though they can still be changed through their respective setters.
 If no other values are provided, \verb|maxiter| is initialized to 1000, \verb|burnin| to 100, and \verb|n_aux| to 3, values that we have assessed as sufficient for a good approximation after performing several tests.
@@ -71,8 +72,8 @@ We shall now describe the features of the two implemented derived classes: \verb
 \subsection{\texttt{Neal2}}
 As discussed in section \ref{neal2}, the \verb|Neal2| algorithm exploits conjugacy, thus the class requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is provided in closed form.
 In our case, the Normal-NIG and Normal-NW specializations for the \verb|Neal2| template class were implemented.
-
-The \verb|Neal2| class implements the substeps of the \verb|run| in the following manner:
+\verb|Neal2| class constructor simply call \verb|Algorithm| constructor.
+Afterwards the \verb|Neal2| class implements the substeps of the \verb|run| in the following manner:
 
 \begin{itemize}
 	\item In \verb|initialize()|, a number of clusters equal to the provided initial valued are created and data are randomly assigned to them, while making sure that each cluster contains at least one.
@@ -106,6 +107,21 @@ unsigned int n_aux = 3;
 std::vector<Hierarchy<Hypers>> aux_unique_values;
 \end{verbatim}
 These are related to the auxiliary blocks. In particular the number of auxiliary blocks is automatically set equal to 3 with the possibility to change the default value with the corresponding setter.
+Therefore \verb|Neal8| class constructor add the initialization of the auxiliary blocks with empty \verb|Hierarchy| objects as for the unique values:
+\begin{verbatim}
+Neal8(const Hypers &hypers_, const Mixture &mixture_,
+    const Eigen::MatrixXd &data_, const unsigned int init = 0) :
+    Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, data_,
+    init) {
+    // Initialize auxiliary blocks
+    for(size_t i = 0; i < n_aux; i++){
+        aux_unique_values.push_back(this->unique_values[0]);
+    }
+}
+
+\end{verbatim}
+
+
 
 Relying on the algorithm described in section \ref{neal8}, we proceed to describe the implementation of \verb|sample_allocations()|.
 
