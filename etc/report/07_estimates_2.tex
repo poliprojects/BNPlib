@@ -4,7 +4,7 @@ The cluster and density estimation described in chapter \ref{chap-esimates-1} ar
 unsigned int cluster_estimate(BaseCollector* coll);
 void eval_density(const Eigen::MatrixXd &grid, BaseCollector* coll);
 \end{verbatim}
-Both functions exploit the \verb|chain| deque of states from the passed collector object. \\
+Both functions exploit the chain saved in the passed collector object.
 The former loops over all \verb|State| objects in the chain to compute and save the dissimilarity matrix for each of them, while incrementally updating the average dissimilarity matrix.
 As previously noted, the matrix need not be filled in its upper triangular part, which can effectively be ignored, thus saving over half of the computation time. \\
 Storing the matrices of all iterations is mandatory, since the function needs to pick the one which is closest, in terms of Frobenius norm, to the yet-unknown average dissimilarity.
@@ -14,13 +14,13 @@ The density estimation function is also implemented in the base \verb|Algorithm|
 They therefore share a large part of the code, namely the loop over all states of the chain, in which the cardinalities vector of the current state is recomputed and a \verb|Hierarchy| object to compute the likelihood with is rebuilt.
 The likelihood will then be multiplied by the mixture-dependent weights, which in turn depend on the computed cardinalities.
 The only difference between both algorithms is enclosed in the \verb|density_marginal_component()| subroutine, which has a specific implementation for each of them: \verb|Neal2| uses the closed-form marginal by exploiting the conjugacy of the model, while \verb|Neal8| has to compute an arithmetic mean on a small random sample.
-The other parameter of the function is a grid of Eigen points in which the density will be evaluated.
+The other parameter of \verb|eval_density()| is a \verb|grid| of Eigen points in which the density will be evaluated.
 After \verb|eval_density()| is run, this grid is stored together with the evaluated points themselves in the \verb|density| member object, which is an \verb|std::pair| of Eigen matrices. \\[8pt]
-We also implemented two writing utilities, which save data from the class into text files in order to ease exportation to other programs or machines:
+We also implemented two writing utilities, which save data from the class into text files in order to ease exportation to other programs, machines, or even the Python interface itself:
 \begin{verbatim}
 write_clustering_to_file(const std::string &filename);
 write_density_to_file(const std::string &filename);
 \end{verbatim}
 They can be called as need be from any main file.
-Each of these functions checks an appropriate boolean flag, respectively \verb|clustering_was_computed| and \verb|density_was_computed|, which is changed to \verb|true| only at the end of the corresponding estimation function; if such flag is still \verb|false|, an error message is printed.
+Before writing to a file, each of these functions checks an appropriate boolean flag, respectively \verb|clustering_was_computed| and \verb|density_was_computed|, which is changed to \verb|true| only at the end of the corresponding estimation function; if such flag is still \verb|false|, an error message is printed.
 Otherwise, they write the information stored in the appropriate member classes to a file in a comma-separated value format.

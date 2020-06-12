@@ -1,8 +1,9 @@
 \chapter{Python interface} \label{chap-py-int}
 
 \section{Creating the interface}
-A Python interface was implemented for easier usage and testing with respect to C++.
-The files are located in the \verb|src/python| folder.
+In this section we will talk about the Python interface we implemented for the library, for a more user-friendly and versatile use of the code.
+We first note that thanks to the algorithm factory described in the previous section, the user can choose the desired algorithm directly from their Python script.
+The files for this interface are located in the \verb|src/python| folder.
 This interface is made possible by two main pieces of software: the \verb|pybind11| Python package, and again the Protocol Buffers library.
 \verb|pybind11| allows transporting of C++ objects into a C++ library that can be read as if it were a Python library.
 In particular, the \verb|cpp_exports| subfolder contains several source files each containing a function that fulfills a specific role.
