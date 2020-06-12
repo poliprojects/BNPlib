@@ -82,7 +82,7 @@ def chain_barplot(collfile, imgfile = "src/python/chain.pdf"):
 
 
 def plot_density_points(densfile, imgfile = "src/python/dens_points.pdf",
-	title = "Posterior estimate graph"):
+    title = "Posterior estimate graph"):
     """! Reads a 1D or 2D density from a csv file and plots it point-by-point.
 
     densfile is the file from which the density will be read. Such file must
@@ -109,7 +109,7 @@ def plot_density_points(densfile, imgfile = "src/python/dens_points.pdf",
 
 
 def plot_density_contour(densfile, imgfile = "src/python/dens_cont.pdf",
-	title = "Posterior estimate contour"):
+    title = "Posterior estimate contour"):
     """! Reads a 2D density from a csv file and plots countour lines for it.
 
     densfile is the file from which the density will be read. Such file must
