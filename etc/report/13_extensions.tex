@@ -9,8 +9,10 @@ The \verb|bnplib| library has several possible extensions:
 	This is enough to run \verb|Neal8| and \verb|Neal2| by passing the class name as parameter, provided that the \verb|Hierarchy| class has the appropriate interface.
 	\item The same goes for other mixtures and algorithm.
 	A good starting point for the latter would be the blocked Gibbs algorithm, which would make use of the \verb|update_weights()| substep.
+	\item The reading implementation for \verb|FileCollector| without using the \verb|get_chain()| method can be completed, as mentioned in section \ref{collectors}.
 	\item Conjugacy-dependent algorithms such as \verb|Neal2| can be further re-adapted to account for non-conjugacy, for example by using an Hamiltonian Monte Carlo sampler.
-	\item Code parallelization: in particular the \verb|cluster_estimate| function takes some time to compute the dissimilarity matrices.
+	\item Code parallelization can be studied, in particular for the \verb|cluster_estimate()| function, in which dissimilarity matrices can be computed in parallel.
+	Note that the algorithm themselves are sequential by nature, so there is not much else to optimize this way.
 	\item Finally, a \emph{full generalization} of the library might be possible.
 	That is, given the distributions of the likelihood, hyperparameters, etc, one might want an algorithm that works for the chosen specific model without needing and explicit implementation for it.
 	This means, among other things, that one has to handle non-conjugacy for the general case.
