@@ -5,17 +5,20 @@ The algorithms studied and discussed in the theoretical section all share the sa
 template<template <class> class Hierarchy, class Hypers,
          class Mixture> class Algorithm
 \end{verbatim}
-The \verb|Algorithm| class contains a number of integer class members:
-\begin{itemize}
-	\item \verb|maxiter|, the cumulative number of algorithm iterations;
-	\item \verb|burnin|, the number of initial iterations in the burn-in phase, which will be discarded;
-	\item \verb|init_num_clusters|: data will be randomly initialized in cluster according to this number, while making sure there is at least one datum per cluster.
-	Default value is equal to the number of data points, that is, one point per cluster;
-\end{itemize}
+All algorithms of this form can be built as derived classes from this one.
+It is constructed by the following function:
+\begin{verbatim}
+Algorithm(const Hypers &hypers_, const Mixture &mixture_,
+    const Eigen::MatrixXd &data_, const unsigned int init = 0);
+\end{verbatim}
+As mentioned, the first argument initializes the passed \verb|Hypers| object through a shared pointer.
+\verb|init| is assigned to the \verb|init_num_clusters| member, which states the number of clusters in the initialization phase of the algorithm.
+If a value is not provided, it will be set equal to the data size in the constructor body, therefore placing one object in each cluster. \\
+The \verb|Algorithm| class contains the integer class members \verb|maxiter|, the cumulative number of algorithm iterations, and \verb|burnin|, the number of initial iterations in the burn-in phase, which will be discarded.
 These integer values, including the seed for the \verb|rng| object (of type \verb|std::mt19937|, a basic Mersenne Twister random number generator provided by the standard C++ library) and the \verb|n_aux| parameter that indicates the number of auxiliary blocks in \verb|Neal8|, are not present in the class constructor since they are usually left with their default values, though they can still be changed through their respective setters.
 If no other values are provided, \verb|maxiter| is initialized to 1000, \verb|burnin| to 100, and \verb|n_aux| to 3, values that we have assessed as sufficient for a good approximation after performing several tests.
-Note that changing these values after running the algorithm (see below for the \verb|run()| function) has no effect. \\
-The class contains several data and values containers: %TODO arrivato qui
+Note that changing these values after running the algorithm (see below for the \verb|run()| function) has no effect as far as the execution of the algorithm is concerned. \\
+Moreover, the class contains several data and values containers:
 \begin{verbatim}
 Eigen::MatrixXd data;
 std::vector<unsigned int> cardinalities;
@@ -25,21 +28,16 @@ std::pair< Eigen::MatrixXd, Eigen::VectorXd > density;
 Mixture mixture;
 State best_clust;
 \end{verbatim}
-
-The matrix of row-vectorial data points is given as input to the class constructor by the user, as well as the number of clusters for the algorithm initialization. If it is not provided, it will be automatically set equal to the number of data points, thus starting the algorithm with one datum per cluster.
-
+The matrix of row-vectorial data points is given as input to the class constructor by the user.
+Data points were chosen to be matrix rows, even though points in a space are usually represented as column vectors, because this is the way data are usually stored in comma- or space-separated values files.
+In fact, the \verb|utils.hpp| file contains the \verb|read_eigen_matrix()| utility, which returns an \verb|Eigen::MatrixXd| after reading values from a given filename.
+This works for both data matrices and grid matrices on which evaluate the estimated density (see section \ref{estimates-imp} for the implementation details). \\
 The algorithm will keep track of the labels representing assignments to clusters via the \verb|allocations| vector.
-For instance, if one has \verb|allocations[5] = 2|, it means that datum number 5 is associated to cluster number 2.
-Note that indexing for both data and clusters starts at zero, so this actually means that we have the sixth datum being assigned to the third cluster. 
-In \verb|cardinalities| the cardinalities of the clusters are stored, while \verb|unique_values| is a vector of Hierarchy objects, which identify the clusters and in which the corresponding unique values are stored in the \verb|state|.
-
-The three vectors just described, initialized with null values and empty Hierarchy objects, are filled with proper values when the algorithm is run.
-The run() method, which is inherited from all derived classes, sharing the same general structure, is as follows:
-
-TODO constructors
-
+For instance, if at any point one has \verb|allocations[5] = 2|, it means that datum number 5 is associated to cluster number 2, with indexing starting at zero.
+Similarly, we store the \verb|cardinalities| of the current clusters and \verb|unique_values|, which is a vector of Hierarchy objects which identify the clusters and in which the corresponding unique values are stored in the \verb|state|, as mentioned in the previous section.
+The three aforementioned vectors are initialized with null values and empty \verb|Hierarchy| objects, and will be filled with proper values while the algorithm is running. \\
+The \verb|run()| method is the same from all derived classes, given that all implemented algorithms share the same general structure:
 \begin{verbatim}
-
 void step(){
     sample_allocations();
     sample_unique_values();
@@ -54,38 +52,31 @@ void run(BaseCollector* collector){
     while(iter < maxiter){
         step();
         if(iter >= burnin){
-          save_state(collector, iter);
+            save_state(collector, iter);
         }
         iter++;
     }
     collector->finish();
-    }
-    
+}    
 \end{verbatim}
-
-The BNP algorithm generates a Markov chain on the clustering of the provided data running multiple iterations of the same step.
-
-\verb|initialize()| creates \verb|num_clusters| clusters and randomly assigns each datum to one of them, while making sure that each cluster contains at least one.
-	This assignment is done through changing \verb|allocations| components, as explained earlier.
-
-Steps are further split into substeps, each of which updates specific values of the state of the Markov chain, which is composed of the allocations vector and the unique values vector. Substeps are then overridden in the specific derived classes.
-
-In particular, among the studied algoritmhs, only the blocked Gibbs algorithm exploits the \verb|sample_weights()| function. Moreover, \verb|update_hypers()| has an effect  when the hyperparameters are not fixed.
-
-The collector input and \verb|start|, \verb|save_state| and \verb|finish| functions concern the saving of the chain states, which we will discuss later in the Collectors section.
-We have implemented in particular the neal2 and neal8 derived algorithms, leaving in the \verb|step| all the substeps for a possible addition of other algorithms.
-
-
-
+That is, a Gibbs sampling iterative BNP algorithm generates a Markov chain on the clustering of the provided data running multiple iterations of the same \verb|step()|.
+The latter is further split into substeps, each of which updates specific values of the state of the Markov chain, which we recall to be composed of the allocations vector and the unique values vector.
+Substeps are then overridden in the specific derived classes.
+In particular, among the studied algorithms, only the currently unimplemented blocked Gibbs algorithm exploits the \verb|sample_weights()| function.
+Moreover, \verb|update_hypers()| only has an effect when the hyperparameters are not fixed.
+Therefore this function is not currently used in the library either, since we only have \verb|Hypers| classes representing fixed ones at the moment.
+The collector argument of \verb|run()| and the functions \verb|start()|, \verb|save_state()|, and \verb|finish()| deal with storage of the chain state, which we will discuss later in the appropriate section \ref{collectors}. \\
+We shall now describe the features of the two implemented derived classes: \verb|Neal2| and \verb|Neal8|.
 
 \subsection{\texttt{Neal2}}
-
-As discussed in section \ref{neal2}, this algorithm exploits conjugacy, thus the class requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is provided in closed form.
+As discussed in section \ref{neal2}, the \verb|Neal2| algorithm exploits conjugacy, thus the class requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is provided in closed form.
 In our case, the Normal-NIG and Normal-NW specializations for the \verb|Neal2| template class were implemented.
 
 The \verb|Neal2| class implements the substeps of the \verb|run| in the following manner:
 
 \begin{itemize}
+	\item In \verb|initialize()|, a number of clusters equal to the provided initial valued are created and data are randomly assigned to them, while making sure that each cluster contains at least one.
+	Assignment to a cluster means that the \verb|allocations| component of the datum is set equal to the number of the cluster, as explained earlier.
 
 	\item In \verb|sample_allocations()|, a loop is performed over all observations $i=1:n$.
 	The vector \verb|cardinalities| is filled at first, with \verb|cardinalities[j]| being the cardinality of cluster $j$.
@@ -95,7 +86,7 @@ The \verb|Neal2| class implements the substeps of the \verb|run| in the followin
 	Finally, four different cases of updating \verb|unique_values| and \verb|cardinalities| are handled separately, depending on whether the old cluster was a singleton or not and whether \verb|datum| is assigned to a new cluster.
 	Indeed, in such a case, a new $\boldsymbol\phi$ value for it must be generated, and this must be handled differently by the code if an old singleton cluster was just destroyed (as the new cluster must take its former place).
 	Depending on the case, clusters are either unchanged, increased by one, decreased by one, or moved around.
-	
+
 	\item In \verb|sample_unique_values()|, for each cluster $j$, their $\boldsymbol\phi$ values are updated through the \verb|sample_given_data()| function, which takes as argument the vector \verb|curr_data| of data points which belong to cluster $j$.
 	Since we only keep track of clusters via their labels in \verb|allocations|, we do not have a vector of actual data points stored for each cluster.
 	Thus we must fill, before the loop on $j$, a matrix \verb|clust_idxs| whose column $k$ contains the index of data points belonging to cluster $k$.
