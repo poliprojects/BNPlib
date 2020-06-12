@@ -65,7 +65,14 @@ public:
 
     // GETTERS AND SETTERS
     unsigned int get_n_aux() const {return n_aux;}
-    void set_n_aux(const unsigned int n_aux_) override {n_aux = n_aux_;}
+    void set_n_aux(const unsigned int n_aux_) override {
+        n_aux = n_aux_;
+        // Rebuild the correct amount of auxiliary blocks
+        aux_unique_values.clear();
+        for(size_t i = 0; i < n_aux; i++){
+            aux_unique_values.push_back(this->unique_values[0]);
+        }
+    }
 
 };
 
