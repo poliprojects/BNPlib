@@ -31,9 +31,40 @@ The matrix of row-vectorial data points is given as input to the class construct
 The algorithm will keep track of the labels representing assignments to clusters via the \verb|allocations| vector.
 For instance, if one has \verb|allocations[5] = 2|, it means that datum number 5 is associated to cluster number 2.
 Note that indexing for both data and clusters starts at zero, so this actually means that we have the sixth datum being assigned to the third cluster. 
-In \verb|cardinalities| the cardinalities of the clusters are stored, while \verb|unique_values| is a vector of Hierarchy objects, which identify the clusters and in which the corresponding unique values are stored in the \verb|state|.
+In \verb|cardinalities| the cardinalities of the clusters are stored, while \verb|unique_values| is a vector of Hierarchy objects, which identify the clusters and in which the corresponding unique values are stored in the \verb|state|. \
+The \verb|Algorithm| class constructor is the following:
 
-The three vectors just described, initialized with null values and empty Hierarchy objects, are filled with proper values when the algorithm is run.
+\begin{verbatim}
+Algorithm(const Hypers &hypers_, const Mixture &mixture_,
+	const Eigen::MatrixXd &data_, const unsigned int init = 0) :
+    mixture(mixture_), data(data_), init_num_clusters(init) {
+    Hierarchy<Hypers> hierarchy( std::make_shared<Hypers>(hypers_) );
+
+    	if(hierarchy.is_multivariate() == false && data.cols() > 1){
+        	std::cout << "Warning: multivariate data supplied to " <<
+            	"univariate hierarchy. The algorithm will run " <<
+                "correctly, but all data rows other than the first" <<
+                "one will be ignored" << std::endl;
+        }
+        if(data.rows() == 0){
+            init_num_clusters = 1;            
+        }
+        if(init_num_clusters == 0){
+            // If not provided, standard initializ.: one datum per cluster
+            std::cout << "Warning: initial number of clusters will be " <<
+                "set equal to the data size (" << data.rows() << ")" <<
+                std::endl;
+            init_num_clusters = data.rows();
+        }
+
+        // Initialize hierarchies for starting clusters
+        for(size_t i = 0; i < init_num_clusters; i++){
+            unique_values.push_back(hierarchy);
+        }
+}
+
+ \end{verbatim}
+After dimensional checks and the initial number of clusters setting, if not provided, the \verb|unique_values| vector is initialized with empty \verb|Hierarchy| objects, while \verb|cardinalities| and \verb|allocations| with null values. They are filled with proper values when the algorithm is run.
 The run() method, which is inherited from all derived classes, sharing the same general structure, is as follows:
 
 TODO constructors
@@ -82,8 +113,8 @@ We have implemented in particular the neal2 and neal8 derived algorithms, leavin
 
 As discussed in section \ref{neal2}, this algorithm exploits conjugacy, thus the class requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is provided in closed form.
 In our case, the Normal-NIG and Normal-NW specializations for the \verb|Neal2| template class were implemented.
-
-The \verb|Neal2| class implements the substeps of the \verb|run| in the following manner:
+\verb|Neal2| class constructor simply call \verb|Algorithm| constructor.
+Afterwards the \verb|Neal2| class implements the substeps of the \verb|run| in the following manner:
 
 \begin{itemize}
 
@@ -115,6 +146,21 @@ unsigned int n_aux = 3;
 std::vector<Hierarchy<Hypers>> aux_unique_values;
 \end{verbatim}
 These are related to the auxiliary blocks. In particular the number of auxiliary blocks is automatically set equal to 3 with the possibility to change the default value with the corresponding setter.
+Therefore \verb|Neal8| class constructor add the initialization of the auxiliary blocks with empty \verb|Hierarchy| object as for the unique values:
+\begin{verbatim}
+Neal8(const Hypers &hypers_, const Mixture &mixture_,
+    const Eigen::MatrixXd &data_, const unsigned int init = 0) :
+    Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, data_,
+    init) {
+    // Initialize auxiliary blocks
+    for(size_t i = 0; i < n_aux; i++){
+        aux_unique_values.push_back(this->unique_values[0]);
+    }
+}
+
+\end{verbatim}
+
+
 
 Relying on the algorithm described in section \ref{neal8}, we proceed to describe the implementation of \verb|sample_allocations()|.
 
