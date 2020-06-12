@@ -75,7 +75,8 @@ State FileCollector::get_state(unsigned int i) {
     }
     if(i < size-1){
         curr_iter = -1;
-        close_reading();}
+        close_reading();
+    }
     return state;
 }
 
