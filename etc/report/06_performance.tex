@@ -92,9 +92,10 @@ valgrind --tool=callgrind ./maintest_multi csv/data_multi.csv neal2 memory
 	\hspace{-50pt}
 	\includegraphics[scale=0.35]{etc/kcg_uni.png}
 	%\captionsetup{labelformat=empty}
-	%\caption{}
+	\caption{\texttt{callgrind} dependence graph for \texttt{maintest\_uni.cpp} (univariate NNIG case).}
+	\label{fig:profiling_nnig}
 \end{figure}
-The output of the univariate case produced the above dependence graph. %TODO check it is still above
+The output of the univariate case produced the above dependence graph (figure \ref{fig:profiling_nnig}).
 The percentage inside the square is the proportion of the total time spent in that particular function across all calls to it.
 The number followed by x tells instead the number of times that function was called. \\
 We are first interested in the partitioning of the computation time between the different methods.
@@ -103,7 +104,7 @@ As for the lower-level operations in \verb|run()|, almost all the time is spent 
 This also means that the cost of collecting the states into the \verb|MemoryCollector| is irrelevant.
 Moreover, \verb|like()| is the most significant low-level utility function in the library, taking a total of 20\% of the total time across both \verb|run()| and \verb|eval_density()|. \\
 
-Let us now compare these results with the multivariate case, as shown in the next page. %TODO check it still is in the next page
+Let us now compare these results with the multivariate case, as shown in figure \ref{fig:profiling_nnw} in the next page.
 As for the general composition, \verb|run()| has now become less than 10\% of the total, with \verb|sample_allocations()| taking roughly half of that amount, while the \verb|eval_density()| part reaches almost 90\%.
 This is to be expected since nearly all of the time is spent likelihood and marginal computation, which is much harder in 2D than in the univariate case due to the introduction of matrix algebra.
 We can also note that as a side effect of the growth of the density estimation part, the percentage of time spent in \verb|cluster_estimate()| is now irrelevant, which makes sense since the computational costs of building a dissimilarity matrix is almost identical in all dimensions.
@@ -112,7 +113,8 @@ The most costly part of the density estimation is the unoptimized \verb|eval_mar
 	\hspace{-60pt}
 	\includegraphics[scale=0.45]{etc/kcg_multi.png}
 	%\captionsetup{labelformat=empty}
-	%\caption{}
+	\caption{\texttt{callgrind} dependence graph for \texttt{maintest\_multi.cpp} (multivariate NNW case).}
+	\label{fig:profiling_nnw}
 \end{figure}
 On the contrary, we note that the usage of \verb|like()| is in the same order of magnitude as before (27\%).
 Since the estimate algorithm is the same as before, this means that \verb|like()| is optimized enough for it to withstand the jump to the multidimensional case better than the other functions. \\

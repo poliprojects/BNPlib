@@ -1,0 +1,293 @@
+\chapter{Implementation}
+The purpose of this library is to provide tools to conduct data analysis through the application of the algorithms described above for the construction of the respective Markov chains and the use of these for density and clustering estimations.
+A template approach was used, including a set of algorithm classes templatized on the \verb|Hierarchy|, \verb|Hypers|, and \verb|Mixture| classes to allow the use of algorithms with different hierarchies, hyperparameters related to the hierarchy and mixture models. \\
+It currently includes Neal's two algorithms, two Gaussian-based hierarchies (one univariate and one multivariate), and two mixture models. \\
+Unless explicitly stated, the files corresponding to the described objects will be located in the \verb|src| folder and its subfolders.
+
+\section{Libraries}
+\verb|bnplib| depends on other libraries such as:
+\begin{itemize}
+	\item \emph{Eigen} library, a popular template library for linear algebra, which includes implementations for matrices, vectors, numerical solvers, and related algorithms;
+	\item \emph{Stan Math}, a C++ template library for several math-related tasks; it includes a range of built-in functions for probabilistic modeling, linear algebra, and equation solving.
+	Stan in turn uses the following:
+	\begin{itemize}
+		\item the already-mentioned Eigen library (which is the reason why it was chosen over its main alternative, Armadillo);
+		\item \emph{Boost}, a library that provides support for tasks and structures such as linear algebra, pseudo-random number generation, multithreading, image processing, regular expressions, and unit testing;
+		\item Intel's \emph{Threading Building Blocks} (TBB) library, to write parallel C++ programs that take full advantage of multicore performance;
+		\item \emph{Sundials} library, a suite of nonlinear and differential or algebraic equation solvers.
+	\end{itemize}
+	\item \emph{Protocol Buffer} library, or \verb|protobuf| for short, which was developed by Google and provides a fast serialization mechanism for structured data and extensible code generators for different programming languages.
+\end{itemize}
+These libraries exist in the \verb|lib| subfolder. \\
+We also implemented a Python interface for the library, the details of which will be discussed in section \ref{collectors}).
+The following libraries were needed:
+\begin{itemize}
+	\item \verb|protobuf|, to interface data between C++ and Python;
+	\item \emph{pybind11}, a header-only library that exposes C++ types in Python and vice versa;
+	\item \emph{NumPy}, a popular library which provides high-performance multidimensional array objects, and tools for working with them;
+	\item \emph{SciPy}, another widespread library containing modules for numerical integration, interpolation, optimization, linear algebra, and statistics;
+	\item \emph{Scikit-learn}, a free machine learning library built on top of SciPy;
+	\item \emph{Matplotlib}, for creating plots.
+\end{itemize}
+First of all, we shall describe the auxiliary classes that are used as template arguments for the algorithms.
+Probability distributions and random sampling are handled through the \verb|Stan| library, while \verb|Eigen| was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code. \\
+Some main test files are present in the root folder of the library: \verb|maintest_uni.cpp|, \verb|maintest_multi.cpp|, and \verb|maintest_nnws.cpp|, the latter of which we used for several time comparisons in the multivariate NNW hierarchy.
+In the \verb|README.md| of the project one may find some basic examples of usage of these files.
+
+\section{Model classes}
+The \emph{mixture classes} (alias in the algorithm: \verb|Mixture|) contain all information about the mixing part of the BNP algorithm, namely the way of weighing the insertion of data in old clusters with respect to the creation of new clusters.
+They are implemented starting from the abstract class \verb|BaseMixture| which provides the common interface for those objects.
+The class has methods that provide probability masses for the two aforementioned events: \verb|mass_existing_cluster()| and \verb|mass_new_cluster()|.
+We implemented two derived classes from \verb|BaseMixture|: the \verb|DirichletMixture| and the \verb|PitYorMixture|.
+The derived classes have their own parameters (including their respective getters and setters) and could be extended by adding prior distributions on those, for instance by creating further classes that inherit from them. \\
+
+The \emph{hyperparameters classes} (alias: \verb|Hypers|) contain information about the hyperparameters of the hierarchy, including their values (if fixed) or their prior distributions (if not).
+Unlike all other types of classes, these are not based on inheritance from a common abstract base class, since their internal structure is vastly different.
+Moreover, each of them is to be used in conjunction with a single hierarchy class anyway, so there is less need for a inheritance-based implementation.
+We implemented the \verb|HypersFixedNNIG| class, which contains fixed hyperparameters for an NNIG hierarchy, and the \verb|HypersFixedNNW| class for an NNW hierarchy.
+Both classes provide setters and getters for parameters with validity checks for the inserted values. \\
+
+Finally, the \emph{hierarchy classes} (alias: \verb|Hierarchy|) are implemented starting from the abstract template class \verb|HierarchyBase<Hypers>|.
+They represent the form of the hierarchical model in a generic Gibbs sampler BNP algorithm, namely the likelihood of data points, including their parameters, the unique values.
+Since only data points that are in the same cluster as each other share unique values, this means that for each cluster there will be a hierarchy object, that is, a single set of unique values with their own prior distribution attached to it.
+These values are part of the Markov chain's state chain which develops as the iterations of the algorithm increase, updating them providing the data related to the specific hierarchy and their prior distribution.
+These are simply referred to as the \emph{hierarchy state}; they are not the same thing as the \emph{state of the chain}, which is composed of all allocations and unique values across all hierarchy objects.
+A hierarchy class stores the current unique values for the cluster it represents in the member \verb|state|, a vector of parameter matrices.
+Since the prior distribution for the state is often the same across multiple different hierarchies, the hyperparameters object is accessed via a shared pointer, and this is why \verb|Hypers| is required as a template parameter for the class. \\
+The constructor of a hierarchy class contains the shared pointer to create the hyperparameters object with, and initializes the hierarchy state to default values.
+These classes also contains methods to:
+\begin{itemize}
+	\item evaluate the marginal distribution (in the hierarchies where it is known in closed form) and the likelihood in a given set of points, conditioned on the current \verb|state| values: \verb|eval_marg()| and \verb|like()|;
+	\item compute the posterior parameters with respect to a given set of observations: \verb|sample_given_data()|;
+	\item generate new values for the \verb|state| both according to its prior (\verb|draw()|) and to its posterior (\verb|normal_gamma_update()| or similar) centering distribution;
+	\item getter and setter class members, as with the other classes.
+	The peculiarity of the setter for \verb|state| is that it also accept a boolean flag \verb|check|.
+	If the setter is called with the flag set to \verb|true| (which is also its default value), it mandates the calling of the \verb|check_state_validity()| utility, which is specific for each hierarchy and raises an error if the state values are not valid with respect to their own domain (for instance, a negative value for the variance).
+	This type of check is only done in \verb|set_state()|, and not in the functions that generate new values for the state, since these functions always generate coherent values, which makes any check redundant.
+	This saves some computational time, especially in the multivariate case where an expensive check on the precision matrix must be performed to assess its positive semi-definiteness.
+	For the same reasons, the setter is called with the flag set to \verb|false| also in the algorithm functions (see below).
+\end{itemize}
+The derived hierarchy classes are \verb|HierarchyNNIG|, which represents the Normal Normal-InverseGamma hierarchy for univariate data, and \verb|HierarchyNNW|, which represents the Normal Normal-Wishart hierarchy for multivariate data.
+As mentioned in section \ref{nnig} onwards, the \verb|state| in \verb|HierarchyNNIG| holds the values for $\boldsymbol\phi = (\mu,\sigma)$, i.e.  location and scale, while in \verb|HierarchyNNW| one has $\boldsymbol\phi = (\boldsymbol\mu,T)$, i.e. location and precision parameters.
+Recall that both hierarchies are conjugate, thus the Neal2 algorithm may be used with them.
+
+
+\section{Algorithm classes}
+The algorithms studied and discussed in the theoretical section all share the same structure, so we decided to build an abstract class for a generic Gibbs sampling iterative BNP algorithm, the \verb|Algorithm| class:
+\begin{verbatim}
+template<template <class> class Hierarchy, class Hypers,
+class Mixture> class Algorithm
+\end{verbatim}
+All algorithms of this form can be built as derived classes from this one.
+It is constructed by the following function:
+\begin{verbatim}
+Algorithm(const Hypers &hypers_, const Mixture &mixture_,
+const Eigen::MatrixXd &data_, const unsigned int init = 0);
+\end{verbatim}
+As mentioned, the first argument initializes the passed \verb|Hypers| object through a shared pointer.
+\verb|init| is assigned to the \verb|init_num_clusters| member, which states the number of clusters in the initialization phase of the algorithm.
+If a value is not provided, it will be set equal to the data size in the constructor body, therefore placing one object in each cluster.
+Dimensionality checks also take place, in order to verify that all passed objects have coherent dimensions with each other. \\
+The \verb|Algorithm| class contains the integer class members \verb|maxiter|, the cumulative number of algorithm iterations, and \verb|burnin|, the number of initial iterations in the burn-in phase, which will be discarded.
+These integer values, including the seed for the \verb|rng| object (of type \verb|std::mt19937|, a basic Mersenne Twister random number generator provided by the standard C++ library) and the \verb|n_aux| parameter that indicates the number of auxiliary blocks in \verb|Neal8|, are not present in the class constructor since they are usually left with their default values, though they can still be changed through their respective setters.
+If no other values are provided, \verb|maxiter| is initialized to 1000, \verb|burnin| to 100, and \verb|n_aux| to 3, values that we have assessed as sufficient for a good approximation after performing several tests.
+Note that changing these values after running the algorithm (see below for the \verb|run()| function) has no effect as far as the execution of the algorithm is concerned. \\
+Moreover, the class contains several data and values containers:
+\begin{verbatim}
+Eigen::MatrixXd data;
+std::vector<unsigned int> cardinalities;
+std::vector<unsigned int> allocations;
+std::vector< Hierarchy<Hypers> > unique_values;
+std::pair< Eigen::MatrixXd, Eigen::VectorXd > density;
+Mixture mixture;
+State best_clust;
+\end{verbatim}
+The matrix of row-vectorial data points is given as input to the class constructor by the user.
+Data points were chosen to be matrix rows, even though points in a space are usually represented as column vectors, because this is the way data are usually stored in comma- or space-separated values files.
+In fact, the \verb|utils.hpp| file contains the \verb|read_eigen_matrix()| utility, which returns an \verb|Eigen::MatrixXd| after reading values from a given filename.
+This works for both data matrices and grid matrices on which evaluate the estimated density (see section \ref{estimates-imp} for the implementation details). \\
+The algorithm will keep track of the labels representing assignments to clusters via the \verb|allocations| vector.
+For instance, if at any point one has \verb|allocations[5] = 2|, it means that datum number 5 is associated to cluster number 2, with indexing starting at zero.
+Similarly, we store the \verb|cardinalities| of the current clusters and \verb|unique_values|, which is a vector of Hierarchy objects which identify the clusters and in which the corresponding unique values are stored in the \verb|state|, as mentioned in the previous section.
+The three aforementioned vectors are initialized with null values and empty \verb|Hierarchy| objects, and will be filled with proper values while the algorithm is running. \\
+The \verb|run()| method is the same from all derived classes, given that all implemented algorithms share the same general structure:
+\begin{verbatim}
+void step(){
+sample_allocations();
+sample_unique_values();
+sample_weights();
+update_hypers();
+}
+
+void run(BaseCollector* collector){
+initialize();
+unsigned int iter = 0;
+collector->start();
+while(iter < maxiter){
+step();
+if(iter >= burnin){
+save_state(collector, iter);
+}
+iter++;
+}
+collector->finish();
+}    
+\end{verbatim}
+That is, a Gibbs sampling iterative BNP algorithm generates a Markov chain on the clustering of the provided data running multiple iterations of the same \verb|step()|.
+The latter is further split into substeps, each of which updates specific values of the state of the Markov chain, which we recall to be composed of the allocations vector and the unique values vector.
+Substeps are then overridden in the specific derived classes.
+In particular, among the studied algorithms, only the currently unimplemented blocked Gibbs algorithm exploits the \verb|sample_weights()| function.
+Moreover, \verb|update_hypers()| only has an effect when the hyperparameters are not fixed.
+Therefore this function is not currently used in the library either, since we only have \verb|Hypers| classes representing fixed ones at the moment.
+The collector argument of \verb|run()| and the functions \verb|start()|, \verb|save_state()|, and \verb|finish()| deal with storage of the chain state, which we will discuss later in the appropriate section \ref{collectors}. \\
+We shall now describe the features of the two implemented derived classes: \verb|Neal2| and \verb|Neal8|.
+
+\subsection{\texttt{Neal2}}
+As discussed in section \ref{neal2}, the \verb|Neal2| algorithm exploits conjugacy, thus the class requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is available in closed form.
+This class implements the substeps of the \verb|run()| function as follows:
+\begin{itemize}
+	\item In \verb|initialize()|, a number of clusters equal to the provided initial value are created, and data are randomly assigned to them, while making sure that each cluster contains at least one.
+	Assignment to a cluster means that the \verb|allocations| entry for the datum is set equal to the number of the cluster, as explained earlier.
+	\item In \verb|sample_allocations()|, a loop is performed over all observations $i=1:n$.
+	The vector \verb|cardinalities| is filled at first, with \verb|cardinalities[j]| being the cardinality of cluster $j$.
+	Then, the algorithm mandates that \verb|datum = data.row(i)| be moved to another cluster.
+	A vector \verb|probas| is filled with the probabilities of each cluster being chosen, including a new one, as shown in (\ref{probasneal2}): computations involve the \verb|cardinalities| vector, the mass probabilities defined by the \verb|Mixture|, the likelihood \verb|like()| evaluated in \verb|datum| to compute the probability of being assigned to an already existing cluster, and the marginal \verb|eval_marg()| to compute the probability of being assigned to a newly generated cluster.
+	Then, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|.
+	Finally, four different cases of updating \verb|unique_values| and \verb|cardinalities| are handled separately, depending on whether the old cluster was a singleton or not and whether or not \verb|datum| is assigned to a new cluster.
+	Indeed, in such a case, a new $\boldsymbol\phi$ value for it must be generated, and this must be handled differently by the code if an old singleton cluster was just destroyed (as the new cluster must take its former place).
+	Depending on the case, clusters are either unchanged, increased by one, decreased by one, or moved around.
+	\item In \verb|sample_unique_values()|, for each cluster $j$, their $\boldsymbol\phi$ values are updated through the \verb|sample_given_data()| function, which takes as argument the vector \verb|curr_data| of data points which belong to cluster $j$.
+	Since we only keep track of clusters via their labels in \verb|allocations|, we do not have a vector of actual data points stored for each cluster.
+	Thus we must fill, before the loop on $j$, a matrix \verb|clust_idxs| whose column $k$ contains the index of data points belonging to cluster $k$.
+	\verb|clust_idxs| is then used in the $j$ loop to fill \verb|curr_data| with the actual data points of cluster $j$.
+\end{itemize}
+
+
+\subsection{\texttt{Neal8}}
+The \verb|Neal8| algorithm is a generalization of \verb|Neal2| which works for any hierarchical model, even non-conjugate ones, by adding adjustments in the allocation sampling phase to circumvent non-conjugacy.
+However, the unique values sampling phase remains unchanged.
+For this reason \verb|Neal8| is built as a derived class from \verb|Neal2|.
+In addition to the members already defined in the parent classes, the following are added:
+\begin{verbatim}
+unsigned int n_aux = 3;
+std::vector<Hierarchy<Hypers>> aux_unique_values;
+\end{verbatim}
+These are related to the auxiliary blocks, which are unique to this algorithm.
+A setter exists for \verb|n_aux| which also updates the \verb|aux_unique_values| vector to the correct number of blocks. \\
+We now proceed to describe the new implementation of \verb|sample_allocations()| in this class.
+A loop is first performed over all observations $i=1:n$ and \verb|cardinalities| is filled, just like in \verb|Neal2|.
+Now, if the current cluster is a singleton, its $\boldsymbol\phi$ values are transferred to the first auxiliary block.
+Then, each auxiliary block (except the first one if the above case occurred) generates new $\boldsymbol\phi$ values via the hierarchy's \verb|draw()| function.
+Now a new cluster, that is, new $\boldsymbol\phi$ values, for \verb|datum| needs to be drawn.
+The vector \verb|probas| with \verb|n_clust+n_aux| components is filled with the probabilities of each $\boldsymbol\phi$ being extracted, computed as shown in (\ref{neal8prob}); this formula also involves the auxiliary blocks.
+The new value for \verb|allocations[i]| is then randomly chosen according to the computed \verb|probas|.
+Finally, four different cases of updating \verb|unique_values| and \verb|cardinalities| are handled separately, depending on whether the old cluster was a singleton or not, and whether an auxiliary block or an already existing cluster was chosen as the new cluster for \verb|datum|.
+
+
+\section{Collectors}\label{collectors}
+After an algorithm is run, one may be interested in an estimate of the density given a grid of points, and/or in an identification of a partition through the clustering obtained in the algorithm, which we sometimes call ``best clustering'', in the sense we described in section \ref{chap-esimates-1}.
+In any case we need to be able to save and to retrieve the information of each iteration of the algorithm, such as allocations and unique values, which characterize the state of the chain.
+This values must therefore be stored in an appropriate data structure, preferably one which is independent of \verb|Algorithm|, so that we do not have to save the entire chain of \verb|State| objects as a member.
+For this reason, we have implemented the collector classes.
+A \emph{collector} is an external class meant to store the state of the Markov chain at all iterations as a list of \verb|State| objects.
+Their implementation is based on the \verb|protobuf| (Protocol Buffers) library, which allows automatic generation of data-storing C++ classes by defining a class skeleton in the \verb|chain_state.proto| file located in the root folder.
+This also allows easy interfacing with other programming languages such as R and Python. \\
+We built the template for our collector classes as follows:
+\begin{verbatim}
+message Par_Col {
+repeated double elems = 1;
+}
+
+message Param {
+repeated Par_Col par_cols = 1;
+}
+
+message UniqueValues {
+repeated Param params = 1;
+}
+
+message State {
+repeated int32 allocations = 1;
+repeated UniqueValues uniquevalues = 2;
+}
+\end{verbatim}
+Here \verb|message| and \verb|repeated| are the \verb|protobuf| equivalent of classes and vectors respectively, while the numbers 1 and 2 just act as identifiers for the fields in the messages.
+The corresponding C++ and Python classes are automagically generated off of this skeleton via the \verb|protoc| compiler. \\
+We have implemented two types of collectors: \verb|FileCollector| and \verb|MemoryCollector|, both of which are derived classes from the \verb|BaseCollector| abstract class.
+The former saves the \verb|State| objects into appropriate binary files, while the latter places them in memory into a deque.
+In particular, the \verb|MemoryCollector| does not ``hard write'' chain states anywhere and all information contained in it is destroyed when the main that created it is terminated.
+It is therefore useful in situation in which writing to a file is not needed, for instance in a main program that both runs the algorithm and computes the estimates.
+Instead, the contents of a \verb|Filecollector| are permanent, because every state collected by it remains ever after the termination of the main that created it, in Protobuf form, in the corresponding file.
+This approach is mandatory, for instance, if different main programs are used to run the algorithm and the estimates, for instance in the Python interface (more on this later, in section \ref{chap-py-int}).
+Both collectors store the current size of the chain, i.e. the number of the stored \verb|State| objects, which is constantly updated during the run after each performed iteration, and \verb|curr_iter|, an integer that acts as a cursor, useful when reading the chain state-by-state.
+
+\subsection{Writing and reading}
+In the main program, a collector whose type is chosen at runtime is instantiated before running the algorithm, and a \verb|BaseCollector| pointer points to the collector object, exploiting polymorphism.
+Then, the \verb|BaseCollector| pointer is passed to the \verb|run()| method.
+Let us take a closer look at the \emph{writing} procedure in it.
+In the specific case of \verb|FileCollector|, we first pass a string to the constructor, which initializes the \verb|filename| where the chain will be saved.
+Then, in \verb|run()|, the \verb|start()| method creates a so-called open file description that refers to the file, as well as a stream object that writes to it via a Unix file descriptor.
+After each iteration, the \verb|collect()| function is called which takes as input the current state in Protobuf object format and writes it into the file.
+At the end of \verb|run()|, after all iterations have been performed, \verb|finish()| closes the file descriptor and the corresponding file.
+The writing procedure is similar when using a \verb|MemoryCollector|, except that \verb|collect()| inserts the current iteration's state in Protobuf-object form into the deque. \\
+Once the algorithm's run is completed, one may proceed with the density and clustering estimates.
+Both of these require \emph{reading} from the collector, since they require knowledge of the entire chain of states.
+Therefore, the aforementioned \verb|BaseCollector| pointer is also passed to the estimate functions, inside of which the method \verb|get_chain()| is called, which returns the whole chain in deque form.
+In the case of \verb|MemoryCollector| this simply means returning the currently stored \verb|chain| protected member, while in the case of \verb|FileCollector| the chain is read state-by-state from the binary file, converted back into Protobuf format and returned as a deque. \\
+In fact, two alternatives are possible for reading: the above method of using \verb|get_chain()|, and reading one state at a time directly in the estimates functions when necessary, without having to save back the whole chain. 
+This is achieved using the function \verb|get_next_state()|, which returns one state at a time based on the current position given by the cursor \verb|curr_iter|, which is increased by 1 with each call.
+With such an implementation, in both estimate functions' loops over the iterations, \verb|get_next_state()| is called at each round, which in turn calls the \verb|get_next()| protected method, specifically implemented for each collector, and the state relative to the current round is returned.
+This is easily achieved when using a \verb|MemoryCollector|, but in the case of \verb|FileCollector|, the \verb|State| object must be read from the file itself.
+However, unlike in the cases using \verb|MemoryCollector|, if the estimate functions are executed in a different source file than the one where the algorithm is run, a \verb|FileCollector| must be used, but in the second source file the information on the size of the chain and of the objects is unavailable, since the actual C++ object was destroyed when closing the first one.
+This information is crucial in order to correctly read from the produced binary file.
+Therefore, our library currently uses the \verb|get_chain()| method which re-creates the whole chain even from a \verb|FileCollector| instead of the state-by-state method.
+In order to use the latter, one would have to store additional information about object sizes in the file itself. \\
+In addition, in the cluster estimate utility, even though all dissimilarity matrices can be computed via state-by-state reading, one needs random access to retrieve the \verb|State| object corresponding to the best clustering.
+In the case of \verb|FileCollector|, since the current implementation re-creates the \verb|chain| deque, one can simply access \verb|chain[i]| where \verb|i| is the iteration that minimizes the squared error.
+If the above reading mode were to be implemented, one would need to use a getter \verb|get_state(unsigned int i)|, which would make necessary to re-read the file up to this iteration with multiple calls to \verb|get_state()|.
+In this case, optimization may be achieved by saving the byte size of the individual Protobuf objects, so that one can recover a specific state directly by jumping at the correct location in the file without having to read and return all previous iterations.
+
+
+\section{Estimate functions}\label{estimates-imp}
+The cluster and density estimation described in chapter \ref{chap-esimates-1} are implemented in the following methods in the \verb|Algorithm| base class:
+\begin{verbatim}
+unsigned int cluster_estimate(BaseCollector* coll);
+void eval_density(const Eigen::MatrixXd &grid, BaseCollector* coll);
+\end{verbatim}
+Both functions exploit the chain saved in the passed collector object.
+The former loops over all \verb|State| objects in the chain to compute and save the dissimilarity matrix for each of them, while incrementally updating the average dissimilarity matrix.
+As previously noted, the matrix need not be filled in its upper triangular part, which can effectively be ignored, thus saving over half of the computation time. \\
+Storing the matrices of all iterations is mandatory, since the function needs to pick the one which is closest, in terms of Frobenius norm, to the yet-unknown average dissimilarity.
+Since these matrices are quite large in dimension ($n$-by-$n$) and hundreds of them need to be stored, we used the \verb|Eigen::SparseMatrix| class instead of its usual \verb|Dense| counterpart.
+After that, the error for each matrix (or rather for its lower triangular part) is computed, and the function returns the index of the matrix which has the least error after saving the corresponding \verb|State| object in the \verb|best_clust| class member. \\[8pt]
+The density estimation function is also implemented in the base \verb|Algorithm| class, despite \verb|Neal2| and \verb|Neal8| having different formulas for it, because both estimates are actually identical except for the last addendum involving the marginal distribution, insofar that they are the average over all iterations of local (i.e. iteration-specific) density estimates.
+They therefore share a large part of the code, namely the loop over all states of the chain, in which the cardinalities vector of the current state is recomputed and a \verb|Hierarchy| object to compute the likelihood with is rebuilt.
+The likelihood will then be multiplied by the mixture-dependent weights, which in turn depend on the computed cardinalities.
+The only difference between both algorithms is enclosed in the \verb|density_marginal_component()| subroutine, which has a specific implementation for each of them: \verb|Neal2| uses the closed-form marginal by exploiting the conjugacy of the model, while \verb|Neal8| has to compute an arithmetic mean on a small random sample.
+The other parameter of \verb|eval_density()| is a \verb|grid| of Eigen points in which the density will be evaluated.
+After \verb|eval_density()| is run, this grid is stored together with the evaluated points themselves in the \verb|density| member object, which is an \verb|std::pair| of Eigen matrices. \\[8pt]
+We also implemented two writing utilities, which save data from the class into text files in order to ease exportation to other programs, machines, or even the Python interface itself:
+\begin{verbatim}
+write_clustering_to_file(const std::string &filename);
+write_density_to_file(const std::string &filename);
+\end{verbatim}
+They can be called as need be from any main file.
+Before writing to a file, each of these functions checks an appropriate boolean flag, which are called respectively \verb|clustering_was_computed| and \verb|density_was_computed|, which is changed to \verb|true| only at the end of the corresponding estimation function; if such flag is still \verb|false|, an error message is printed.
+Otherwise, they write the information stored in the appropriate member classes to a file in a comma-separated value format.
+
+
+\section{Algorithm factory}
+In order to have the possibility of a runtime choice of the algorithm, we implemented the \verb|Factory| class.
+An \emph{object factory} allows to choose at runtime one of several object types for a given variable, provided that these objects derive from a common abstract base class, whose name is passed as a template parameter with the alias \verb|AbstractProduct|.
+An object factory is usually implemented as a singleton and stores a list of \emph{builders}, i.e. functions that each create a different kind of object, into the private \verb|storage| class member.
+Each of these builders can be as simple as a function returning a smart pointer to a new instance, and has an identifier (e.g. a string) corresponding to the specific object they create: \verb|storage| is therefore an Identifier-Builder map.
+In order to have the choice of creating one of multiple objects, \verb|storage| must first be filled with their corresponding builders; this can be done in a main file or in an appropriate separate utility function.
+Since the constructors of the implemented algorithm classes may take different numbers of parameters as input, we chose to templatize the factory with a variadic template in addition to the \verb|AbstractProduct| type.
+This allows passing any number of parameters of any type to the constructors of the objects. \\
+Theoretically, it would be possible to use the same \verb|Factory| implementation file to create multiple factories which each produce different categories of objects, since templates specialized with different arguments (\verb|AbstractProduct|) are treated as different objects altogether.
+However the abstract product, which in our case is one of two algorithms, is defined with specific hierarchy, mixture, and hyperparameters classes, all of which must be known at compile time.
+Therefore one could not have different independent factories that each generate a piece of the model.
+In order to choose every class at runtime, it would be required to add all possible combinations of algorithms, hierarchies, and mixtures to the \verb|storage|, so that all possible \verb|AbstractProduct|s are known at compile time.
+This is possible with the current number of available objects, but as the library expands with new classes being added, this method would not scale well.
+Therefore, at the moment only the choice of the algorithm type is available at runtime. \\
+Another difficulty for full runtime choices is that the hyperparameters classes do not currently have a base class, since their implementations heavily depend on the hierarchy they support and therefore have little to no common structure.

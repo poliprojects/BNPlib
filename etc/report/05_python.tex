@@ -1,12 +1,11 @@
 \chapter{Python interface} \label{chap-py-int}
 
-\section{Creating the interface}
 In this section we will talk about the Python interface we implemented for the library, for a more user-friendly and versatile use of the code.
 We first note that thanks to the algorithm factory described in the previous section, the user can choose the desired algorithm directly from their Python script.
-The files for this interface are located in the \verb|src/python| folder.
+The files for this interface are located in the \verb|src/python| folder. \\
 This interface is made possible by two main pieces of software: the \verb|pybind11| Python package, and again the Protocol Buffers library.
 \verb|pybind11| allows transporting of C++ objects into a C++ library that can be read as if it were a Python library.
-In particular, the \verb|cpp_exports| subfolder contains several source files each containing a function that fulfills a specific role.
+In particular, the \verb|cpp_exports| subfolder contains several independent source files each containing a function that fulfills a specific role.
 This allows the user to be able to run the algorithm and execute the estimate at different points in time, since these two actions are completely independent -- this is actually the main reason for why a \verb|FileCollector| was implemented in the first place.
 Such independence is possible because after using the run unit, the Markov chain is automatically saved to a \verb|FileCollector|, which can then be read and deserialized thanks to the Python interface of the \verb|protobuf| library.
 More specifically, the \verb|chain_state.proto| file that was used to generate the \verb|State| class in C++ is also used to generate the same exact class in a Python file, again by running the Protobuf compiler \verb|protoc|; the created file is called \verb|chain_state_pb2.py|.
@@ -38,7 +37,7 @@ In particular, a Python interface file, \verb|bnp_interface.py| was created to a
 	(See \cite{rand} for further details.)
 \end{itemize}
 The user can then call each of these tools and the ones in \verb|bnplibpy| at will in their scripts.
-For instance, one may want to run the algorithm and get the Markov chain, visualize the distribution of clusters via \verb|chain_barplot()|, then compute the estimates; or maybe di all 3 at the same times.
+For instance, one may want to run the algorithm and get the Markov chain, visualize the distribution of clusters via \verb|chain_barplot()|, then compute the estimates; or maybe do all 3 at the same time.
 A typical Python script that uses this library looks as follows (extracted from \verb|console.py|):
 \begin{verbatim}
 from bnp_interface import *

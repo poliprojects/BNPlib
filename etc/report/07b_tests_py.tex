@@ -1,5 +1,5 @@
 \section{Python tests}\label{chap-py-test}
-We implemented 6 tests in Python using data coming from different distributions and mixtures to assess the predicting power of the estimates of the library.
+We also implemented 6 tests in Python using data coming from different distributions and mixtures to assess the predicting power of the library.
 All of them were run with the following settings:
 \begin{itemize}
 	\item \verb|Neal2| algorithm with 500 iterations, of which 100 for the burn-in phase
@@ -35,19 +35,20 @@ For each univariate test, a plot was produced that includes the following:
 	\item the posterior likelihood computed by the library.
 \end{itemize}
 Having the ``expected prior likelihood'' as a rough starting point, the goal is to approximate the true likelihood via the posterior likelihood by using the given data.
-For multivariate tests, we only show the posterior likelihood for the $d=2$ case. \\
-Finally, the adjusted Rand index $ARI$ for the predicted clustering with respect to the true clustering introduced in chapter \ref{chap-py-int} was also computed for all tests.
-The results are listed below:
-\\ TODO metti plot giusti e correggi scale; commento al 3 \\
+For multivariate tests, we show the following plots, obviously only for the $d=2$ case: posterior likelihood, both in graph and in contour form, and the data histogram. \\
+Finally, the adjusted Rand index $ARI$ for the predicted clustering with respect to the true clustering introduced in chapter \ref{chap-py-int} is also listed for all tests.
+The results are listed below. \\
+The only test the library struggles with is number 3, in which only 2 clusters are recognized instead of the actual 3.
+This is due to the fact that the 3 clusters are really close to each other, therefore data for the central one can easily be mistaken as being part of the leftmost and rightmost ones.
 \begin{figure}[h]
 	\centering
 	\begin{minipage}{0.5\textwidth}
-		\includegraphics[scale=0.4]{etc/test1.pdf}
+		\includegraphics[scale=0.45]{etc/test1.pdf}
 		\captionsetup{labelformat=empty}
 		\caption{Test 1. $ARI = 1.0$}
 	\end{minipage}%
 	\begin{minipage}{0.5\textwidth}
-		\includegraphics[scale=0.4]{etc/test2.pdf}
+		\includegraphics[scale=0.45]{etc/test2.pdf}
 		\captionsetup{labelformat=empty}
 		\caption{Test 2. $ARI = 1.0$}
 	\end{minipage}
@@ -56,12 +57,12 @@ The results are listed below:
 \begin{figure}[h]
 	\centering
 	\begin{minipage}{0.5\textwidth}
-		\includegraphics[scale=0.4]{etc/test3.pdf}
+		\includegraphics[scale=0.45]{etc/test3.pdf}
 		\captionsetup{labelformat=empty}
-		\caption{Test 3. $ARI = 0.45 $}
+		\caption{Test 3. $ARI = 0.45$}
 	\end{minipage}%
 	\begin{minipage}{0.5\textwidth}
-		\includegraphics[scale=0.4]{etc/test4.pdf}
+		\includegraphics[scale=0.45]{etc/test4.pdf}
 		\captionsetup{labelformat=empty}
 		\caption{Test 4. $ARI = 0.99$}
 	\end{minipage}
@@ -70,13 +71,13 @@ The results are listed below:
 \begin{figure}[h]
 	\centering
 	\begin{minipage}{0.5\textwidth}
-		\includegraphics[scale=0.5]{etc/test5_dens.png} %TODO fix
+		\includegraphics[scale=0.5]{etc/test5_dens.png}
 	\end{minipage}%
 	\begin{minipage}{0.5\textwidth}
-		\includegraphics[scale=0.4]{etc/test5_cont.pdf}
+		\includegraphics[scale=0.5]{etc/test5_cont.pdf}
 	\end{minipage}
 	\captionsetup{labelformat=empty}
-	\caption{Test 5. $ARI = 1.0 $}
+	\caption{Test 5. $ARI = 1.0$}
 \end{figure}
 
 
