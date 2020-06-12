@@ -8,7 +8,7 @@ Note that these will be identical regardless of the dimension of the data points
 Suppose we wish to estimate the real clustering of the data, assuming the DPM model holds true.
 Since the proposed algorithms repeat the same steps for many iterations, they will run through just as many states, i.e. combinations of unique values and clusters, which represent a clustering structure.
 Therefore, one might think that a first rough estimate for the real clustering could be the \emph{final clustering}, that is, the state values corresponding to the last iteration of the algorithm.
-However, due to the oscillating behavior of the clusters (as we shall show later on by performing tests), the last clustering is far from being guarateed to be the optimal one.
+However, due to the oscillating behavior of the clusters (as we shall show later on by performing tests), the last clustering is far from being guaranteed to be the optimal one.
 Instead, we chose to implement a \emph{least square} estimate.
 More specifically, we examine the state values provided by each iteration, then we select the one that minimizes the squared posterior \emph{Binder's loss function}, which gives cost 0 to a pair of points which are correctly assessed to be in the same cluster, and cost 1 to a pair of points which are placed in the same cluster but are actually in different ones.
 An equivalent approach (see \cite{beep-bayes} lecture on BNP clustering) is computing the so-called \emph{dissimilarity matrix} for each iteration, computing its sample mean over all iterations, and finding the iteration that is the closest to the mean with respect to the \emph{Frobenius norm}, which the sum of squares of the matrix entries. 
@@ -19,7 +19,7 @@ $$
 $$
 Note that by virtue of the involved matrices being symmetric, the minimization of the latter summation is equivalent to the one computed only for those entries $(i,j)$ such that $i<j$.
 One can prove that the described algorithms \emph{converge in mean}, but not in the single iterations.
-That is, the last iterations of the algorithm have no higher probability than the first ones of being the ``best'' cluster estimate; in fact, the algorithm has quite the \emph{oscillating behaviour} in its single-iteration estimates, starting with the number of clusters at each iteration, as we will see in the last part of the report.
+That is, the last iterations of the algorithm have no higher probability than the first ones of being the ``best'' cluster estimate; in fact, the algorithm has quite the \emph{oscillating behavior} in its single-iteration estimates, starting with the number of clusters at each iteration, as we will see in the last part of the report.
 Instead, it is the mean of all dissimilarity matrices that converges to the ``best'' clustering structure: the more iterations are run, the better the approximation provided by the mean becomes.
 (The number of iterations required is actually surprisingly small: we will show that even a few hundreds are enough to get a good estimate.)
 Since the mean itself is obviously not a valid dissimilarity, as it is not binary-valued, we choose the one valid iteration matrix that best approximates it.

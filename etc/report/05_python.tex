@@ -32,7 +32,7 @@ In particular, a Python interface file, \verb|bnp_interface.py| was created to a
 	\item \verb|plot_clust_cards()| takes a clustering \verb|.csv| file as input, most likely the best clustering computed and stored via the \verb|cluster_estimate()| method of the \verb|Algorithm| class, and plots the cardinalities of clusters inside it;
 	\item \verb|clust_rand_score()| computes the so-called \emph{adjusted Rand index} ($ARI$), or score, between a given predicted clustering and true clustering, which is a value in $[0,1]$ that represents a measure of similarity between both clusterings.
 	In particular, it is the proportion $RI$ of correct decisions made by the clustering algorithm with respect to the true clustering: the higher the score, the better the estimation.
-	Such proprortion is then adjusted for chance in the following way:
+	Such proportion is then adjusted for chance in the following way:
 	$ARI = (RI - \EE[RI]) / (\max(RI) - \EE[RI])$.
 	(See \cite{rand} for further details.)
 \end{itemize}

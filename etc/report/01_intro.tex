@@ -1,5 +1,3 @@
-%\part{Algorithms}
-
 \chapter{Introduction}
 This report presents the development of a C++ library containing Markov chain sampling algorithms for two major goals: \emph{density estimation} and \emph{clustering analysis} of a given set of data points.
 In a Bayesian nonparametric (BNP) setting, we focused on the Dirichlet process, one of the most widely used priors due to its flexibility and computational ease, and its extensions and generalizations.
@@ -200,7 +198,7 @@ Our settings for this hierarchy's hyperparameters are as follows:
 	\item $\boldsymbol\mu_0 = \bar{\textbf y}$: the sample mean is often a good starting point for assessing the distribution of the data;
 	\item $\lambda$ small, e.g. 0.1: being at the denominator of the covariance matrix of the normal, this allows for a large initial variance, which means that the algorithm has more freedom to move where the data dictates right from the start, instead on focusing on a narrow spike which a small variance would produce;
 	\item $\nu = k + 3$ so that the excepted value and median are well-defined;
-	\item $T_0 = \frac{1}{\nu} I_k$, so that the prior expectation of the precision $\EE[T] = \nu T_0$ is the identity matrix (same as picking unitary variance in the monodimensional case).
+	\item $T_0 = \frac{1}{\nu} I_k$, so that the prior expectation of the precision $\EE[T] = \nu T_0$ is the identity matrix (same as picking unitary variance in the unidimensional case).
 \end{itemize}
 Note that the influence of the hyperparameters on the state values is only direct at the very start of the algorithm, and they will become less and less relevant the more data are taken into consideration.
 Provided that the algorithm works as intended, it is not imperative to have good parameters in order to get good results. \\

@@ -57,7 +57,7 @@ test 5 & 1.50049441e+08 & 1.37240555e+08 \\
 test 6 & 1.28818714e+08 & 1.16328396e+08
 	\end{tabular}
 \end{center}
-As one can see, the performance is on average nearly identical for both types of implementation, with a difference of only less than 10\% for the multivariate tests 5 and 6 in favour of the dense case. \\[8pt]
+As one can see, the performance is on average nearly identical for both types of implementation, with a difference of only less than 10\% for the multivariate tests 5 and 6 in favor of the dense case. \\[8pt]
 Finally, one more possible improvement for the current implementation is using a completely different approach of storing the data, e.g. with an \verb|std::map| in which each entry is a cluster that holds objects representing the data points themselves, instead of just storing the allocations labels.
 This may be a way to erase and add clusters more efficiently.
 Testing this assumption would be very difficult, since it would require implementing all data structures from scratch; nonetheless we think that using vectorial structures is more efficient for everything else, and therefore the correct choice.
