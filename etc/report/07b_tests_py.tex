@@ -35,7 +35,7 @@ For each univariate test, a plot was produced that includes the following:
 	\item the posterior likelihood computed by the library.
 \end{itemize}
 Having the ``expected prior likelihood'' as a rough starting point, the goal is to approximate the true likelihood via the posterior likelihood by using the given data.
-For multivariate tests, we show the following plots, obviously only for the $d=2$ case: posterior likelihood, both in graph and in contour form, and the data histogram. \\
+For multivariate tests, we show the following plots, obviously only for the $d=2$ case: posterior likelihood and true likelihood, both in graph and in contour form. \\
 Finally, the adjusted Rand index $ARI$ for the predicted clustering with respect to the true clustering introduced in chapter \ref{chap-py-int} is also listed for all tests.
 The results are listed below. \\
 The only test the library struggles with is number 3, in which only 2 clusters are recognized instead of the actual 3.
@@ -68,16 +68,17 @@ This is due to the fact that the 3 clusters are really close to each other, ther
 	\end{minipage}
 \end{figure}
 
-\begin{figure}[h]
-	\centering
-	\begin{minipage}{0.5\textwidth}
-		\includegraphics[scale=0.5]{etc/test5_dens.png}
-	\end{minipage}%
-	\begin{minipage}{0.5\textwidth}
-		\includegraphics[scale=0.5]{etc/test5_cont.pdf}
-	\end{minipage}
-	\captionsetup{labelformat=empty}
-	\caption{Test 5. $ARI = 1.0$}
-\end{figure}
+\begin{figure*}[h]
+\begin{multicols}{2}
+    \includegraphics[width=\linewidth]{etc/true_density.png}\par 
+    \includegraphics[width=\linewidth]{etc/test5_dens.png}\par 
+    \end{multicols}
+\begin{multicols}{2}
+    \includegraphics[width=\linewidth]{etc/true_contour.png}\par
 
+    \includegraphics[width=\linewidth]{etc/posterior_contour.png}\par
+\end{multicols}
+\captionsetup{labelformat=empty}
+\caption{Test 5. $ARI = 1.0$}
+\end{figure*}
 
