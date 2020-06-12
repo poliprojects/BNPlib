@@ -24,6 +24,8 @@ grids.append( np.arange(-10, +10.1, 0.1) ) # for test 4
 
 tests = [1,2,3,4]
 
+
+
 for t in tests:
     print("Starting test", t)
 
@@ -42,11 +44,12 @@ for t in tests:
     # Run algorithms, estimates, and plots
     bnplibpy.run_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass, datafile,
         algo, collfile, init, rng, maxit, burn, n_aux)
-
+        
     chain_barplot(collfile, imgfilechain)
-
+    
     bnplibpy.estimates_NNIG_Dir(mu0, lambda_, alpha0, beta0, totalmass,
         grids[t-1], algo, collfile, densfile, clustfile, only)
+
 
     plot_clust_cards(clustfile, imgfileclust)
     plot_density_points(densfile, imgfiledens)
