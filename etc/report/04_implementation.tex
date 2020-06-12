@@ -16,13 +16,13 @@ Unless explicitly stated, the files corresponding to the described objects will 
 		\item Intel's \emph{Threading Building Blocks} (TBB) library, to write parallel C++ programs that take full advantage of multicore performance;
 		\item \emph{Sundials} library, a suite of nonlinear and differential or algebraic equation solvers.
 	\end{itemize}
-	\item \emph{Protocol Buffer} library, or \verb|protobuf| for short, which was developed by Google and provides a fast serialization mechanism for structured data and extensible code generators for different programming languages.
+	\item \emph{Protocol Buffer} library, or Protobuf for short, which was developed by Google and provides a fast serialization mechanism for structured data and extensible code generators for different programming languages.
 \end{itemize}
 These libraries exist in the \verb|lib| subfolder. \\
 We also implemented a Python interface for the library, the details of which will be discussed in section \ref{collectors}).
 The following libraries were needed:
 \begin{itemize}
-	\item \verb|protobuf|, to interface data between C++ and Python;
+	\item \emph{Protobuf}, to interface data between C++ and Python;
 	\item \emph{pybind11}, a header-only library that exposes C++ types in Python and vice versa;
 	\item \emph{NumPy}, a popular library which provides high-performance multidimensional array objects, and tools for working with them;
 	\item \emph{SciPy}, another widespread library containing modules for numerical integration, interpolation, optimization, linear algebra, and statistics;
@@ -190,7 +190,7 @@ In any case we need to be able to save and to retrieve the information of each i
 This values must therefore be stored in an appropriate data structure, preferably one which is independent of \verb|Algorithm|, so that we do not have to save the entire chain of \verb|State| objects as a member.
 For this reason, we have implemented the collector classes.
 A \emph{collector} is an external class meant to store the state of the Markov chain at all iterations as a list of \verb|State| objects.
-Their implementation is based on the \verb|protobuf| (Protocol Buffers) library, which allows automatic generation of data-storing C++ classes by defining a class skeleton in the \verb|chain_state.proto| file located in the root folder.
+Their implementation is based on the Protobuf (Protocol Buffers) library, which allows automatic generation of data-storing C++ classes by defining a class skeleton in the \verb|chain_state.proto| file located in the root folder.
 This also allows easy interfacing with other programming languages such as R and Python. \\
 We built the template for our collector classes as follows:
 \begin{verbatim}
@@ -211,7 +211,7 @@ repeated int32 allocations = 1;
 repeated UniqueValues uniquevalues = 2;
 }
 \end{verbatim}
-Here \verb|message| and \verb|repeated| are the \verb|protobuf| equivalent of classes and vectors respectively, while the numbers 1 and 2 just act as identifiers for the fields in the messages.
+Here \verb|message| and \verb|repeated| are the Protobuf equivalent of classes and vectors respectively, while the numbers 1 and 2 just act as identifiers for the fields in the messages.
 The corresponding C++ and Python classes are automagically generated off of this skeleton via the \verb|protoc| compiler. \\
 We have implemented two types of collectors: \verb|FileCollector| and \verb|MemoryCollector|, both of which are derived classes from the \verb|BaseCollector| abstract class.
 The former saves the \verb|State| objects into appropriate binary files, while the latter places them in memory into a deque.

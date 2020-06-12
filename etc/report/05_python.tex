@@ -7,7 +7,7 @@ This interface is made possible by two main pieces of software: the \verb|pybind
 \verb|pybind11| allows transporting of C++ objects into a C++ library that can be read as if it were a Python library.
 In particular, the \verb|cpp_exports| subfolder contains several independent source files each containing a function that fulfills a specific role.
 This allows the user to be able to run the algorithm and execute the estimate at different points in time, since these two actions are completely independent -- this is actually the main reason for why a \verb|FileCollector| was implemented in the first place.
-Such independence is possible because after using the run unit, the Markov chain is automatically saved to a \verb|FileCollector|, which can then be read and deserialized thanks to the Python interface of the \verb|protobuf| library.
+Such independence is possible because after using the run unit, the Markov chain is automatically saved to a \verb|FileCollector|, which can then be read and deserialized thanks to the Python interface of the Protobuf library.
 More specifically, the \verb|chain_state.proto| file that was used to generate the \verb|State| class in C++ is also used to generate the same exact class in a Python file, again by running the Protobuf compiler \verb|protoc|; the created file is called \verb|chain_state_pb2.py|.
 All these units are included into the \verb|exports.cpp| file, in which the macro \verb|PYBIND_MODULE| is invoked to create the Python version of the library by passing the created function objects by reference:
 \begin{verbatim}
