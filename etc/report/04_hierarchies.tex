@@ -30,7 +30,9 @@ The following libraries were needed:
 	\item \emph{Matplotlib}, for creating plots.
 \end{itemize}
 First of all, we shall describe the auxiliary classes that are used as template arguments for the algorithms.
-Probability distributions and random sampling are handled through the \verb|Stan| library, while \verb|Eigen| was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code.
+Probability distributions and random sampling are handled through the \verb|Stan| library, while \verb|Eigen| was exploited for the creation of the necessary matrix-like objects and the use of matrix-algebraic operations throughout the code. \\
+Some main test files are present in the root folder of the library: \verb|maintest_uni.cpp|, \verb|maintest_multi.cpp|, and \verb|maintest_nnws.cpp|, the latter of which we used for several time comparisons in the multivariate NNW hierarchy.
+In the \verb|README.md| of the project one may find some basic examples of usage of these files.
 
 \section{Model classes}
 The \emph{mixture classes} (alias in the algorithm: \verb|Mixture|) contain all information about the mixing part of the BNP algorithm, namely the way of weighing the insertion of data in old clusters with respect to the creation of new clusters.

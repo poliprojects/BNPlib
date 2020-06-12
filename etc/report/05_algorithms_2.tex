@@ -1,5 +1,4 @@
 \section{Algorithm classes}
-
 The algorithms studied and discussed in the theoretical section all share the same structure, so we decided to build an abstract class for a generic Gibbs sampling iterative BNP algorithm, the \verb|Algorithm| class:
 \begin{verbatim}
 template<template <class> class Hierarchy, class Hypers,
@@ -70,59 +69,42 @@ The collector argument of \verb|run()| and the functions \verb|start()|, \verb|s
 We shall now describe the features of the two implemented derived classes: \verb|Neal2| and \verb|Neal8|.
 
 \subsection{\texttt{Neal2}}
-As discussed in section \ref{neal2}, the \verb|Neal2| algorithm exploits conjugacy, thus the class requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is provided in closed form.
-In our case, the Normal-NIG and Normal-NW specializations for the \verb|Neal2| template class were implemented.
-\verb|Neal2| class constructor simply call \verb|Algorithm| constructor.
-Afterwards the \verb|Neal2| class implements the substeps of the \verb|run| in the following manner:
-
+As discussed in section \ref{neal2}, the \verb|Neal2| algorithm exploits conjugacy, thus the class requires specifically implemented hierarchies, in which the marginal distribution of the data with respect to $\boldsymbol\theta$ is available in closed form.
+This class implements the substeps of the \verb|run()| function as follows:
 \begin{itemize}
-	\item In \verb|initialize()|, a number of clusters equal to the provided initial valued are created and data are randomly assigned to them, while making sure that each cluster contains at least one.
-	Assignment to a cluster means that the \verb|allocations| component of the datum is set equal to the number of the cluster, as explained earlier.
-
+	\item In \verb|initialize()|, a number of clusters equal to the provided initial value are created, and data are randomly assigned to them, while making sure that each cluster contains at least one.
+	Assignment to a cluster means that the \verb|allocations| entry for the datum is set equal to the number of the cluster, as explained earlier.
 	\item In \verb|sample_allocations()|, a loop is performed over all observations $i=1:n$.
 	The vector \verb|cardinalities| is filled at first, with \verb|cardinalities[j]| being the cardinality of cluster $j$.
-	Then, the algorithm mandates that \verb|datum = data.row(i)| be moved to another cluster;
-	A vector \verb|probas| with \verb|n_clust| components if \verb|datum| belongs to a cluster that is a singleton, or with \verb|n_clust+1| otherwise, is filled with the probabilities of each $\boldsymbol\phi$ being extracted, in line with (\ref{probasneal2}).
-	Computations involve the \verb|cardinalities| vector, the mass probabilities defined by the \verb|Mixture|, the likelihood \verb|like()| evaluated in \verb|datum| to compute the probability of being assigned to an already existing cluster and \verb|eval_marg()| to compute the probability of being assigned to a newly generated cluster. Then, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|.
-	Finally, four different cases of updating \verb|unique_values| and \verb|cardinalities| are handled separately, depending on whether the old cluster was a singleton or not and whether \verb|datum| is assigned to a new cluster.
+	Then, the algorithm mandates that \verb|datum = data.row(i)| be moved to another cluster.
+	A vector \verb|probas| is filled with the probabilities of each cluster being chosen, including a new one, as shown in (\ref{probasneal2}): computations involve the \verb|cardinalities| vector, the mass probabilities defined by the \verb|Mixture|, the likelihood \verb|like()| evaluated in \verb|datum| to compute the probability of being assigned to an already existing cluster, and the marginal \verb|eval_marg()| to compute the probability of being assigned to a newly generated cluster.
+	Then, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|.
+	Finally, four different cases of updating \verb|unique_values| and \verb|cardinalities| are handled separately, depending on whether the old cluster was a singleton or not and whether or not \verb|datum| is assigned to a new cluster.
 	Indeed, in such a case, a new $\boldsymbol\phi$ value for it must be generated, and this must be handled differently by the code if an old singleton cluster was just destroyed (as the new cluster must take its former place).
 	Depending on the case, clusters are either unchanged, increased by one, decreased by one, or moved around.
-
 	\item In \verb|sample_unique_values()|, for each cluster $j$, their $\boldsymbol\phi$ values are updated through the \verb|sample_given_data()| function, which takes as argument the vector \verb|curr_data| of data points which belong to cluster $j$.
 	Since we only keep track of clusters via their labels in \verb|allocations|, we do not have a vector of actual data points stored for each cluster.
 	Thus we must fill, before the loop on $j$, a matrix \verb|clust_idxs| whose column $k$ contains the index of data points belonging to cluster $k$.
 	\verb|clust_idxs| is then used in the $j$ loop to fill \verb|curr_data| with the actual data points of cluster $j$.
-
 \end{itemize}
 
 
 \subsection{\texttt{Neal8}}
-
-Being Neal's algorithm 8 a generalization of Neal's algorithm 2 which works for any hierarchical model, even non-conjugate ones, it adds adjustments in the allocation sampling phase to circumvent non-conjugacy.
-However, the unique values sampling phase remains unchanged. For this reason \verb|Neal8| is built as a derived class from \verb|Neal2|.
-
-In addition to the members defined in Algorithm, the following are added in Neal8 class:
+The \verb|Neal8| algorithm is a generalization of \verb|Neal2| which works for any hierarchical model, even non-conjugate ones, by adding adjustments in the allocation sampling phase to circumvent non-conjugacy.
+However, the unique values sampling phase remains unchanged.
+For this reason \verb|Neal8| is built as a derived class from \verb|Neal2|.
+In addition to the members already defined in the parent classes, the following are added:
 \begin{verbatim}
 unsigned int n_aux = 3;
 std::vector<Hierarchy<Hypers>> aux_unique_values;
 \end{verbatim}
-These are related to the auxiliary blocks. In particular the number of auxiliary blocks is automatically set equal to 3 with the possibility to change the default value with the corresponding setter.
-Therefore \verb|Neal8| class constructor add the initialization of the auxiliary blocks with empty \verb|Hierarchy| objects as for the unique values:
-\begin{verbatim}
-Neal8(const Hypers &hypers_, const Mixture &mixture_,
-    const Eigen::MatrixXd &data_, const unsigned int init = 0) :
-    Neal2<Hierarchy, Hypers, Mixture>::Neal2(hypers_, mixture_, data_,
-    init) {
-    // Initialize auxiliary blocks
-    for(size_t i = 0; i < n_aux; i++){
-        aux_unique_values.push_back(this->unique_values[0]);
-    }
-}
-
-\end{verbatim}
-
-
-
-Relying on the algorithm described in section \ref{neal8}, we proceed to describe the implementation of \verb|sample_allocations()|.
-
-As before, a loop is performed over all observations $i=1:n$ and \verb|cardinalities| is filled. Now, if the current cluster is a singleton, its $\boldsymbol\phi$ values are transferred to the first auxiliary block. Then, each auxiliary block (except the first one if the above case occurred) generates new $\boldsymbol\phi$ values via the hierarchy's \verb|draw()| function. Now a new cluster, that is, new $\boldsymbol\phi$ values, for \verb|datum| needs to be drawn. 	A vector \verb|probas| with \verb|n_clust+n_aux| components is filled with the probabilities of each $\boldsymbol\phi$ being extracted, in line with (\ref{neal8prob}). In this case computations involve also the auxiliary components. Then,as in \verb|Neal2|, the new value for \verb|allocations[i]| is randomly drawn according to the computed \verb|probas|. Finally, four different cases of updating \verb|unique_values| and \verb|cardinalities| are handled separately, depending on whether the old cluster was a singleton or not, and whether an auxiliary block or an already existing cluster was chosen as the new cluster for \verb|datum|.
+These are related to the auxiliary blocks, which are unique to this algorithm.
+A setter exists for \verb|n_aux| which also updates the \verb|aux_unique_values| vector to the correct number of blocks. \\
+We now proceed to describe the new implementation of \verb|sample_allocations()| in this class.
+A loop is first performed over all observations $i=1:n$ and \verb|cardinalities| is filled, just like in \verb|Neal2|.
+Now, if the current cluster is a singleton, its $\boldsymbol\phi$ values are transferred to the first auxiliary block.
+Then, each auxiliary block (except the first one if the above case occurred) generates new $\boldsymbol\phi$ values via the hierarchy's \verb|draw()| function.
+Now a new cluster, that is, new $\boldsymbol\phi$ values, for \verb|datum| needs to be drawn.
+The vector \verb|probas| with \verb|n_clust+n_aux| components is filled with the probabilities of each $\boldsymbol\phi$ being extracted, computed as shown in (\ref{neal8prob}); this formula also involves the auxiliary blocks.
+The new value for \verb|allocations[i]| is then randomly chosen according to the computed \verb|probas|.
+Finally, four different cases of updating \verb|unique_values| and \verb|cardinalities| are handled separately, depending on whether the old cluster was a singleton or not, and whether an auxiliary block or an already existing cluster was chosen as the new cluster for \verb|datum|.

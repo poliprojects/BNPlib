@@ -1,10 +1,9 @@
 \section{Collectors}\label{collectors}
-Once a BNP algorithm is run, one may be interested, as mentioned above, in an estimate of the density given a grid of points or in an identification of a partition through the clustering obtained in the algorithm, which we call best clustering, i.e. the one that optimizes the binder loss function.
-In any case we need to be able to retrieve the information of each iteration of the algorithm, such as allocations and unique values, which characterize the state of the chain, which must be stored in some data structure.
-For this purpose, we used the Protocol Buffers library, which needs a short introduction. \\
-Protocol Buffers, or \verb|protobuf| for short, was developed by Google and allows automatic generation of data-storing C++ classes by defining a class skeleton in a \verb|.proto| file.
+After an algorithm is run, one may be interested in an estimate of the density given a grid of points, and/or in an identification of a partition through the clustering obtained in the algorithm, which we sometimes call ``best clustering'', as described in section TODO.
+In any case we need to be able to retrieve the information of each iteration of the algorithm, such as allocations and unique values, which characterize the state of the chain and must be stored in some data structure.
+For this purpose, we used the \verb|protobuf| (Protocol Buffers) library, which allows automatic generation of data-storing C++ classes by defining a class skeleton in a \verb|.proto| file.
 This also allows easy interfacing with other programming languages such as R and Python. \\
-We built our template as follows:
+We built our template in the \verb|chain_state.proto| file as follows:
 \begin{verbatim}
 message Par_Col {
     repeated double elems = 1;
@@ -24,7 +23,7 @@ message State {
 }
 \end{verbatim}
 Here \verb|message| and \verb|repeated| are the \verb|protobuf| equivalent of classes and vectors respectively, while the numbers 1 and 2 just act as identifiers for the fields in the messages.
-The corresponding C++ classes are generated via the \verb|protoc| compiler.
+The corresponding C++ and Python classes are automagically generated via the \verb|protoc| compiler.
 
 
 In order to use the states chain after the algorithm run, for density and clustering estimates, without saving the entire chain of State-objects as a member of the Algoritmh class we have implemented the collectors classes. 
