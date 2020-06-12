@@ -4,9 +4,9 @@ All of them were run with the following settings:
 \begin{itemize}
 	\item \verb|Neal2| algorithm with 500 iterations, of which 100 for the burn-in phase
 	\item Dirichlet process mixture with total mass $m=1$
-	\item NNIG hierarchy for the univariate tests and the NNW hierarchy for the multivariate ones
+	\item NNIG hierarchy for the univariate tests and NNW hierarchy for the multivariate ones
 	\item Hyperparameters for all NNIG hierarchies: $\mu_0 = 0.0$, $\lambda = 0.1$, $\alpha = 2$, $\beta = 2$
-	\item Hyperparameters for all $d$-dimensional NNW hierarchies: $\mu_0$ is the sample mean of the data, $\lambda = 0.2$, $\nu = d + 3$, $\tau_0 = \frac{1}{\nu} I_d$ (multiple of identity matrix).
+	\item Hyperparameters for all $d$-dimensional NNW hierarchies: $\mu_0$ is the sample mean of the data, $\lambda = 0.2$, $\nu = d + 3$, $\tau_0 = \frac{1}{\nu} I_d$ (multiple of identity matrix). We discussed the rationale behind these choices in section \ref{nnw}.
 \end{itemize}
 Data were iid generated through the use of an R script.
 Below are listed the first 4 univariate tests alongside their respective sample size and the process from which the data was produced:
@@ -19,7 +19,7 @@ Below are listed the first 4 univariate tests alongside their respective sample 
 		4 &  400 & $y \sim 0.5 \, t_5(-5, 1 ) + 0.5 \, \text{SkewNormal}(5, 1, 2)$
 	\end{tabular}
 \end{center}
-Test number 4 uses a mixture of the Student's $t$ distribution (refer to \ref{nnig} for more information) and the skew normal distribution (location $\mu=5$, scale $\sigma^2=1$, shape $\alpha=2$). \footnote{Its p.d.f. is as follows ($\phi(t) = (2\pi)^{-1/2} \exp\{-t^2/2\}$ is the standard $\Nc(0,1)$ p.d.f.):
+Test number 4 uses a mixture of the Student's $t$ distribution (refer to section \ref{nnig} for more information) and the skew normal distribution (location $\mu=5$, scale $\sigma^2=1$, shape $\alpha=2$). \footnote{Its p.d.f. is as follows ($\phi(t) = (2\pi)^{-1/2} \exp\{-t^2/2\}$ is the standard $\Nc(0,1)$ p.d.f.):
 $$
 f(x) = 2 \phi\left(\frac{x-\mu}{\sigma^2}\right) \int_{-\infty}^{\alpha \frac{x-\mu}{\sigma^2}} \phi(t) \de t
 $$}

@@ -44,7 +44,7 @@ Therefore, $\frac{n^2}{4}$ is a good estimate for the number of entries.
 This number is very close to the true amount if the number of clusters is small (e.g. $k=2,3,4$), which it often is. (Note that one could theoretically compute the exact number of nonzero entries of the dissimilarity matrix, but this would require additional computational costs which is not warranted for the size of a single vector.)
 This relatively large amount of reserved space does not significantly impact the overall memory usage, since the \verb|triplets_list| vector is destroyed after each dissimilarity matrix is computed. \\
 The usage of sparse matrices instead of dense ones does not hinder computational time either, since the Eigen library also heavily optimizes computations with sparse objects.
-Nevertheless, an efficiency test was performed, this time using the Python interface, on the already implemented Python tests 1-6 (see section \label{chap-py-test} for full details) with 500 algorithm iterations and 100 burn-in ones, using sparse matrices first and then the same operations but with dense matrices.
+Nevertheless, an efficiency test was performed, this time using the Python interface, on the already implemented Python tests 1-6 (see section \ref{chap-py-test} for full details) with 500 algorithm iterations and 100 burn-in ones, using sparse matrices first and then the same operations but with dense matrices.
 The results were as follows, again in shakes:
 \begin{center}
 	\begin{tabular}{c|c|c}
@@ -108,7 +108,7 @@ Let us now compare these results with the multivariate case, as shown in figure 
 As for the general composition, \verb|run()| has now become less than 10\% of the total, with \verb|sample_allocations()| taking roughly half of that amount, while the \verb|eval_density()| part reaches almost 90\%.
 This is to be expected since nearly all of the time is spent likelihood and marginal computation, which is much harder in 2D than in the univariate case due to the introduction of matrix algebra.
 We can also note that as a side effect of the growth of the density estimation part, the percentage of time spent in \verb|cluster_estimate()| is now irrelevant, which makes sense since the computational costs of building a dissimilarity matrix is almost identical in all dimensions.
-The most costly part of the density estimation is the unoptimized \verb|eval_marg()| (more than 60\%), presumably due to the presence of matrix inversions and Student's t evaluations, both of which require expensive Cholesky decompositions.
+The most costly part of the density estimation is the unoptimized \verb|eval_marg()| (more than 60\%), presumably due to the presence of matrix inversions and Student's $t$ evaluations, both of which require expensive Cholesky decompositions.
 \begin{figure}[h]
 	\hspace{-60pt}
 	\includegraphics[scale=0.45]{etc/kcg_multi.png}

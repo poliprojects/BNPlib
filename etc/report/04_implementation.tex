@@ -19,7 +19,7 @@ Unless explicitly stated, the files corresponding to the described objects will 
 	\item \emph{Protocol Buffer} library, or Protobuf for short, which was developed by Google and provides a fast serialization mechanism for structured data and extensible code generators for different programming languages.
 \end{itemize}
 These libraries exist in the \verb|lib| subfolder. \\
-We also implemented a Python interface for the library, the details of which will be discussed in section \ref{collectors}).
+We also implemented a Python interface for the library, the details of which will be discussed in section \ref{collectors}.
 The following libraries were needed:
 \begin{itemize}
 	\item \emph{Protobuf}, to interface data between C++ and Python;
@@ -107,7 +107,7 @@ Data points were chosen to be matrix rows, even though points in a space are usu
 In fact, the \verb|utils.hpp| file contains the \verb|read_eigen_matrix()| utility, which returns an \verb|Eigen::MatrixXd| after reading values from a given filename.
 This works for both data matrices and grid matrices on which evaluate the estimated density (see section \ref{estimates-imp} for the implementation details). \\
 The algorithm will keep track of the labels representing assignments to clusters via the \verb|allocations| vector.
-For instance, if at any point one has \verb|allocations[5] = 2|, it means that datum number 5 is associated to cluster number 2, with indexing starting at zero.
+For instance, if at any point one has that \verb|allocations[5] = 2|, it means that datum number 5 is associated to cluster number 2, with indexing starting at zero.
 Similarly, we store the \verb|cardinalities| of the current clusters and \verb|unique_values|, which is a vector of Hierarchy objects which identify the clusters and in which the corresponding unique values are stored in the \verb|state|, as mentioned in the previous section.
 The three aforementioned vectors are initialized with null values and empty \verb|Hierarchy| objects, and will be filled with proper values while the algorithm is running. \\
 The \verb|run()| method is the same from all derived classes, given that all implemented algorithms share the same general structure:
@@ -213,7 +213,7 @@ message State {
 \end{verbatim}
 Here \verb|message| and \verb|repeated| are the Protobuf equivalent of classes and vectors respectively, while the numbers 1 and 2 just act as identifiers for the fields in the messages.
 The corresponding C++ and Python classes are automagically generated off of this skeleton via the \verb|protoc| compiler. \\
-We have implemented two types of collectors: \verb|FileCollector| and \verb|MemoryCollector|, both of which are derived classes from the \verb|BaseCollector| abstract class.
+We have implemented two types of collectors: the \verb|FileCollector| and the \verb|MemoryCollector|, both of which are derived classes from the \verb|BaseCollector| abstract class.
 The former saves the \verb|State| objects into appropriate binary files, while the latter places them in memory into a deque.
 In particular, the \verb|MemoryCollector| does not ``hard write'' chain states anywhere and all information contained in it is destroyed when the main that created it is terminated.
 It is therefore useful in situation in which writing to a file is not needed, for instance in a main program that both runs the algorithm and computes the estimates.
@@ -280,7 +280,7 @@ Otherwise, they write the information stored in the appropriate member classes t
 In order to have the possibility of a runtime choice of the algorithm, we implemented the \verb|Factory| class.
 An \emph{object factory} allows to choose at runtime one of several object types for a given variable, provided that these objects derive from a common abstract base class, whose name is passed as a template parameter with the alias \verb|AbstractProduct|.
 An object factory is usually implemented as a singleton and stores a list of \emph{builders}, i.e. functions that each create a different kind of object, into the private \verb|storage| class member.
-Each of these builders can be as simple as a function returning a smart pointer to a new instance, and has an identifier (e.g. a string) corresponding to the specific object they create: \verb|storage| is therefore an Identifier-Builder map.
+Each of these builders can be as simple as a function returning a smart pointer to a new instance, and has an identifier (e.g. a string) corresponding to the specific object they create: \verb|storage| is therefore an identifier-builder map.
 In order to have the choice of creating one of multiple objects, \verb|storage| must first be filled with their corresponding builders; this can be done in a main file or in an appropriate separate utility function.
 Since the constructors of the implemented algorithm classes may take different numbers of parameters as input, we chose to templatize the factory with a variadic template in addition to the \verb|AbstractProduct| type.
 This allows passing any number of parameters of any type to the constructors of the objects. \\
