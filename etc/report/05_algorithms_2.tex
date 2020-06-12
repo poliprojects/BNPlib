@@ -64,7 +64,7 @@ Algorithm(const Hypers &hypers_, const Mixture &mixture_,
 }
 
  \end{verbatim}
-After dimensional checks and the initial number of clusters setting, if not provided, the \verb|unique_values| vector is initialized with empty \verb|Hierarchy| objects, while \verb|cardinalities| and \verb|allocations| with null values. They are filled with proper values when the algorithm is run.
+After dimensional checks and the initial number of clusters setting, if not provided, the \verb|unique_values| vector is initialized with empty \verb|Hierarchy| objects, while \verb|cardinalities| and \verb|allocations| are initialized by default with null values. They are filled with proper values when the algorithm is run.
 The run() method, which is inherited from all derived classes, sharing the same general structure, is as follows:
 
 TODO constructors
